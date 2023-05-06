@@ -8,6 +8,7 @@ mandatory: 반드시 필요한 구현
 finish: 완료한 항목
 implementation: 구체적인 구현
 bonus: 추가적으로 적용할 수도 있는 구현
+dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
 공부 더 필요하고 저번에 만든 코드 좀 보자
@@ -18,36 +19,63 @@ bonus: 추가적으로 적용할 수도 있는 구현
 
 섬? 우주? 선택 가능
 탑뷰
-타일맵으로 하자
-오브젝트를 조사할 수 있다
 내 캐릭터는 타일 단위로 움직이지는 않는다
-하우징은 자유롭게
-움직이는 방향대로 팔을 흔드는 정도는 쉽다
 
-벽 같은 오브젝트는 인벤에 들어갈 수 없다
-바닥에 설치한 것을 집을 수도 없다
-파괴용 해머 좋다
 해머를 들고 상호작용 시 설치물의 내구를 파괴
 고정 오브젝트 초기 맵
 인벤은 많이는 말고 하단 마크처럼 몇 칸이 전부
 진행 바
-버튼 효과음 뽁 입으로 녹음
-멀티 터치 가능
-한 손으로 팬하여 이동하면서
-다른 한 손으로 아이템을 들고 옮긴다
+
+움직일 때 속도에 따른 자갈 밟는 소리
+움직일 때 미세한 움직임에 부들부들 움직이면 보기 안좋을 수 있다
 
 # 일정
-1주: 계획
-2주: 베타 완료
-3주: 광고 추가, 컨텐츠 추가
-4주: 리소스 생성, 테스트, 완성
+1주 2023-05-03 ~ 2023-05-09
+    계획 및 기초 개발
+    2023-05-03 어떤 게임을 만들 것인지 구상
+    2023-05-04 대략적인 기능 스케치
+    2023-05-05
+    2023-05-06 game object 및 앱 간단히 실행해보기
+    2023-05-07
+    2023-05-08
+    2023-05-09
+
+2주 2023-05-10 ~ 2023-05-16
+    베타 완료
+    2023-05-10
+    2023-05-11
+    2023-05-12
+    2023-05-13
+    2023-05-14
+    2023-05-15
+    2023-05-16
+
+3주 2023-05-17 ~ 2023-05-23
+    광고 추가, 컨텐츠 추가
+    2023-05-17
+    2023-05-18
+    2023-05-19
+    2023-05-20
+    2023-05-21
+    2023-05-22
+    2023-05-23
+
+4주 2023-05-24 ~ 2023-05-30
+    리소스 생성, 테스트, 완성
+    2023-05-24
+    2023-05-25
+    2023-05-26
+    2023-05-27
+    2023-05-28
+    2023-05-29
+    2023-05-30
 
 # mandatory: 기대 시간(h) + 요구 사항
 view
-    game view
-        월드 레이어
-            타일, 오브젝트
-        ui
+    game scene
+        tileLayer
+        gameObjectLayer
+        uiLayer
             인벤토리(하단)
             메뉴(정지) 버튼(우측 상단)
             제작 버튼(롤코타처럼 버튼 누르면 서브 아이템 버튼 show) 제작 버튼은 흔하게 왼쪽에 세로로 두자
@@ -60,11 +88,11 @@ UI
     1 구체화하기
     layer: 바닥 > 벽 > 오브젝트
     바닥 타일은 모눈 회색 테두리를 가장 윗 레이어에 둬서 타일이 구분되도록 하자
+    상호 작용 시 뽁 소리(입으로 녹음)
 
 타일
     100 * 100 칸으로 일단 만들어보자
         상수 파일 분리(MAP_WIDTH_TILE_COUNT, MAP_HEIGHT_TILE_COUNT)
-    타일 데이터 + 타일 사이 변 데이터
 
 캐릭터
     이미지: 기본 이미지 + 모자 + 손 장비
@@ -99,9 +127,14 @@ UI
                     작은 원을 그리는 애니메이션
         내려 놓는 위치에 합칠 수 있으면 아이템을 뭉탱이로 합친다
 
-gameObject
-    pickableObject: item
-    interactableObject: tree
+GameObject
+    Pickable: stone
+        pick, interact, durability
+    Interactable: tree
+        interact
+    Destroyable: building
+        isWalkable = false, durability
+
 
 2 sense message
     interaction 시 조건이 맞지 않을 때 무엇이 부족한지 출력(가장 위 레이어)
@@ -110,6 +143,9 @@ gameObject
 컨트롤
     3 move: pan 하여 이동 적용(갈 수 있고 없고)
     2 interaction: 근처 타일 터치
+    멀티 터치 가능
+        한 손으로 팬하여 이동하면서
+        다른 한 손으로 아이템을 들고 옮긴다
 
 컨텐츠(이미지, 사운드) 생성 및 적용하기
     오브젝트의 타일 이미지와 인벤토리 이미지는 같은 것을 사용한다
@@ -119,11 +155,10 @@ gameObject
     1 나무 씨앗
         심으면 현실 시간 몇 시간 후에 성장한다
     1 나무벽
-    1 돌
-    1 나뭇가지
-    1 도끼
-    1 망치
-    1 밀짚모자
+    1 돌: 기본적으로 바닥에 떨어져 있다
+    1 나뭇가지: 맨 손으로 나무와 상호작용하면 주변 빈 타일에 생성된다
+    1 도끼: 나무와 상호작용하여 log 를 얻는다
+    1 망치: 건물을 부순다
 
 4 광고 추가하기
     화면 상단 일부
@@ -134,6 +169,7 @@ gameObject
 건설
     건설할 오브젝트를 드래그하여 캐릭터 주변에 드래그하면 회색으로 건설될 예정 모습을 보여준다
     드래그를 때면 건설이 되며 재료가 차감된다
+    캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 스플래쉬 뷰?
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
@@ -141,11 +177,12 @@ gameObject
 # finish
 
 # implementation
-enum
-    east
-    south
-    west
-    north
+enum CompassDirection {
+    case east
+    case south
+    case west
+    case north
+}
 
 map
     tile[100][100]
@@ -155,6 +192,44 @@ tile
     object
     side[4]
 
+struct TileCoord {
+    var x: Int
+    var y: Int
+}
+
+class GameObject {
+    var tilePosition: TileCoord?
+    var isWalkable: Bool
+    var isPickable: Bool
+    var durability: Int
+}
+
+protocol Interactable {
+    mutating interact(GameObject item)
+}
+
+protocol Destructible {
+    destruct()
+}
+
+class Tree: GameObject, Interactable {
+}
+
+class Seed: GameObject, Pickable {
+}
+
+class Branch: GameObject, Pickable {
+}
+
+class Stone: GameObject, Pickable {
+}
+
+class Axe: GameObject, Pickable {
+}
+
+class Hammer: GameObject, Pickable {
+}
+
 # bonus
 멀티 가능
 성능 향상
@@ -163,7 +238,13 @@ tile
 맵 랜덤 혹은 시드 생성
 농사(괭이, 보리)
 
-# 정리 안됨 log
+# dump log
+624B27 어두운 고동색
+7F7F7F 어두운 회색
+8A591E 어두운 갈색
+CBCBCB 밝은 회색
+E4B783 살구색
+
 propagation
 주사위
 어드벤처
@@ -203,6 +284,18 @@ rpg는 3d 정도는 되야 한다고 생각한다
 건물을 지을 때 뽁 하는 효과
 복사 붙여넣기 중요
 
+2023-05-05
 인벤토리에서 제작하면?
 그러면 아이템 내려놓는 거는 비슷하니까
 안된다
+버튼 효과음 뽁 입으로 녹음
+움직이는 방향대로 팔을 흔드는 정도는 쉽다
+하우징은 자유롭게
+벽 같은 오브젝트는 인벤에 들어갈 수 없다
+바닥에 설치한 것을 집을 수도 없다
+파괴용 해머 좋다
+타일맵으로 하자
+오브젝트를 조사할 수 있다
+
+2023-05-06
+그래, 굳이 벽을 따로 만들 필요 없이 림월드나 마인크래프트처럼 벽도 타일 하나를 차지하도록 만드는 것이 복잡도 면에서 좋겠다
