@@ -15,28 +15,16 @@ class GameScene: SKScene {
     var uiLayer: SKNode!
 
     override func didMove(to view: SKView) {
+        initCamera()
         initTileMap()
         initGameObjectLayer()
         initUILayer()
-//        // Get label node from scene and store it for use later
-//        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-//        if let label = self.label {
-//            label.alpha = 0.0
-//            label.run(SKAction.fadeIn(withDuration: 2.0))
-//        }
-//
-//        // Create shape node to use during mouse interaction
-//        let w = (self.size.width + self.size.height) * 0.05
-//        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
-//
-//        if let spinnyNode = self.spinnyNode {
-//            spinnyNode.lineWidth = 2.5
-//
-//            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(Double.pi), duration: 1)))
-//            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-//                                              SKAction.fadeOut(withDuration: 0.5),
-//                                              SKAction.removeFromParent()]))
-//        }
+    }
+
+    func initCamera() {
+        let camera: SKCameraNode = SKCameraNode()
+        self.addChild(camera)
+        self.camera = camera
     }
 
     func initTileMap() {
@@ -75,62 +63,86 @@ class GameScene: SKScene {
         menuButtonNode.position = Constant.Frame.menuButton.origin
         uiLayer.addChild(menuButtonNode)
 
-        for index in 0...4 {
+        let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
+
+        for index in 0..<Constant.inventoryCellCount {
             let inventoryCellNode: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.inventoryCell)
-            inventoryCellNode.size = Constant.Frame.inventoryCell[index].size
-            inventoryCellNode.position = Constant.Frame.inventoryCell[index].origin
+            inventoryCellNode.size = Constant.defaultNodeSize
+            inventoryCellNode.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
             uiLayer.addChild(inventoryCellNode)
         }
 
-        self.addChild(uiLayer)
+        self.camera!.addChild(uiLayer)
     }
 
-    func touchDown(atPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.green
-//            self.addChild(n)
-//        }
+    // MARK: Touch event
+    var touchDownTimestamp: TimeInterval = 0.0
+    var touchDownLocation: CGPoint = CGPoint()
+    var velocityVector: CGVector = CGVector()
+
+    func touchDown(_ touch: UITouch) {
+        self.touchDownTimestamp = touch.timestamp
+        self.touchDownLocation = touch.location(in: self.camera!)
+        self.velocityVector = CGVector()
     }
 
-    func touchMoved(toPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.blue
-//            self.addChild(n)
-//        }
+    func touchMoved(_ touch: UITouch) {
+        let currentLocation = touch.location(in: self.camera!)
+        let previousLocation = touch.previousLocation(in: self.camera!)
+        let dx = currentLocation.x - previousLocation.x
+        let dy = currentLocation.y - previousLocation.y
+        let cameraPosition = self.camera!.position
+        self.camera!.position = CGPoint(x: cameraPosition.x - dx, y: cameraPosition.y - dy)
     }
 
-    func touchUp(atPoint pos : CGPoint) {
-//        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-//            n.position = pos
-//            n.strokeColor = SKColor.red
-//            self.addChild(n)
-//        }
+    func touchUp(_ touch: UITouch) {
+        let currentLocation = touch.location(in: self.camera!)
+        let timeInterval = touch.timestamp - touchDownTimestamp
+
+        print("currentLocation: \(currentLocation), touchDownLocation: \(touchDownLocation)")
+
+        let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
+        let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
+        self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        if let label = self.label {
-//            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-//        }
-//
-//        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        for touch in touches { self.touchDown(touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
+        for touch in touches { self.touchMoved(touch) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for touch in touches { self.touchUp(touch) }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        for touch in touches { self.touchUp(touch) }
     }
 
-
+    var lastUpdateTime: TimeInterval = 0.0
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+        let timeInterval: TimeInterval = (currentTime - lastUpdateTime)
+
+        let cameraPosition = self.camera!.position
+        let newCameraPositionX = cameraPosition.x + self.velocityVector.dx * timeInterval
+        let newCameraPositionY = cameraPosition.y + self.velocityVector.dy * timeInterval
+        self.camera!.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
+
+        let velocity = (self.velocityVector.dx * self.velocityVector.dx + self.velocityVector.dy * self.velocityVector.dy).squareRoot()
+        if velocity != 0.0 {
+            print("velocityVector: \(velocityVector), velocity: \(velocity), damping: \(Constant.velocityDamping)")
+        }
+        if velocity <= Constant.velocityDamping * timeInterval {
+            self.velocityVector = CGVector()
+        } else {
+            let newVelocityVectorX = self.velocityVector.dx - Constant.velocityDamping / velocity * self.velocityVector.dx * timeInterval
+            let newVelocityVectorY = self.velocityVector.dy - Constant.velocityDamping / velocity * self.velocityVector.dy * timeInterval
+            self.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
+        }
+
+        lastUpdateTime = currentTime
     }
 }
