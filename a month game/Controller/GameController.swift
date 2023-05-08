@@ -8,13 +8,8 @@
 import UIKit
 
 class GameController {
-    var gameModel: GameModel
+    var gameModel: GameModel!
     var gameScene: GameScene!
-
-    init() {
-        gameModel = GameModel()
-        gameScene = GameScene(gameController: self)
-    }
 
     // MARK: touch
     var touchDownTimestamp: TimeInterval = 0.0
@@ -84,6 +79,7 @@ class GameController {
     var lastTileUpdateTime: TimeInterval = 0.0
     var tileUpdateCoord = Array<Int>(repeating: 0, count: 2)
     func updateTile(_ currentTime: TimeInterval) {
+        lastTileUpdateTime = lastTileUpdateTime == 0.0 ? currentTime : lastTileUpdateTime
         let timeInterval = currentTime - lastTileUpdateTime
 
         let timeExcess = timeInterval - 1.0
@@ -100,8 +96,8 @@ class GameController {
     }
 
     func toggleTile(row: Int, column: Int) {
-        let targetTileID = self.gameModel.mapModel.tileMapData[row][column] ^ 1
-        self.gameModel.mapModel.setTileData(row: row, column: column, tileID: targetTileID)
-        self.gameScene.setTile(row: row, column: column, tileID: targetTileID)
+        let newTileID = self.gameModel.mapModel.tileMapData[row][column] ^ 1
+        self.gameModel.mapModel.setTileData(row: row, column: column, tileID: newTileID)
+        self.gameScene.setTile(row: row, column: column, tileID: newTileID)
     }
 }

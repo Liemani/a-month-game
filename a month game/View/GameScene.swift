@@ -18,20 +18,7 @@ class GameScene: SKScene {
     var tileInformationDictionary = Dictionary<String, (SKTileGroup, SKTileDefinition)>()
     let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile]
 
-    init(gameController: GameController) {
-        self.gameController = gameController
-
-        super.init()
-
-        self.size = Constant.screenSize
-        self.scaleMode = .aspectFit
-    }
-
     // MARK: -
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func didMove(to view: SKView) {
         self.initLayer()
     }
@@ -137,6 +124,7 @@ class GameScene: SKScene {
 
     func setTile(row: Int, column: Int, tileID: Int) {
         let tileInformation = self.tileInformationDictionary[self.tileIDToKey[tileID]]!
+        print("tileID: \(tileID), column: \(column), row: \(row), self.tileIDToKey[tileID]: \(self.tileIDToKey[tileID])")
         self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
     }
 }
