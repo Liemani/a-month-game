@@ -20,6 +20,8 @@ struct Constant {
     static let inventoryCellFirstPosition: CGPoint = CGPoint(x: -screenCenter.x + defaultSize, y: -screenCenter.y + defaultSize)
     static let inventoryCellLastPosition: CGPoint = CGPoint(x: screenCenter.x - defaultSize, y: -screenCenter.y + defaultSize)
 
+    static let gridSize: Int = 100
+
     struct Frame {
         static let character: CGRect = CGRect(origin: CGPoint(), size: CGSize(width: defaultSize, height: defaultSize))
         static let menuButton: CGRect = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
@@ -29,7 +31,9 @@ struct Constant {
         static let character: String = "character"
         static let menuButton: String = "menu button"
         static let inventoryCell: String = "inventory cell"
-        static let tile: String = "tile"
+        
+        static let grassTile: String = "tile_grass"
+        static let woodTile: String = "tile_wood"
     }
     static let velocityDamping: Double = 1500.0
 }

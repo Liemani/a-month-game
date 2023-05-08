@@ -10,6 +10,10 @@
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterController.swift */; };
 		031D57592A07731A007EF383 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* GameController.swift */; };
+		031D575C2A07C24C007EF383 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575B2A07C24C007EF383 /* GameModel.swift */; };
+		031D575E2A07C311007EF383 /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575D2A07C311007EF383 /* MapModel.swift */; };
+		031D57632A07D3F6007EF383 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 031D57612A07D3F5007EF383 /* DataModel.xcdatamodeld */; };
+		031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57642A07D7D9007EF383 /* CoreDataStack.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
 		038330A62A02850A008DEA10 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 038330A52A02850A008DEA10 /* Actions.sks */; };
 		038330A82A02850A008DEA10 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A72A02850A008DEA10 /* GameScene.swift */; };
@@ -23,6 +27,10 @@
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
+		031D575B2A07C24C007EF383 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		031D575D2A07C311007EF383 /* MapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModel.swift; sourceTree = "<group>"; };
+		031D57622A07D3F6007EF383 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		031D57642A07D7D9007EF383 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		038330A12A02850A008DEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		038330A52A02850A008DEA10 /* Actions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Actions.sks; sourceTree = "<group>"; };
@@ -52,9 +60,36 @@
 			path = "trash can";
 			sourceTree = "<group>";
 		};
+		031D575A2A07C232007EF383 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				031D575B2A07C24C007EF383 /* GameModel.swift */,
+				031D575D2A07C311007EF383 /* MapModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		031D575F2A07C838007EF383 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				038330A92A02850A008DEA10 /* GameViewController.swift */,
+				031D57582A07731A007EF383 /* GameController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		031D57602A07C849007EF383 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				038330A72A02850A008DEA10 /* GameScene.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		038330952A02850A008DEA10 = {
 			isa = PBXGroup;
 			children = (
+				031D57642A07D7D9007EF383 /* CoreDataStack.swift */,
 				031D57542A062A26007EF383 /* trash can */,
 				038330A02A02850A008DEA10 /* a month game */,
 				0383309F2A02850A008DEA10 /* Products */,
@@ -72,15 +107,16 @@
 		038330A02A02850A008DEA10 /* a month game */ = {
 			isa = PBXGroup;
 			children = (
+				031D575A2A07C232007EF383 /* Model */,
+				031D57602A07C849007EF383 /* View */,
+				031D575F2A07C838007EF383 /* Controller */,
 				038330A12A02850A008DEA10 /* AppDelegate.swift */,
-				038330A92A02850A008DEA10 /* GameViewController.swift */,
-				038330A72A02850A008DEA10 /* GameScene.swift */,
 				038330AB2A02850A008DEA10 /* Main.storyboard */,
 				038330AE2A02850B008DEA10 /* Assets.xcassets */,
 				038330B02A02850B008DEA10 /* LaunchScreen.storyboard */,
 				031D57512A06298F007EF383 /* Constant.swift */,
 				031D57552A076DC8007EF383 /* CharacterController.swift */,
-				031D57582A07731A007EF383 /* GameController.swift */,
+				031D57612A07D3F5007EF383 /* DataModel.xcdatamodeld */,
 			);
 			path = "a month game";
 			sourceTree = "<group>";
@@ -157,11 +193,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				031D575E2A07C311007EF383 /* MapModel.swift in Sources */,
 				038330A82A02850A008DEA10 /* GameScene.swift in Sources */,
 				031D57592A07731A007EF383 /* GameController.swift in Sources */,
+				031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */,
 				038330AA2A02850A008DEA10 /* GameViewController.swift in Sources */,
 				038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */,
+				031D57632A07D3F6007EF383 /* DataModel.xcdatamodeld in Sources */,
 				031D57562A076DC8007EF383 /* CharacterController.swift in Sources */,
+				031D575C2A07C24C007EF383 /* GameModel.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -380,6 +420,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		031D57612A07D3F5007EF383 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				031D57622A07D3F6007EF383 /* Model.xcdatamodel */,
+			);
+			currentVersion = 031D57622A07D3F6007EF383 /* Model.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 038330962A02850A008DEA10 /* Project object */;
 }
