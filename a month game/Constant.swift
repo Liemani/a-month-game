@@ -35,5 +35,10 @@ struct Constant {
         static let grassTile: String = "tile_grass"
         static let woodTile: String = "tile_wood"
     }
+    
     static let velocityDamping: Double = 1500.0
+
+    // MARK: - URL
+    static let worldDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("world_a")
+    static let tileMapDataFileURL = worldDirectoryURL.appendingPathComponent("tileMapData")
 }

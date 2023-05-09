@@ -78,7 +78,7 @@ class GameScene: SKScene {
 
         for row in 0..<Constant.gridSize {
             for column in 0..<Constant.gridSize {
-                let tileID: Int = self.gameController.gameModel.mapModel.tileMapData[row][column]
+                let tileID: Int = self.gameController.gameModel.mapModel.tileMap[100 * row + column]
                 let tileInformation = self.tileInformationDictionary[self.tileIDToKey[tileID]]!
                 tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
             }
@@ -124,7 +124,6 @@ class GameScene: SKScene {
 
     func setTile(row: Int, column: Int, tileID: Int) {
         let tileInformation = self.tileInformationDictionary[self.tileIDToKey[tileID]]!
-        print("tileID: \(tileID), column: \(column), row: \(row), self.tileIDToKey[tileID]: \(self.tileIDToKey[tileID])")
         self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
     }
 }

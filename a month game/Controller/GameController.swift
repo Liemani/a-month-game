@@ -11,6 +11,17 @@ class GameController {
     var gameModel: GameModel!
     var gameScene: GameScene!
 
+    init() {
+        let gameModel = GameModel()
+        let gameScene = GameScene()
+        self.gameModel = gameModel
+        self.gameScene = gameScene
+        self.gameScene.gameController = self
+
+        gameScene.size = Constant.screenSize
+        gameScene.scaleMode = .aspectFit
+    }
+
     // MARK: touch
     var touchDownTimestamp: TimeInterval = 0.0
     var touchDownLocation: CGPoint = CGPoint()
@@ -24,6 +35,8 @@ class GameController {
         self.touchDownTimestamp = touch.timestamp
         self.touchDownLocation = touch.location(in: self.gameScene.camera!)
         self.velocityVector = CGVector()
+
+        print(FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask))
     }
 
     func touchMoved(_ touch: UITouch) {
@@ -38,8 +51,6 @@ class GameController {
     func touchUp(_ touch: UITouch) {
         let currentLocation = touch.location(in: self.gameScene.camera!)
         let timeInterval = touch.timestamp - touchDownTimestamp
-
-        print("currentLocation: \(currentLocation), touchDownLocation: \(touchDownLocation)")
 
         let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
         let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
@@ -96,7 +107,7 @@ class GameController {
     }
 
     func toggleTile(row: Int, column: Int) {
-        let newTileID = self.gameModel.mapModel.tileMapData[row][column] ^ 1
+        let newTileID = self.gameModel.mapModel.tileMap[100 * row + column] ^ 1
         self.gameModel.mapModel.setTileData(row: row, column: column, tileID: newTileID)
         self.gameScene.setTile(row: row, column: column, tileID: newTileID)
     }
