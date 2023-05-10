@@ -35,8 +35,6 @@ class GameController {
         self.touchDownTimestamp = touch.timestamp
         self.touchDownLocation = touch.location(in: self.gameScene.camera!)
         self.velocityVector = CGVector()
-
-        print(FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask))
     }
 
     func touchMoved(_ touch: UITouch) {

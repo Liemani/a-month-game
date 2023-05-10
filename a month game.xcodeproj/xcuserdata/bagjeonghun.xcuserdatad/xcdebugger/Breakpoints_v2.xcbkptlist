@@ -3,4 +3,69 @@
    uuid = "07AD21D7-1E8E-45F3-AB6C-337A5803ABBC"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "825AC212-6D1E-4A27-811B-9D2468A08F69"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "a month game/Model/MapModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
+            landmarkName = "setTileData(row:column:tileID:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "825AC212-6D1E-4A27-811B-9D2468A08F69 - 7b079a1223b3bc09"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "a_month_game.MapModel.setTileData(row: Swift.Int, column: Swift.Int, tileID: Swift.Int) -&gt; ()"
+                  moduleName = "a month game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bagjeonghun/Documents/xcode/a%20month%20game/a%20month%20game/Model/MapModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "660">
+               </Location>
+               <Location
+                  uuid = "825AC212-6D1E-4A27-811B-9D2468A08F69 - b5b97a85f67b1ad2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.UnsafeRawBufferPointer) -&gt; Foundation.Data in a_month_game.MapModel.setTileData(row: Swift.Int, column: Swift.Int, tileID: Swift.Int) -&gt; ()"
+                  moduleName = "a month game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bagjeonghun/Documents/xcode/a%20month%20game/a%20month%20game/Model/MapModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "825AC212-6D1E-4A27-811B-9D2468A08F69 - 7b079a1223b3bc09"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "a_month_game.MapModel.setTileData(row: Swift.Int, column: Swift.Int, tileID: Swift.Int) -&gt; ()"
+                  moduleName = "a month game"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bagjeonghun/Documents/xcode/a%20month%20game/a%20month%20game/Model/MapModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "244">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

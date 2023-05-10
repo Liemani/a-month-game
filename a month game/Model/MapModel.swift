@@ -16,7 +16,13 @@ class MapModel {
 //    = Array<Array<Int>>(repeating: Array<Int>(repeating: 0, count: 100), count: 100)
 
     init() {
+        load()
+    }
+
+    func load() {
         let fileManager = FileManager.default
+
+//        try! fileManager.removeItem(at: Constant.tileMapDataFileURL)
 
         if !fileManager.fileExists(atPath: Constant.tileMapDataFileURL.path) {
             if !fileManager.fileExists(atPath: Constant.worldDirectoryURL.path) {
@@ -37,6 +43,10 @@ class MapModel {
         tileMap = tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
+
+        for i in 0..<5 {
+            print(tileMap[i])
+        }
     }
 
     func setTileData(row: Int, column: Int, tileID: Int) {
@@ -48,7 +58,7 @@ class MapModel {
 
         let fileHandle = try! FileHandle(forWritingTo: Constant.tileMapDataFileURL)
 
-        try! fileHandle.seek(toOffset: UInt64(Constant.gridSize * row + column))
+        try! fileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * (Constant.gridSize * row + column)))
 
         fileHandle.write(data)
         fileHandle.closeFile()
