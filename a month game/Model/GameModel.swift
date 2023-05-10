@@ -8,5 +8,5 @@
 import Foundation
 
 class GameModel {
-    var mapModel = MapModel()
+    var mapModel = TileMapModel()
 }

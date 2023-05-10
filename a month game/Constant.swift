@@ -34,6 +34,7 @@ struct Constant {
         
         static let grassTile: String = "tile_grass"
         static let woodTile: String = "tile_wood"
+        static let woodWallTile: String = "tile_wall_wood"
     }
     
     static let velocityDamping: Double = 1500.0

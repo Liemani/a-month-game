@@ -11,7 +11,7 @@
 		031D57562A076DC8007EF383 /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterController.swift */; };
 		031D57592A07731A007EF383 /* GameController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* GameController.swift */; };
 		031D575C2A07C24C007EF383 /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575B2A07C24C007EF383 /* GameModel.swift */; };
-		031D575E2A07C311007EF383 /* MapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575D2A07C311007EF383 /* MapModel.swift */; };
+		031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575D2A07C311007EF383 /* TileMapModel.swift */; };
 		031D57632A07D3F6007EF383 /* Data.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 031D57612A07D3F5007EF383 /* Data.xcdatamodeld */; };
 		031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57642A07D7D9007EF383 /* CoreDataStack.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
@@ -28,7 +28,7 @@
 		031D57552A076DC8007EF383 /* CharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* GameController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameController.swift; sourceTree = "<group>"; };
 		031D575B2A07C24C007EF383 /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
-		031D575D2A07C311007EF383 /* MapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapModel.swift; sourceTree = "<group>"; };
+		031D575D2A07C311007EF383 /* TileMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMapModel.swift; sourceTree = "<group>"; };
 		031D57622A07D3F6007EF383 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		031D57642A07D7D9007EF383 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				031D575B2A07C24C007EF383 /* GameModel.swift */,
-				031D575D2A07C311007EF383 /* MapModel.swift */,
+				031D575D2A07C311007EF383 /* TileMapModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -201,7 +201,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				031D575E2A07C311007EF383 /* MapModel.swift in Sources */,
+				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
 				038330A82A02850A008DEA10 /* GameScene.swift in Sources */,
 				031D57592A07731A007EF383 /* GameController.swift in Sources */,
 				031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */,

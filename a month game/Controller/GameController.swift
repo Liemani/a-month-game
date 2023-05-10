@@ -8,6 +8,7 @@
 import UIKit
 
 class GameController {
+
     var gameModel: GameModel!
     var gameScene: GameScene!
 
@@ -62,7 +63,7 @@ class GameController {
 
         updateCamera(timeInterval)
         updateVelocity(timeInterval)
-        updateTile(currentTime)
+//        toggleTileIfPass1Sec(currentTime)
 
         lastUpdateTime = currentTime
     }
@@ -87,7 +88,7 @@ class GameController {
 
     var lastTileUpdateTime: TimeInterval = 0.0
     var tileUpdateCoord = Array<Int>(repeating: 0, count: 2)
-    func updateTile(_ currentTime: TimeInterval) {
+    func toggleTileIfPass1Sec(_ currentTime: TimeInterval) {
         lastTileUpdateTime = lastTileUpdateTime == 0.0 ? currentTime : lastTileUpdateTime
         let timeInterval = currentTime - lastTileUpdateTime
 
@@ -106,7 +107,8 @@ class GameController {
 
     func toggleTile(row: Int, column: Int) {
         let newTileID = self.gameModel.mapModel.tileMap[100 * row + column] ^ 1
-        self.gameModel.mapModel.setTileData(row: row, column: column, tileID: newTileID)
+        self.gameModel.mapModel.setTile(row: row, column: column, tileID: newTileID)
         self.gameScene.setTile(row: row, column: column, tileID: newTileID)
     }
+
 }

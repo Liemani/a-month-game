@@ -16,7 +16,7 @@ class GameScene: SKScene {
     var uiLayer: SKNode!
 
     var tileInformationDictionary = Dictionary<String, (SKTileGroup, SKTileDefinition)>()
-    let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile]
+    let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile, Constant.ResourceName.woodWallTile]
 
     // MARK: -
     override func didMove(to view: SKView) {
@@ -54,15 +54,16 @@ class GameScene: SKScene {
     }
 
     func initTileDictionary() {
-        let grassTileTexture = SKTexture(imageNamed: Constant.ResourceName.grassTile)
-        let grassTileDefinition = SKTileDefinition(texture: grassTileTexture)
-        let grassTileGroup = SKTileGroup(tileDefinition: grassTileDefinition)
-        self.tileInformationDictionary[Constant.ResourceName.grassTile] = (grassTileGroup, grassTileDefinition)
+        for resourceName in tileIDToKey {
+            addTileToDictionary(resourceName: resourceName)
+        }
+    }
 
-        let woodTileTexture = SKTexture(imageNamed: Constant.ResourceName.woodTile)
-        let woodTileDefinition = SKTileDefinition(texture: woodTileTexture)
-        let woodTileGroup = SKTileGroup(tileDefinition: woodTileDefinition)
-        self.tileInformationDictionary[Constant.ResourceName.woodTile] = (woodTileGroup, woodTileDefinition)
+    func addTileToDictionary(resourceName: String) {
+        let tileTexture = SKTexture(imageNamed: resourceName)
+        let tileDefinition = SKTileDefinition(texture: tileTexture)
+        let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
+        self.tileInformationDictionary[resourceName] = (tileGroup, tileDefinition)
     }
 
     func initCamera() {
