@@ -8,6 +8,7 @@
 import Foundation
 
 struct Constant {
+
     static let defaultSize: Double = 250
 
     static let screenSize: CGSize = CGSize(width: 750 * 2, height: 1334 * 2)
@@ -31,15 +32,17 @@ struct Constant {
         static let character: String = "character"
         static let menuButton: String = "menu button"
         static let inventoryCell: String = "inventory cell"
-        
+        static let bgPortal: String = "bg_portal"
+
         static let grassTile: String = "tile_grass"
         static let woodTile: String = "tile_wood"
         static let woodWallTile: String = "tile_wall_wood"
     }
     
-    static let velocityDamping: Double = 1500.0
+    static let velocityDamping: Double = 3000.0
 
     // MARK: - URL
     static let worldDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("world_a")
     static let tileMapDataFileURL = worldDirectoryURL.appendingPathComponent("tileMapData")
+
 }
