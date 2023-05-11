@@ -9,37 +9,44 @@ import Foundation
 
 struct Constant {
 
-    static let defaultSize: Double = 250
+    static let defaultSize = 250.0
 
-    static let screenSize: CGSize = CGSize(width: 750 * 2, height: 1334 * 2)
-    static let screenCenter: CGPoint = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
+    static let screenSize = CGSize(width: 750 * 2, height: 1334 * 2)
+    static let screenCenter = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
 
-    static let menuPosition: CGPoint = CGPoint(x: screenSize.width / 2 - defaultSize, y: screenSize.height / 2 - defaultSize)
-    static let defaultNodeSize: CGSize = CGSize(width: defaultSize, height: defaultSize)
+    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
+    static let menuPosition = CGPoint(x: screenSize.width / 2 - defaultSize, y: screenSize.height / 2 - defaultSize)
+    static let enterButtonPosition = screenCenter
+    static let enterButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
+    static let resetButtonPosition = CGPoint(x: screenCenter.x, y: screenCenter.y - defaultSize * 2)
+    static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
-    static let inventoryCellCount: Int = 5
-    static let inventoryCellFirstPosition: CGPoint = CGPoint(x: -screenCenter.x + defaultSize, y: -screenCenter.y + defaultSize)
-    static let inventoryCellLastPosition: CGPoint = CGPoint(x: screenCenter.x - defaultSize, y: -screenCenter.y + defaultSize)
+    static let inventoryCellCount = 5
+    static let inventoryCellFirstPosition = CGPoint(x: -screenCenter.x + defaultSize, y: -screenCenter.y + defaultSize)
+    static let inventoryCellLastPosition = CGPoint(x: screenCenter.x - defaultSize, y: -screenCenter.y + defaultSize)
 
     static let gridSize: Int = 100
 
     struct Frame {
-        static let character: CGRect = CGRect(origin: CGPoint(), size: CGSize(width: defaultSize, height: defaultSize))
-        static let menuButton: CGRect = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
+        static let character = CGRect(origin: CGPoint(), size: CGSize(width: defaultSize, height: defaultSize))
+        static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
+        static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
+        static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)
     }
 
     struct ResourceName {
-        static let character: String = "character"
-        static let menuButton: String = "menu button"
-        static let inventoryCell: String = "inventory cell"
-        static let bgPortal: String = "bg_portal"
+        static let character = "character"
+        static let menuButton = "menu button"
+        static let inventoryCell = "inventory cell"
+        static let bgPortal = "bg_portal"
+        static let button = "button"
 
-        static let grassTile: String = "tile_grass"
-        static let woodTile: String = "tile_wood"
-        static let woodWallTile: String = "tile_wall_wood"
+        static let grassTile = "tile_grass"
+        static let woodTile = "tile_wood"
+        static let woodWallTile = "tile_wall_wood"
     }
     
-    static let velocityDamping: Double = 3000.0
+    static let velocityDamping = 3000.0
 
     // MARK: - URL
     static let worldDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("world_a")

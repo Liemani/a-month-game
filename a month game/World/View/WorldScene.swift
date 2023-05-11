@@ -87,7 +87,7 @@ class WorldScene: SKScene {
         }
 
         tileMapNode.position = Constant.screenCenter
-        tileMapNode.zPosition = -1
+        tileMapNode.zPosition = -1.0
 
         self.addChild(tileMapNode)
         self.tileMapNode = tileMapNode

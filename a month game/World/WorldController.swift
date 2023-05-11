@@ -9,6 +9,7 @@ import UIKit
 
 class WorldController {
 
+    weak var viewController: UIViewController!
     var worldModel: WorldModel!
     var worldScene: WorldScene!
 
@@ -19,9 +20,9 @@ class WorldController {
 
         worldScene.size = Constant.screenSize
         worldScene.scaleMode = .aspectFit
+        worldScene.worldController = self
 
         self.worldScene = worldScene
-        self.worldScene.worldController = self
     }
 
     // MARK: - touch

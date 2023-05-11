@@ -11,6 +11,9 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
+enterButton, resetButton resource 생성
+button touch 인식 방식 개선
+
 tile 관련되서 enum 과 resource path 들을 Constant 에 다 넣어도 좋겠다
 미끄러지는 방식을 더 자연스럽게 만들기
 메뉴 화면을 만들자
