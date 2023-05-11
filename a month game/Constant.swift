@@ -48,8 +48,7 @@ struct Constant {
     
     static let velocityDamping = 3000.0
 
-    // MARK: - URL
-    static let worldDirectoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("world_a")
-    static let tileMapDataFileURL = worldDirectoryURL.appendingPathComponent("tileMapData")
+    static let defaultWorldName = "world000"
+    static let tileMapFileName = "tileMap.dat"
 
 }

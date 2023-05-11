@@ -8,5 +8,20 @@
 import Foundation
 
 class WorldModel {
-    var mapModel = TileMapModel()
+
+    weak var worldController: WorldController!
+    var fileController: FileController!
+    var tileMapModel: TileMapModel!
+
+    init(worldController: WorldController, worldName: String) {
+        self.worldController = worldController
+        self.fileController = FileController(worldName: Constant.defaultWorldName)
+        let tileMapData = self.fileController.loadTileMapData()
+        self.tileMapModel = TileMapModel(worldModel: self, tileMapData: tileMapData)
+    }
+
+    func saveTileData(index: Int, tileData: Data) {
+        self.fileController.saveTileData(index: index, tileData: tileData)
+    }
+
 }

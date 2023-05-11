@@ -10,50 +10,34 @@ import CoreData
 
 class TileMapModel {
 
+    weak var worldModel: WorldModel!
+
     var tileMapData: Data!
     var tileMap: UnsafeMutableBufferPointer<Int>!
 
-    // MARK: init
-    init() {
-        load()
-        customSetTile()
+    // MARK: - init
+    init(worldModel: WorldModel, tileMapData: Data) {
+        self.worldModel = worldModel
+
+        setTileMapData(tileMapData: tileMapData)
+        setTileCustom()
     }
 
-    func load() {
-        createTileMapDataFileIfNotExist()
-        loadTileMap()
-    }
-
-    func createTileMapDataFileIfNotExist() {
-        let fileManager = FileManager.default
-
-        if !fileManager.fileExists(atPath: Constant.tileMapDataFileURL.path) {
-            createWorldDirectoryIfNotExist()
-            fileManager.createFile(atPath: Constant.tileMapDataFileURL.path, contents: Data(count: MemoryLayout<Int>.size * 100 * 100))
-        }
-    }
-
-    func createWorldDirectoryIfNotExist() {
-        let fileManager = FileManager.default
-
-        if !fileManager.fileExists(atPath: Constant.worldDirectoryURL.path) {
-            try! fileManager.createDirectory(at: Constant.worldDirectoryURL, withIntermediateDirectories: false)
-        }
-    }
-
-    func loadTileMap() {
-        let fileHandle = try! FileHandle(forReadingFrom: Constant.tileMapDataFileURL)
-
-        tileMapData = fileHandle.readData(ofLength: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize)
-
-        fileHandle.closeFile()
-
-        tileMap = tileMapData.withUnsafeMutableBytes {
+    func setTileMapData(tileMapData: Data) {
+        self.tileMapData = tileMapData
+        tileMap = self.tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
     }
 
-    // MARK: set tile
+    func setTileCustom() {
+        setTile(row: 45, column: 45, tileID: 1)
+        setTile(row: 48, column: 48, tileID: 2)
+        setTile(row: 52, column: 52, tileID: 2)
+        setTile(row: 52, column: 53, tileID: 2)
+    }
+
+    // MARK: - set tile
     func setTile(row: Int, column: Int, tileID: Int) {
         self.tileMap[100 * row + column] = tileID
         saveTile(row: row, column: column, tileID: tileID)
@@ -61,20 +45,8 @@ class TileMapModel {
 
     func saveTile(row: Int, column: Int, tileID: Int) {
         var value = tileID
-        let data = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        
-        let fileHandle = try! FileHandle(forWritingTo: Constant.tileMapDataFileURL)
-        try! fileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * (Constant.gridSize * row + column)))
-        fileHandle.write(data)
-        try! fileHandle.write(contentsOf: data)
-        fileHandle.closeFile()
-    }
-
-    // MARK: custom
-    func customSetTile() {
-        setTile(row: 48, column: 48, tileID: 2)
-        setTile(row: 52, column: 52, tileID: 2)
-        setTile(row: 52, column: 53, tileID: 2)
+        let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
+        worldModel.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
     }
 
 }

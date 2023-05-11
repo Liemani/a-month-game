@@ -16,8 +16,8 @@ class WorldScene: SKScene {
     var worldObjectLayer: SKNode!
     var uiLayer: SKNode!
 
-    var tileInformationDictionary = Dictionary<String, (SKTileGroup, SKTileDefinition)>()
     let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile, Constant.ResourceName.woodWallTile]
+    var tileInformationDictionary = Dictionary<Int, (SKTileGroup, SKTileDefinition)>()
 
     // MARK: - override
     override func didMove(to view: SKView) {
@@ -55,16 +55,16 @@ class WorldScene: SKScene {
     }
 
     func initTileDictionary() {
-        for resourceName in tileIDToKey {
-            addTileToDictionary(resourceName: resourceName)
+        for tileID in 0..<tileIDToKey.count {
+            addTileToDictionary(tileID: tileID)
         }
     }
 
-    func addTileToDictionary(resourceName: String) {
-        let tileTexture = SKTexture(imageNamed: resourceName)
+    func addTileToDictionary(tileID: Int) {
+        let tileTexture = SKTexture(imageNamed: tileIDToKey[tileID])
         let tileDefinition = SKTileDefinition(texture: tileTexture)
         let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
-        self.tileInformationDictionary[resourceName] = (tileGroup, tileDefinition)
+        self.tileInformationDictionary[tileID] = (tileGroup, tileDefinition)
     }
 
     func initCamera() {
@@ -74,14 +74,15 @@ class WorldScene: SKScene {
     }
 
     func initTileMapNode() {
-        let tileSet = SKTileSet(tileGroups: [self.tileInformationDictionary[Constant.ResourceName.grassTile]!.0, self.tileInformationDictionary[Constant.ResourceName.woodTile]!.0])
+        let tileGroups = tileInformationDictionary.values.map { $0.0 }
+        let tileSet = SKTileSet(tileGroups: tileGroups)
 
         let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
 
         for row in 0..<Constant.gridSize {
             for column in 0..<Constant.gridSize {
-                let tileID: Int = self.worldController.worldModel.mapModel.tileMap[100 * row + column]
-                let tileInformation = self.tileInformationDictionary[self.tileIDToKey[tileID]]!
+                let tileID = self.worldController.worldModel.tileMapModel.tileMap[Constant.gridSize * row + column]
+                let tileInformation = self.tileInformationDictionary[tileID]!
                 tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
             }
         }
@@ -125,7 +126,7 @@ class WorldScene: SKScene {
     }
 
     func setTile(row: Int, column: Int, tileID: Int) {
-        let tileInformation = self.tileInformationDictionary[self.tileIDToKey[tileID]]!
+        let tileInformation = self.tileInformationDictionary[tileID]!
         self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
     }
 

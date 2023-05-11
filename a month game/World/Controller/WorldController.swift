@@ -9,12 +9,13 @@ import UIKit
 
 class WorldController {
 
-    weak var viewController: UIViewController!
+    weak var viewController: ViewController!
     var worldModel: WorldModel!
     var worldScene: WorldScene!
 
-    init() {
-        self.worldModel = WorldModel()
+    init(viewController: ViewController, worldName: String) {
+        self.viewController = viewController
+        self.worldModel = WorldModel(worldController: self, worldName: worldName)
 
         let worldScene = WorldScene()
 
@@ -58,7 +59,7 @@ class WorldController {
         self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
     }
 
-    // MARK: update()
+    // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
     func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
@@ -108,8 +109,8 @@ class WorldController {
     }
 
     func toggleTile(row: Int, column: Int) {
-        let newTileID = self.worldModel.mapModel.tileMap[100 * row + column] ^ 1
-        self.worldModel.mapModel.setTile(row: row, column: column, tileID: newTileID)
+        let newTileID = self.worldModel.tileMapModel.tileMap[100 * row + column] ^ 1
+        self.worldModel.tileMapModel.setTile(row: row, column: column, tileID: newTileID)
         self.worldScene.setTile(row: row, column: column, tileID: newTileID)
     }
 

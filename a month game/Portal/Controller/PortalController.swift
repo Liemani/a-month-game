@@ -35,7 +35,7 @@ class PortalController {
         }
 
         if self.portalScene.resetButton.contains(touchPoint) {
-            print("reset button is touched")
+            FileController(worldName: Constant.defaultWorldName).resetWorld()
         }
     }
 

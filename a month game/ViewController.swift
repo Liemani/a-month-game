@@ -11,18 +11,23 @@ import GameplayKit
 
 class ViewController: UIViewController {
 
+    var fileController: FileController!
+
     var portalController: PortalController?
     var worldController: WorldController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setView()
+        setPortalScene()
+    }
+
+    func setView() {
         let view = self.view as! SKView
         view.ignoresSiblingOrder = true
         view.showsFPS = true
         view.showsNodeCount = true
-
-        setPortalScene()
     }
 
     func setPortalScene() {
@@ -36,8 +41,7 @@ class ViewController: UIViewController {
 
     func setWorldScene() {
         portalController = nil
-        let worldController = WorldController()
-        worldController.viewController = self
+        let worldController = WorldController(viewController: self, worldName: Constant.defaultWorldName)
         let view = self.view as! SKView
         view.presentScene(worldController.worldScene)
         self.worldController = worldController

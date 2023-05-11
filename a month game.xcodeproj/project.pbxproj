@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		030ABFB12A0BCE6700BAB9B8 /* PortalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB02A0BCE6600BAB9B8 /* PortalController.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
+		030ABFB62A0C93AA00BAB9B8 /* FileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* FileController.swift */; };
+		030ABFB82A0CD90A00BAB9B8 /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB72A0CD90A00BAB9B8 /* TouchController.swift */; };
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterController.swift */; };
 		031D57592A07731A007EF383 /* WorldController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* WorldController.swift */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		030ABFB02A0BCE6600BAB9B8 /* PortalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalController.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
+		030ABFB52A0C93AA00BAB9B8 /* FileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileController.swift; sourceTree = "<group>"; };
+		030ABFB72A0CD90A00BAB9B8 /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* WorldController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldController.swift; sourceTree = "<group>"; };
@@ -59,10 +63,9 @@
 		030ABFAB2A0BCC3A00BAB9B8 /* World */ = {
 			isa = PBXGroup;
 			children = (
-				031D57582A07731A007EF383 /* WorldController.swift */,
+				031D575F2A07C838007EF383 /* Controller */,
 				031D575A2A07C232007EF383 /* Model */,
 				031D57602A07C849007EF383 /* View */,
-				031D575F2A07C838007EF383 /* Controller */,
 			);
 			path = World;
 			sourceTree = "<group>";
@@ -70,10 +73,9 @@
 		030ABFAC2A0BCC4C00BAB9B8 /* Portal */ = {
 			isa = PBXGroup;
 			children = (
-				030ABFB02A0BCE6600BAB9B8 /* PortalController.swift */,
+				030ABFAD2A0BCDF000BAB9B8 /* Controller */,
 				030ABFAF2A0BCDFE00BAB9B8 /* Model */,
 				030ABFAE2A0BCDF900BAB9B8 /* View */,
-				030ABFAD2A0BCDF000BAB9B8 /* Controller */,
 			);
 			path = Portal;
 			sourceTree = "<group>";
@@ -81,6 +83,7 @@
 		030ABFAD2A0BCDF000BAB9B8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				030ABFB02A0BCE6600BAB9B8 /* PortalController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -122,7 +125,9 @@
 		031D575F2A07C838007EF383 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				031D57582A07731A007EF383 /* WorldController.swift */,
 				031D57552A076DC8007EF383 /* CharacterController.swift */,
+				030ABFB72A0CD90A00BAB9B8 /* TouchController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -164,6 +169,7 @@
 			isa = PBXGroup;
 			children = (
 				031D57512A06298F007EF383 /* Constant.swift */,
+				030ABFB52A0C93AA00BAB9B8 /* FileController.swift */,
 				038330A92A02850A008DEA10 /* ViewController.swift */,
 				030ABFAC2A0BCC4C00BAB9B8 /* Portal */,
 				030ABFAB2A0BCC3A00BAB9B8 /* World */,
@@ -248,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
+				030ABFB62A0C93AA00BAB9B8 /* FileController.swift in Sources */,
 				038330A82A02850A008DEA10 /* WorldScene.swift in Sources */,
 				031D57592A07731A007EF383 /* WorldController.swift in Sources */,
 				031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */,
@@ -257,6 +264,7 @@
 				031D57632A07D3F6007EF383 /* Data.xcdatamodeld in Sources */,
 				031D57562A076DC8007EF383 /* CharacterController.swift in Sources */,
 				031D575C2A07C24C007EF383 /* WorldModel.swift in Sources */,
+				030ABFB82A0CD90A00BAB9B8 /* TouchController.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				030ABFB12A0BCE6700BAB9B8 /* PortalController.swift in Sources */,
 			);
