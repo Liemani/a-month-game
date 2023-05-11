@@ -30,16 +30,7 @@ class WorldSceneTouchController {
 
     // MARK: - touch
     func touchDown(_ touch: UITouch) {
-        if self.worldController.worldModel.isMenuOpen {
-
-        } else {
-            switch self.touchState {
-            case .none:
-                startDragging(touch: touch)
-            case .dragging:
-                <#code#>
-            }
-        }
+        startDragging(touch: touch)
     }
 
     func startDragging(touch: UITouch) {

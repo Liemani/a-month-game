@@ -4,6 +4,7 @@ dump.txt
 # index
 dump: 생각을 마구 적음
 일정: 대략적인 일정
+issue: 이슈들
 mandatory: 반드시 필요한 구현
 finish: 완료한 항목
 implementation: 구체적인 구현
@@ -11,7 +12,6 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
-enterButton, resetButton resource 생성
 button touch 인식 방식 개선
 
 tile 관련되서 enum 과 resource path 들을 Constant 에 다 넣어도 좋겠다
@@ -67,10 +67,10 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
 
 2주 2023-05-10 ~ 2023-05-16
 베타 완료
-    2023-05-10
-    2023-05-11
-    2023-05-12
-    2023-05-13
+    2023-05-10 DataController 추가
+    2023-05-11 PortalScene 추가
+    2023-05-12 WorldScene 에서 menu layer 추가
+    2023-05-13 
     2023-05-14
     2023-05-15
     2023-05-16
@@ -94,6 +94,39 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-28
     2023-05-29
     2023-05-30
+
+# issue
+WorldScene 에서 menu layer 추가
+간단한 아이템 구현
+{
+    WorldScene 에서 터치에 따른 동작 구현
+        터치에 따른 state machine 구상
+    isWalkable 에 따른 캐릭터 이동 구현
+
+    pan -> 이동 (1 개 제한)
+    flick -> 미끄러지는 이동
+    item pan -> 아이템 이동 (1 개 제한)
+    button touch -> 기능 수행
+}
+아이템을 드래그해서 내려놓는 기능
+    placeholder 를 보여주고 불가능하면 못내려 놓는다
+데이터 관리
+    캐릭터
+        위치, 스킬
+    바닥 아이템
+    오브젝트
+타일도 캐릭터의 위치 데이터와 마찬가지로 앱을 종료, 중단 시에 저장해도 충분할지 조사
+sense message 구현
+
+컨텐츠 추가
+    나무
+    도끼
+    나무 바닥
+    나무 벽
+    망치
+    돌맹이
+
+enterButton, resetButton 맞춤 resource 제작
 
 # mandatory: 기대 시간(h) + 요구 사항
 view

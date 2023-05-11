@@ -43,7 +43,6 @@ class PortalScene: SKScene {
     }
 
     // MARK: - touch
-
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.portalController.touchDown(touch) }
     }

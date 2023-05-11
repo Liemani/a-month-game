@@ -25,8 +25,8 @@ class FileController {
         self.tileMapDataFileURL = self.worldDirectoryURL.appending(path: Constant.tileMapFileName)
     }
 
-    // MARK: - create world data
-    func createWorldDataIfNotExist() {
+    // MARK: - modify world data
+    private func createWorldDataIfNotExist() {
         createWorldDirectoryIfNotExist()
         createTileDataFileIfNotExist()
     }
@@ -38,15 +38,20 @@ class FileController {
     }
 
     private func createTileDataFileIfNotExist() {
-        if !self.fileManager.fileExists(atPath: tileMapDataFileURL.path) {
-            self.fileManager.createFile(atPath: tileMapDataFileURL.path, contents: Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize))
+        if !self.fileManager.fileExists(atPath: self.tileMapDataFileURL.path) {
+            self.fileManager.createFile(atPath: self.tileMapDataFileURL.path, contents: Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize))
+        }
+    }
+
+    private func removeWorldDirectoryIfExist() {
+        if self.fileManager.fileExists(atPath: self.worldDirectoryURL.path) {
+            try! self.fileManager.removeItem(at: self.worldDirectoryURL)
         }
     }
 
     // MARK: - reset
     func resetWorld() {
-        try! self.fileManager.removeItem(at: self.worldDirectoryURL)
-
+        removeWorldDirectoryIfExist()
         createWorldDataIfNotExist()
     }
 
