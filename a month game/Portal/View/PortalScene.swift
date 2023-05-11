@@ -35,27 +35,11 @@ class PortalScene: SKScene {
 
         let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
 
-        self.enterButton = createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.enterButton, labelText: "Enter World", andAddTo: uiLayer)
-        self.resetButton = createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.resetButton, labelText: "Reset", andAddTo: uiLayer)
+        self.enterButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.enterButton, labelText: "Enter World", andAddTo: uiLayer)
+        self.resetButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.resetButton, labelText: "Reset", andAddTo: uiLayer)
 
         self.addChild(uiLayer)
         self.uiLayer = uiLayer
-    }
-
-    func createLabeledSpriteNode(texture: SKTexture, in frame: CGRect, labelText: String, andAddTo parentNode: SKNode) -> SKSpriteNode{
-        let spriteNode = SKSpriteNode(texture: texture)
-        spriteNode.position = frame.origin
-        spriteNode.size = frame.size
-
-        let labelNode = SKLabelNode(text: labelText)
-        labelNode.fontSize = Constant.defaultSize / 2
-        labelNode.position = CGPoint(x: 0, y: -labelNode.fontSize / 2)
-        labelNode.zPosition = 1.0
-        spriteNode.addChild(labelNode)
-
-        parentNode.addChild(spriteNode)
-
-        return spriteNode
     }
 
     // MARK: - touch

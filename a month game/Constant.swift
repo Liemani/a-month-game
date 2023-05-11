@@ -20,6 +20,8 @@ struct Constant {
     static let enterButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
     static let resetButtonPosition = CGPoint(x: screenCenter.x, y: screenCenter.y - defaultSize * 2)
     static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
+    static let outWorldButtonPosition = screenCenter
+    static let outWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let inventoryCellCount = 5
     static let inventoryCellFirstPosition = CGPoint(x: -screenCenter.x + defaultSize, y: -screenCenter.y + defaultSize)
@@ -32,6 +34,7 @@ struct Constant {
         static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
         static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
         static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)
+        static let outWorldButton = CGRect(origin: outWorldButtonPosition, size: outWorldButtonSize)
     }
 
     struct ResourceName {

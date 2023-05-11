@@ -11,47 +11,28 @@ import GameplayKit
 class WorldScene: SKScene {
 
     weak var worldController: WorldController!
+    var worldSceneTouchController: WorldSceneTouchController!
 
     var tileMapNode: SKTileMapNode!
     var worldObjectLayer: SKNode!
     var uiLayer: SKNode!
+    var menuLayer: SKNode!
 
     let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile, Constant.ResourceName.woodWallTile]
     var tileInformationDictionary = Dictionary<Int, (SKTileGroup, SKTileDefinition)>()
 
-    // MARK: - override
+    // MARK: - didMove
     override func didMove(to view: SKView) {
         initTileDictionary()
 
         self.initLayer()
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.touchDown(touch) }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.touchMoved(touch) }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.touchUp(touch) }
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.touchUp(touch) }
-    }
-
-    override func update(_ currentTime: TimeInterval) {
-        self.worldController.update(currentTime)
-    }
-
-    // MARK: -
     func initLayer() {
-        initCamera()
         initTileMapNode()
         initGameObjectLayer()
         initUILayer()
+        initMenuLayer()
     }
 
     func initTileDictionary() {
@@ -65,12 +46,6 @@ class WorldScene: SKScene {
         let tileDefinition = SKTileDefinition(texture: tileTexture)
         let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
         self.tileInformationDictionary[tileID] = (tileGroup, tileDefinition)
-    }
-
-    func initCamera() {
-        let camera: SKCameraNode = SKCameraNode()
-        self.addChild(camera)
-        self.camera = camera
     }
 
     func initTileMapNode() {
@@ -97,6 +72,7 @@ class WorldScene: SKScene {
     func initGameObjectLayer() {
         let worldObjectLayer = SKNode()
         self.addChild(worldObjectLayer)
+        self.worldObjectLayer = worldObjectLayer
     }
 
     func initUILayer() {
@@ -123,8 +99,47 @@ class WorldScene: SKScene {
         }
 
         self.camera!.addChild(uiLayer)
+        self.uiLayer = uiLayer
     }
 
+    func initMenuLayer() {
+        let menuLayer = SKSpriteNode()
+
+        menuLayer.color = .black
+        menuLayer.alpha = 0.1
+        menuLayer.zPosition = 2.0
+        menuLayer.isHidden = true
+
+        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
+        let outWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.outWorldButton, labelText: "Out World", andAddTo: menuLayer)
+        outWorldButton.zPosition = 1.0
+
+        self.addChild(menuLayer)
+        self.menuLayer = menuLayer
+    }
+
+    // MARK: - touoch
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.worldController.worldSceneTouchController.touchDown(touch) }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.worldController.worldSceneTouchController.touchMoved(touch) }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch) }
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        self.worldController.update(currentTime)
+    }
+
+    // MARK: - set tile
     func setTile(row: Int, column: Int, tileID: Int) {
         let tileInformation = self.tileInformationDictionary[tileID]!
         self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)

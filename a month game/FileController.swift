@@ -13,6 +13,7 @@ class FileController {
     var worldDirectoryURL: URL!
     var tileMapDataFileURL: URL!
 
+    // MARK: - init
     init(worldName: String) {
         self.fileManager = FileManager.default
 

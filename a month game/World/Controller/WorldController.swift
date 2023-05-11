@@ -6,13 +6,16 @@
 //
 
 import UIKit
+import SpriteKit
 
 class WorldController {
 
     weak var viewController: ViewController!
     var worldModel: WorldModel!
     var worldScene: WorldScene!
+    var worldSceneTouchController: WorldSceneTouchController!
 
+    // MARK: - init
     init(viewController: ViewController, worldName: String) {
         self.viewController = viewController
         self.worldModel = WorldModel(worldController: self, worldName: worldName)
@@ -23,40 +26,15 @@ class WorldController {
         worldScene.scaleMode = .aspectFit
         worldScene.worldController = self
 
+        let camera = SKCameraNode()
+        worldScene.camera = camera
+        worldScene.addChild(camera)
+
         self.worldScene = worldScene
-    }
 
-    // MARK: - touch
-    var touchDownTimestamp: TimeInterval = 0.0
-    var touchDownLocation: CGPoint = CGPoint()
-    var velocityVector: CGVector = CGVector()
-
-    func touchDown(_ touch: UITouch) {
-        recordTouchDown(touch)
-    }
-
-    func recordTouchDown(_ touch: UITouch) {
-        self.touchDownTimestamp = touch.timestamp
-        self.touchDownLocation = touch.location(in: self.worldScene.camera!)
-        self.velocityVector = CGVector()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        let currentLocation = touch.location(in: self.worldScene.camera!)
-        let previousLocation = touch.previousLocation(in: self.worldScene.camera!)
-        let dx = currentLocation.x - previousLocation.x
-        let dy = currentLocation.y - previousLocation.y
-        let cameraPosition = self.worldScene.camera!.position
-        self.worldScene.camera!.position = CGPoint(x: cameraPosition.x - dx, y: cameraPosition.y - dy)
-    }
-
-    func touchUp(_ touch: UITouch) {
-        let currentLocation = touch.location(in: self.worldScene.camera!)
-        let timeInterval = touch.timestamp - touchDownTimestamp
-
-        let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
-        let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
-        self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
+        let worldSceneTouchController = WorldSceneTouchController(worldController: self)
+        worldSceneTouchController.camera = camera
+        self.worldSceneTouchController = worldSceneTouchController
     }
 
     // MARK: - update
@@ -72,20 +50,20 @@ class WorldController {
     }
 
     func updateCamera(_ timeInterval: TimeInterval) {
-        let cameraPosition = self.worldScene.camera!.position
-        let newCameraPositionX = cameraPosition.x + self.velocityVector.dx * timeInterval
-        let newCameraPositionY = cameraPosition.y + self.velocityVector.dy * timeInterval
-        self.worldScene.camera!.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
+        let cameraPosition = self.worldSceneTouchController.camera.position
+        let newCameraPositionX = cameraPosition.x + self.worldSceneTouchController.velocityVector.dx * timeInterval
+        let newCameraPositionY = cameraPosition.y + self.worldSceneTouchController.velocityVector.dy * timeInterval
+        self.worldSceneTouchController.camera.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
     }
 
     func updateVelocity(_ timeInterval: TimeInterval) {
-        let velocity = (self.velocityVector.dx * self.velocityVector.dx + self.velocityVector.dy * self.velocityVector.dy).squareRoot()
+        let velocity = (self.worldSceneTouchController.velocityVector.dx * self.worldSceneTouchController.velocityVector.dx + self.worldSceneTouchController.velocityVector.dy * self.worldSceneTouchController.velocityVector.dy).squareRoot()
         if velocity <= Constant.velocityDamping * timeInterval {
-            self.velocityVector = CGVector()
+            self.worldSceneTouchController.velocityVector = CGVectorMake(0.0, 0.0)
         } else {
-            let newVelocityVectorX = self.velocityVector.dx - Constant.velocityDamping / velocity * self.velocityVector.dx * timeInterval
-            let newVelocityVectorY = self.velocityVector.dy - Constant.velocityDamping / velocity * self.velocityVector.dy * timeInterval
-            self.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
+            let newVelocityVectorX = self.worldSceneTouchController.velocityVector.dx - Constant.velocityDamping / velocity * self.worldSceneTouchController.velocityVector.dx * timeInterval
+            let newVelocityVectorY = self.worldSceneTouchController.velocityVector.dy - Constant.velocityDamping / velocity * self.worldSceneTouchController.velocityVector.dy * timeInterval
+            self.worldSceneTouchController.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
         }
     }
 

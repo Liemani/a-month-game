@@ -13,6 +13,10 @@ class WorldModel {
     var fileController: FileController!
     var tileMapModel: TileMapModel!
 
+    var isMenuOpen: Bool {
+        return self.worldController.worldScene.menuLayer.isHidden
+    }
+
     init(worldController: WorldController, worldName: String) {
         self.worldController = worldController
         self.fileController = FileController(worldName: Constant.defaultWorldName)
