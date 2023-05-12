@@ -107,6 +107,7 @@ WorldScene 에서 menu layer 추가
     flick -> 미끄러지는 이동
     item pan -> 아이템 이동 (1 개 제한)
     button touch -> 기능 수행
+    item touch -> interact(multi touch -> add queue)
 }
 아이템을 드래그해서 내려놓는 기능
     placeholder 를 보여주고 불가능하면 못내려 놓는다
@@ -298,6 +299,8 @@ class Hammer: GameObject, Pickable {
 개선 사항
     화면에 적합한 비율의 리소스 사용
 여러 월드 생성 가능
+오브젝트를 드래그하는 상태에서 손가락을 떼지 않고 튕기면 반경 내에 그 방향으로 날라가는 상호작용
+    오브젝트가 손가락에 가려지는 것을 막을 수 있다
 
 # dump log
 624B27 어두운 고동색

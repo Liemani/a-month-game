@@ -1,5 +1,5 @@
 //
-//  PortalController.swift
+//  PortalSceneController.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/10.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PortalController {
+class PortalSceneController {
 
     weak var viewController: ViewController!
     var portalScene: PortalScene!
@@ -22,13 +22,13 @@ class PortalController {
         self.portalScene = portalScene
     }
 
-    func touchDown(_ touch: UITouch) {
+    func touchDown(touch: UITouch) {
     }
 
-    func touchMoved(_ touch: UITouch) {
+    func touchMoved(touch: UITouch) {
     }
 
-    func touchUp(_ touch: UITouch) {
+    func touchUp(touch: UITouch) {
         let touchPoint = touch.location(in: self.portalScene.uiLayer)
         if self.portalScene.enterButton.contains(touchPoint) {
             viewController.setWorldScene()

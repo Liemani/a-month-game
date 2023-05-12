@@ -13,15 +13,44 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     var fileController: FileController!
 
-    var portalController: PortalController?
-    var worldController: WorldController?
+    var portalController: PortalSceneController?
+    var worldController: WorldSceneController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setView()
         setPortalScene()
+
+//        setGestureRecognizer()
     }
+
+//    func setGestureRecognizer() {
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+//        tapGesture.delegate = self
+//        self.view.addGestureRecognizer(tapGesture)
+//
+//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+//        panGesture.delegate = self
+//        self.view.addGestureRecognizer(panGesture)
+//    }
+//
+//    @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
+//        // Handle the tap gesture here
+//        let location = sender.location(in: self.view)
+//        print("Tap detected at (\(location.x), \(location.y))")
+//    }
+//
+//    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+//        // Handle the tap gesture here
+//        let location = sender.location(in: self.view)
+//        print("Pan detected at (\(location.x), \(location.y))")
+//    }
+//
+//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+//                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
 
     func setView() {
         let view = self.view as! SKView
@@ -32,7 +61,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     func setPortalScene() {
         worldController = nil
-        let portalController = PortalController()
+        let portalController = PortalSceneController()
         portalController.viewController = self
         let view = self.view as! SKView
         view.presentScene(portalController.portalScene)
@@ -41,7 +70,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     func setWorldScene() {
         portalController = nil
-        let worldController = WorldController(viewController: self, worldName: Constant.defaultWorldName)
+        let worldController = WorldSceneController(viewController: self, worldName: Constant.defaultWorldName)
         let view = self.view as! SKView
         view.presentScene(worldController.worldScene)
         self.worldController = worldController

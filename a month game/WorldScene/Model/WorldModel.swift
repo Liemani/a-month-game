@@ -9,15 +9,15 @@ import Foundation
 
 class WorldModel {
 
-    weak var worldController: WorldController!
+    weak var worldController: WorldSceneController!
     var fileController: FileController!
     var tileMapModel: TileMapModel!
 
     var isMenuOpen: Bool {
-        return self.worldController.worldScene.menuLayer.isHidden
+        return !self.worldController.worldScene.menuLayer.isHidden
     }
 
-    init(worldController: WorldController, worldName: String) {
+    init(worldController: WorldSceneController, worldName: String) {
         self.worldController = worldController
         self.fileController = FileController(worldName: Constant.defaultWorldName)
         let tileMapData = self.fileController.loadTileMapData()

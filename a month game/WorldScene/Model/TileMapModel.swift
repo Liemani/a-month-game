@@ -19,8 +19,8 @@ class TileMapModel {
     init(worldModel: WorldModel, tileMapData: Data) {
         self.worldModel = worldModel
 
-        setTileMapData(tileMapData: tileMapData)
-        setTileCustom()
+        self.setTileMapData(tileMapData: tileMapData)
+        self.setTileCustom()
     }
 
     func setTileMapData(tileMapData: Data) {
@@ -31,22 +31,22 @@ class TileMapModel {
     }
 
     func setTileCustom() {
-        setTile(row: 45, column: 45, tileID: 1)
-        setTile(row: 48, column: 48, tileID: 2)
-        setTile(row: 52, column: 52, tileID: 2)
-        setTile(row: 52, column: 53, tileID: 2)
+        self.setTile(row: 45, column: 45, tileID: 1)
+        self.setTile(row: 48, column: 48, tileID: 2)
+        self.setTile(row: 52, column: 52, tileID: 2)
+        self.setTile(row: 52, column: 53, tileID: 2)
     }
 
     // MARK: - set tile
     func setTile(row: Int, column: Int, tileID: Int) {
         self.tileMap[100 * row + column] = tileID
-        saveTile(row: row, column: column, tileID: tileID)
+        self.saveTile(row: row, column: column, tileID: tileID)
     }
 
     func saveTile(row: Int, column: Int, tileID: Int) {
         var value = tileID
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        worldModel.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
+        self.worldModel.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
     }
 
 }

@@ -10,13 +10,15 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    weak var worldController: WorldController!
+    weak var worldController: WorldSceneController!
     var worldSceneTouchController: WorldSceneTouchController!
 
     var tileMapNode: SKTileMapNode!
     var worldObjectLayer: SKNode!
     var uiLayer: SKNode!
     var menuLayer: SKNode!
+    var menuButtonNode: SKNode!
+    var exitWorldButtonNode: SKNode!
 
     let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile, Constant.ResourceName.woodWallTile]
     var tileInformationDictionary = Dictionary<Int, (SKTileGroup, SKTileDefinition)>()
@@ -62,7 +64,7 @@ class WorldScene: SKScene {
             }
         }
 
-        tileMapNode.position = Constant.screenCenter
+        tileMapNode.position = Constant.screenUpRight
         tileMapNode.zPosition = -1.0
 
         self.addChild(tileMapNode)
@@ -87,6 +89,7 @@ class WorldScene: SKScene {
         menuButtonNode.size = Constant.Frame.menuButton.size
         menuButtonNode.position = Constant.Frame.menuButton.origin
         uiLayer.addChild(menuButtonNode)
+        self.menuButtonNode = menuButtonNode
 
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
 
@@ -103,40 +106,46 @@ class WorldScene: SKScene {
     }
 
     func initMenuLayer() {
-        let menuLayer = SKSpriteNode()
-
-        menuLayer.color = .black
-        menuLayer.alpha = 0.1
+        let menuLayer = SKShapeNode()
         menuLayer.zPosition = 2.0
         menuLayer.isHidden = true
 
-        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
-        let outWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.outWorldButton, labelText: "Out World", andAddTo: menuLayer)
-        outWorldButton.zPosition = 1.0
+        let menuBackground = SKShapeNode()
+        let rect = CGRect(origin: Constant.screenDownLeft, size: Constant.screenSize)
+        let path = CGPath(rect: rect, transform: nil)
+        menuBackground.path = path
+        menuBackground.fillColor = .black
+        menuBackground.alpha = 0.5
+        menuLayer.addChild(menuBackground)
 
-        self.addChild(menuLayer)
+        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
+        let exitWorldButtonNode = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuLayer)
+        exitWorldButtonNode.zPosition = 1.0
+        self.exitWorldButtonNode = exitWorldButtonNode
+
+        self.camera!.addChild(menuLayer)
         self.menuLayer = menuLayer
     }
 
     // MARK: - touoch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchDown(touch) }
+        for touch in touches { self.worldController.worldSceneTouchController.touchDown(touch: touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchMoved(touch) }
+        for touch in touches { self.worldController.worldSceneTouchController.touchMoved(touch: touch) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch) }
+        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch: touch) }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch) }
+        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch: touch) }
     }
 
     override func update(_ currentTime: TimeInterval) {
-        self.worldController.update(currentTime)
+        self.worldController.update(currentTime: currentTime)
     }
 
     // MARK: - set tile

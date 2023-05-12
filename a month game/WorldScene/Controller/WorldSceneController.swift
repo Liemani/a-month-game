@@ -8,7 +8,7 @@
 import UIKit
 import SpriteKit
 
-class WorldController {
+class WorldSceneController {
 
     weak var viewController: ViewController!
     var worldModel: WorldModel!
@@ -39,24 +39,24 @@ class WorldController {
 
     // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
-    func update(_ currentTime: TimeInterval) {
+    func update(currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
 
-        updateCamera(timeInterval)
-        updateVelocity(timeInterval)
-//        toggleTileIfPass1Sec(currentTime)
+        updateCamera(timeInterval: timeInterval)
+        updateVelocity(timeInterval: timeInterval)
+//        toggleTileIfPass1Sec(timeInterval: currentTime)
 
         lastUpdateTime = currentTime
     }
 
-    func updateCamera(_ timeInterval: TimeInterval) {
+    func updateCamera(timeInterval: TimeInterval) {
         let cameraPosition = self.worldSceneTouchController.camera.position
         let newCameraPositionX = cameraPosition.x + self.worldSceneTouchController.velocityVector.dx * timeInterval
         let newCameraPositionY = cameraPosition.y + self.worldSceneTouchController.velocityVector.dy * timeInterval
         self.worldSceneTouchController.camera.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
     }
 
-    func updateVelocity(_ timeInterval: TimeInterval) {
+    func updateVelocity(timeInterval: TimeInterval) {
         let velocity = (self.worldSceneTouchController.velocityVector.dx * self.worldSceneTouchController.velocityVector.dx + self.worldSceneTouchController.velocityVector.dy * self.worldSceneTouchController.velocityVector.dy).squareRoot()
         if velocity <= Constant.velocityDamping * timeInterval {
             self.worldSceneTouchController.velocityVector = CGVectorMake(0.0, 0.0)
@@ -69,7 +69,7 @@ class WorldController {
 
     var lastTileUpdateTime: TimeInterval = 0.0
     var tileUpdateCoord = Array<Int>(repeating: 0, count: 2)
-    func toggleTileIfPass1Sec(_ currentTime: TimeInterval) {
+    func toggleTileIfPass1Sec(currentTime: TimeInterval) {
         lastTileUpdateTime = lastTileUpdateTime == 0.0 ? currentTime : lastTileUpdateTime
         let timeInterval = currentTime - lastTileUpdateTime
 

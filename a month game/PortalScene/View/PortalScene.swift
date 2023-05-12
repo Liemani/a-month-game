@@ -9,7 +9,7 @@ import SpriteKit
 
 class PortalScene: SKScene {
 
-    weak var portalController: PortalController!
+    weak var portalController: PortalSceneController!
 
     var uiLayer: SKNode!
     var enterButton: SKSpriteNode!
@@ -24,7 +24,7 @@ class PortalScene: SKScene {
     func initBackground() {
         let backgroundNode = SKSpriteNode(imageNamed: Constant.ResourceName.bgPortal)
 
-        backgroundNode.position = Constant.screenCenter
+        backgroundNode.position = Constant.screenUpRight
         backgroundNode.zPosition = -1.0
 
         self.addChild(backgroundNode)
@@ -44,19 +44,19 @@ class PortalScene: SKScene {
 
     // MARK: - touch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.portalController.touchDown(touch) }
+        for touch in touches { self.portalController.touchDown(touch: touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.portalController.touchMoved(touch) }
+        for touch in touches { self.portalController.touchMoved(touch: touch) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.portalController.touchUp(touch) }
+        for touch in touches { self.portalController.touchUp(touch: touch) }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.portalController.touchUp(touch) }
+        for touch in touches { self.portalController.touchUp(touch: touch) }
     }
 
     override func update(_ currentTime: TimeInterval) {

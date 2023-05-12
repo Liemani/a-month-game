@@ -12,20 +12,20 @@ struct Constant {
     static let defaultSize = 250.0
 
     static let screenSize = CGSize(width: 750 * 2, height: 1334 * 2)
-    static let screenCenter = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
+    static let screenDownLeft = CGPoint(x: -screenSize.width / 2, y: -screenSize.height / 2)
+    static let screenUpRight = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
 
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
     static let menuPosition = CGPoint(x: screenSize.width / 2 - defaultSize, y: screenSize.height / 2 - defaultSize)
-    static let enterButtonPosition = screenCenter
+    static let enterButtonPosition = screenUpRight
     static let enterButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
-    static let resetButtonPosition = CGPoint(x: screenCenter.x, y: screenCenter.y - defaultSize * 2)
+    static let resetButtonPosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
     static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
-    static let outWorldButtonPosition = screenCenter
-    static let outWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
+    static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let inventoryCellCount = 5
-    static let inventoryCellFirstPosition = CGPoint(x: -screenCenter.x + defaultSize, y: -screenCenter.y + defaultSize)
-    static let inventoryCellLastPosition = CGPoint(x: screenCenter.x - defaultSize, y: -screenCenter.y + defaultSize)
+    static let inventoryCellFirstPosition = CGPoint(x: screenDownLeft.x + defaultSize, y: screenDownLeft.y + defaultSize)
+    static let inventoryCellLastPosition = CGPoint(x: screenUpRight.x - defaultSize, y: screenDownLeft.y + defaultSize)
 
     static let gridSize: Int = 100
 
@@ -34,7 +34,7 @@ struct Constant {
         static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
         static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
         static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)
-        static let outWorldButton = CGRect(origin: outWorldButtonPosition, size: outWorldButtonSize)
+        static let exitWorldButton = CGRect(origin: CGPoint(), size: exitWorldButtonSize)
     }
 
     struct ResourceName {
@@ -49,7 +49,7 @@ struct Constant {
         static let woodWallTile = "tile_wall_wood"
     }
     
-    static let velocityDamping = 3000.0
+    static let velocityDamping = 5000.0
 
     static let defaultWorldName = "world000"
     static let tileMapFileName = "tileMap.dat"
