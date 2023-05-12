@@ -27,6 +27,7 @@ class WorldSceneController {
         worldScene.worldController = self
 
         let camera = SKCameraNode()
+        camera.position = Constant.tileMapNodePosition
         worldScene.camera = camera
         worldScene.addChild(camera)
 

@@ -20,13 +20,8 @@ class WorldScene: SKScene {
     var menuButtonNode: SKNode!
     var exitWorldButtonNode: SKNode!
 
-    let tileIDToKey = [Constant.ResourceName.grassTile, Constant.ResourceName.woodTile, Constant.ResourceName.woodWallTile]
-    var tileInformationDictionary = Dictionary<Int, (SKTileGroup, SKTileDefinition)>()
-
     // MARK: - didMove
     override func didMove(to view: SKView) {
-        initTileDictionary()
-
         self.initLayer()
     }
 
@@ -37,21 +32,8 @@ class WorldScene: SKScene {
         initMenuLayer()
     }
 
-    func initTileDictionary() {
-        for tileID in 0..<tileIDToKey.count {
-            addTileToDictionary(tileID: tileID)
-        }
-    }
-
-    func addTileToDictionary(tileID: Int) {
-        let tileTexture = SKTexture(imageNamed: tileIDToKey[tileID])
-        let tileDefinition = SKTileDefinition(texture: tileTexture)
-        let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
-        self.tileInformationDictionary[tileID] = (tileGroup, tileDefinition)
-    }
-
     func initTileMapNode() {
-        let tileGroups = tileInformationDictionary.values.map { $0.0 }
+        let tileGroups = Constant.tileTypeInformationArray.map { $0.0 }
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
         let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
@@ -59,13 +41,13 @@ class WorldScene: SKScene {
         for row in 0..<Constant.gridSize {
             for column in 0..<Constant.gridSize {
                 let tileID = self.worldController.worldModel.tileMapModel.tileMap[Constant.gridSize * row + column]
-                let tileInformation = self.tileInformationDictionary[tileID]!
+                let tileInformation = Constant.tileTypeInformationArray[tileID]
                 tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
             }
         }
 
-        tileMapNode.position = Constant.screenUpRight
-        tileMapNode.zPosition = -1.0
+        tileMapNode.position = Constant.tileMapNodePosition
+        tileMapNode.zPosition = Constant.tileMapNodeZPosition
 
         self.addChild(tileMapNode)
         self.tileMapNode = tileMapNode
@@ -73,12 +55,24 @@ class WorldScene: SKScene {
 
     func initGameObjectLayer() {
         let worldObjectLayer = SKNode()
+        worldObjectLayer.zPosition = Constant.worldObjectLayerZPosition
+
+        for gameItem in self.worldController.worldModel.gameItemModel.gameItemDictionary.values {
+            let texture = Constant.gameItemTypeInformationArray[gameItem.typeID]
+            let gameItemNode = SKSpriteNode(texture: texture)
+            gameItemNode.position.x = Constant.defaultSize * (Double(gameItem.position.row) + 0.5)
+            gameItemNode.position.y = Constant.defaultSize * (Double(gameItem.position.column) + 0.5)
+            worldObjectLayer.addChild(gameItemNode)
+        }
+
         self.addChild(worldObjectLayer)
         self.worldObjectLayer = worldObjectLayer
     }
 
     func initUILayer() {
         let uiLayer = SKNode()
+
+        uiLayer.zPosition = Constant.uiLayerZPosition
 
         let characterNode: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.character)
         characterNode.size = Constant.Frame.character.size
@@ -107,7 +101,7 @@ class WorldScene: SKScene {
 
     func initMenuLayer() {
         let menuLayer = SKShapeNode()
-        menuLayer.zPosition = 2.0
+        menuLayer.zPosition = Constant.menuLayerZPosition
         menuLayer.isHidden = true
 
         let menuBackground = SKShapeNode()
@@ -150,7 +144,7 @@ class WorldScene: SKScene {
 
     // MARK: - set tile
     func setTile(row: Int, column: Int, tileID: Int) {
-        let tileInformation = self.tileInformationDictionary[tileID]!
+        let tileInformation = Constant.tileTypeInformationArray[tileID]
         self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
     }
 

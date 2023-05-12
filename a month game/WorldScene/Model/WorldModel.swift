@@ -10,8 +10,10 @@ import Foundation
 class WorldModel {
 
     weak var worldController: WorldSceneController!
+
     var fileController: FileController!
     var tileMapModel: TileMapModel!
+    var gameItemModel: GameItemModel!
 
     var isMenuOpen: Bool {
         return !self.worldController.worldScene.menuLayer.isHidden
@@ -19,9 +21,11 @@ class WorldModel {
 
     init(worldController: WorldSceneController, worldName: String) {
         self.worldController = worldController
+
         self.fileController = FileController(worldName: Constant.defaultWorldName)
         let tileMapData = self.fileController.loadTileMapData()
         self.tileMapModel = TileMapModel(worldModel: self, tileMapData: tileMapData)
+        self.gameItemModel = GameItemModel(worldModel: self)
     }
 
     func saveTileData(index: Int, tileData: Data) {

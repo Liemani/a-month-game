@@ -13,6 +13,10 @@
 		030ABFB82A0CD90A00BAB9B8 /* WorldSceneTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */; };
 		030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB92A0CE8F600BAB9B8 /* Helper.swift */; };
 		030ABFBC2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBB2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift */; };
+		030ABFBE2A0E10F600BAB9B8 /* GameItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBD2A0E10F600BAB9B8 /* GameItemModel.swift */; };
+		030ABFC02A0E11FB00BAB9B8 /* GameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBF2A0E11FB00BAB9B8 /* GameItem.swift */; };
+		030ABFC32A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC12A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld */; };
+		030ABFC52A0E314000BAB9B8 /* GameItemSeedPineCone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC42A0E314000BAB9B8 /* GameItemSeedPineCone.swift */; };
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterController.swift */; };
 		031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* WorldSceneController.swift */; };
@@ -36,6 +40,10 @@
 		030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneTouchController.swift; sourceTree = "<group>"; };
 		030ABFB92A0CE8F600BAB9B8 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		030ABFBB2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMITapGestureRecognizer.swift; sourceTree = "<group>"; };
+		030ABFBD2A0E10F600BAB9B8 /* GameItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItemModel.swift; sourceTree = "<group>"; };
+		030ABFBF2A0E11FB00BAB9B8 /* GameItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItem.swift; sourceTree = "<group>"; };
+		030ABFC22A0E290E00BAB9B8 /* GameModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameModel.xcdatamodel; sourceTree = "<group>"; };
+		030ABFC42A0E314000BAB9B8 /* GameItemSeedPineCone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItemSeedPineCone.swift; sourceTree = "<group>"; };
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* WorldSceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneController.swift; sourceTree = "<group>"; };
@@ -71,6 +79,8 @@
 				031D575A2A07C232007EF383 /* Model */,
 				031D57602A07C849007EF383 /* View */,
 				030ABFBB2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift */,
+				030ABFBF2A0E11FB00BAB9B8 /* GameItem.swift */,
+				030ABFC42A0E314000BAB9B8 /* GameItemSeedPineCone.swift */,
 			);
 			path = WorldScene;
 			sourceTree = "<group>";
@@ -123,6 +133,7 @@
 			children = (
 				031D575B2A07C24C007EF383 /* WorldModel.swift */,
 				031D575D2A07C311007EF383 /* TileMapModel.swift */,
+				030ABFBD2A0E10F600BAB9B8 /* GameItemModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -179,6 +190,7 @@
 				030ABFAC2A0BCC4C00BAB9B8 /* PortalScene */,
 				030ABFAB2A0BCC3A00BAB9B8 /* WorldScene */,
 				030ABFB92A0CE8F600BAB9B8 /* Helper.swift */,
+				030ABFC12A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld */,
 				038330A12A02850A008DEA10 /* AppDelegate.swift */,
 				038330AB2A02850A008DEA10 /* Main.storyboard */,
 				038330AE2A02850B008DEA10 /* Assets.xcassets */,
@@ -259,6 +271,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				030ABFBE2A0E10F600BAB9B8 /* GameItemModel.swift in Sources */,
 				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
 				030ABFB62A0C93AA00BAB9B8 /* FileController.swift in Sources */,
 				030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */,
@@ -266,12 +279,15 @@
 				031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */,
 				031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */,
 				030ABFBC2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift in Sources */,
+				030ABFC32A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld in Sources */,
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
 				038330AA2A02850A008DEA10 /* ViewController.swift in Sources */,
+				030ABFC02A0E11FB00BAB9B8 /* GameItem.swift in Sources */,
 				038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */,
 				031D57632A07D3F6007EF383 /* Data.xcdatamodeld in Sources */,
 				031D57562A076DC8007EF383 /* CharacterController.swift in Sources */,
 				031D575C2A07C24C007EF383 /* WorldModel.swift in Sources */,
+				030ABFC52A0E314000BAB9B8 /* GameItemSeedPineCone.swift in Sources */,
 				030ABFB82A0CD90A00BAB9B8 /* WorldSceneTouchController.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */,
@@ -494,6 +510,16 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
+		030ABFC12A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				030ABFC22A0E290E00BAB9B8 /* GameModel.xcdatamodel */,
+			);
+			currentVersion = 030ABFC22A0E290E00BAB9B8 /* GameModel.xcdatamodel */;
+			path = GameDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
 		031D57612A07D3F5007EF383 /* Data.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
