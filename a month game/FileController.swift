@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import CoreData
 
 class FileController {
+
+    weak var viewController: ViewController!
 
     let fileManager: FileManager
     var worldDirectoryURL: URL!

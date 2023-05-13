@@ -93,7 +93,9 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-27
     2023-05-28
     2023-05-29
-    2023-05-30
+    2023-05-30 ppt 준비
+
+    2023-05-31 마감
 
 # issue
 WorldScene 에서 menu layer 추가
@@ -128,6 +130,21 @@ sense message 구현
     돌맹이
 
 enterButton, resetButton 맞춤 resource 제작
+
+ppt
+    flow
+        touch
+    data(memory, disk)
+        TileMap, GameItem
+    structure
+        MVC, class reference
+```
+A
+ViewController
+├─ PortalSceneController
+├─ WorldSceneController
+```
+├│─└
 
 # mandatory: 기대 시간(h) + 요구 사항
 view
@@ -301,6 +318,9 @@ class Hammer: GameObject, Pickable {
 여러 월드 생성 가능
 오브젝트를 드래그하는 상태에서 손가락을 떼지 않고 튕기면 반경 내에 그 방향으로 날라가는 상호작용
     오브젝트가 손가락에 가려지는 것을 막을 수 있다
+아이템이 실수형 위치
+    일정 거리 서로 밀어내도록
+아이템도 튕기면 날아가게
 
 # dump log
 624B27 어두운 고동색

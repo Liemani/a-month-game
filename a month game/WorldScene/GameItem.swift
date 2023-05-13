@@ -24,4 +24,8 @@ class GameItem {
         self.position = (0, 0, 0)
     }
 
+    required convenience init() {
+        self.init(typeID: 0)
+    }
+
 }

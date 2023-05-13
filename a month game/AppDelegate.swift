@@ -22,8 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        return delegate
 //    }()
 
+    var persistentContainer: PersistentContainer = {
+        let container = PersistentContainer(name: "DataModel")
+        container.loadPersistentStores { description, error in
+            if let error = error {
+                fatalError("Unable to load persistent stores: \(error)")
+            }
+        }
+        return container
+    }()
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let rootViewController = window!.rootViewController as! ViewController
+        rootViewController.persistentContainer = self.persistentContainer
         return true
     }
 

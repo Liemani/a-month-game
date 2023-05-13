@@ -1,6 +1,21 @@
 diary.txt
 각 날짜에 몇 시간 동안 어떤 작업을 했는가를 기록
 
+# 2023-05-13
+투자 시간: 5h 50m
+오늘은 CoreData 를 사용하는 방법을 알아보았다
+구조와 사용법이 꽤 복잡해서 아직 적용도 못해봤다
+내일 계속 알아봐야겠다
+
+# 2023-05-12
+투자 시간: 12h
+오늘은 WorldScene 에서 메뉴 윈도우 프로토타입을 만들고,
+아이템 클래스들의 부모 클래스인 GameItem 를 정의하였다
+그리고 이 클래스를 상속받는 GameItemSeedPineCone 클래스를 정의하고,
+GameItemModel 이 Dictionary 형태로 가지고 있는 GameItem 들을 화면에 출력하는 것까지 구현하였다
+내일은 GameItem 을 CoreData 로 저장하고 불러오는 기능,
+GameObject 를 구현하여 이를 상속받는 GameObjectTreePineTree 를 구현해 볼 예정이다
+
 # 2023-05-11
 투자 시간: 8h 20m
 오늘은 PortalScene 의 기본 기능을 구현하고 터치 구현을 생각했다

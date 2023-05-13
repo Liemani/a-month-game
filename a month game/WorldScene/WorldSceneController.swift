@@ -11,6 +11,7 @@ import SpriteKit
 class WorldSceneController {
 
     weak var viewController: ViewController!
+
     var worldModel: WorldModel!
     var worldScene: WorldScene!
     var worldSceneTouchController: WorldSceneTouchController!

@@ -10,9 +10,11 @@ import UIKit
 class PortalSceneController {
 
     weak var viewController: ViewController!
+
     var portalScene: PortalScene!
 
-    init() {
+    init(viewController: ViewController) {
+        self.viewController = viewController
         let portalScene = PortalScene()
 
         portalScene.size = Constant.screenSize

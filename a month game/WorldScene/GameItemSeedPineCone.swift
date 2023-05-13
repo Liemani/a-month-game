@@ -11,7 +11,7 @@ class GameItemSeedPineCone: GameItem {
 
     static let typeID: Int = Helper.getTypeID(from: GameItemSeedPineCone.self)
 
-    init() {
+    required init() {
         super.init(typeID: GameItemSeedPineCone.typeID)
     }
 
