@@ -131,20 +131,20 @@ sense message 구현
 
 enterButton, resetButton 맞춤 resource 제작
 
-ppt
-    flow
-        touch
-    data(memory, disk)
-        TileMap, GameItem
-    structure
-        MVC, class reference
+flow
+    touch
+data(memory, disk)
+    TileMap, GameItem
+structure
+    MVC, class reference
 ```
-A
+├│─└
+
+
 ViewController
 ├─ PortalSceneController
 ├─ WorldSceneController
 ```
-├│─└
 
 # mandatory: 기대 시간(h) + 요구 사항
 view

@@ -7,21 +7,18 @@
 
 import UIKit
 
-class PortalSceneController {
+class PortalSceneController: SceneController {
 
-    weak var viewController: ViewController!
+    required init(viewController: ViewController) {
+        super.init(viewController: viewController)
 
-    var portalScene: PortalScene!
+        let scene = PortalScene()
 
-    init(viewController: ViewController) {
-        self.viewController = viewController
-        let portalScene = PortalScene()
+        scene.size = Constant.screenSize
+        scene.scaleMode = .aspectFit
+        scene.portalController = self
 
-        portalScene.size = Constant.screenSize
-        portalScene.scaleMode = .aspectFit
-        portalScene.portalController = self
-
-        self.portalScene = portalScene
+        self.scene = scene
     }
 
     func touchDown(touch: UITouch) {
@@ -31,13 +28,15 @@ class PortalSceneController {
     }
 
     func touchUp(touch: UITouch) {
-        let touchPoint = touch.location(in: self.portalScene.uiLayer)
-        if self.portalScene.enterButton.contains(touchPoint) {
+        let scene = self.scene as! PortalScene
+        let touchPoint = touch.location(in: scene.uiLayer)
+        if scene.enterButton.contains(touchPoint) {
             viewController.setWorldScene()
         }
 
-        if self.portalScene.resetButton.contains(touchPoint) {
-            FileController(worldName: Constant.defaultWorldName).resetWorld()
+        if scene.resetButton.contains(touchPoint) {
+            let diskController = DiskController.default
+            diskController.removeWorldDirectory(ofName: Constant.defaultWorldName)
         }
     }
 

@@ -14,11 +14,13 @@ class GameItemModel {
     var gameItemDictionary: Dictionary<Int, GameItem>
 
     // MARK: - init
-    init(worldModel: WorldModel) {
+    init(worldModel: WorldModel, gameItemDictionary: Dictionary<Int, GameItem>) {
         self.worldModel = worldModel
 
-        self.gameItemDictionary = Dictionary<Int, GameItem>()
+        self.gameItemDictionary = gameItemDictionary
+    }
 
+    func setGameItemCustom() {
         let seed = GameItemSeedPineCone()
         seed.position = (0, 50, 50)
         addGameItem(gameItem: seed)
@@ -26,7 +28,8 @@ class GameItemModel {
 
     // MARK: - add item
     func addGameItem(gameItem: GameItem) {
-        gameItemDictionary[gameItem.id] = gameItem
+        self.gameItemDictionary[gameItem.id] = gameItem
+        self.worldModel.storeGameItemToData(gameItem: gameItem)
     }
 
 }

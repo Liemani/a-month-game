@@ -110,5 +110,7 @@ struct Constant {
 
     static let defaultWorldName = "world000"
     static let tileMapFileName = "tileMap.dat"
+    static let gameDataModelFileName = "GameDataModel.sqlite"
+    static let worldDataModelName = "GameDataModel"
 
 }

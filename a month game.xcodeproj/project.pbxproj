@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
-		030ABFB62A0C93AA00BAB9B8 /* FileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* FileController.swift */; };
+		030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */; };
 		030ABFB82A0CD90A00BAB9B8 /* WorldSceneTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */; };
 		030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB92A0CE8F600BAB9B8 /* Helper.swift */; };
 		030ABFBC2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBB2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift */; };
@@ -18,6 +18,8 @@
 		030ABFC32A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC12A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld */; };
 		030ABFC52A0E314000BAB9B8 /* GameItemSeedPineCone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC42A0E314000BAB9B8 /* GameItemSeedPineCone.swift */; };
 		030ABFCB2A0F2E0800BAB9B8 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */; };
+		030ABFCD2A10C6ED00BAB9B8 /* DiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFCC2A10C6ED00BAB9B8 /* DiskController.swift */; };
+		030ABFD02A10D44A00BAB9B8 /* SceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFCF2A10D44900BAB9B8 /* SceneController.swift */; };
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterController.swift */; };
 		031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* WorldSceneController.swift */; };
@@ -36,7 +38,7 @@
 /* Begin PBXFileReference section */
 		030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalSceneController.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
-		030ABFB52A0C93AA00BAB9B8 /* FileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileController.swift; sourceTree = "<group>"; };
+		030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMapFileController.swift; sourceTree = "<group>"; };
 		030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneTouchController.swift; sourceTree = "<group>"; };
 		030ABFB92A0CE8F600BAB9B8 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		030ABFBB2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMITapGestureRecognizer.swift; sourceTree = "<group>"; };
@@ -45,6 +47,8 @@
 		030ABFC22A0E290E00BAB9B8 /* GameModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameModel.xcdatamodel; sourceTree = "<group>"; };
 		030ABFC42A0E314000BAB9B8 /* GameItemSeedPineCone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameItemSeedPineCone.swift; sourceTree = "<group>"; };
 		030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
+		030ABFCC2A10C6ED00BAB9B8 /* DiskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskController.swift; sourceTree = "<group>"; };
+		030ABFCF2A10D44900BAB9B8 /* SceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneController.swift; sourceTree = "<group>"; };
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterController.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* WorldSceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneController.swift; sourceTree = "<group>"; };
@@ -118,6 +122,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		030ABFCE2A10C6FF00BAB9B8 /* Disk */ = {
+			isa = PBXGroup;
+			children = (
+				030ABFCC2A10C6ED00BAB9B8 /* DiskController.swift */,
+				030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */,
+				030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */,
+			);
+			path = Disk;
+			sourceTree = "<group>";
+		};
 		031D57542A062A26007EF383 /* trash can */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,11 +189,10 @@
 		038330A02A02850A008DEA10 /* a month game */ = {
 			isa = PBXGroup;
 			children = (
+				030ABFCE2A10C6FF00BAB9B8 /* Disk */,
 				038330A12A02850A008DEA10 /* AppDelegate.swift */,
-				030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */,
 				030ABFB92A0CE8F600BAB9B8 /* Helper.swift */,
 				031D57512A06298F007EF383 /* Constant.swift */,
-				030ABFB52A0C93AA00BAB9B8 /* FileController.swift */,
 				038330A92A02850A008DEA10 /* ViewController.swift */,
 				030ABFAC2A0BCC4C00BAB9B8 /* PortalScene */,
 				030ABFAB2A0BCC3A00BAB9B8 /* WorldScene */,
@@ -187,6 +200,7 @@
 				038330AB2A02850A008DEA10 /* Main.storyboard */,
 				038330AE2A02850B008DEA10 /* Assets.xcassets */,
 				038330B02A02850B008DEA10 /* LaunchScreen.storyboard */,
+				030ABFCF2A10D44900BAB9B8 /* SceneController.swift */,
 			);
 			path = "a month game";
 			sourceTree = "<group>";
@@ -265,10 +279,12 @@
 			files = (
 				030ABFBE2A0E10F600BAB9B8 /* GameItemModel.swift in Sources */,
 				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
-				030ABFB62A0C93AA00BAB9B8 /* FileController.swift in Sources */,
+				030ABFD02A10D44A00BAB9B8 /* SceneController.swift in Sources */,
+				030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */,
 				030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */,
 				038330A82A02850A008DEA10 /* WorldScene.swift in Sources */,
 				031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */,
+				030ABFCD2A10C6ED00BAB9B8 /* DiskController.swift in Sources */,
 				031D57662A07D7D9007EF383 /* CoreDataStack.swift in Sources */,
 				030ABFBC2A0DA03100BAB9B8 /* LMITapGestureRecognizer.swift in Sources */,
 				030ABFC32A0E290E00BAB9B8 /* GameDataModel.xcdatamodeld in Sources */,

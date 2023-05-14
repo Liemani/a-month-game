@@ -11,17 +11,17 @@ import GameplayKit
 
 class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    var persistentContainer: PersistentContainer!
+    var sceneController: SceneController!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard persistentContainer != nil else {
-            fatalError("This view needs a persistent container.")
-        }
-
         setView()
         setPortalScene()
+        testCode()
+    }
+
+    func testCode() {
     }
 
     func setView() {
@@ -32,17 +32,19 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     func setPortalScene() {
-        let portalController = PortalSceneController(viewController: self)
+        let sceneController = PortalSceneController(viewController: self)
 
         let view = self.view as! SKView
-        view.presentScene(portalController.portalScene)
+        view.presentScene(sceneController.scene)
+        self.sceneController = sceneController
     }
 
     func setWorldScene() {
-        let worldController = WorldSceneController(viewController: self, worldName: Constant.defaultWorldName)
+        let sceneController = WorldSceneController(viewController: self, worldName: Constant.defaultWorldName)
 
         let view = self.view as! SKView
-        view.presentScene(worldController.worldScene)
+        view.presentScene(sceneController.scene)
+        self.sceneController = sceneController
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

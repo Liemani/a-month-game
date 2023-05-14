@@ -8,35 +8,42 @@
 import UIKit
 import SpriteKit
 
-class WorldSceneController {
-
-    weak var viewController: ViewController!
+class WorldSceneController: SceneController {
 
     var worldModel: WorldModel!
-    var worldScene: WorldScene!
     var worldSceneTouchController: WorldSceneTouchController!
 
+    var isMenuOpen: Bool {
+        let scene = self.scene as! WorldScene
+        return !scene.menuLayer.isHidden
+    }
+
     // MARK: - init
-    init(viewController: ViewController, worldName: String) {
-        self.viewController = viewController
-        self.worldModel = WorldModel(worldController: self, worldName: worldName)
+    required init(viewController: ViewController) {
+        super.init(viewController: viewController)
 
-        let worldScene = WorldScene()
+        let scene = WorldScene()
 
-        worldScene.size = Constant.screenSize
-        worldScene.scaleMode = .aspectFit
-        worldScene.worldController = self
+        scene.size = Constant.screenSize
+        scene.scaleMode = .aspectFit
+        scene.worldController = self
 
         let camera = SKCameraNode()
         camera.position = Constant.tileMapNodePosition
-        worldScene.camera = camera
-        worldScene.addChild(camera)
+        scene.camera = camera
+        scene.addChild(camera)
 
-        self.worldScene = worldScene
+        self.scene = scene
 
         let worldSceneTouchController = WorldSceneTouchController(worldController: self)
         worldSceneTouchController.camera = camera
         self.worldSceneTouchController = worldSceneTouchController
+    }
+
+    convenience init(viewController: ViewController, worldName: String) {
+        self.init(viewController: viewController)
+
+        self.worldModel = WorldModel(worldController: self, worldName: worldName)
     }
 
     // MARK: - update
@@ -89,9 +96,10 @@ class WorldSceneController {
     }
 
     func toggleTile(row: Int, column: Int) {
+        let scene = self.scene as! WorldScene
         let newTileID = self.worldModel.tileMapModel.tileMap[100 * row + column] ^ 1
         self.worldModel.tileMapModel.setTile(row: row, column: column, tileID: newTileID)
-        self.worldScene.setTile(row: row, column: column, tileID: newTileID)
+        scene.setTile(row: row, column: column, tileID: newTileID)
     }
 
 }

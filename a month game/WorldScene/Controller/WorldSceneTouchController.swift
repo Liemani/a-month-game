@@ -11,6 +11,7 @@ import SpriteKit
 class WorldSceneTouchController {
 
     weak var worldController: WorldSceneController!
+    
     var camera: SKCameraNode!
 
     var touchDownTimestamp: TimeInterval = 0.0
@@ -24,7 +25,7 @@ class WorldSceneTouchController {
 
     // MARK: - touch
     func touchDown(touch: UITouch) {
-        if !self.worldController.worldModel.isMenuOpen {
+        if !self.worldController.isMenuOpen {
             startDragging(touch: touch)
         }
     }
@@ -53,22 +54,23 @@ class WorldSceneTouchController {
     }
 
     func touchUp(touch: UITouch) {
-        if !self.worldController.worldModel.isMenuOpen {
+        let scene = self.worldController.scene as! WorldScene
+        if !self.worldController.isMenuOpen {
             let currentLocation = touch.location(in: self.camera)
             let timeInterval = touch.timestamp - touchDownTimestamp
 
             let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
             let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
             self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
-            if self.worldController.worldScene.menuButtonNode.contains(currentLocation) {
-                self.worldController.worldScene.menuLayer.isHidden = false
+            if scene.menuButtonNode.contains(currentLocation) {
+                scene.menuLayer.isHidden = false
             }
         } else {
             let currentLocation = touch.location(in: self.camera)
-            if self.worldController.worldScene.exitWorldButtonNode.contains(currentLocation) {
+            if scene.exitWorldButtonNode.contains(currentLocation) {
                 performSegueToPortalScene()
             } else {
-                self.worldController.worldScene.menuLayer.isHidden = true
+                scene.menuLayer.isHidden = true
             }
         }
     }

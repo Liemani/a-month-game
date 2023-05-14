@@ -9,27 +9,38 @@ import Foundation
 
 class WorldModel {
 
+    var diskController: DiskController!
+
     weak var worldController: WorldSceneController!
 
-    var fileController: FileController!
     var tileMapModel: TileMapModel!
     var gameItemModel: GameItemModel!
 
-    var isMenuOpen: Bool {
-        return !self.worldController.worldScene.menuLayer.isHidden
-    }
-
     init(worldController: WorldSceneController, worldName: String) {
+        let diskController = DiskController.default
+        diskController.setToWorld(ofName: worldName)
+        self.diskController = diskController
+
         self.worldController = worldController
 
-        self.fileController = FileController(worldName: Constant.defaultWorldName)
-        let tileMapData = self.fileController.loadTileMapData()
+        let tileMapData = diskController.loadTileData()
         self.tileMapModel = TileMapModel(worldModel: self, tileMapData: tileMapData)
-        self.gameItemModel = GameItemModel(worldModel: self)
+
+        let gameItemDictionary = diskController.loadGameItemDictionary()
+        self.gameItemModel = GameItemModel(worldModel: self, gameItemDictionary: gameItemDictionary)
     }
 
-    func saveTileData(index: Int, tileData: Data) {
-        self.fileController.saveTileData(index: index, tileData: tileData)
+    deinit {
+        diskController.closeFiles()
+    }
+
+    func saveTileData(row: Int, column: Int, tileData: Data) {
+        self.diskController.saveTileData(row: row, column: column, tileData: tileData)
+    }
+
+    func storeGameItemToData(gameItem: GameItem) {
+        self.diskController.storeGameItem(gameItem: gameItem)
+
     }
 
 }
