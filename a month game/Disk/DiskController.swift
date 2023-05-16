@@ -9,21 +9,31 @@ import Foundation
 
 final class DiskController {
 
-    static let `default` = DiskController()
+    static private var _default: DiskController?
+    static var `default`: DiskController {
+        get {
+            if let diskController = DiskController._default {
+                return diskController
+            }
+            let diskController = DiskController()
+            DiskController._default = diskController
+            return diskController
+        }
+    }
 
     let fileManager: FileManager
 
-    let persistentContainer: PersistentContainer
+    let coreDataController: CoreDataController
     let tileMapFileController: TileMapFileController
-
-    var worldName: String?
+    let userDefaultsController: UserDefaultsController
 
     // MARK: - init
     init() {
         self.fileManager = FileManager.default
 
-        self.persistentContainer = PersistentContainer()
+        self.coreDataController = CoreDataController()
         self.tileMapFileController = TileMapFileController()
+        self.userDefaultsController = UserDefaultsController()
     }
 
     // MARK: - set to world
@@ -32,7 +42,7 @@ final class DiskController {
 
         let worldDirectoryURL = self.worldDirectoryURL(ofName: name)
 
-        self.persistentContainer.setToWorld(with: worldDirectoryURL)
+        self.coreDataController.setToWorld(with: worldDirectoryURL)
         self.tileMapFileController.setToWorld(with: worldDirectoryURL)
     }
 
@@ -59,34 +69,54 @@ final class DiskController {
         }
     }
 
-    // MARK: - load and save
-    func loadTileData() -> Data {
-        return self.tileMapFileController.loadTileMapData()
-    }
+    // MARK: - CoreData
+    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
+        var gameItemDictionary = Dictionary<Int, GameObject>()
 
-    func loadGameItemDictionary() -> Dictionary<Int, GameItem> {
-        var gameItemDictionary = Dictionary<Int, GameItem>()
-
-        let gameItemDataArray = self.persistentContainer.loadGameItemDataArray()
+        let gameItemDataArray = self.coreDataController.loadGameObjectDataArray()
         for gameItemData in gameItemDataArray {
-            let gameItem = GameItem(typeID: Int(gameItemData.typeID))
+            let position = GameObjectPosition(
+                inventoryID: Int(gameItemData.inventoryID),
+                row: Int(gameItemData.row),
+                column: Int(gameItemData.column))
+            let typeID = Int(gameItemData.typeID)
+            let id = Int(gameItemData.id)
+            let gameItem = GameObject(position: position, typeID: typeID, id: id)
             gameItemDictionary[gameItem.id] = gameItem
         }
 
         return gameItemDictionary
     }
 
-    func saveTileData(row: Int, column: Int, tileData: Data) {
-        self.tileMapFileController.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
+    func store(gameObject: GameObject) {
+        self.coreDataController.store(gameObject: gameObject)
     }
 
-    func storeGameItem(gameItem: GameItem) {
-        self.persistentContainer.saveGameItem(gameItem: gameItem)
+    func delete(gameObject: GameObject) {
+        self.coreDataController.delete(gameObject: gameObject)
     }
 
     // TODO: write saveModifiedGameItem()
     // TODO: write modifyGameItem()
     // TODO: write removeGameItem()
+
+    // MARK: - FileManager
+    func loadTileData() -> Data {
+        return self.tileMapFileController.loadTileMapData()
+    }
+
+    func saveTileData(row: Int, column: Int, tileData: Data) {
+        self.tileMapFileController.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
+    }
+
+    // MARK: - UserDefaults
+    func readUserDefaults(forKey key: String) ->Int {
+        return self.userDefaultsController.read(forKey: key)
+    }
+
+    func updateUserDefaults(_ value: Int, forKey key: String) {
+        self.userDefaultsController.update(value, forKey: key)
+    }
 
     // MARK: - private method
     private func closeTileMapFile() {
@@ -94,7 +124,7 @@ final class DiskController {
     }
 
     private func removePersistentStore() {
-        self.persistentContainer.removeFirstPersistentStore()
+        self.coreDataController.removeFirstPersistentStore()
     }
 
     // MARK: - helper

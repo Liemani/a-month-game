@@ -321,6 +321,7 @@ class Hammer: GameObject, Pickable {
 아이템이 실수형 위치
     일정 거리 서로 밀어내도록
 아이템도 튕기면 날아가게
+메뉴 윈도우에 도움말 추가
 
 # dump log
 624B27 어두운 고동색

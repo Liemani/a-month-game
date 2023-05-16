@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-final class PersistentContainer {
+final class CoreDataController {
 
     var persistentContainer: NSPersistentContainer!
 
@@ -29,21 +29,43 @@ final class PersistentContainer {
         }
     }
 
-    func loadGameItemDataArray() -> [GameItemData] {
+    // MARK: - edit
+    func loadGameObjectDataArray() -> [GameItemData] {
         let fetchRequest = GameItemData.fetchRequest()
-        return try! self.persistentContainer.viewContext.fetch(fetchRequest)
+        let context = self.persistentContainer.viewContext
+        return try! context.fetch(fetchRequest)
     }
 
-    func saveGameItem(gameItem: GameItem) {
-        let gameItemData = NSEntityDescription.insertNewObject(forEntityName: "GameItemData", into: self.persistentContainer.viewContext) as! GameItemData
-        gameItemData.typeID = Int32(gameItem.typeID)
-        gameItemData.inventoryID = Int32(gameItem.position.inventoryID)
-        gameItemData.row = Int32(gameItem.position.row)
-        gameItemData.column = Int32(gameItem.position.column)
+    func store(gameObject: GameObject) {
+        let context = self.persistentContainer.viewContext
+        let gameItemData = NSEntityDescription.insertNewObject(forEntityName: Constant.gameItemDataEntityName, into: context) as! GameItemData
+        gameItemData.id = Int32(gameObject.id)
+        gameItemData.inventoryID = Int32(gameObject.position.inventoryID)
+        gameItemData.row = Int32(gameObject.position.row)
+        gameItemData.column = Int32(gameObject.position.column)
+        gameItemData.typeID = Int32(gameObject.typeID)
 
         try! self.persistentContainer.viewContext.save()
     }
 
+    func delete(gameObject: GameObject) {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: Constant.gameItemDataEntityName)
+        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
+
+        do {
+            let context = self.persistentContainer.viewContext
+            let results = try context.fetch(request)
+            if results.count > 0 {
+                let objectToDelete = results[0] as! NSManagedObject
+                context.delete(objectToDelete)
+                try context.save()
+            }
+        } catch {
+            print("Error deleting object: \(error)")
+        }
+    }
+
+    // MARK: - remove persistentStore
     func removeFirstPersistentStore() {
         let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
         let persistentStore = persistentStoreCoordinator.persistentStores.first!

@@ -7,12 +7,12 @@
 
 import Foundation
 
-class GameItemSeedPineCone: GameItem {
+class GameItemSeedPineCone: GameObject {
 
     static let typeID: Int = Helper.getTypeID(from: GameItemSeedPineCone.self)
 
-    required init() {
-        super.init(typeID: GameItemSeedPineCone.typeID)
+    required init(position: GameObjectPosition, id: Int?) {
+        super.init(position: position, typeID: GameItemSeedPineCone.typeID, id: id)
     }
 
 }

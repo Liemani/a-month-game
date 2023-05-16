@@ -10,22 +10,23 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    weak var worldController: WorldSceneController!
+    weak var worldSceneController: WorldSceneController!
     var worldSceneTouchController: WorldSceneTouchController!
 
     var tileMapNode: SKTileMapNode!
-    var worldObjectLayer: SKNode!
+    var fieldGameObjectLayer: SKNode!
     var uiLayer: SKNode!
     var menuLayer: SKNode!
     var menuButtonNode: SKNode!
     var exitWorldButtonNode: SKNode!
 
-    // MARK: - didMove
-    override func didMove(to view: SKView) {
-        self.initLayer()
-    }
+    // MARK: - set up
+    func setUp(worldSceneController: WorldSceneController) {
+        self.worldSceneController = worldSceneController
+        
+        self.size = Constant.screenSize
+        self.scaleMode = .aspectFit
 
-    func initLayer() {
         initTileMapNode()
         initGameObjectLayer()
         initUILayer()
@@ -33,18 +34,10 @@ class WorldScene: SKScene {
     }
 
     func initTileMapNode() {
-        let tileGroups = Constant.tileTypeInformationArray.map { $0.0 }
+        let tileGroups = Resource.tileResourceArray.map { $0.tileGroup }
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
         let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
-
-        for row in 0..<Constant.gridSize {
-            for column in 0..<Constant.gridSize {
-                let tileID = self.worldController.worldModel.tileMapModel.tileMap[Constant.gridSize * row + column]
-                let tileInformation = Constant.tileTypeInformationArray[tileID]
-                tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
-            }
-        }
 
         tileMapNode.position = Constant.tileMapNodePosition
         tileMapNode.zPosition = Constant.tileMapNodeZPosition
@@ -57,29 +50,26 @@ class WorldScene: SKScene {
         let worldObjectLayer = SKNode()
         worldObjectLayer.zPosition = Constant.worldObjectLayerZPosition
 
-        for gameItem in self.worldController.worldModel.gameItemModel.gameItemDictionary.values {
-            let texture = Constant.gameItemTypeInformationArray[gameItem.typeID]
-            let gameItemNode = SKSpriteNode(texture: texture)
-            gameItemNode.position.x = Constant.defaultSize * (Double(gameItem.position.row) + 0.5)
-            gameItemNode.position.y = Constant.defaultSize * (Double(gameItem.position.column) + 0.5)
-            worldObjectLayer.addChild(gameItemNode)
-        }
-
         self.addChild(worldObjectLayer)
-        self.worldObjectLayer = worldObjectLayer
+        self.fieldGameObjectLayer = worldObjectLayer
     }
 
     func initUILayer() {
         let uiLayer = SKNode()
 
+        let camera = SKCameraNode()
+        camera.position = Constant.tileMapNodePosition
+        self.addChild(camera)
+        self.camera = camera
+
         uiLayer.zPosition = Constant.uiLayerZPosition
 
-        let characterNode: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.character)
+        let characterNode: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
         characterNode.size = Constant.Frame.character.size
         characterNode.position = Constant.Frame.character.origin
         uiLayer.addChild(characterNode)
 
-        let menuButtonNode: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.menuButton)
+        let menuButtonNode: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.menuButton)
         menuButtonNode.size = Constant.Frame.menuButton.size
         menuButtonNode.position = Constant.Frame.menuButton.origin
         uiLayer.addChild(menuButtonNode)
@@ -87,7 +77,7 @@ class WorldScene: SKScene {
 
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
 
-        let inventoryCellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
+        let inventoryCellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
         for index in 0..<Constant.inventoryCellCount {
             let inventoryCellNode = SKSpriteNode(texture: inventoryCellTexture)
             inventoryCellNode.size = Constant.defaultNodeSize
@@ -112,7 +102,7 @@ class WorldScene: SKScene {
         menuBackground.alpha = 0.5
         menuLayer.addChild(menuBackground)
 
-        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
+        let buttonTexture = SKTexture(imageNamed: Resource.Name.button)
         let exitWorldButtonNode = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuLayer)
         exitWorldButtonNode.zPosition = 1.0
         self.exitWorldButtonNode = exitWorldButtonNode
@@ -123,29 +113,44 @@ class WorldScene: SKScene {
 
     // MARK: - touoch
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchDown(touch: touch) }
+        for touch in touches { self.worldSceneController.worldSceneTouchController.touchDown(touch: touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchMoved(touch: touch) }
+        for touch in touches { self.worldSceneController.worldSceneTouchController.touchMoved(touch: touch) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch: touch) }
+        for touch in touches { self.worldSceneController.worldSceneTouchController.touchUp(touch: touch) }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.worldController.worldSceneTouchController.touchUp(touch: touch) }
+        for touch in touches { self.worldSceneController.worldSceneTouchController.touchUp(touch: touch) }
     }
 
     override func update(_ currentTime: TimeInterval) {
-        self.worldController.update(currentTime: currentTime)
+        self.worldSceneController.update(currentTime: currentTime)
     }
 
-    // MARK: - set tile
-    func setTile(row: Int, column: Int, tileID: Int) {
-        let tileInformation = Constant.tileTypeInformationArray[tileID]
-        self.tileMapNode.setTileGroup(tileInformation.0, andTileDefinition: tileInformation.1, forColumn: column, row: row)
+    // MARK: - edit
+    func set(row: Int, column: Int, tileTypeID: Int) {
+        let tileInformation = Resource.tileResourceArray[tileTypeID]
+        self.tileMapNode.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: column, row: row)
+    }
+
+    func addSpriteNode(byGameObject gameObject: GameObject) -> SKSpriteNode {
+        let texture = Resource.gameItemTextureArray[gameObject.typeID]
+        let gameObjectSpriteNode = SKSpriteNode(texture: texture)
+        gameObjectSpriteNode.position.x = Constant.defaultSize * (Double(gameObject.position.row) + 0.5)
+        gameObjectSpriteNode.position.y = Constant.defaultSize * (Double(gameObject.position.column) + 0.5)
+
+        self.fieldGameObjectLayer.addChild(gameObjectSpriteNode)
+
+        return gameObjectSpriteNode
+    }
+
+    func remove(gameItemSpriteNode: SKSpriteNode) {
+        gameItemSpriteNode.removeFromParent()
     }
 
 }

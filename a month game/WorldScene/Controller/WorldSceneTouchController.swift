@@ -26,8 +26,26 @@ class WorldSceneTouchController {
     // MARK: - touch
     func touchDown(touch: UITouch) {
         if !self.worldController.isMenuOpen {
-            startDragging(touch: touch)
+            let scene = self.worldController.scene as! WorldScene
+            let touchLocation = touch.location(in: scene.fieldGameObjectLayer)
+            if let touchedObject = scene.fieldGameObjectLayer.nodes(at: touchLocation).first {
+                self.worldController.removeGameObject(bySpriteNode: touchedObject as! SKSpriteNode)
+            } else {
+                self.addGameItemAtTouchLocation(touch: touch)
+            }
+            self.startDragging(touch: touch)
+
         }
+    }
+
+    private func addGameItemAtTouchLocation(touch: UITouch) {
+        let scene = self.worldController.scene as! WorldScene
+        let location = touch.location(in: scene)
+        let row = Int(location.x) / Int(Constant.defaultSize)
+        let column = Int(location.y) / Int(Constant.defaultSize)
+        let position = GameObjectPosition(inventoryID: 0, row: row, column: column)
+        let gameItem = GameItemSeedPineCone(position: position, id: nil)
+        self.worldController.add(gameObject: gameItem)
     }
 
     private func startDragging(touch: UITouch) {

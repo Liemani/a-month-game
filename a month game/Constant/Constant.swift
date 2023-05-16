@@ -49,68 +49,19 @@ struct Constant {
         static let exitWorldButton = CGRect(origin: CGPoint(), size: exitWorldButtonSize)
     }
 
-    // MARK: - resource name
-    struct ResourceName {
-        static let character = "character"
-        static let menuButton = "menu button"
-        static let inventoryCell = "inventory cell"
-        static let bgPortal = "bg_portal"
-        static let button = "button"
+    // MARK: - data
+    static let defaultWorldName = "world000"
+    static let tileMapFileName = "tileMap.dat"
+    static let gameDataModelFileName = "GameDataModel.sqlite"
+    static let worldDataModelName = "GameDataModel"
+    static let gameItemDataEntityName = "GameItemData"
 
-        static let grassTile = "tile_grass"
-        static let woodTile = "tile_wood"
-        static let woodWallTile = "tile_wall_wood"
-
-        static let gameItemDefault = "game_item_default"
-        static let gameItemSeedPineCone = "game_item_seed_pine_cone"
-    }
-
-    // MARK: - tile
-    static let tileTypeIDToResourceName = [
-        Constant.ResourceName.grassTile,
-        Constant.ResourceName.woodTile,
-        Constant.ResourceName.woodWallTile,
-    ]
-
-    static let tileTypeInformationArray = ({
-        var array = Array<(SKTileGroup, SKTileDefinition)>(repeating: (SKTileGroup(), SKTileDefinition()), count: Constant.tileTypeIDToResourceName.count)
-
-        for tileTypeID in 0..<Constant.tileTypeIDToResourceName.count {
-            let tileTexture = SKTexture(imageNamed: Constant.tileTypeIDToResourceName[tileTypeID])
-            let tileDefinition = SKTileDefinition(texture: tileTexture)
-            let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
-            array[tileTypeID] = (tileGroup, tileDefinition)
-        }
-
-        return array
-    })()
-
-    // MARK: - game item
-    static let gameItemTypeIDToInformation: [(gameItemType: GameItem.Type, resourceName: String)] = [
-        (GameItem.self, Constant.ResourceName.gameItemDefault),
-        (GameItemSeedPineCone.self, Constant.ResourceName.gameItemSeedPineCone),
-    ]
-
-    static let gameItemTypeInformationArray = ({
-        var array = Array<SKTexture>(repeating: SKTexture(), count: Constant.gameItemTypeIDToInformation.count)
-
-        for gameItemTypeID in 0..<Constant.gameItemTypeIDToInformation.count {
-            let resourceName = Constant.gameItemTypeIDToInformation[gameItemTypeID].resourceName
-            let gameItemNode = SKTexture(imageNamed: resourceName)
-            array[gameItemTypeID] = (gameItemNode)
-        }
-
-        return array
-    })()
+    // MARK: - UserDefaults key
+    static let idGenerator = "idGenerator"
 
     // MARK: - etc
     static let gridSize: Int = 100
 
     static let velocityDamping = 5000.0
-
-    static let defaultWorldName = "world000"
-    static let tileMapFileName = "tileMap.dat"
-    static let gameDataModelFileName = "GameDataModel.sqlite"
-    static let worldDataModelName = "GameDataModel"
 
 }

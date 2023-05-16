@@ -1,5 +1,5 @@
 //
-//  FileController.swift
+//  TileMapFileController.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/11.
@@ -54,9 +54,28 @@ final class TileMapFileController {
 
     // MARK: - private
     private func createTileDataFileIfNotExist(ofPath filePath: String) {
-        if !self.fileManager.fileExists(atPath: filePath) {
-            self.fileManager.createFile(atPath: filePath, contents: Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize))
+        guard !self.fileManager.fileExists(atPath: filePath) else { return }
+
+        let tileMapData = self.getInitialTileMapData()
+        self.fileManager.createFile(atPath: filePath, contents: tileMapData)
+    }
+
+    private func getInitialTileMapData() -> Data {
+        var tileMapData = Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize)
+
+        var tileMap = tileMapData.withUnsafeMutableBytes {
+            $0.bindMemory(to: Int.self)
         }
+        self.set(tileMap: tileMap, row: 45, column: 45, tileTypeID: 1)
+        self.set(tileMap: tileMap, row: 48, column: 48, tileTypeID: 2)
+        self.set(tileMap: tileMap, row: 52, column: 52, tileTypeID: 2)
+        self.set(tileMap: tileMap, row: 52, column: 53, tileTypeID: 2)
+
+        return tileMapData
+    }
+
+    private func set(tileMap: UnsafeMutableBufferPointer<Int>, row: Int, column: Int, tileTypeID: Int) {
+        tileMap[100 * row + column] = tileTypeID
     }
 
 }

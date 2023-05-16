@@ -18,10 +18,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
         setView()
         setPortalScene()
-        testCode()
-    }
-
-    func testCode() {
     }
 
     func setView() {
