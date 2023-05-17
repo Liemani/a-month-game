@@ -23,7 +23,7 @@ class WorldScene: SKScene {
     // MARK: - set up
     func setUp(worldSceneController: WorldSceneController) {
         self.worldSceneController = worldSceneController
-        
+
         self.size = Constant.screenSize
         self.scaleMode = .aspectFit
 
@@ -134,15 +134,21 @@ class WorldScene: SKScene {
 
     // MARK: - edit
     func set(row: Int, column: Int, tileTypeID: Int) {
-        let tileInformation = Resource.tileResourceArray[tileTypeID]
+        let resourceIndex = Resource.tileResourceArray.indices.contains(tileTypeID) ? tileTypeID : 0
+        let tileInformation = Resource.tileResourceArray[resourceIndex]
+
         self.tileMapNode.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: column, row: row)
     }
 
     func addSpriteNode(byGameObject gameObject: GameObject) -> SKSpriteNode {
-        let texture = Resource.gameObjectTextureArray[gameObject.typeID]
+        let textureIndex = Resource.gameObjectTextureArray.indices.contains(gameObject.typeID) ? gameObject.typeID : 0
+        let texture = Resource.gameObjectTextureArray[textureIndex]
+
         let gameObjectSpriteNode = SKSpriteNode(texture: texture)
-        gameObjectSpriteNode.position.x = Constant.defaultSize * (Double(gameObject.coordinate.row) + 0.5)
-        gameObjectSpriteNode.position.y = Constant.defaultSize * (Double(gameObject.coordinate.column) + 0.5)
+        let positionX = Constant.defaultSize * (Double(gameObject.coordinate.row) + 0.5)
+        let positionY = Constant.defaultSize * (Double(gameObject.coordinate.column) + 0.5)
+        gameObjectSpriteNode.position.x = positionX
+        gameObjectSpriteNode.position.y = positionY
 
         self.fieldGameObjectLayer.addChild(gameObjectSpriteNode)
 

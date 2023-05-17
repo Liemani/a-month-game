@@ -46,7 +46,7 @@ class WorldSceneTouchController {
         let column = Int(location.y) / Int(Constant.defaultSize)
 
         let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
-        let typeID = Int(arc4random_uniform(2) + 1)
+        let typeID = Int(arc4random_uniform(3) + 1)
 
         let gameObject = GameObject.new(id: nil, coordinate: coordinate, typeID: typeID)
 

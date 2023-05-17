@@ -20,18 +20,17 @@ struct Resource {
 
         static let grassTile = "tile_grass"
         static let woodTile = "tile_wood"
-        static let woodWallTile = "tile_wall_wood"
 
         static let gameObjectDefault = "game_object_default"
         static let gameObjectPineCone = "game_object_pine_cone"
         static let gameObjectPineTree = "game_object_pine_tree"
+        static let gameObjectWoodWall = "game_object_wood_wall"
     }
 
     // MARK: - tile
     static let tileTypeIDToResourceName: [String] = [
         Resource.Name.grassTile,
         Resource.Name.woodTile,
-        Resource.Name.woodWallTile,
     ]
 
     static let tileResourceArray: [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
@@ -52,6 +51,7 @@ struct Resource {
         (GameObject.self, Resource.Name.gameObjectDefault),
         (GameObjectPineCone.self, Resource.Name.gameObjectPineCone),
         (GameObjectPineTree.self, Resource.Name.gameObjectPineTree),
+        (GameObjectWoodWall.self, Resource.Name.gameObjectWoodWall),
     ]
 
     static let gameObjectTextureArray: [SKTexture] = ({
