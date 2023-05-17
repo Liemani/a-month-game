@@ -29,7 +29,7 @@ final class WorldSceneController: SceneController {
 
         self.scene = scene
 
-        let worldSceneTouchController = WorldSceneTouchController(worldController: self)
+        let worldSceneTouchController = WorldSceneTouchController(worldSceneController: self)
         worldSceneTouchController.camera = scene.camera
         self.worldSceneTouchController = worldSceneTouchController
     }
@@ -123,8 +123,7 @@ final class WorldSceneController: SceneController {
     // MARK: - debug code
     func debugCode() {
         for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
-            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), typeID: \(gameObject.typeID)")
-
+            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), typeID: \(Resource.getTypeID(of: gameObject))")
         }
 
     }

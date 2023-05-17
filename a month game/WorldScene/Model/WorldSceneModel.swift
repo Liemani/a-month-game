@@ -12,7 +12,7 @@ final class WorldSceneModel {
 
     var diskController: DiskController!
 
-    weak var worldController: WorldSceneController!
+    weak var worldSceneController: WorldSceneController!
 
     var worldSceneTileModel: WorldSceneTileModel!
     var worldSceneGameObjectModel: WorldSceneGameObjectModel!
@@ -23,7 +23,7 @@ final class WorldSceneModel {
         diskController.setToWorld(ofName: worldName)
         self.diskController = diskController
 
-        self.worldController = worldSceneController
+        self.worldSceneController = worldSceneController
 
         let tileMapData = self.diskController.loadTileData()
         self.worldSceneTileModel = WorldSceneTileModel(worldModel: self, tileMapData: tileMapData)
@@ -49,7 +49,7 @@ final class WorldSceneModel {
                 row: Int(gameObjectManagedObject.row),
                 column: Int(gameObjectManagedObject.column))
             let typeID = Int(gameObjectManagedObject.typeID)
-            let gameObject = GameObject.new(id: id, coordinate: coordinate, typeID: typeID)
+            let gameObject = GameObject.new(withTypeID: typeID, id: id, coordinate: coordinate)
             gameObjectDictionary[id] = gameObject
         }
 

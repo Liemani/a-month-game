@@ -54,15 +54,27 @@ struct Resource {
         (GameObjectWoodWall.self, Resource.Name.gameObjectWoodWall),
     ]
 
-    static let gameObjectTextureArray: [SKTexture] = ({
-        let resourceNameArray = Resource.gameObjectTypeIDToInformation.map { $0.resourceName }
-        var textureArray = [SKTexture](repeating: SKTexture(), count: resourceNameArray.count)
+    private static let gameObjectResourceDictionary: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = ({
+        var dictionary: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = [:]
 
-        for (gameObjectTypeID, resourceName) in resourceNameArray.enumerated() {
-            textureArray[gameObjectTypeID] = SKTexture(imageNamed: resourceName)
+        for (index, information) in Resource.gameObjectTypeIDToInformation.enumerated() {
+            let key = ObjectIdentifier(information.gameObjectType)
+            let texture = SKTexture(imageNamed: information.resourceName)
+            let value = (typeID: index, texture: texture)
+            dictionary[key] = value
         }
 
-        return textureArray
+        return dictionary
     })()
+
+    static func getTypeID(of gameObject: GameObject) -> Int {
+        let objectIdentifier = ObjectIdentifier(type(of: gameObject))
+        return Resource.gameObjectResourceDictionary[objectIdentifier]!.typeID
+    }
+
+    static func getTexture(of gameObject: GameObject) -> SKTexture {
+        let objectIdentifier = ObjectIdentifier(type(of: gameObject))
+        return Resource.gameObjectResourceDictionary[objectIdentifier]!.texture
+    }
 
 }

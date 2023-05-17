@@ -141,8 +141,7 @@ class WorldScene: SKScene {
     }
 
     func addSpriteNode(byGameObject gameObject: GameObject) -> SKSpriteNode {
-        let textureIndex = Resource.gameObjectTextureArray.indices.contains(gameObject.typeID) ? gameObject.typeID : 0
-        let texture = Resource.gameObjectTextureArray[textureIndex]
+        let texture = Resource.getTexture(of: gameObject)
 
         let gameObjectSpriteNode = SKSpriteNode(texture: texture)
         let positionX = Constant.defaultSize * (Double(gameObject.coordinate.row) + 0.5)

@@ -9,11 +9,12 @@ import Foundation
 
 final class GameObjectWoodWall: GameObject {
 
-    static let typeID: Int = Helper.getTypeID(from: GameObjectWoodWall.self)
-
     required init(id: Int?, coordinate: GameObjectCoordinate) {
-        super.init(id: id, coordinate: coordinate, typeID: GameObjectWoodWall.typeID)
+        super.init(id: id, coordinate: coordinate)
     }
+
+    // MARK: - override
+    override class var isWalkable: Bool { return false }
 
     override func interact(leftHand: GameObject?, rightHand: GameObject?) {
         print("This is a instance of GameObjectWoodWall")

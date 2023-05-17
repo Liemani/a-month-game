@@ -10,7 +10,7 @@ import SpriteKit
 
 class WorldSceneTouchController {
 
-    weak var worldController: WorldSceneController!
+    weak var worldSceneController: WorldSceneController!
     
     var camera: SKCameraNode!
 
@@ -19,18 +19,18 @@ class WorldSceneTouchController {
     var velocityVector: CGVector = CGVector()
 
     // MARK: - init
-    init(worldController: WorldSceneController) {
-        self.worldController = worldController
+    init(worldSceneController: WorldSceneController) {
+        self.worldSceneController = worldSceneController
     }
 
     // MARK: - touch
     func touchDown(touch: UITouch) {
-        if !self.worldController.isMenuOpen {
-            let scene = self.worldController.scene as! WorldScene
+        if !self.worldSceneController.isMenuOpen {
+            let scene = self.worldSceneController.scene as! WorldScene
             let touchLocation = touch.location(in: scene.fieldGameObjectLayer)
             if let touchedObject = scene.fieldGameObjectLayer.nodes(at: touchLocation).first {
-                self.worldController.interact(gameObjectNode: touchedObject)
-                self.worldController.removeGameObject(by: touchedObject as! SKSpriteNode)
+                self.worldSceneController.interact(gameObjectNode: touchedObject)
+                self.worldSceneController.removeGameObject(by: touchedObject as! SKSpriteNode)
             } else {
                 self.addGameObjectAtTouchLocation(touch: touch)
             }
@@ -40,7 +40,7 @@ class WorldSceneTouchController {
     }
 
     private func addGameObjectAtTouchLocation(touch: UITouch) {
-        let scene = self.worldController.scene as! WorldScene
+        let scene = self.worldSceneController.scene as! WorldScene
         let location = touch.location(in: scene)
         let row = Int(location.x) / Int(Constant.defaultSize)
         let column = Int(location.y) / Int(Constant.defaultSize)
@@ -48,9 +48,9 @@ class WorldSceneTouchController {
         let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
         let typeID = Int(arc4random_uniform(3) + 1)
 
-        let gameObject = GameObject.new(id: nil, coordinate: coordinate, typeID: typeID)
+        let gameObject = GameObject.new(withTypeID: typeID, id: nil, coordinate: coordinate)
 
-        self.worldController.add(gameObject: gameObject)
+        self.worldSceneController.add(gameObject: gameObject)
     }
 
     private func startDragging(touch: UITouch) {
@@ -77,8 +77,8 @@ class WorldSceneTouchController {
     }
 
     func touchUp(touch: UITouch) {
-        let scene = self.worldController.scene as! WorldScene
-        if !self.worldController.isMenuOpen {
+        let scene = self.worldSceneController.scene as! WorldScene
+        if !self.worldSceneController.isMenuOpen {
             let currentLocation = touch.location(in: self.camera)
             let timeInterval = touch.timestamp - touchDownTimestamp
 
@@ -99,7 +99,7 @@ class WorldSceneTouchController {
     }
 
     private func performSegueToPortalScene() {
-        self.worldController.viewController.setPortalScene()
+        self.worldSceneController.viewController.setPortalScene()
     }
 
 }

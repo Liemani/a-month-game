@@ -42,10 +42,10 @@ final class CoreDataController {
         let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
 
         managedObject.id = Int32(gameObject.id)
+        managedObject.typeID = Int32(Resource.getTypeID(of: gameObject))
         managedObject.inventoryID = Int32(gameObject.coordinate.inventoryID)
         managedObject.row = Int32(gameObject.coordinate.row)
         managedObject.column = Int32(gameObject.coordinate.column)
-        managedObject.typeID = Int32(gameObject.typeID)
 
         try! context.save()
     }
