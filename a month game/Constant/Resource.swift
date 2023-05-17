@@ -48,7 +48,7 @@ struct Resource {
     // MARK: - game item
     static let gameItemTypeIDToInformation: [(gameItemType: GameObject.Type, resourceName: String)] = [
         (GameObject.self, Resource.Name.gameItemDefault),
-        (GameItemSeedPineCone.self, Resource.Name.gameItemSeedPineCone),
+        (GameObjectSeedPineCone.self, Resource.Name.gameItemSeedPineCone),
     ]
 
     static let gameItemTextureArray: [SKTexture] = ({

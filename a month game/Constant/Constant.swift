@@ -54,7 +54,7 @@ struct Constant {
     static let tileMapFileName = "tileMap.dat"
     static let gameDataModelFileName = "GameDataModel.sqlite"
     static let worldDataModelName = "GameDataModel"
-    static let gameItemDataEntityName = "GameItemData"
+    static let gameObjectDataEntityName = "GameItemData"
 
     // MARK: - UserDefaults key
     static let idGenerator = "idGenerator"

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GameObjectPosition {
+struct GameObjectCoordinate {
 
     var inventoryID: Int
     var row: Int

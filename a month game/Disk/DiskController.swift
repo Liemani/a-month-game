@@ -75,13 +75,13 @@ final class DiskController {
 
         let gameItemDataArray = self.coreDataController.loadGameObjectDataArray()
         for gameItemData in gameItemDataArray {
-            let position = GameObjectPosition(
+            let position = GameObjectCoordinate(
                 inventoryID: Int(gameItemData.inventoryID),
                 row: Int(gameItemData.row),
                 column: Int(gameItemData.column))
             let typeID = Int(gameItemData.typeID)
             let id = Int(gameItemData.id)
-            let gameItem = GameObject(position: position, typeID: typeID, id: id)
+            let gameItem = GameObject(id: id, coordinate: position, typeID: typeID)
             gameItemDictionary[gameItem.id] = gameItem
         }
 

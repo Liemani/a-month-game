@@ -12,17 +12,17 @@ class GameObject {
     static private let idGenerator = IDGenerator.default
 
     let id: Int
-    var position: GameObjectPosition
+    var coordinate: GameObjectCoordinate
     let typeID: Int
 
-    init(position: GameObjectPosition, typeID: Int, id: Int?) {
+    init(id: Int?, coordinate: GameObjectCoordinate, typeID: Int) {
         self.id = id ?? GameObject.idGenerator.generate()
         self.typeID = typeID
-        self.position = position
+        self.coordinate = coordinate
     }
 
-    required convenience init(position: GameObjectPosition, id: Int?) {
-        self.init(position: position, typeID: 0, id: id)
+    required convenience init(id: Int?, coordinate: GameObjectCoordinate) {
+        self.init(id: id, coordinate: coordinate, typeID: 0)
     }
 
 }

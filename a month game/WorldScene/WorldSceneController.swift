@@ -117,7 +117,7 @@ final class WorldSceneController: SceneController {
     // MARK: - debug code
     func debugCode() {
         for gameItem in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
-            print("id: \(gameItem.id), typeID: \(gameItem.typeID), position: \(gameItem.position)")
+            print("id: \(gameItem.id), typeID: \(gameItem.typeID), position: \(gameItem.coordinate)")
 
         }
 

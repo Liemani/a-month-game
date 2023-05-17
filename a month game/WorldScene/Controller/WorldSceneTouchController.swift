@@ -43,8 +43,8 @@ class WorldSceneTouchController {
         let location = touch.location(in: scene)
         let row = Int(location.x) / Int(Constant.defaultSize)
         let column = Int(location.y) / Int(Constant.defaultSize)
-        let position = GameObjectPosition(inventoryID: 0, row: row, column: column)
-        let gameItem = GameItemSeedPineCone(position: position, id: nil)
+        let position = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
+        let gameItem = GameObjectSeedPineCone(id: nil, coordinate: position)
         self.worldController.add(gameObject: gameItem)
     }
 

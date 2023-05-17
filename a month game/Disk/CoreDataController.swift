@@ -38,31 +38,45 @@ final class CoreDataController {
 
     func store(gameObject: GameObject) {
         let context = self.persistentContainer.viewContext
-        let gameItemData = NSEntityDescription.insertNewObject(forEntityName: Constant.gameItemDataEntityName, into: context) as! GameItemData
+
+        let gameItemData = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameItemData
+
         gameItemData.id = Int32(gameObject.id)
-        gameItemData.inventoryID = Int32(gameObject.position.inventoryID)
-        gameItemData.row = Int32(gameObject.position.row)
-        gameItemData.column = Int32(gameObject.position.column)
+        gameItemData.inventoryID = Int32(gameObject.coordinate.inventoryID)
+        gameItemData.row = Int32(gameObject.coordinate.row)
+        gameItemData.column = Int32(gameObject.coordinate.column)
         gameItemData.typeID = Int32(gameObject.typeID)
 
-        try! self.persistentContainer.viewContext.save()
+        try! context.save()
+    }
+
+    func moveCoordinate(gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+        let context = self.persistentContainer.viewContext
+
+        let request = NSFetchRequest<GameItemData>(entityName: Constant.gameObjectDataEntityName)
+        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
+
+        let results = try! context.fetch(request)
+        let targetObject = results.first!
+
+        targetObject.inventoryID = Int32(newCoordinate.inventoryID)
+        targetObject.row = Int32(newCoordinate.row)
+        targetObject.column = Int32(newCoordinate.column)
+
+        try! context.save()
     }
 
     func delete(gameObject: GameObject) {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: Constant.gameItemDataEntityName)
+        let context = self.persistentContainer.viewContext
+
+        let request = NSFetchRequest<GameItemData>(entityName: Constant.gameObjectDataEntityName)
         request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
 
-        do {
-            let context = self.persistentContainer.viewContext
-            let results = try context.fetch(request)
-            if results.count > 0 {
-                let objectToDelete = results[0] as! NSManagedObject
-                context.delete(objectToDelete)
-                try context.save()
-            }
-        } catch {
-            print("Error deleting object: \(error)")
-        }
+        let results = try! context.fetch(request)
+        let targetObject = results.first!
+        context.delete(targetObject)
+
+        try! context.save()
     }
 
     // MARK: - remove persistentStore
@@ -73,31 +87,3 @@ final class CoreDataController {
     }
 
 }
-
-//    func saveContext(backgroundContext: NSManagedObjectContext? = nil) {
-//        let context = backgroundContext ?? viewContext
-//        guard context.hasChanges else { return }
-//
-//        try! context.save()
-//    }
-
-//    func saveNewGameItemData(gameItem: GameItem) {
-//        var itemEntity = GameItemData()
-//        let newItem = NSManagedObject(entity: itemEntity, insertInto: managedObjectContext)
-//        newItem.setValue(gameItem.id, forKey: "id")
-//        newItem.setValue(gameItem.position.inventoryID, forKey: "inventoryID")
-//        newItem.setValue(gameItem.position.row, forKey: "row")
-//        newItem.setValue(gameItem.position.column, forKey: "column")
-//
-//        try! managedObjectContext.save()
-//    }
-
-//    func loadGameItemData() {
-//        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "GameItemData")
-//        fetchRequest.predicate = NSPredicate(format: "id == %@", argumentArray: [id])
-//        fetchRequest.predicate = NSPredicate(format: "row == %@", argumentArray: [row])
-//        fetchRequest.predicate = NSPredicate(format: "column == %@", argumentArray: [column])
-//
-//        let gameItem = GameItem(name: name, quantity: quantity, value: value)
-//        gameItem.id = id
-//    }

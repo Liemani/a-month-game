@@ -63,7 +63,7 @@ final class TileMapFileController {
     private func getInitialTileMapData() -> Data {
         var tileMapData = Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize)
 
-        var tileMap = tileMapData.withUnsafeMutableBytes {
+        let tileMap = tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
         self.set(tileMap: tileMap, row: 45, column: 45, tileTypeID: 1)
