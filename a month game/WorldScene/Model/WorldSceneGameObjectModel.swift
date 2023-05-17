@@ -1,5 +1,5 @@
 //
-//  GameItemModel.swift
+//  WorldSceneGameObjectModel.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/12.
@@ -14,19 +14,19 @@ final class WorldSceneGameObjectModel {
     var gameObjectDictionary: Dictionary<Int, GameObject>
 
     // MARK: - init
-    init(worldSceneModel: WorldSceneModel, gameItemDictionary: Dictionary<Int, GameObject>) {
+    init(worldSceneModel: WorldSceneModel, gameObjectDictionary: Dictionary<Int, GameObject>) {
         self.worldSceneModel = worldSceneModel
 
-        self.gameObjectDictionary = gameItemDictionary
+        self.gameObjectDictionary = gameObjectDictionary
     }
 
-    // MARK: - edit item
-    func add(gameItem: GameObject) {
-        self.gameObjectDictionary[gameItem.id] = gameItem
+    // MARK: - edit object
+    func add(gameObject: GameObject) {
+        self.gameObjectDictionary[gameObject.id] = gameObject
     }
 
-    func remove(gameItem: GameObject) {
-        self.gameObjectDictionary.removeValue(forKey: gameItem.id)
+    func remove(gameObject: GameObject) {
+        self.gameObjectDictionary.removeValue(forKey: gameObject.id)
     }
 
 }

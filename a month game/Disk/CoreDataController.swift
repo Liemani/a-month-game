@@ -30,30 +30,30 @@ final class CoreDataController {
     }
 
     // MARK: - edit
-    func loadGameObjectDataArray() -> [GameItemData] {
-        let fetchRequest = GameItemData.fetchRequest()
+    func loadGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
+        let request = GameObjectManagedObject.fetchRequest()
         let context = self.persistentContainer.viewContext
-        return try! context.fetch(fetchRequest)
+        return try! context.fetch(request)
     }
 
     func store(gameObject: GameObject) {
         let context = self.persistentContainer.viewContext
 
-        let gameItemData = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameItemData
+        let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
 
-        gameItemData.id = Int32(gameObject.id)
-        gameItemData.inventoryID = Int32(gameObject.coordinate.inventoryID)
-        gameItemData.row = Int32(gameObject.coordinate.row)
-        gameItemData.column = Int32(gameObject.coordinate.column)
-        gameItemData.typeID = Int32(gameObject.typeID)
+        managedObject.id = Int32(gameObject.id)
+        managedObject.inventoryID = Int32(gameObject.coordinate.inventoryID)
+        managedObject.row = Int32(gameObject.coordinate.row)
+        managedObject.column = Int32(gameObject.coordinate.column)
+        managedObject.typeID = Int32(gameObject.typeID)
 
         try! context.save()
     }
 
-    func moveCoordinate(gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+    func moveCoordinate(of gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
         let context = self.persistentContainer.viewContext
 
-        let request = NSFetchRequest<GameItemData>(entityName: Constant.gameObjectDataEntityName)
+        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
         request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
 
         let results = try! context.fetch(request)
@@ -69,7 +69,7 @@ final class CoreDataController {
     func delete(gameObject: GameObject) {
         let context = self.persistentContainer.viewContext
 
-        let request = NSFetchRequest<GameItemData>(entityName: Constant.gameObjectDataEntityName)
+        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
         request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
 
         let results = try! context.fetch(request)

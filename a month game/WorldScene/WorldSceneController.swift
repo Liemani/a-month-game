@@ -13,7 +13,7 @@ final class WorldSceneController: SceneController {
     var worldSceneModel: WorldSceneModel!
     var worldSceneTouchController: WorldSceneTouchController!
 
-    var gameItemSpriteNodeToModelDictionary: [SKSpriteNode: GameObject] = [:]
+    var gameObjectNodeToModelDictionary: [SKNode: GameObject] = [:]
 
     var isMenuOpen: Bool {
         let scene = self.scene as! WorldScene
@@ -58,34 +58,34 @@ final class WorldSceneController: SceneController {
         let gameObjectDictionary = self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary
         for gameObject in gameObjectDictionary.values {
             let scene = self.scene as! WorldScene
-            let gameItemNode = scene.addSpriteNode(byGameObject: gameObject)
+            let gameObjectNode = scene.addSpriteNode(byGameObject: gameObject)
 
-            self.gameItemSpriteNodeToModelDictionary[gameItemNode] = gameObject
+            self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
         }
     }
 
-    // MARK: - edit
+    // MARK: - edit model and scene
     func add(gameObject: GameObject) {
-        self.worldSceneModel.add(gameItem: gameObject)
+        self.worldSceneModel.add(gameObject: gameObject)
 
         let scene = self.scene as! WorldScene
-        let gameItemNode = scene.addSpriteNode(byGameObject: gameObject)
+        let gameObjectNode = scene.addSpriteNode(byGameObject: gameObject)
 
-        self.gameItemSpriteNodeToModelDictionary[gameItemNode] = gameObject
+        self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
     }
 
-    func removeGameObject(bySpriteNode gameItemSpriteNode: SKSpriteNode) {
-        let gameItem = self.gameItemSpriteNodeToModelDictionary[gameItemSpriteNode]!
+    func removeGameObject(by gameObjectNode: SKNode) {
+        let gameObject = self.gameObjectNodeToModelDictionary[gameObjectNode]!
 
         let scene = self.scene as! WorldScene
-        scene.remove(gameItemSpriteNode: gameItemSpriteNode)
+        scene.remove(gameObjectNode: gameObjectNode)
 
-        self.worldSceneModel.remove(gameItem: gameItem)
+        self.worldSceneModel.remove(gameObject: gameObject)
 
-        self.gameItemSpriteNodeToModelDictionary.removeValue(forKey: gameItemSpriteNode)
+        self.gameObjectNodeToModelDictionary.removeValue(forKey: gameObjectNode)
     }
 
-    // MARK: - update
+    // MARK: - update scene
     var lastUpdateTime: TimeInterval = 0.0
     func update(currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
@@ -114,10 +114,16 @@ final class WorldSceneController: SceneController {
         }
     }
 
+    // MARK: - not categorized
+    func interact(gameObjectNode: SKNode) {
+        let gameObject = self.gameObjectNodeToModelDictionary[gameObjectNode]!
+        gameObject.interact(leftHand: nil, rightHand: nil)
+    }
+
     // MARK: - debug code
     func debugCode() {
-        for gameItem in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
-            print("id: \(gameItem.id), typeID: \(gameItem.typeID), position: \(gameItem.coordinate)")
+        for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
+            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), typeID: \(gameObject.typeID)")
 
         }
 

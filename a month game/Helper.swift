@@ -27,9 +27,9 @@ class Helper {
         return spriteNode
     }
 
-    static func getTypeID(from gameItemType: GameObject.Type) -> Int {
-        for (index, information) in Resource.gameItemTypeIDToInformation.enumerated() {
-            if gameItemType == information.gameItemType {
+    static func getTypeID(from gameObjectType: GameObject.Type) -> Int {
+        for (index, information) in Resource.gameObjectTypeIDToInformation.enumerated() {
+            if gameObjectType == information.gameObjectType {
                 return index
             }
         }

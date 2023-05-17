@@ -7,7 +7,8 @@
 
 import Foundation
 
-class WorldSceneModel {
+/// Use DiskController to set self
+final class WorldSceneModel {
 
     var diskController: DiskController!
 
@@ -27,8 +28,8 @@ class WorldSceneModel {
         let tileMapData = self.diskController.loadTileData()
         self.worldSceneTileModel = WorldSceneTileModel(worldModel: self, tileMapData: tileMapData)
 
-        let gameObjectDictionary = diskController.loadGameObjectDictionary()
-        self.worldSceneGameObjectModel = WorldSceneGameObjectModel(worldSceneModel: self, gameItemDictionary: gameObjectDictionary)
+        let gameObjectDictionary = self.loadGameObjectDictionary()
+        self.worldSceneGameObjectModel = WorldSceneGameObjectModel(worldSceneModel: self, gameObjectDictionary: gameObjectDictionary)
     }
 
     // MARK: - deinit
@@ -37,6 +38,24 @@ class WorldSceneModel {
     }
 
     // MARK: - edit
+    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
+        var gameObjectDictionary = Dictionary<Int, GameObject>()
+
+        let gameObjectManagedObjectArray = self.diskController.loadGameObjectManagedObjectArray()
+        for gameObjectManagedObject in gameObjectManagedObjectArray {
+            let id = Int(gameObjectManagedObject.id)
+            let coordinate = GameObjectCoordinate(
+                inventoryID: Int(gameObjectManagedObject.inventoryID),
+                row: Int(gameObjectManagedObject.row),
+                column: Int(gameObjectManagedObject.column))
+            let typeID = Int(gameObjectManagedObject.typeID)
+            let gameObject = GameObject.new(id: id, coordinate: coordinate, typeID: typeID)
+            gameObjectDictionary[id] = gameObject
+        }
+
+        return gameObjectDictionary
+    }
+
     func updateTile(row: Int, column: Int, tileTypeID: Int) {
         self.worldSceneTileModel.set(row: row, column: column, tileTypeID: tileTypeID)
 
@@ -45,16 +64,16 @@ class WorldSceneModel {
         self.diskController.saveTileData(row: row, column: column, tileData: tileData)
     }
 
-    func add(gameItem: GameObject) {
-        self.worldSceneGameObjectModel.add(gameItem: gameItem)
+    func add(gameObject: GameObject) {
+        self.worldSceneGameObjectModel.add(gameObject: gameObject)
 
-        self.diskController.store(gameObject: gameItem)
+        self.diskController.store(gameObject: gameObject)
     }
 
-    func remove(gameItem: GameObject) {
-        self.worldSceneGameObjectModel.remove(gameItem: gameItem)
+    func remove(gameObject: GameObject) {
+        self.worldSceneGameObjectModel.remove(gameObject: gameObject)
 
-        self.diskController.delete(gameObject: gameItem)
+        self.diskController.delete(gameObject: gameObject)
     }
 
 }

@@ -1,5 +1,5 @@
 //
-//  GameItem.swift
+//  GameObject.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/12.
@@ -15,14 +15,21 @@ class GameObject {
     var coordinate: GameObjectCoordinate
     let typeID: Int
 
-    init(id: Int?, coordinate: GameObjectCoordinate, typeID: Int) {
+    static func new(id: Int?, coordinate: GameObjectCoordinate, typeID: Int) -> GameObject {
+        return Resource.gameObjectTypeIDToInformation[typeID].gameObjectType.init(id: id, coordinate: coordinate)
+    }
+
+    internal init(id: Int?, coordinate: GameObjectCoordinate, typeID: Int) {
         self.id = id ?? GameObject.idGenerator.generate()
-        self.typeID = typeID
         self.coordinate = coordinate
+        self.typeID = typeID
     }
 
     required convenience init(id: Int?, coordinate: GameObjectCoordinate) {
         self.init(id: id, coordinate: coordinate, typeID: 0)
+    }
+
+    func interact(leftHand: GameObject?, rightHand: GameObject?) {
     }
 
 }

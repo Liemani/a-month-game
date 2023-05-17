@@ -139,7 +139,7 @@ class WorldScene: SKScene {
     }
 
     func addSpriteNode(byGameObject gameObject: GameObject) -> SKSpriteNode {
-        let texture = Resource.gameItemTextureArray[gameObject.typeID]
+        let texture = Resource.gameObjectTextureArray[gameObject.typeID]
         let gameObjectSpriteNode = SKSpriteNode(texture: texture)
         gameObjectSpriteNode.position.x = Constant.defaultSize * (Double(gameObject.coordinate.row) + 0.5)
         gameObjectSpriteNode.position.y = Constant.defaultSize * (Double(gameObject.coordinate.column) + 0.5)
@@ -149,8 +149,8 @@ class WorldScene: SKScene {
         return gameObjectSpriteNode
     }
 
-    func remove(gameItemSpriteNode: SKSpriteNode) {
-        gameItemSpriteNode.removeFromParent()
+    func remove(gameObjectNode: SKNode) {
+        gameObjectNode.removeFromParent()
     }
 
 }

@@ -25,8 +25,6 @@ struct Constant {
     static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
     static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
-    static let itemNodeSize = CGSize(width: 100.0, height: 100.0)
-
     static let tileMapSide = Constant.defaultSize * Double(Constant.gridSize)
     static let tileMapNodePosition = CGPoint(x: Constant.tileMapSide / 2.0, y: Constant.tileMapSide / 2.0)
 
@@ -53,8 +51,8 @@ struct Constant {
     static let defaultWorldName = "world000"
     static let tileMapFileName = "tileMap.dat"
     static let gameDataModelFileName = "GameDataModel.sqlite"
-    static let worldDataModelName = "GameDataModel"
-    static let gameObjectDataEntityName = "GameItemData"
+    static let worldDataModelName = "DataModel"
+    static let gameObjectDataEntityName = "GameObjectManagedObject"
 
     // MARK: - UserDefaults key
     static let idGenerator = "idGenerator"

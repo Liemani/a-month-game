@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Handle all disk related function
 final class DiskController {
 
     static private var _default: DiskController?
@@ -70,22 +71,8 @@ final class DiskController {
     }
 
     // MARK: - CoreData
-    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
-        var gameItemDictionary = Dictionary<Int, GameObject>()
-
-        let gameItemDataArray = self.coreDataController.loadGameObjectDataArray()
-        for gameItemData in gameItemDataArray {
-            let position = GameObjectCoordinate(
-                inventoryID: Int(gameItemData.inventoryID),
-                row: Int(gameItemData.row),
-                column: Int(gameItemData.column))
-            let typeID = Int(gameItemData.typeID)
-            let id = Int(gameItemData.id)
-            let gameItem = GameObject(id: id, coordinate: position, typeID: typeID)
-            gameItemDictionary[gameItem.id] = gameItem
-        }
-
-        return gameItemDictionary
+    func loadGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
+        return self.coreDataController.loadGameObjectManagedObjectArray()
     }
 
     func store(gameObject: GameObject) {
@@ -96,9 +83,9 @@ final class DiskController {
         self.coreDataController.delete(gameObject: gameObject)
     }
 
-    // TODO: write saveModifiedGameItem()
-    // TODO: write modifyGameItem()
-    // TODO: write removeGameItem()
+    func moveCoordinate(of gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+        self.coreDataController.moveCoordinate(of: gameObject, to: newCoordinate)
+    }
 
     // MARK: - FileManager
     func loadTileData() -> Data {

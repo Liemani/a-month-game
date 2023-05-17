@@ -29,23 +29,28 @@ class WorldSceneTouchController {
             let scene = self.worldController.scene as! WorldScene
             let touchLocation = touch.location(in: scene.fieldGameObjectLayer)
             if let touchedObject = scene.fieldGameObjectLayer.nodes(at: touchLocation).first {
-                self.worldController.removeGameObject(bySpriteNode: touchedObject as! SKSpriteNode)
+                self.worldController.interact(gameObjectNode: touchedObject)
+                self.worldController.removeGameObject(by: touchedObject as! SKSpriteNode)
             } else {
-                self.addGameItemAtTouchLocation(touch: touch)
+                self.addGameObjectAtTouchLocation(touch: touch)
             }
             self.startDragging(touch: touch)
 
         }
     }
 
-    private func addGameItemAtTouchLocation(touch: UITouch) {
+    private func addGameObjectAtTouchLocation(touch: UITouch) {
         let scene = self.worldController.scene as! WorldScene
         let location = touch.location(in: scene)
         let row = Int(location.x) / Int(Constant.defaultSize)
         let column = Int(location.y) / Int(Constant.defaultSize)
-        let position = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
-        let gameItem = GameObjectSeedPineCone(id: nil, coordinate: position)
-        self.worldController.add(gameObject: gameItem)
+
+        let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
+        let typeID = Int(arc4random_uniform(2) + 1)
+
+        let gameObject = GameObject.new(id: nil, coordinate: coordinate, typeID: typeID)
+
+        self.worldController.add(gameObject: gameObject)
     }
 
     private func startDragging(touch: UITouch) {

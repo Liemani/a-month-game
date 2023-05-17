@@ -9,6 +9,7 @@ import Foundation
 import SpriteKit
 
 struct Resource {
+
     // MARK: - resource name
     struct Name {
         static let character = "character"
@@ -21,8 +22,9 @@ struct Resource {
         static let woodTile = "tile_wood"
         static let woodWallTile = "tile_wall_wood"
 
-        static let gameItemDefault = "game_item_default"
-        static let gameItemSeedPineCone = "game_item_seed_pine_cone"
+        static let gameObjectDefault = "game_object_default"
+        static let gameObjectPineCone = "game_object_pine_cone"
+        static let gameObjectPineTree = "game_object_pine_tree"
     }
 
     // MARK: - tile
@@ -45,21 +47,22 @@ struct Resource {
         return array
     })()
 
-    // MARK: - game item
-    static let gameItemTypeIDToInformation: [(gameItemType: GameObject.Type, resourceName: String)] = [
-        (GameObject.self, Resource.Name.gameItemDefault),
-        (GameObjectSeedPineCone.self, Resource.Name.gameItemSeedPineCone),
+    // MARK: - game object
+    static let gameObjectTypeIDToInformation: [(gameObjectType: GameObject.Type, resourceName: String)] = [
+        (GameObject.self, Resource.Name.gameObjectDefault),
+        (GameObjectPineCone.self, Resource.Name.gameObjectPineCone),
+        (GameObjectPineTree.self, Resource.Name.gameObjectPineTree),
     ]
 
-    static let gameItemTextureArray: [SKTexture] = ({
-        var array = [SKTexture](repeating: SKTexture(), count: Resource.gameItemTypeIDToInformation.count)
+    static let gameObjectTextureArray: [SKTexture] = ({
+        let resourceNameArray = Resource.gameObjectTypeIDToInformation.map { $0.resourceName }
+        var textureArray = [SKTexture](repeating: SKTexture(), count: resourceNameArray.count)
 
-        for gameItemTypeID in 0..<Resource.gameItemTypeIDToInformation.count {
-            let resourceName = Resource.gameItemTypeIDToInformation[gameItemTypeID].resourceName
-            let gameItemNode = SKTexture(imageNamed: resourceName)
-            array[gameItemTypeID] = (gameItemNode)
+        for (gameObjectTypeID, resourceName) in resourceNameArray.enumerated() {
+            textureArray[gameObjectTypeID] = SKTexture(imageNamed: resourceName)
         }
 
-        return array
+        return textureArray
     })()
+
 }
