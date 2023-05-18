@@ -16,8 +16,4 @@ final class GameObjectWoodWall: GameObject {
     // MARK: - override
     override class var isWalkable: Bool { return false }
 
-    override func interact(leftHand: GameObject?, rightHand: GameObject?) {
-        print("This is a instance of GameObjectWoodWall")
-    }
-
 }

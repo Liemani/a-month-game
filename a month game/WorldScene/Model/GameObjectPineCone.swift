@@ -14,8 +14,5 @@ final class GameObjectPineCone: GameObject {
     }
 
     // MARK: - override
-    override func interact(leftHand: GameObject?, rightHand: GameObject?) {
-        print("This is a instance of GameObjectPineCone")
-    }
 
 }

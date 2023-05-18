@@ -1,6 +1,28 @@
 diary.txt
 각 날짜에 몇 시간 동안 어떤 작업을 했는가를 기록
 
+# 2023-05-17
+투자 시간:8h 40m
+오늘은 DiskController 를 완성했다
+
+- Add DiskController.moveCoordinate(of:to:)
+- Add GameObject.interact()
+- Add GameObject.isWalkable
+- Remove GameObject.typeID
+
+GameObject 의 typeID 부분을 정말 고민을 많이 했다
+이걸 굳이 저장하지 않고 key 로 갖는 dictionary 를 만들면 좋을텐데
+metatype 인 GameObject.Type 은 hashable protocol 을 conform 하지 않아서 dictionary 의 key 로 사용할 수 없었다
+어떤 글은 해결 방법으로 GameObject.Type 을 wrap 하는 class 를 정의하여 사용했는데, swift 언어의 의도를 violate 한다는 느낌이 들어서 채택하지는 않았다
+더 조사를 해보니 ObjectIdentifier() 라는 함수가 있었다
+이 함수의 인자로 metatype 을 주면 metatype 를 식별하는 용도의 ObjectIdentifier type 의 값을 반환해준다
+ObjectIdentifier(_: Any) -> ObjectIdentifier
+인스턴스도 들어가지만 metatype 도 들어가서 나에게 꼭 필요한 기능이었다
+그리고 type(of: Any) -> metatype 을 함께 사용하면 마침내 어떤 instance 의 class type identifier 를 얻을 수 있다
+
+오늘까지 해서 기초적인 기능은 사운드를 제외하고는 다 훑어 봤다
+내일은 터치를 정밀하게 구현해야 한다
+
 # 2023-05-16
 투자 시간: 8h 40m
 오늘은 어제 요청받은 문서를 작성했다

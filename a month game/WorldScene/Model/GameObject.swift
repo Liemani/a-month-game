@@ -7,26 +7,48 @@
 
 import Foundation
 
-class GameObject {
+/// Call gameObjectDelegate.initDelegateReference() before call gameObject.interact()
+protocol GameObjectDelegate {
 
-    static private let idGenerator = IDGenerator.default
+    func interact(_ gameObject: GameObject, with leftHand: GameObject?, and rightHand: GameObject?)
+
+}
+
+extension GameObjectDelegate {
+
+    func initDelegateReference() { GameObject.delegate = self }
+
+}
+
+// MARK: - class GameObject
+class GameObject {
 
     let id: Int
     var coordinate: GameObjectCoordinate
-
-    static func new(withTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
-        let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
-        return Resource.gameObjectTypeIDToInformation[typeID].gameObjectType.init(id: id, coordinate: coordinate)
-    }
 
     required init(id: Int?, coordinate: GameObjectCoordinate) {
         self.id = id ?? GameObject.idGenerator.generate()
         self.coordinate = coordinate
     }
 
-    // MARK: - property to be overriden
-    class var isWalkable: Bool { return true }
+    func interact(leftHand: GameObject?, rightHand: GameObject?) {
+        GameObject.delegate.interact(self, with: leftHand, and: rightHand)
+    }
 
-    func interact(leftHand: GameObject?, rightHand: GameObject?) { }
+    // MARK: property to be overriden
+    var isWalkable: Bool { return true }
+
+}
+
+extension GameObject {
+
+    static private let idGenerator = IDGenerator.default
+
+    static var delegate: GameObjectDelegate!
+
+    static func new(withTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
+        let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
+        return Resource.gameObjectTypeIDToInformation[typeID].gameObjectType.init(id: id, coordinate: coordinate)
+    }
 
 }

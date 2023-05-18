@@ -28,14 +28,13 @@ class WorldSceneTouchController {
         if !self.worldSceneController.isMenuOpen {
             let scene = self.worldSceneController.scene as! WorldScene
             let touchLocation = touch.location(in: scene.fieldGameObjectLayer)
-            if let touchedObject = scene.fieldGameObjectLayer.nodes(at: touchLocation).first {
-                self.worldSceneController.interact(gameObjectNode: touchedObject)
-                self.worldSceneController.removeGameObject(by: touchedObject as! SKSpriteNode)
+            if let touchedObjectNode = scene.fieldGameObjectLayer.nodes(at: touchLocation).first {
+                self.worldSceneController.interactObject(byNode: touchedObjectNode)
+                self.worldSceneController.removeGameObject(by: touchedObjectNode as! SKSpriteNode)
             } else {
                 self.addGameObjectAtTouchLocation(touch: touch)
             }
             self.startDragging(touch: touch)
-
         }
     }
 

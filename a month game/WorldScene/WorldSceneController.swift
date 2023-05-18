@@ -24,6 +24,8 @@ final class WorldSceneController: SceneController {
     required init(viewController: ViewController) {
         super.init(viewController: viewController)
 
+        self.initDelegateReference()
+
         let scene = WorldScene()
         scene.setUp(worldSceneController: self)
 
@@ -85,6 +87,12 @@ final class WorldSceneController: SceneController {
         self.gameObjectNodeToModelDictionary.removeValue(forKey: gameObjectNode)
     }
 
+    // TODO: implement hand
+    func interactObject(byNode node: SKNode) {
+        let gameObject = self.gameObjectNodeToModelDictionary[node]!
+        gameObject.interact(leftHand: nil, rightHand: nil)
+    }
+
     // MARK: - update scene
     var lastUpdateTime: TimeInterval = 0.0
     func update(currentTime: TimeInterval) {
@@ -112,12 +120,6 @@ final class WorldSceneController: SceneController {
             let newVelocityVectorY = self.worldSceneTouchController.velocityVector.dy - Constant.velocityDamping / velocity * self.worldSceneTouchController.velocityVector.dy * timeInterval
             self.worldSceneTouchController.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
         }
-    }
-
-    // MARK: - not categorized
-    func interact(gameObjectNode: SKNode) {
-        let gameObject = self.gameObjectNodeToModelDictionary[gameObjectNode]!
-        gameObject.interact(leftHand: nil, rightHand: nil)
     }
 
     // MARK: - debug code
