@@ -55,10 +55,10 @@ final class DiskController {
         }
     }
 
-    // MARK: - close files
-    func closeFiles() {
-        self.closeTileMapFile()
-        self.removePersistentStore()
+    /// Call this methods after all use
+    func close() {
+        self.coreDataController.removeFirstPersistentStore()
+        self.tileMapFileController.close()
     }
 
     // MARK: - remove world
@@ -103,15 +103,6 @@ final class DiskController {
 
     func updateUserDefaults(_ value: Int, forKey key: String) {
         self.userDefaultsController.update(value, forKey: key)
-    }
-
-    // MARK: - private method
-    private func closeTileMapFile() {
-        self.tileMapFileController.closeWriteFile()
-    }
-
-    private func removePersistentStore() {
-        self.coreDataController.removeFirstPersistentStore()
     }
 
     // MARK: - helper

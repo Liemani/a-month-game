@@ -32,9 +32,8 @@ final class WorldSceneModel {
         self.worldSceneGameObjectModel = WorldSceneGameObjectModel(gameObjectDictionary: gameObjectDictionary)
     }
 
-    // MARK: - deinit
     deinit {
-        diskController.closeFiles()
+        self.diskController.close()
     }
 
     // MARK: - edit
@@ -43,12 +42,12 @@ final class WorldSceneModel {
 
         let gameObjectManagedObjectArray = self.diskController.loadGameObjectManagedObjectArray()
         for gameObjectManagedObject in gameObjectManagedObjectArray {
+            let typeID = Int(gameObjectManagedObject.typeID)
             let id = Int(gameObjectManagedObject.id)
             let coordinate = GameObjectCoordinate(
                 inventoryID: Int(gameObjectManagedObject.inventoryID),
                 row: Int(gameObjectManagedObject.row),
                 column: Int(gameObjectManagedObject.column))
-            let typeID = Int(gameObjectManagedObject.typeID)
             let gameObject = GameObject.new(withTypeID: typeID, id: id, coordinate: coordinate)
             gameObjectDictionary[id] = gameObject
         }

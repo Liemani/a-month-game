@@ -50,7 +50,7 @@ struct Constant {
     // MARK: - data
     static let defaultWorldName = "world000"
     static let tileMapFileName = "tileMap.dat"
-    static let gameDataModelFileName = "GameDataModel.sqlite"
+    static let dataModelFileName = "DataModel.sqlite"
     static let worldDataModelName = "DataModel"
     static let gameObjectDataEntityName = "GameObjectManagedObject"
 

@@ -8,7 +8,7 @@
 import Foundation
 
 /// Call gameObjectDelegate.initDelegateReference() before call gameObject.interact()
-protocol GameObjectDelegate {
+protocol GameObjectDelegate: SceneController {
 
     func interact(_ gameObject: GameObject, with leftHand: GameObject?, and rightHand: GameObject?)
 
@@ -44,7 +44,7 @@ extension GameObject {
 
     static private let idGenerator = IDGenerator.default
 
-    static var delegate: GameObjectDelegate!
+    weak static var delegate: GameObjectDelegate!
 
     static func new(withTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
         let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0

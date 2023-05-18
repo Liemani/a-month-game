@@ -17,10 +17,9 @@ final class CoreDataController {
     }
 
     func setToWorld(with worldDirectoryURL: URL) {
-        if let storeDescription = self.persistentContainer.persistentStoreDescriptions.first {
-            let worldDataModelURL = worldDirectoryURL.appending(path: Constant.gameDataModelFileName)
-            storeDescription.url = worldDataModelURL
-        }
+        let persistentStoreDescription = self.persistentContainer.persistentStoreDescriptions.first!
+        let worldDataModelURL = worldDirectoryURL.appending(path: Constant.dataModelFileName)
+        persistentStoreDescription.url = worldDataModelURL
 
         self.persistentContainer.loadPersistentStores { description, error in
             if let error = error {
@@ -29,11 +28,21 @@ final class CoreDataController {
         }
     }
 
+    func removeFirstPersistentStore() {
+        let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+        let persistentStore = persistentStoreCoordinator.persistentStores.first!
+        try! persistentStoreCoordinator.remove(persistentStore)
+    }
+
     // MARK: - edit
     func loadGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
         let request = GameObjectManagedObject.fetchRequest()
         let context = self.persistentContainer.viewContext
-        return try! context.fetch(request)
+        let gameObjectManagedObjectArray = try! context.fetch(request)
+
+        return gameObjectManagedObjectArray.count > 0
+            ? gameObjectManagedObjectArray
+            : self.generateInitialGameObjectManagedObjectArray()
     }
 
     func store(_ gameObject: GameObject) {
@@ -79,11 +88,35 @@ final class CoreDataController {
         try! context.save()
     }
 
-    // MARK: - remove persistentStore
-    func removeFirstPersistentStore() {
-        let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
-        let persistentStore = persistentStoreCoordinator.persistentStores.first!
-        try! persistentStoreCoordinator.remove(persistentStore)
+    // MARK: - private
+    private func generateInitialGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
+        let idGenerator = IDGenerator.default
+
+        let gameObjectManagedObject = [
+            self.store(id: Int32(idGenerator.generate()), typeID: 1, inventoryID: 0, row: 51, column: 51),
+            self.store(id: Int32(idGenerator.generate()), typeID: 2, inventoryID: 0, row: 52, column: 52),
+            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 50, column: 53),
+            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 48, column: 51),
+            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 48, column: 52),
+        ]
+
+        try! self.persistentContainer.viewContext.save()
+
+        return gameObjectManagedObject
+    }
+
+    private func store(id: Int32, typeID: Int32, inventoryID: Int32, row: Int32, column: Int32) -> GameObjectManagedObject {
+        let context = self.persistentContainer.viewContext
+
+        let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
+
+        managedObject.id = id
+        managedObject.typeID = typeID
+        managedObject.inventoryID = inventoryID
+        managedObject.row = row
+        managedObject.column = column
+
+        return managedObject
     }
 
 }

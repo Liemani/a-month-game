@@ -30,6 +30,10 @@ final class TileMapFileController {
         self.writeFileHandle = fileHandle
     }
 
+    func close() {
+        self.writeFileHandle.closeFile()
+    }
+
     /// Load Data from the file
     func loadTileMapData() -> Data {
         let readFileHandle = FileHandle(forReadingAtPath: self.filePath)!
@@ -47,20 +51,15 @@ final class TileMapFileController {
         try! self.writeFileHandle.write(contentsOf: tileData)
     }
 
-    /// Call closeFile() when you saved all tile
-    func closeWriteFile() {
-        writeFileHandle.closeFile()
-    }
-
     // MARK: - private
     private func createTileDataFileIfNotExist(ofPath filePath: String) {
         guard !self.fileManager.fileExists(atPath: filePath) else { return }
 
-        let tileMapData = self.getInitialTileMapData()
+        let tileMapData = self.generateInitialTileMapData()
         self.fileManager.createFile(atPath: filePath, contents: tileMapData)
     }
 
-    private func getInitialTileMapData() -> Data {
+    private func generateInitialTileMapData() -> Data {
         var tileMapData = Data(count: MemoryLayout<Int>.size * Constant.gridSize * Constant.gridSize)
 
         let tileMap = tileMapData.withUnsafeMutableBytes {
