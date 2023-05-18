@@ -10,7 +10,6 @@
 		030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
 		030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */; };
-		030ABFB82A0CD90A00BAB9B8 /* WorldSceneTouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */; };
 		030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB92A0CE8F600BAB9B8 /* Helper.swift */; };
 		030ABFBE2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBD2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift */; };
 		030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */; };
@@ -43,7 +42,6 @@
 		030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalSceneController.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
 		030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMapFileController.swift; sourceTree = "<group>"; };
-		030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneTouchController.swift; sourceTree = "<group>"; };
 		030ABFB92A0CE8F600BAB9B8 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		030ABFBD2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneGameObjectModel.swift; sourceTree = "<group>"; };
 		030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
@@ -160,7 +158,6 @@
 			isa = PBXGroup;
 			children = (
 				031D57552A076DC8007EF383 /* CharacterController.swift */,
-				030ABFB72A0CD90A00BAB9B8 /* WorldSceneTouchController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -320,7 +317,6 @@
 				031D57562A076DC8007EF383 /* CharacterController.swift in Sources */,
 				031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */,
 				030ABFC52A0E314000BAB9B8 /* GameObjectPineCone.swift in Sources */,
-				030ABFB82A0CD90A00BAB9B8 /* WorldSceneTouchController.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */,
 			);

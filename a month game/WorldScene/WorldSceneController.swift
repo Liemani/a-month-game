@@ -11,14 +11,8 @@ import SpriteKit
 final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
-    var worldSceneTouchController: WorldSceneTouchController!
 
     var gameObjectNodeToModelDictionary: [SKNode: GameObject] = [:]
-
-    var isMenuOpen: Bool {
-        let scene = self.scene as! WorldScene
-        return !scene.menuLayer.isHidden
-    }
 
     // MARK: - init
     required init(viewController: ViewController) {
@@ -30,10 +24,6 @@ final class WorldSceneController: SceneController {
         scene.setUp(worldSceneController: self)
 
         self.scene = scene
-
-        let worldSceneTouchController = WorldSceneTouchController(worldSceneController: self)
-        worldSceneTouchController.camera = scene.camera
-        self.worldSceneTouchController = worldSceneTouchController
     }
 
     convenience init(viewController: ViewController, worldName: String) {
@@ -67,7 +57,7 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: - edit model and scene
-    func add(gameObject: GameObject) {
+    func add(_ gameObject: GameObject) {
         self.worldSceneModel.add(gameObject: gameObject)
 
         let scene = self.scene as! WorldScene
@@ -88,38 +78,9 @@ final class WorldSceneController: SceneController {
     }
 
     // TODO: implement hand
-    func interactObject(byNode node: SKNode) {
+    func interactObject(by node: SKNode) {
         let gameObject = self.gameObjectNodeToModelDictionary[node]!
         gameObject.interact(leftHand: nil, rightHand: nil)
-    }
-
-    // MARK: - update scene
-    var lastUpdateTime: TimeInterval = 0.0
-    func update(currentTime: TimeInterval) {
-        let timeInterval: TimeInterval = currentTime - lastUpdateTime
-
-        updateCamera(timeInterval: timeInterval)
-        updateVelocity(timeInterval: timeInterval)
-
-        lastUpdateTime = currentTime
-    }
-
-    func updateCamera(timeInterval: TimeInterval) {
-        let cameraPosition = self.worldSceneTouchController.camera.position
-        let newCameraPositionX = cameraPosition.x + self.worldSceneTouchController.velocityVector.dx * timeInterval
-        let newCameraPositionY = cameraPosition.y + self.worldSceneTouchController.velocityVector.dy * timeInterval
-        self.worldSceneTouchController.camera.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
-    }
-
-    func updateVelocity(timeInterval: TimeInterval) {
-        let velocity = (self.worldSceneTouchController.velocityVector.dx * self.worldSceneTouchController.velocityVector.dx + self.worldSceneTouchController.velocityVector.dy * self.worldSceneTouchController.velocityVector.dy).squareRoot()
-        if velocity <= Constant.velocityDamping * timeInterval {
-            self.worldSceneTouchController.velocityVector = CGVectorMake(0.0, 0.0)
-        } else {
-            let newVelocityVectorX = self.worldSceneTouchController.velocityVector.dx - Constant.velocityDamping / velocity * self.worldSceneTouchController.velocityVector.dx * timeInterval
-            let newVelocityVectorY = self.worldSceneTouchController.velocityVector.dy - Constant.velocityDamping / velocity * self.worldSceneTouchController.velocityVector.dy * timeInterval
-            self.worldSceneTouchController.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
-        }
     }
 
     // MARK: - debug code

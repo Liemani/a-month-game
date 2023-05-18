@@ -14,6 +14,6 @@ final class GameObjectPineTree: GameObject {
     }
 
     // MARK: - override
-    override class var isWalkable: Bool { return false }
+    override var isWalkable: Bool { return false }
 
 }
