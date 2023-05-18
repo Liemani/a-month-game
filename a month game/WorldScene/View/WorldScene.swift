@@ -115,10 +115,16 @@ class WorldScene: SKScene {
     }
 
     // MARK: - touoch
-    var moveTouch: UITouch? = nil
     var menuButtonTouch: UITouch? = nil
 
+    var moveTouch: UITouch? = nil
+    var previousMoveTouchTimestamp1: TimeInterval!
+    var previousMoveTouchTimestamp2: TimeInterval!
+    var previousMoveTouchLocation2: CGPoint!
+    var velocityVector = CGVector(dx: 0.0, dy: 0.0)
+
     func touchDown(touch: UITouch) {
+//        print("touchDown timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             return
         }
@@ -129,20 +135,12 @@ class WorldScene: SKScene {
         } else if let touchedNode = self.fieldGameObjectLayer.child(at: touch) {
             print("start touch game object node")
         } else {
-            self.startDragging(touch: touch)
+            moveTouch = touch
+            previousMoveTouchTimestamp1 = touch.timestamp
         }
     }
 
-    var touchDownTimestamp: TimeInterval = 0.0
-    var touchDownLocation: CGPoint = CGPoint()
-    var velocityVector: CGVector = CGVector()
-
     private func startDragging(touch: UITouch) {
-        moveTouch = touch
-
-        self.touchDownTimestamp = touch.timestamp
-        self.touchDownLocation = touch.location(in: self.camera!)
-        self.velocityVector = CGVector()
     }
 
 //    private func addGameObjectAtTouchLocation(touch: UITouch) {
@@ -160,6 +158,7 @@ class WorldScene: SKScene {
 //    }
 
     func touchMoved(touch: UITouch) {
+//        print("touchMoved timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             return
         }
@@ -171,13 +170,17 @@ class WorldScene: SKScene {
                 self.menuButtonNode.alpha = 1.0
             }
         } else if touch == self.moveTouch {
-            print("touch == moveTouch")
+            self.moveCamera(touch: touch)
+            self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
+            self.previousMoveTouchTimestamp1 = touch.timestamp
+            self.previousMoveTouchLocation2 = touch.previousLocation(in: self.camera!)
         } else {
             print("no matching touch")
         }
     }
 
     func touchUp(touch: UITouch) {
+//        print("touchUp timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             let currentLocation = touch.location(in: self.camera!)
             if self.exitWorldButtonNode.contains(currentLocation) {
@@ -196,11 +199,13 @@ class WorldScene: SKScene {
             self.menuButtonNode.alpha = 1.0
             self.menuButtonTouch = nil
         } else if touch == self.moveTouch {
-            let currentLocation = touch.location(in: self.camera!)
-            let timeInterval = touch.timestamp - touchDownTimestamp
+            let currentLocation = touch.previousLocation(in: self.camera!)
+            let previousLocation = self.previousMoveTouchLocation2!
+            let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
 
-            let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
-            let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
+            let velocityX = -(currentLocation.x - previousLocation.x) / timeInterval
+            let velocityY = -(currentLocation.y - previousLocation.y) / timeInterval
+            print("timeInterval: \(timeInterval), (\(velocityX), \(velocityY))")
             self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
         }
     }
@@ -248,8 +253,10 @@ class WorldScene: SKScene {
         if velocity <= Constant.velocityDamping * timeInterval {
             self.velocityVector = CGVectorMake(0.0, 0.0)
         } else {
-            let newVelocityVectorX = self.velocityVector.dx - Constant.velocityDamping / velocity * self.velocityVector.dx * timeInterval
-            let newVelocityVectorY = self.velocityVector.dy - Constant.velocityDamping / velocity * self.velocityVector.dy * timeInterval
+//            let newVelocityVectorX = self.velocityVector.dx - Constant.velocityDamping / velocity * self.velocityVector.dx * timeInterval
+            let newVelocityVectorX = self.velocityVector.dx * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
+//            let newVelocityVectorY = self.velocityVector.dy - Constant.velocityDamping / velocity * self.velocityVector.dy * timeInterval
+            let newVelocityVectorY = self.velocityVector.dy * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
             self.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
         }
     }

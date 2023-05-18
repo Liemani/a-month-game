@@ -77,4 +77,7 @@ struct Resource {
         return Resource.gameObjectResourceDictionary[objectIdentifier]!.texture
     }
 
+    // MARK: - etc
+//    static let moveTouchValidityDuration = 0.1
+
 }

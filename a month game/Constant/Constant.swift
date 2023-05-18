@@ -60,6 +60,7 @@ struct Constant {
     // MARK: - etc
     static let gridSize: Int = 100
 
-    static let velocityDamping = 5000.0
+    static let velocityDamping = 10000.0
+    static let velocityFrictionRatioPerSec = 0.001
 
 }

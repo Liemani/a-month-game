@@ -12,6 +12,13 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
+touch.location(in: self.view!) 는 값이 깔끔하게 나오는데
+touch.location(in: self.camera!) 는 값이 지저분하게 나온다
+하지만 화면에 적합하게 사이즈를 세팅하지 않았기 때문에
+view 와 camera 가 서로 다른 단위 공간 벡터를 갖는다
+당장은 오차가 다소 있어도 camera 기준으로 처리하지만,
+이 문제를 해결할 아름다운 방법 생각하기
+
 button touch 인식 방식 개선
 
 tile 관련되서 enum 과 resource path 들을 Constant 에 다 넣어도 좋겠다
