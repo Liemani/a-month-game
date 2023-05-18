@@ -115,79 +115,93 @@ class WorldScene: SKScene {
     }
 
     // MARK: - touoch
-    var touchDownTimestamp: TimeInterval = 0.0
-    var touchDownLocation: CGPoint = CGPoint()
-    var velocityVector: CGVector = CGVector()
+    var moveTouch: UITouch? = nil
+    var menuButtonTouch: UITouch? = nil
 
     func touchDown(touch: UITouch) {
-        if !self.isMenuOpen {
-            let touchLocation = touch.location(in: self.fieldGameObjectLayer)
-            if let touchedObjectNode = self.fieldGameObjectLayer.nodes(at: touchLocation).first {
-                self.worldSceneController.interactObject(by: touchedObjectNode)
-                self.worldSceneController.removeGameObject(by: touchedObjectNode)
-            } else {
-                self.addGameObjectAtTouchLocation(touch: touch)
-            }
+        if self.isMenuOpen {
+            return
+        }
+
+        if touch.is(onThe: self.menuButtonNode) {
+            self.menuButtonNode.alpha = 0.5
+            menuButtonTouch = touch
+        } else if let touchedNode = self.fieldGameObjectLayer.child(at: touch) {
+            print("start touch game object node")
+        } else {
             self.startDragging(touch: touch)
         }
     }
 
-    private func addGameObjectAtTouchLocation(touch: UITouch) {
-        let scene = self.scene as! WorldScene
-        let location = touch.location(in: scene)
-        let row = Int(location.x) / Int(Constant.defaultSize)
-        let column = Int(location.y) / Int(Constant.defaultSize)
-
-        let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
-        let typeID = Int(arc4random_uniform(3) + 1)
-
-        let gameObject = GameObject.new(withTypeID: typeID, id: nil, coordinate: coordinate)
-
-        self.worldSceneController.add(gameObject)
-    }
+    var touchDownTimestamp: TimeInterval = 0.0
+    var touchDownLocation: CGPoint = CGPoint()
+    var velocityVector: CGVector = CGVector()
 
     private func startDragging(touch: UITouch) {
+        moveTouch = touch
+
         self.touchDownTimestamp = touch.timestamp
         self.touchDownLocation = touch.location(in: self.camera!)
         self.velocityVector = CGVector()
     }
 
+//    private func addGameObjectAtTouchLocation(touch: UITouch) {
+//        let scene = self.scene as! WorldScene
+//        let location = touch.location(in: scene)
+//        let row = Int(location.x) / Int(Constant.defaultSize)
+//        let column = Int(location.y) / Int(Constant.defaultSize)
+//
+//        let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
+//        let typeID = Int(arc4random_uniform(3) + 1)
+//
+//        let gameObject = GameObject.new(withTypeID: typeID, id: nil, coordinate: coordinate)
+//
+//        self.worldSceneController.add(gameObject)
+//    }
+
     func touchMoved(touch: UITouch) {
-        moveCamera(touch: touch)
-    }
+        if self.isMenuOpen {
+            return
+        }
 
-    private func moveCamera(touch: UITouch) {
-        let currentLocation = touch.location(in: self.camera!)
-        let previousLocation = touch.previousLocation(in: self.camera!)
-
-        let dx = currentLocation.x - previousLocation.x
-        let dy = currentLocation.y - previousLocation.y
-
-        let oldCameraPosition = self.camera!.position
-        let newCameraPosition = CGPoint(x: oldCameraPosition.x - dx, y: oldCameraPosition.y - dy)
-
-        self.camera!.position = newCameraPosition
+        if touch == self.menuButtonTouch {
+            if touch.is(onThe: self.menuButtonNode) {
+                self.menuButtonNode.alpha = 0.5
+            } else {
+                self.menuButtonNode.alpha = 1.0
+            }
+        } else if touch == self.moveTouch {
+            print("touch == moveTouch")
+        } else {
+            print("no matching touch")
+        }
     }
 
     func touchUp(touch: UITouch) {
-        let scene = self.scene as! WorldScene
-        if !self.isMenuOpen {
+        if self.isMenuOpen {
+            let currentLocation = touch.location(in: self.camera!)
+            if self.exitWorldButtonNode.contains(currentLocation) {
+                performSegueToPortalScene()
+            } else {
+                self.menuLayer.isHidden = true
+            }
+
+            return
+        }
+
+        if touch == self.menuButtonTouch {
+            if touch.is(onThe: self.menuButtonNode) {
+                self.menuLayer.isHidden = false
+            }
+            self.menuButtonNode.alpha = 1.0
+            self.menuButtonTouch = nil
+        } else if touch == self.moveTouch {
             let currentLocation = touch.location(in: self.camera!)
             let timeInterval = touch.timestamp - touchDownTimestamp
 
             let velocityX = -(currentLocation.x - touchDownLocation.x) / timeInterval
             let velocityY = -(currentLocation.y - touchDownLocation.y) / timeInterval
             self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
-            if scene.menuButtonNode.contains(currentLocation) {
-                scene.menuLayer.isHidden = false
-            }
-        } else {
-            let currentLocation = touch.location(in: self.camera!)
-            if scene.exitWorldButtonNode.contains(currentLocation) {
-                performSegueToPortalScene()
-            } else {
-                scene.menuLayer.isHidden = true
-            }
         }
     }
 
@@ -211,6 +225,7 @@ class WorldScene: SKScene {
         for touch in touches { self.touchUp(touch: touch) }
     }
 
+    // MARK: - update scene
     var lastUpdateTime: TimeInterval = 0.0
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
@@ -263,6 +278,20 @@ class WorldScene: SKScene {
 
     func remove(gameObjectNode: SKNode) {
         gameObjectNode.removeFromParent()
+    }
+
+    // MARK: - etc
+    private func moveCamera(touch: UITouch) {
+        let currentLocation = touch.location(in: self.camera!)
+        let previousLocation = touch.previousLocation(in: self.camera!)
+
+        let dx = currentLocation.x - previousLocation.x
+        let dy = currentLocation.y - previousLocation.y
+
+        let oldCameraPosition = self.camera!.position
+        let newCameraPosition = CGPoint(x: oldCameraPosition.x - dx, y: oldCameraPosition.y - dy)
+
+        self.camera!.position = newCameraPosition
     }
 
 }
