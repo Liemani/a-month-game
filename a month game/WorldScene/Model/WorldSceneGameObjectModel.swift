@@ -9,23 +9,19 @@ import Foundation
 
 final class WorldSceneGameObjectModel {
 
-    weak var worldSceneModel: WorldSceneModel!
-
     var gameObjectDictionary: Dictionary<Int, GameObject>
 
     // MARK: - init
-    init(worldSceneModel: WorldSceneModel, gameObjectDictionary: Dictionary<Int, GameObject>) {
-        self.worldSceneModel = worldSceneModel
-
+    init(gameObjectDictionary: Dictionary<Int, GameObject>) {
         self.gameObjectDictionary = gameObjectDictionary
     }
 
     // MARK: - edit object
-    func add(gameObject: GameObject) {
+    func add(_ gameObject: GameObject) {
         self.gameObjectDictionary[gameObject.id] = gameObject
     }
 
-    func remove(gameObject: GameObject) {
+    func remove(_ gameObject: GameObject) {
         self.gameObjectDictionary.removeValue(forKey: gameObject.id)
     }
 

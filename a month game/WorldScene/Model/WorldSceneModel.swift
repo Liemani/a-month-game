@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Use DiskController to set self
+/// Control world scene model and DiskController
 final class WorldSceneModel {
 
     var diskController: DiskController!
@@ -26,10 +26,10 @@ final class WorldSceneModel {
         self.worldSceneController = worldSceneController
 
         let tileMapData = self.diskController.loadTileData()
-        self.worldSceneTileModel = WorldSceneTileModel(worldModel: self, tileMapData: tileMapData)
+        self.worldSceneTileModel = WorldSceneTileModel(tileMapData: tileMapData)
 
         let gameObjectDictionary = self.loadGameObjectDictionary()
-        self.worldSceneGameObjectModel = WorldSceneGameObjectModel(worldSceneModel: self, gameObjectDictionary: gameObjectDictionary)
+        self.worldSceneGameObjectModel = WorldSceneGameObjectModel(gameObjectDictionary: gameObjectDictionary)
     }
 
     // MARK: - deinit
@@ -64,16 +64,16 @@ final class WorldSceneModel {
         self.diskController.saveTileData(row: row, column: column, tileData: tileData)
     }
 
-    func add(gameObject: GameObject) {
-        self.worldSceneGameObjectModel.add(gameObject: gameObject)
+    func add(_ gameObject: GameObject) {
+        self.worldSceneGameObjectModel.add(gameObject)
 
-        self.diskController.store(gameObject: gameObject)
+        self.diskController.store(gameObject)
     }
 
-    func remove(gameObject: GameObject) {
-        self.worldSceneGameObjectModel.remove(gameObject: gameObject)
+    func remove(_ gameObject: GameObject) {
+        self.worldSceneGameObjectModel.remove(gameObject)
 
-        self.diskController.delete(gameObject: gameObject)
+        self.diskController.delete(gameObject)
     }
 
 }

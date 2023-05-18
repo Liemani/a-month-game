@@ -124,7 +124,6 @@ class WorldScene: SKScene {
     var velocityVector = CGVector(dx: 0.0, dy: 0.0)
 
     func touchDown(touch: UITouch) {
-//        print("touchDown timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             return
         }
@@ -158,7 +157,6 @@ class WorldScene: SKScene {
 //    }
 
     func touchMoved(touch: UITouch) {
-//        print("touchMoved timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             return
         }
@@ -180,7 +178,6 @@ class WorldScene: SKScene {
     }
 
     func touchUp(touch: UITouch) {
-//        print("touchUp timestamp: \(touch.timestamp), previousLocation: \(touch.previousLocation(in: self.camera!)), currentLocation: \(touch.location(in: self.camera!))")
         if self.isMenuOpen {
             let currentLocation = touch.location(in: self.camera!)
             if self.exitWorldButtonNode.contains(currentLocation) {
@@ -205,7 +202,6 @@ class WorldScene: SKScene {
 
             let velocityX = -(currentLocation.x - previousLocation.x) / timeInterval
             let velocityY = -(currentLocation.y - previousLocation.y) / timeInterval
-            print("timeInterval: \(timeInterval), (\(velocityX), \(velocityY))")
             self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
         }
     }
@@ -253,9 +249,7 @@ class WorldScene: SKScene {
         if velocity <= Constant.velocityDamping * timeInterval {
             self.velocityVector = CGVectorMake(0.0, 0.0)
         } else {
-//            let newVelocityVectorX = self.velocityVector.dx - Constant.velocityDamping / velocity * self.velocityVector.dx * timeInterval
             let newVelocityVectorX = self.velocityVector.dx * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-//            let newVelocityVectorY = self.velocityVector.dy - Constant.velocityDamping / velocity * self.velocityVector.dy * timeInterval
             let newVelocityVectorY = self.velocityVector.dy * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
             self.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
         }
@@ -281,10 +275,6 @@ class WorldScene: SKScene {
         self.fieldGameObjectLayer.addChild(gameObjectSpriteNode)
 
         return gameObjectSpriteNode
-    }
-
-    func remove(gameObjectNode: SKNode) {
-        gameObjectNode.removeFromParent()
     }
 
     // MARK: - etc

@@ -75,12 +75,12 @@ final class DiskController {
         return self.coreDataController.loadGameObjectManagedObjectArray()
     }
 
-    func store(gameObject: GameObject) {
-        self.coreDataController.store(gameObject: gameObject)
+    func store(_ gameObject: GameObject) {
+        self.coreDataController.store(gameObject)
     }
 
-    func delete(gameObject: GameObject) {
-        self.coreDataController.delete(gameObject: gameObject)
+    func delete(_ gameObject: GameObject) {
+        self.coreDataController.delete(gameObject)
     }
 
     func moveCoordinate(of gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {

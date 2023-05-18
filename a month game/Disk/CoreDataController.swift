@@ -36,7 +36,7 @@ final class CoreDataController {
         return try! context.fetch(request)
     }
 
-    func store(gameObject: GameObject) {
+    func store(_ gameObject: GameObject) {
         let context = self.persistentContainer.viewContext
 
         let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
@@ -66,7 +66,7 @@ final class CoreDataController {
         try! context.save()
     }
 
-    func delete(gameObject: GameObject) {
+    func delete(_ gameObject: GameObject) {
         let context = self.persistentContainer.viewContext
 
         let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)

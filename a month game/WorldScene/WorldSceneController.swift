@@ -58,7 +58,7 @@ final class WorldSceneController: SceneController {
 
     // MARK: - edit model and scene
     func add(_ gameObject: GameObject) {
-        self.worldSceneModel.add(gameObject: gameObject)
+        self.worldSceneModel.add(gameObject)
 
         let scene = self.scene as! WorldScene
         let gameObjectNode = scene.addSpriteNode(byGameObject: gameObject)
@@ -69,12 +69,10 @@ final class WorldSceneController: SceneController {
     func removeGameObject(by gameObjectNode: SKNode) {
         let gameObject = self.gameObjectNodeToModelDictionary[gameObjectNode]!
 
-        let scene = self.scene as! WorldScene
-        scene.remove(gameObjectNode: gameObjectNode)
-
-        self.worldSceneModel.remove(gameObject: gameObject)
-
         self.gameObjectNodeToModelDictionary.removeValue(forKey: gameObjectNode)
+
+        self.worldSceneModel.remove(gameObject)
+        gameObjectNode.removeFromParent()
     }
 
     // TODO: implement hand

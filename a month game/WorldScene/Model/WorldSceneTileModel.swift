@@ -10,15 +10,11 @@ import CoreData
 
 final class WorldSceneTileModel {
 
-    weak var worldSceneModel: WorldSceneModel!
-
     var tileMapData: Data!
     var tileMap: UnsafeMutableBufferPointer<Int>!
 
     // MARK: - init
-    init(worldModel: WorldSceneModel, tileMapData: Data) {
-        self.worldSceneModel = worldModel
-
+    init(tileMapData: Data) {
         set(tileMapData: tileMapData)
     }
 
