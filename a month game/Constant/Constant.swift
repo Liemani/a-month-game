@@ -30,11 +30,13 @@ struct Constant {
 
     // MARK: world scene
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
-    static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
-    static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let tileMapSide = Constant.tileSide * Double(Constant.gridSize)
     static let tileMapNodePosition = CGPoint() + (Constant.tileMapSide / 2.0)
+
+    static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
+    static let characterRadius = Constant.defaultSize - 2.0
+    static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let inventoryCellCount = 5
     static let inventoryCellFirstPosition = CGPoint() + Constant.defaultSize
@@ -53,7 +55,7 @@ struct Constant {
 
     // MARK: - frame
     struct Frame {
-        static let character = CGRect(origin: Constant.sceneCenter, size: CGSize(width: defaultSize, height: defaultSize))
+        static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
         static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
         static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
         static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)

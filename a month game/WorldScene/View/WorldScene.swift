@@ -28,6 +28,15 @@ class WorldScene: SKScene {
         return !menuWindow.isHidden
     }
 
+    var characterPosition: CGPoint {
+        get {
+            return self.movingLayer.position
+        }
+        set(point) {
+            self.movingLayer.position = point
+        }
+    }
+
     var accessableGameObjects = [SKNode?](repeating: nil, count: 9)
 
     // MARK: - set up
@@ -178,8 +187,8 @@ class WorldScene: SKScene {
     var menuButtonTouch: UITouch? = nil
 
     var moveTouch: UITouch? = nil
-    var previousMoveTouchTimestamp1: TimeInterval!
     var previousMoveTouchTimestamp2: TimeInterval!
+    var previousMoveTouchTimestamp1: TimeInterval!
     var previousMoveTouchLocation2: CGPoint!
     var velocityVector = CGVector(dx: 0.0, dy: 0.0)
 
@@ -225,21 +234,37 @@ class WorldScene: SKScene {
             self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
         } else if touch == self.moveTouch {
             self.moveCamera(touch: touch)
-            self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
-            self.previousMoveTouchTimestamp1 = touch.timestamp
-            self.previousMoveTouchLocation2 = touch.previousLocation(in: self)
-            let accessNodes = self.gameObjectField.nodes(at: self.accessBox)
         } else {
             print("no matching touch")
         }
     }
 
     func moveCamera(touch: UITouch) {
-        let currentLocation = touch.location(in: self)
-        let previousLocation = touch.previousLocation(in: self)
+        let previousPoint = touch.previousLocation(in: self)
+        let currentPoint = touch.location(in: self)
+        let difference = currentPoint - previousPoint
 
-        let difference = currentLocation - previousLocation
-        self.movingLayer.position += difference
+        self.characterPosition += difference
+
+        resolveCollision()
+
+        self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
+        self.previousMoveTouchTimestamp1 = touch.timestamp
+        self.previousMoveTouchLocation2 = previousPoint
+    }
+
+    func resolveCollision() {
+//
+//        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+//        for accessableNode in accessableNodes {
+//            let collisionFrame = accessableNode.frame
+//            let x = destinationPoint.x
+//            let y = destinationPoint.y
+//
+//            if accessableNode.contains(destinationPoint) {
+//                destinationPoint
+//            }
+//        }
     }
 
     private func touchUp(touch: UITouch) {
@@ -307,11 +332,11 @@ class WorldScene: SKScene {
         updateAccessableGameObjects()
 
         lastUpdateTime = currentTime
-        lastPosition = -self.movingLayer.position
+        lastPosition = -self.characterPosition
     }
 
     func updateCamera(timeInterval: TimeInterval) {
-        self.movingLayer.position -= self.velocityVector * timeInterval
+        self.characterPosition -= self.velocityVector * timeInterval
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
@@ -362,7 +387,7 @@ class WorldScene: SKScene {
     // MARK: - etc
     // TODO: implement
     func isTileMoved() -> Bool {
-        let currentPosition = -self.movingLayer.position
+        let currentPosition = -self.characterPosition
 
         let lastTile = TileCoordinate(self.lastPosition)
         let currentTile = TileCoordinate(currentPosition)
