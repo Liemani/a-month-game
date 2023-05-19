@@ -52,9 +52,9 @@ final class CoreDataController {
 
         managedObject.id = Int32(gameObject.id)
         managedObject.typeID = Int32(Resource.getTypeID(of: gameObject))
-        managedObject.inventoryID = Int32(gameObject.coordinate.inventoryID)
-        managedObject.row = Int32(gameObject.coordinate.row)
-        managedObject.column = Int32(gameObject.coordinate.column)
+        managedObject.inventory = Int32(gameObject.coordinate.inventory)
+        managedObject.x = Int32(gameObject.coordinate.x)
+        managedObject.y = Int32(gameObject.coordinate.y)
 
         try! context.save()
     }
@@ -68,9 +68,9 @@ final class CoreDataController {
         let results = try! context.fetch(request)
         let targetObject = results.first!
 
-        targetObject.inventoryID = Int32(newCoordinate.inventoryID)
-        targetObject.row = Int32(newCoordinate.row)
-        targetObject.column = Int32(newCoordinate.column)
+        targetObject.inventory = Int32(newCoordinate.inventory)
+        targetObject.x = Int32(newCoordinate.x)
+        targetObject.y = Int32(newCoordinate.y)
 
         try! context.save()
     }
@@ -93,11 +93,11 @@ final class CoreDataController {
         let idGenerator = IDGenerator.default
 
         let gameObjectManagedObject = [
-            self.store(id: Int32(idGenerator.generate()), typeID: 1, inventoryID: 0, row: 51, column: 51),
-            self.store(id: Int32(idGenerator.generate()), typeID: 2, inventoryID: 0, row: 52, column: 52),
-            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 50, column: 53),
-            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 48, column: 51),
-            self.store(id: Int32(idGenerator.generate()), typeID: 3, inventoryID: 0, row: 48, column: 52),
+            self.store(typeID: 1, id: Int32(idGenerator.generate()), inventory: 0, x: 51, y: 51),
+            self.store(typeID: 2, id: Int32(idGenerator.generate()), inventory: 0, x: 52, y: 52),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 50, y: 53),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 51),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 52),
         ]
 
         try! self.persistentContainer.viewContext.save()
@@ -105,16 +105,16 @@ final class CoreDataController {
         return gameObjectManagedObject
     }
 
-    private func store(id: Int32, typeID: Int32, inventoryID: Int32, row: Int32, column: Int32) -> GameObjectManagedObject {
+    private func store(typeID: Int32, id: Int32, inventory: Int32, x: Int32, y: Int32) -> GameObjectManagedObject {
         let context = self.persistentContainer.viewContext
 
         let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
 
-        managedObject.id = id
         managedObject.typeID = typeID
-        managedObject.inventoryID = inventoryID
-        managedObject.row = row
-        managedObject.column = column
+        managedObject.id = id
+        managedObject.inventory = inventory
+        managedObject.x = x
+        managedObject.y = y
 
         return managedObject
     }

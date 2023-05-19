@@ -28,37 +28,41 @@ struct Resource {
     }
 
     // MARK: - tile
-    static let tileTypeIDToResourceName: [String] = [
+    /// Define tile type
+    static let tileTypeToResourceName: [String] = [
         Resource.Name.grassTile,
         Resource.Name.woodTile,
     ]
 
-    static let tileResourceArray: [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
-        var array = [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)](repeating: (SKTileGroup(), SKTileDefinition()), count: Resource.tileTypeIDToResourceName.count)
+    static let tileTypeToResource: [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
+        let emptyElement = (SKTileGroup(), SKTileDefinition())
+        let count = Resource.tileTypeToResourceName.count
+        var array = [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)](repeating: emptyElement, count: count)
 
-        for tileTypeID in 0..<Resource.tileTypeIDToResourceName.count {
-            let tileTexture = SKTexture(imageNamed: Resource.tileTypeIDToResourceName[tileTypeID])
+        for tileType in 0..<Resource.tileTypeToResourceName.count {
+            let tileTexture = SKTexture(imageNamed: Resource.tileTypeToResourceName[tileType])
             let tileDefinition = SKTileDefinition(texture: tileTexture)
             let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
-            array[tileTypeID] = (tileGroup, tileDefinition)
+            array[tileType] = (tileGroup, tileDefinition)
         }
 
         return array
     })()
 
     // MARK: - game object
-    static let gameObjectTypeIDToInformation: [(gameObjectType: GameObject.Type, resourceName: String)] = [
+    /// Define GameObject type
+    static let gameObjectTypeIDToInformation: [(type: GameObject.Type, resourceName: String)] = [
         (GameObject.self, Resource.Name.gameObjectDefault),
         (GameObjectPineCone.self, Resource.Name.gameObjectPineCone),
         (GameObjectPineTree.self, Resource.Name.gameObjectPineTree),
         (GameObjectWoodWall.self, Resource.Name.gameObjectWoodWall),
     ]
 
-    private static let gameObjectResourceDictionary: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = ({
+    private static let gameObjectTypeIDToResource: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = ({
         var dictionary: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = [:]
 
         for (index, information) in Resource.gameObjectTypeIDToInformation.enumerated() {
-            let key = ObjectIdentifier(information.gameObjectType)
+            let key = ObjectIdentifier(information.type)
             let texture = SKTexture(imageNamed: information.resourceName)
             let value = (typeID: index, texture: texture)
             dictionary[key] = value
@@ -69,12 +73,12 @@ struct Resource {
 
     static func getTypeID(of gameObject: GameObject) -> Int {
         let objectIdentifier = ObjectIdentifier(type(of: gameObject))
-        return Resource.gameObjectResourceDictionary[objectIdentifier]!.typeID
+        return Resource.gameObjectTypeIDToResource[objectIdentifier]!.typeID
     }
 
     static func getTexture(of gameObject: GameObject) -> SKTexture {
         let objectIdentifier = ObjectIdentifier(type(of: gameObject))
-        return Resource.gameObjectResourceDictionary[objectIdentifier]!.texture
+        return Resource.gameObjectTypeIDToResource[objectIdentifier]!.texture
     }
 
     // MARK: - etc

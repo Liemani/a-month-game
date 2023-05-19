@@ -46,9 +46,10 @@ extension GameObject {
 
     weak static var delegate: GameObjectDelegate!
 
-    static func new(withTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
+    static func new(ofTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
         let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
-        return Resource.gameObjectTypeIDToInformation[typeID].gameObjectType.init(id: id, coordinate: coordinate)
+        let type = Resource.gameObjectTypeIDToInformation[typeID].type
+        return type.init(id: id, coordinate: coordinate)
     }
 
 }

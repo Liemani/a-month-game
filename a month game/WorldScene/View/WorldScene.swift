@@ -12,12 +12,22 @@ class WorldScene: SKScene {
 
     weak var worldSceneController: WorldSceneController!
 
-    var tileMapNode: SKTileMapNode!
-    var fieldGameObjectLayer: SKNode!
-    var uiLayer: SKNode!
-    var menuLayer: SKNode!
-    var menuButtonNode: SKNode!
-    var exitWorldButtonNode: SKNode!
+    var tileMap: SKTileMapNode!
+    var gameObjectField: SKNode!
+
+    var ui: SKNode!
+    var menuButton: SKNode!
+
+    var menuWindow: SKNode!
+    var exitWorldButton: SKNode!
+
+    var isMenuOpen: Bool {
+        return !menuWindow.isHidden
+    }
+
+    var accessBound: CGRect {
+        return CGRect(origin: self.camera!.position, size: Constant.defaultNodeSize * 2.0)
+    }
 
     // MARK: - set up
     func setUp(worldSceneController: WorldSceneController) {
@@ -26,93 +36,134 @@ class WorldScene: SKScene {
         self.size = Constant.screenSize
         self.scaleMode = .aspectFit
 
-        initTileMapNode()
-        initGameObjectLayer()
-        initUILayer()
-        initMenuLayer()
+        debugCode()
+
+        addMovingLayer(to: self)
+        addCamera(to: self)
     }
 
-    func initTileMapNode() {
-        let tileGroups = Resource.tileResourceArray.map { $0.tileGroup }
+    func debugCode() {
+        let origin = SKSpriteNode(imageNamed: Resource.Name.character)
+        self.addChild(origin)
+    }
+
+    // MARK: add moving layer
+    func addMovingLayer(to parent: SKNode) {
+        let movingLayer = SKNode()
+
+        movingLayer.zPosition = Constant.ZPosition.movingLayer
+
+        parent.addChild(movingLayer)
+
+        addBackground(to: movingLayer)
+        addGameObjectField(to: movingLayer)
+    }
+
+    func addBackground(to parent: SKNode) {
+        let background = SKNode()
+
+        background.zPosition = Constant.ZPosition.background
+
+        parent.addChild(background)
+
+        addTileMapNode(to: background)
+    }
+
+    func addTileMapNode(to parent: SKNode) {
+        let tileGroups = Resource.tileTypeToResource.map { $0.tileGroup }
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
-        let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
+        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
 
-        tileMapNode.position = Constant.tileMapNodePosition
-        tileMapNode.zPosition = Constant.tileMapNodeZPosition
+        tileMap.position = Constant.tileMapNodePosition
 
-        self.addChild(tileMapNode)
-        self.tileMapNode = tileMapNode
+        parent.addChild(tileMap)
+        self.tileMap = tileMap
     }
 
-    func initGameObjectLayer() {
-        let worldObjectLayer = SKNode()
-        worldObjectLayer.zPosition = Constant.worldObjectLayerZPosition
+    func addGameObjectField(to parent: SKNode) {
+        let gameObjectField = SKNode()
 
-        self.addChild(worldObjectLayer)
-        self.fieldGameObjectLayer = worldObjectLayer
+        gameObjectField.zPosition = Constant.ZPosition.gameObjectField
+
+        parent.addChild(gameObjectField)
+        self.gameObjectField = gameObjectField
     }
 
-    func initUILayer() {
-        let uiLayer = SKNode()
-
+    // MARK: add camera
+    func addCamera(to parent: SKNode) {
         let camera = SKCameraNode()
+
         camera.position = Constant.tileMapNodePosition
-        self.addChild(camera)
+
+        parent.addChild(camera)
         self.camera = camera
 
-        uiLayer.zPosition = Constant.uiLayerZPosition
+        addUI(to: camera)
+        addMenuWindow(to: camera)
+    }
 
-        let characterNode: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
-        characterNode.size = Constant.Frame.character.size
-        characterNode.position = Constant.Frame.character.origin
-        uiLayer.addChild(characterNode)
+    func addUI(to parent: SKNode) {
+        let ui = SKNode()
 
-        let menuButtonNode: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.menuButton)
-        menuButtonNode.size = Constant.Frame.menuButton.size
-        menuButtonNode.position = Constant.Frame.menuButton.origin
-        uiLayer.addChild(menuButtonNode)
-        self.menuButtonNode = menuButtonNode
+        ui.zPosition = Constant.ZPosition.ui
+
+        parent.addChild(ui)
+        self.ui = ui
+
+        let character: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
+
+        character.position = Constant.Frame.character.origin
+        character.size = Constant.Frame.character.size
+
+        ui.addChild(character)
+
+        let menuButton: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.menuButton)
+
+        menuButton.position = Constant.Frame.menuButton.origin
+        menuButton.size = Constant.Frame.menuButton.size
+
+        ui.addChild(menuButton)
+        self.menuButton = menuButton
 
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
 
         let inventoryCellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
         for index in 0..<Constant.inventoryCellCount {
             let inventoryCellNode = SKSpriteNode(texture: inventoryCellTexture)
-            inventoryCellNode.size = Constant.defaultNodeSize
-            inventoryCellNode.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
-            uiLayer.addChild(inventoryCellNode)
-        }
 
-        self.camera!.addChild(uiLayer)
-        self.uiLayer = uiLayer
+            inventoryCellNode.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
+            inventoryCellNode.size = Constant.defaultNodeSize
+
+            ui.addChild(inventoryCellNode)
+        }
     }
 
-    func initMenuLayer() {
-        let menuLayer = SKShapeNode()
-        menuLayer.zPosition = Constant.menuLayerZPosition
-        menuLayer.isHidden = true
+    func addMenuWindow(to parent: SKNode) {
+        let menuWindow = SKShapeNode()
 
-        let menuBackground = SKShapeNode()
+        menuWindow.zPosition = Constant.ZPosition.menu
+        menuWindow.isHidden = true
+
+        parent.addChild(menuWindow)
+        self.menuWindow = menuWindow
+
+        let background = SKShapeNode()
+
         let rect = CGRect(origin: Constant.screenDownLeft, size: Constant.screenSize)
         let path = CGPath(rect: rect, transform: nil)
-        menuBackground.path = path
-        menuBackground.fillColor = .black
-        menuBackground.alpha = 0.5
-        menuLayer.addChild(menuBackground)
+        background.path = path
+        background.fillColor = .black
+        background.alpha = 0.5
+        background.zPosition = -1.0
+
+        menuWindow.addChild(background)
 
         let buttonTexture = SKTexture(imageNamed: Resource.Name.button)
-        let exitWorldButtonNode = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuLayer)
-        exitWorldButtonNode.zPosition = 1.0
-        self.exitWorldButtonNode = exitWorldButtonNode
-
-        self.camera!.addChild(menuLayer)
-        self.menuLayer = menuLayer
+        let exitWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuWindow)
+        self.exitWorldButton = exitWorldButton
     }
 
-    var isMenuOpen: Bool {
-        return !menuLayer.isHidden
-    }
 
     // MARK: - touoch
     var menuButtonTouch: UITouch? = nil
@@ -128,10 +179,10 @@ class WorldScene: SKScene {
             return
         }
 
-        if touch.is(onThe: self.menuButtonNode) {
-            self.menuButtonNode.alpha = 0.5
+        if touch.is(onThe: self.menuButton) {
+            self.menuButton.alpha = 0.5
             menuButtonTouch = touch
-        } else if let touchedNode = self.fieldGameObjectLayer.child(at: touch) {
+        } else if let gameObject = self.gameObjectField.child(at: touch) {
             print("start touch game object node")
         } else {
             moveTouch = touch
@@ -145,13 +196,13 @@ class WorldScene: SKScene {
 //    private func addGameObjectAtTouchLocation(touch: UITouch) {
 //        let scene = self.scene as! WorldScene
 //        let location = touch.location(in: scene)
-//        let row = Int(location.x) / Int(Constant.defaultSize)
-//        let column = Int(location.y) / Int(Constant.defaultSize)
+//        let x = Int(location.x) / Int(Constant.defaultSize)
+//        let y = Int(location.y) / Int(Constant.defaultSize)
 //
-//        let coordinate = GameObjectCoordinate(inventoryID: 0, row: row, column: column)
+//        let coordinate = GameObjectCoordinate(inventory: 0, x: x, y: y)
 //        let typeID = Int(arc4random_uniform(3) + 1)
 //
-//        let gameObject = GameObject.new(withTypeID: typeID, id: nil, coordinate: coordinate)
+//        let gameObject = GameObject.new(ofTypeID: typeID, id: nil, coordinate: coordinate)
 //
 //        self.worldSceneController.add(gameObject)
 //    }
@@ -162,11 +213,7 @@ class WorldScene: SKScene {
         }
 
         if touch == self.menuButtonTouch {
-            if touch.is(onThe: self.menuButtonNode) {
-                self.menuButtonNode.alpha = 0.5
-            } else {
-                self.menuButtonNode.alpha = 1.0
-            }
+            self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
         } else if touch == self.moveTouch {
             self.moveCamera(touch: touch)
             self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
@@ -180,30 +227,33 @@ class WorldScene: SKScene {
     func touchUp(touch: UITouch) {
         if self.isMenuOpen {
             let currentLocation = touch.location(in: self.camera!)
-            if self.exitWorldButtonNode.contains(currentLocation) {
+            if self.exitWorldButton.contains(currentLocation) {
                 performSegueToPortalScene()
             } else {
-                self.menuLayer.isHidden = true
+                self.menuWindow.isHidden = true
             }
 
             return
         }
 
         if touch == self.menuButtonTouch {
-            if touch.is(onThe: self.menuButtonNode) {
-                self.menuLayer.isHidden = false
+            if touch.is(onThe: self.menuButton) {
+                self.menuWindow.isHidden = false
+                self.moveTouch = nil
             }
-            self.menuButtonNode.alpha = 1.0
+            self.menuButton.alpha = 1.0
             self.menuButtonTouch = nil
         } else if touch == self.moveTouch {
-            let currentLocation = touch.previousLocation(in: self.camera!)
-            let previousLocation = self.previousMoveTouchLocation2!
-            let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
-
-            let velocityX = -(currentLocation.x - previousLocation.x) / timeInterval
-            let velocityY = -(currentLocation.y - previousLocation.y) / timeInterval
-            self.velocityVector = CGVector(dx: velocityX, dy: velocityY)
+            setVelocityVector()
         }
+    }
+
+    func setVelocityVector() {
+        let previousLocation1 = self.moveTouch!.previousLocation(in: self.camera!)
+        let previousLocation2 = self.previousMoveTouchLocation2!
+        let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
+
+        self.velocityVector = -(previousLocation1 - previousLocation2) / timeInterval
     }
 
     private func performSegueToPortalScene() {
@@ -238,43 +288,34 @@ class WorldScene: SKScene {
     }
 
     func updateCamera(timeInterval: TimeInterval) {
-        let cameraPosition = self.camera!.position
-        let newCameraPositionX = cameraPosition.x + self.velocityVector.dx * timeInterval
-        let newCameraPositionY = cameraPosition.y + self.velocityVector.dy * timeInterval
-        self.camera!.position = CGPoint(x: newCameraPositionX, y: newCameraPositionY)
+        self.camera!.position += self.velocityVector * timeInterval
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
-        let velocity = (self.velocityVector.dx * self.velocityVector.dx + self.velocityVector.dy * self.velocityVector.dy).squareRoot()
-        if velocity <= Constant.velocityDamping * timeInterval {
-            self.velocityVector = CGVectorMake(0.0, 0.0)
-        } else {
-            let newVelocityVectorX = self.velocityVector.dx * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-            let newVelocityVectorY = self.velocityVector.dy * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-            self.velocityVector = CGVector(dx: newVelocityVectorX, dy: newVelocityVectorY)
-        }
+        let velocity = self.velocityVector.magnitude
+        self.velocityVector =
+            velocity <= Constant.velocityDamping
+            ? CGVectorMake(0.0, 0.0)
+            : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
     }
 
     // MARK: - edit
-    func set(row: Int, column: Int, tileTypeID: Int) {
-        let resourceIndex = Resource.tileResourceArray.indices.contains(tileTypeID) ? tileTypeID : 0
-        let tileInformation = Resource.tileResourceArray[resourceIndex]
+    func set(tileType: Int, toX x: Int, y: Int) {
+        let resourceIndex = Resource.tileTypeToResource.indices.contains(tileType) ? tileType : 0
+        let tileInformation = Resource.tileTypeToResource[resourceIndex]
 
-        self.tileMapNode.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: column, row: row)
+        self.tileMap.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: y, row: x)
     }
 
-    func addSpriteNode(byGameObject gameObject: GameObject) -> SKSpriteNode {
+    func add(_ gameObject: GameObject) -> SKSpriteNode {
         let texture = Resource.getTexture(of: gameObject)
+        let node = SKSpriteNode(texture: texture)
 
-        let gameObjectSpriteNode = SKSpriteNode(texture: texture)
-        let positionX = Constant.defaultSize * (Double(gameObject.coordinate.row) + 0.5)
-        let positionY = Constant.defaultSize * (Double(gameObject.coordinate.column) + 0.5)
-        gameObjectSpriteNode.position.x = positionX
-        gameObjectSpriteNode.position.y = positionY
+        node.position = (gameObject.coordinate.cgPoint() + 0.5) * Constant.defaultSize
 
-        self.fieldGameObjectLayer.addChild(gameObjectSpriteNode)
+        self.gameObjectField.addChild(node)
 
-        return gameObjectSpriteNode
+        return node
     }
 
     // MARK: - etc
@@ -282,13 +323,8 @@ class WorldScene: SKScene {
         let currentLocation = touch.location(in: self.camera!)
         let previousLocation = touch.previousLocation(in: self.camera!)
 
-        let dx = currentLocation.x - previousLocation.x
-        let dy = currentLocation.y - previousLocation.y
-
-        let oldCameraPosition = self.camera!.position
-        let newCameraPosition = CGPoint(x: oldCameraPosition.x - dx, y: oldCameraPosition.y - dy)
-
-        self.camera!.position = newCameraPosition
+        let difference = currentLocation - previousLocation
+        self.camera!.position -= difference
     }
 
 }

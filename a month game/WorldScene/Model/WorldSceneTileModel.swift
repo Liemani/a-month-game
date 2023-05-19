@@ -19,12 +19,12 @@ final class WorldSceneTileModel {
     }
 
     // MARK: - get set
-    func getTileTypeID(row: Int, column: Int) -> Int {
-        return self.tileMap[100 * row + column]
+    func getTileType(fromX x: Int, y: Int) -> Int {
+        return self.tileMap[Constant.gridSize * x + y]
     }
 
-    func set(row: Int, column: Int, tileTypeID: Int) {
-        self.tileMap[100 * row + column] = tileTypeID
+    func set(tileType: Int, toX x: Int, y: Int) {
+        self.tileMap[Constant.gridSize * x + y] = tileType
     }
 
     // MARK: - set tile map data

@@ -45,8 +45,7 @@ final class TileMapFileController {
     }
 
     /// Save tile data to the file by index
-    func saveTileData(index: Int, tileData: Data) {
-
+    func save(tileData: Data, toIndex index: Int) {
         try! self.writeFileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * index))
         try! self.writeFileHandle.write(contentsOf: tileData)
     }
@@ -65,16 +64,16 @@ final class TileMapFileController {
         let tileMap = tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
-        self.set(tileMap: tileMap, row: 45, column: 45, tileTypeID: 1)
-        self.set(tileMap: tileMap, row: 48, column: 48, tileTypeID: 2)
-        self.set(tileMap: tileMap, row: 52, column: 52, tileTypeID: 2)
-        self.set(tileMap: tileMap, row: 52, column: 53, tileTypeID: 2)
+        self.set(tileMap: tileMap, tileType: 1, x: 45, y: 45)
+        self.set(tileMap: tileMap, tileType: 2, x: 48, y: 48)
+        self.set(tileMap: tileMap, tileType: 2, x: 52, y: 52)
+        self.set(tileMap: tileMap, tileType: 2, x: 52, y: 53)
 
         return tileMapData
     }
 
-    private func set(tileMap: UnsafeMutableBufferPointer<Int>, row: Int, column: Int, tileTypeID: Int) {
-        tileMap[100 * row + column] = tileTypeID
+    private func set(tileMap: UnsafeMutableBufferPointer<Int>, tileType: Int, x: Int, y: Int) {
+        tileMap[Constant.gridSize * x + y] = tileType
     }
 
 }

@@ -33,10 +33,15 @@ struct Constant {
     static let inventoryCellLastPosition = CGPoint(x: screenUpRight.x - defaultSize, y: screenDownLeft.y + defaultSize)
 
     // MARK: - z position
-    static let tileMapNodeZPosition = -1.0
-    static let worldObjectLayerZPosition = 0.0
-    static let uiLayerZPosition = 1.0
-    static let menuLayerZPosition = 2.0
+    struct ZPosition {
+        static let movingLayer = -1.0
+        static let background = -2.0
+        static let gameObjectField = 0.0
+
+        static let camera = 1.0
+        static let ui = 0.0
+        static let menu = 2.0
+    }
 
     // MARK: - frame
     struct Frame {
@@ -60,7 +65,7 @@ struct Constant {
     // MARK: - etc
     static let gridSize: Int = 100
 
-    static let velocityDamping = 10000.0
+    static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
 
 }

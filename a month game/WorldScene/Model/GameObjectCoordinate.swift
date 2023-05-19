@@ -9,8 +9,12 @@ import Foundation
 
 struct GameObjectCoordinate {
 
-    var inventoryID: Int
-    var row: Int
-    var column: Int
+    var inventory: Int
+    var x: Int
+    var y: Int
+
+    func cgPoint() -> CGPoint {
+        return CGPoint(x: x, y: y)
+    }
 
 }

@@ -92,8 +92,9 @@ final class DiskController {
         return self.tileMapFileController.loadTileMapData()
     }
 
-    func saveTileData(row: Int, column: Int, tileData: Data) {
-        self.tileMapFileController.saveTileData(index: Constant.gridSize * row + column, tileData: tileData)
+    func save(tileData: Data, toX x: Int, y: Int) {
+        let index = Constant.gridSize * x + y
+        self.tileMapFileController.save(tileData: tileData, toIndex: index)
     }
 
     // MARK: - UserDefaults

@@ -40,17 +40,17 @@ final class WorldSceneController: SceneController {
         let scene = self.scene as! WorldScene
 
         let tileModel: WorldSceneTileModel = self.worldSceneModel.worldSceneTileModel
-        for row in 0..<Constant.gridSize {
-            for column in 0..<Constant.gridSize {
-                let tileTypeID = tileModel.getTileTypeID(row: row, column: column)
-                scene.set(row: row, column: column, tileTypeID: tileTypeID)
+        for x in 0..<Constant.gridSize {
+            for y in 0..<Constant.gridSize {
+                let tileType = tileModel.getTileType(fromX: x, y: y)
+                scene.set(tileType: tileType, toX: x, y: y)
             }
         }
 
         let gameObjectDictionary = self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary
         for gameObject in gameObjectDictionary.values {
             let scene = self.scene as! WorldScene
-            let gameObjectNode = scene.addSpriteNode(byGameObject: gameObject)
+            let gameObjectNode = scene.add(gameObject)
 
             self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
         }
@@ -61,7 +61,7 @@ final class WorldSceneController: SceneController {
         self.worldSceneModel.add(gameObject)
 
         let scene = self.scene as! WorldScene
-        let gameObjectNode = scene.addSpriteNode(byGameObject: gameObject)
+        let gameObjectNode = scene.add(gameObject)
 
         self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
     }
@@ -84,34 +84,9 @@ final class WorldSceneController: SceneController {
     // MARK: - debug code
     func debugCode() {
         for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
-            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), typeID: \(Resource.getTypeID(of: gameObject))")
+            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
         }
 
     }
-//    var lastTileUpdateTime: TimeInterval = 0.0
-//    var tileUpdateCoord = Array<Int>(repeating: 0, count: 2)
-//    func toggleTileIfPass1Sec(currentTime: TimeInterval) {
-//        lastTileUpdateTime = lastTileUpdateTime == 0.0 ? currentTime : lastTileUpdateTime
-//        let timeInterval = currentTime - lastTileUpdateTime
-//
-//        let timeExcess = timeInterval - 1.0
-//        if timeExcess >= 0.0 {
-//            self.toggleTile(row: tileUpdateCoord[0], column: tileUpdateCoord[1])
-//
-//            let nextColumn = tileUpdateCoord[1] + 1
-//
-//            tileUpdateCoord[0] = tileUpdateCoord[0] + nextColumn / Constant.gridSize
-//            tileUpdateCoord[1] = nextColumn % Constant.gridSize
-//
-//            lastTileUpdateTime = currentTime - timeExcess
-//        }
-//    }
-//
-//    func toggleTile(row: Int, column: Int) {
-//        let scene = self.scene as! WorldScene
-//        let newTileID = self.worldModel.tileMapModel.tileMap[100 * row + column] ^ 1
-//        self.worldModel.tileMapModel.setTile(row: row, column: column, tileID: newTileID)
-//        scene.setTile(row: row, column: column, tileID: newTileID)
-//    }
 
 }

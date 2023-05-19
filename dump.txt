@@ -105,6 +105,9 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+remove WorldSceneController comment
+터치 간의 상관 관계
+    메뉴 버튼 터치 -> 드래그 중단
 PortalScene 에 reset window 추가
 isWalkable 구현
 interact 구현
@@ -329,6 +332,8 @@ class Hammer: GameObject, Pickable {
 }
 
 # bonus
+오픈 월드 방식으로 데이터 관리하기
+진행 방향으로 더 넓은 지역을 보여줬으면 좋겠다
 멀티 가능
 성능 향상
 천장 구현

@@ -45,22 +45,22 @@ final class WorldSceneModel {
             let typeID = Int(gameObjectManagedObject.typeID)
             let id = Int(gameObjectManagedObject.id)
             let coordinate = GameObjectCoordinate(
-                inventoryID: Int(gameObjectManagedObject.inventoryID),
-                row: Int(gameObjectManagedObject.row),
-                column: Int(gameObjectManagedObject.column))
-            let gameObject = GameObject.new(withTypeID: typeID, id: id, coordinate: coordinate)
+                inventory: Int(gameObjectManagedObject.inventory),
+                x: Int(gameObjectManagedObject.x),
+                y: Int(gameObjectManagedObject.y))
+            let gameObject = GameObject.new(ofTypeID: typeID, id: id, coordinate: coordinate)
             gameObjectDictionary[id] = gameObject
         }
 
         return gameObjectDictionary
     }
 
-    func updateTile(row: Int, column: Int, tileTypeID: Int) {
-        self.worldSceneTileModel.set(row: row, column: column, tileTypeID: tileTypeID)
+    func update(tileType: Int, toX x: Int, y: Int) {
+        self.worldSceneTileModel.set(tileType: tileType, toX: x, y: y)
 
-        var value = tileTypeID
+        var value = tileType
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        self.diskController.saveTileData(row: row, column: column, tileData: tileData)
+        self.diskController.save(tileData: tileData, toX: x, y: y)
     }
 
     func add(_ gameObject: GameObject) {
