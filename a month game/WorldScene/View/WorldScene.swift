@@ -12,6 +12,7 @@ class WorldScene: SKScene {
 
     weak var worldSceneController: WorldSceneController!
 
+    // Position of moving layer represents character coordinate
     var movingLayer: SKNode!
     var tileMap: SKTileMapNode!
     var gameObjectField: SKNode!
@@ -42,16 +43,23 @@ class WorldScene: SKScene {
     func addMovingLayer(to parent: SKNode) {
         let movingLayer = SKNode()
 
-        // TODO: set to character start position
-        let characterStartPosition = -Constant.tileMapNodePosition + Constant.sceneCenter
-        movingLayer.position = characterStartPosition
         movingLayer.zPosition = Constant.ZPosition.movingLayer
 
         parent.addChild(movingLayer)
         self.movingLayer = movingLayer
 
-        addBackground(to: movingLayer)
-        addGameObjectField(to: movingLayer)
+        addWorldLayer(to: movingLayer)
+    }
+
+    func addWorldLayer(to parent: SKNode) {
+        let worldLayer = SKNode()
+
+        worldLayer.position = Constant.sceneCenter
+
+        parent.addChild(worldLayer)
+
+        addBackground(to: worldLayer)
+        addGameObjectField(to: worldLayer)
     }
 
     func addBackground(to parent: SKNode) {
@@ -225,7 +233,15 @@ class WorldScene: SKScene {
         }
     }
 
-    func touchUp(touch: UITouch) {
+    func moveCamera(touch: UITouch) {
+        let currentLocation = touch.location(in: self)
+        let previousLocation = touch.previousLocation(in: self)
+
+        let difference = currentLocation - previousLocation
+        self.movingLayer.position += difference
+    }
+
+    private func touchUp(touch: UITouch) {
         if self.isMenuOpen {
             let currentLocation = touch.location(in: self)
             if self.exitWorldButton.contains(currentLocation) {
@@ -279,13 +295,16 @@ class WorldScene: SKScene {
 
     // MARK: - update scene
     var lastUpdateTime: TimeInterval = 0.0
+    var lastPosition: CGPoint!
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
 
         updateCamera(timeInterval: timeInterval)
         updateVelocity(timeInterval: timeInterval)
 
+        // TODO: implement
         lastUpdateTime = currentTime
+        lastPosition = -self.movingLayer.position
     }
 
     func updateCamera(timeInterval: TimeInterval) {
@@ -320,12 +339,20 @@ class WorldScene: SKScene {
     }
 
     // MARK: - etc
-    private func moveCamera(touch: UITouch) {
-        let currentLocation = touch.location(in: self)
-        let previousLocation = touch.previousLocation(in: self)
+    // TODO: implement
+//    func isMovedTile(touch: UITouch) -> Bool {
+//        let currentTouchLocation = touch.location(in: view)
+//        let previousTouchLocation = touch.previousLocation(in: view)
+//        let difference = currentTouchLocation - previousTouchLocation
+//        let currentLocation =
+//
+//        let previousTile = getTile()
+//        let currentTile = getTile()
+//        return currentTile != previousTile
+//    }
 
-        let difference = currentLocation - previousLocation
-        self.movingLayer.position += difference
+    func getTile() {
+
     }
 
 }

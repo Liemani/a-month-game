@@ -18,24 +18,26 @@ final class WorldSceneController: SceneController {
     required init(viewController: ViewController) {
         super.init(viewController: viewController)
 
-        self.initDelegateReference()
+        self.setGameObjectDelegateReference()
 
-        let scene = WorldScene()
-        scene.setUp(worldSceneController: self)
-
-        self.scene = scene
     }
 
     convenience init(viewController: ViewController, worldName: String) {
         self.init(viewController: viewController)
 
         self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
+
+        let scene = WorldScene()
+
+        scene.setUp(worldSceneController: self)
+
+        self.scene = scene
+
         self.initSceneByModel()
 
         self.debugCode()
     }
 
-    // MARK: - init scene by model
     private func initSceneByModel() {
         let scene = self.scene as! WorldScene
 
@@ -54,6 +56,10 @@ final class WorldSceneController: SceneController {
 
             self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
         }
+
+        let characterCoordinate = self.worldSceneModel.characterModel.coordinate
+        let position = (characterCoordinate.toCGPoint() + 0.5) * Constant.tileSide
+        scene.movingLayer.position = -position
     }
 
     // MARK: - edit model and scene

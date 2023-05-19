@@ -16,7 +16,7 @@ protocol GameObjectDelegate: SceneController {
 
 extension GameObjectDelegate {
 
-    func initDelegateReference() { GameObject.delegate = self }
+    func setGameObjectDelegateReference() { GameObject.delegate = self }
 
 }
 

@@ -11,6 +11,7 @@ import SpriteKit
 struct Constant {
 
     static let defaultSize = 250.0
+    static let tileSide = Constant.defaultSize
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
@@ -32,7 +33,7 @@ struct Constant {
     static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
     static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
-    static let tileMapSide = Constant.defaultSize * Double(Constant.gridSize)
+    static let tileMapSide = Constant.tileSide * Double(Constant.gridSize)
     static let tileMapNodePosition = CGPoint() + (Constant.tileMapSide / 2.0)
 
     static let inventoryCellCount = 5

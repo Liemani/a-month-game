@@ -16,6 +16,7 @@ final class WorldSceneModel {
 
     var worldSceneTileModel: WorldSceneTileModel!
     var worldSceneGameObjectModel: WorldSceneGameObjectModel!
+    var characterModel: CharacterModel!
 
     // MARK: - init
     init(worldSceneController: WorldSceneController, worldName: String) {
@@ -30,14 +31,11 @@ final class WorldSceneModel {
 
         let gameObjectDictionary = self.loadGameObjectDictionary()
         self.worldSceneGameObjectModel = WorldSceneGameObjectModel(gameObjectDictionary: gameObjectDictionary)
+
+        self.characterModel = CharacterModel()
     }
 
-    deinit {
-        self.diskController.close()
-    }
-
-    // MARK: - edit
-    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
+    private func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
         var gameObjectDictionary = Dictionary<Int, GameObject>()
 
         let gameObjectManagedObjectArray = self.diskController.loadGameObjectManagedObjectArray()
@@ -55,6 +53,11 @@ final class WorldSceneModel {
         return gameObjectDictionary
     }
 
+    deinit {
+        self.diskController.close()
+    }
+
+    // MARK: - edit
     func update(tileType: Int, toX x: Int, y: Int) {
         self.worldSceneTileModel.set(tileType: tileType, toX: x, y: y)
 
