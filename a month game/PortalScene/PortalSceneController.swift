@@ -14,7 +14,7 @@ class PortalSceneController: SceneController {
 
         let scene = PortalScene()
 
-        scene.size = Constant.screenSize
+        scene.size = Constant.sceneSize
         scene.scaleMode = .aspectFit
         scene.portalController = self
 

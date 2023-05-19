@@ -13,24 +13,31 @@ struct Constant {
     static let defaultSize = 250.0
 
     // MARK: - position, size
-    static let screenSize = CGSize(width: 750 * 2, height: 1334 * 2)
-    static let screenDownLeft = CGPoint(x: -screenSize.width / 2, y: -screenSize.height / 2)
-    static let screenUpRight = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
+    static let iPhone5sResolution = CGSize(width: 750, height: 1334)
+    static let sceneSize = iPhone5sResolution * 2.0
 
-    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
-    static let menuPosition = CGPoint(x: screenSize.width / 2 - defaultSize, y: screenSize.height / 2 - defaultSize)
+    static let sceneCenter = iPhone5sResolution.toCGPoint()
+
+    static let screenDownLeft = CGPoint(x: -sceneSize.width / 2, y: -sceneSize.height / 2)
+    static let screenUpRight = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
+
+    // MARK: portal scene
     static let enterButtonPosition = screenUpRight
     static let enterButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
     static let resetButtonPosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
     static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
+
+    // MARK: world scene
+    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
+    static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
     static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let tileMapSide = Constant.defaultSize * Double(Constant.gridSize)
-    static let tileMapNodePosition = CGPoint(x: Constant.tileMapSide / 2.0, y: Constant.tileMapSide / 2.0)
+    static let tileMapNodePosition = CGPoint() + (Constant.tileMapSide / 2.0)
 
     static let inventoryCellCount = 5
-    static let inventoryCellFirstPosition = CGPoint(x: screenDownLeft.x + defaultSize, y: screenDownLeft.y + defaultSize)
-    static let inventoryCellLastPosition = CGPoint(x: screenUpRight.x - defaultSize, y: screenDownLeft.y + defaultSize)
+    static let inventoryCellFirstPosition = CGPoint() + Constant.defaultSize
+    static let inventoryCellLastPosition = CGPoint(x: Constant.sceneSize.width - defaultSize, y: defaultSize)
 
     // MARK: - z position
     struct ZPosition {
@@ -38,18 +45,18 @@ struct Constant {
         static let background = -2.0
         static let gameObjectField = 0.0
 
-        static let camera = 1.0
+        static let fixedLayer = 1.0
         static let ui = 0.0
         static let menu = 2.0
     }
 
     // MARK: - frame
     struct Frame {
-        static let character = CGRect(origin: CGPoint(), size: CGSize(width: defaultSize, height: defaultSize))
+        static let character = CGRect(origin: Constant.sceneCenter, size: CGSize(width: defaultSize, height: defaultSize))
         static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
         static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
         static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)
-        static let exitWorldButton = CGRect(origin: CGPoint(), size: exitWorldButtonSize)
+        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: exitWorldButtonSize)
     }
 
     // MARK: - data

@@ -12,11 +12,13 @@ class WorldScene: SKScene {
 
     weak var worldSceneController: WorldSceneController!
 
+    var movingLayer: SKNode!
     var tileMap: SKTileMapNode!
     var gameObjectField: SKNode!
 
     var ui: SKNode!
     var menuButton: SKNode!
+    var accessBox: SKNode!
 
     var menuWindow: SKNode!
     var exitWorldButton: SKNode!
@@ -25,35 +27,28 @@ class WorldScene: SKScene {
         return !menuWindow.isHidden
     }
 
-    var accessBound: CGRect {
-        return CGRect(origin: self.camera!.position, size: Constant.defaultNodeSize * 2.0)
-    }
-
     // MARK: - set up
     func setUp(worldSceneController: WorldSceneController) {
         self.worldSceneController = worldSceneController
 
-        self.size = Constant.screenSize
+        self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
 
-        debugCode()
-
         addMovingLayer(to: self)
-        addCamera(to: self)
-    }
-
-    func debugCode() {
-        let origin = SKSpriteNode(imageNamed: Resource.Name.character)
-        self.addChild(origin)
+        addFixedLayer(to: self)
     }
 
     // MARK: add moving layer
     func addMovingLayer(to parent: SKNode) {
         let movingLayer = SKNode()
 
+        // TODO: set to character start position
+        let characterStartPosition = -Constant.tileMapNodePosition + Constant.sceneCenter
+        movingLayer.position = characterStartPosition
         movingLayer.zPosition = Constant.ZPosition.movingLayer
 
         parent.addChild(movingLayer)
+        self.movingLayer = movingLayer
 
         addBackground(to: movingLayer)
         addGameObjectField(to: movingLayer)
@@ -65,7 +60,6 @@ class WorldScene: SKScene {
         background.zPosition = Constant.ZPosition.background
 
         parent.addChild(background)
-
         addTileMapNode(to: background)
     }
 
@@ -90,17 +84,25 @@ class WorldScene: SKScene {
         self.gameObjectField = gameObjectField
     }
 
-    // MARK: add camera
-    func addCamera(to parent: SKNode) {
-        let camera = SKCameraNode()
+    // MARK: add fixed layer
+    func addFixedLayer(to parent: SKNode) {
+        let fixedLayer = SKNode()
 
-        camera.position = Constant.tileMapNodePosition
+        parent.addChild(fixedLayer)
 
-        parent.addChild(camera)
-        self.camera = camera
+        addAccessBox(to: fixedLayer)
+        addUI(to: fixedLayer)
+        addMenuWindow(to: fixedLayer)
+    }
 
-        addUI(to: camera)
-        addMenuWindow(to: camera)
+    func addAccessBox(to parent: SKNode) {
+        let accessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 2.0)
+
+        accessBox.position = Constant.sceneCenter
+        accessBox.alpha = 0.1
+
+        parent.addChild(accessBox)
+        self.accessBox = accessBox
     }
 
     func addUI(to parent: SKNode) {
@@ -140,7 +142,7 @@ class WorldScene: SKScene {
     }
 
     func addMenuWindow(to parent: SKNode) {
-        let menuWindow = SKShapeNode()
+        let menuWindow = SKNode()
 
         menuWindow.zPosition = Constant.ZPosition.menu
         menuWindow.isHidden = true
@@ -148,14 +150,11 @@ class WorldScene: SKScene {
         parent.addChild(menuWindow)
         self.menuWindow = menuWindow
 
-        let background = SKShapeNode()
+        let background = SKSpriteNode(color: .black, size: Constant.sceneSize)
 
-        let rect = CGRect(origin: Constant.screenDownLeft, size: Constant.screenSize)
-        let path = CGPath(rect: rect, transform: nil)
-        background.path = path
-        background.fillColor = .black
-        background.alpha = 0.5
+        background.position = Constant.sceneCenter
         background.zPosition = -1.0
+        background.alpha = 0.5
 
         menuWindow.addChild(background)
 
@@ -165,7 +164,7 @@ class WorldScene: SKScene {
     }
 
 
-    // MARK: - touoch
+    // MARK: - touch
     var menuButtonTouch: UITouch? = nil
 
     var moveTouch: UITouch? = nil
@@ -183,7 +182,7 @@ class WorldScene: SKScene {
             self.menuButton.alpha = 0.5
             menuButtonTouch = touch
         } else if let gameObject = self.gameObjectField.child(at: touch) {
-            print("start touch game object node")
+            print("start touch game object node \(gameObject)")
         } else {
             moveTouch = touch
             previousMoveTouchTimestamp1 = touch.timestamp
@@ -218,7 +217,9 @@ class WorldScene: SKScene {
             self.moveCamera(touch: touch)
             self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
             self.previousMoveTouchTimestamp1 = touch.timestamp
-            self.previousMoveTouchLocation2 = touch.previousLocation(in: self.camera!)
+            self.previousMoveTouchLocation2 = touch.previousLocation(in: self)
+            let accessNodes = self.gameObjectField.nodes(at: self.accessBox)
+            print("count: \(accessNodes.count)")
         } else {
             print("no matching touch")
         }
@@ -226,7 +227,7 @@ class WorldScene: SKScene {
 
     func touchUp(touch: UITouch) {
         if self.isMenuOpen {
-            let currentLocation = touch.location(in: self.camera!)
+            let currentLocation = touch.location(in: self)
             if self.exitWorldButton.contains(currentLocation) {
                 performSegueToPortalScene()
             } else {
@@ -249,7 +250,7 @@ class WorldScene: SKScene {
     }
 
     func setVelocityVector() {
-        let previousLocation1 = self.moveTouch!.previousLocation(in: self.camera!)
+        let previousLocation1 = self.moveTouch!.previousLocation(in: self)
         let previousLocation2 = self.previousMoveTouchLocation2!
         let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
 
@@ -288,7 +289,7 @@ class WorldScene: SKScene {
     }
 
     func updateCamera(timeInterval: TimeInterval) {
-        self.camera!.position += self.velocityVector * timeInterval
+        self.movingLayer.position -= self.velocityVector * timeInterval
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
@@ -320,11 +321,11 @@ class WorldScene: SKScene {
 
     // MARK: - etc
     private func moveCamera(touch: UITouch) {
-        let currentLocation = touch.location(in: self.camera!)
-        let previousLocation = touch.previousLocation(in: self.camera!)
+        let currentLocation = touch.location(in: self)
+        let previousLocation = touch.previousLocation(in: self)
 
         let difference = currentLocation - previousLocation
-        self.camera!.position -= difference
+        self.movingLayer.position += difference
     }
 
 }

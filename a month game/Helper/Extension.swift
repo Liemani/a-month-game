@@ -33,6 +33,11 @@ extension UITouch {
 
 extension CGPoint {
 
+    // MARK: prefix
+    static prefix func - (point: CGPoint) -> CGPoint {
+        return CGPoint(x: -point.x, y: -point.y)
+    }
+
     // MARK: CGPoint, CGPoint
     static func + (left: CGPoint, right: CGPoint) -> CGPoint {
         return CGPoint(x: left.x + right.x, y: left.y + right.y)
@@ -72,8 +77,16 @@ extension CGPoint {
 
 extension CGSize {
 
+    static func - (left: CGSize, right: Double) -> CGSize {
+        return CGSize(width: left.width - right, height: left.height - right)
+    }
+
     static func * (left: CGSize, right: Double) -> CGSize {
         return CGSize(width: left.width * right, height: left.height * right)
+    }
+
+    func toCGPoint() -> CGPoint {
+        return CGPoint(x: self.width, y: self.height)
     }
 
 }
@@ -100,4 +113,19 @@ extension CGVector {
         return (self.dx * self.dx + self.dy * self.dy).squareRoot()
     }
 
+}
+
+extension SKNode {
+
+    func nodes(at node: SKNode) -> [SKNode] {
+        var array = [SKNode]()
+
+        for child in children {
+            if child.intersects(node) {
+                array.append(child)
+            }
+        }
+
+        return array
+    }
 }
