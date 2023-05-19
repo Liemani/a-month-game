@@ -333,6 +333,7 @@ class Hammer: GameObject, Pickable {
 
 # bonus
 오픈 월드 방식으로 데이터 관리하기
+    chunk system
 진행 방향으로 더 넓은 지역을 보여줬으면 좋겠다
 멀티 가능
 성능 향상
