@@ -105,6 +105,21 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+PortalScene 에 reset window 추가
+isWalkable 구현
+interact 구현
+    씨앗 -> 나무
+    나무 맨손 -> 나뭇가지 or 씨앗
+제작 구현
+도끼 구현
+WorldScene 에 exit button touch 구현
+item drag 구현
+손 이미지 추가
+sound 구현 및 추가
+    background
+    interact
+    button touch
+
 WorldScene 에서 menu layer 추가
 간단한 아이템 구현
 {

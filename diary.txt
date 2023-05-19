@@ -1,8 +1,23 @@
 diary.txt
 각 날짜에 몇 시간 동안 어떤 작업을 했는가를 기록
 
+# 2023-05-18
+투자 시간: 8h 20m
+오늘은 GameObject 가 상호작용 하는 구조를 delegate 를 통해 구현했다
+menu button touch 와 touch move 를 정밀하게 구현했다
+reset 후 world create 시 initial game object 가 추가되도록
+CoreDataController.generateInitialGameObjectManagedObjectArray() 를 구현했다
+
+delegate 를 통한 구현은 흐름은 깔끔해지지만, 아무래도 delegate 를 reference 로 저장하다보니 구조가 복잡해질 수 밖에 없다
+물런 delegate 를 사용하지 않는다고 하는 것도 말이 안된다
+그러면 이벤트 드리븐 방식으로 구현한다면 컨택스트 만들고 큐에 넣고 빼고 하는 작업이 번거로울 것 같다
+그리고 난 static 을 사용했는데, factory pattern 이나 description pattern 을 사용했으면 더 좋았을 것 같다
+하지만 지금 적용할 필요는 없고, 다음에 눈독들여보자
+
+내일은 isWalkable() == false 인 object 위로 move 하려고 할 때 이동이 제한되는 기능을 구현해야 한다
+
 # 2023-05-17
-투자 시간:8h 40m
+투자 시간: 8h 40m
 오늘은 DiskController 를 완성했다
 
 - Add DiskController.moveCoordinate(of:to:)
