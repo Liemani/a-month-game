@@ -28,6 +28,8 @@ class WorldScene: SKScene {
         return !menuWindow.isHidden
     }
 
+    var accessableGameObjects = [SKNode?](repeating: nil, count: 9)
+
     // MARK: - set up
     func setUp(worldSceneController: WorldSceneController) {
         self.worldSceneController = worldSceneController
@@ -227,7 +229,6 @@ class WorldScene: SKScene {
             self.previousMoveTouchTimestamp1 = touch.timestamp
             self.previousMoveTouchLocation2 = touch.previousLocation(in: self)
             let accessNodes = self.gameObjectField.nodes(at: self.accessBox)
-            print("count: \(accessNodes.count)")
         } else {
             print("no matching touch")
         }
@@ -295,14 +296,16 @@ class WorldScene: SKScene {
 
     // MARK: - update scene
     var lastUpdateTime: TimeInterval = 0.0
-    var lastPosition: CGPoint!
+    var lastPosition: CGPoint = CGPoint()
+
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
 
         updateCamera(timeInterval: timeInterval)
-        updateVelocity(timeInterval: timeInterval)
 
-        // TODO: implement
+        updateVelocity(timeInterval: timeInterval)
+        updateAccessableGameObjects()
+
         lastUpdateTime = currentTime
         lastPosition = -self.movingLayer.position
     }
@@ -317,6 +320,24 @@ class WorldScene: SKScene {
             velocity <= Constant.velocityDamping
             ? CGVectorMake(0.0, 0.0)
             : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
+    }
+
+    func updateAccessableGameObjects() {
+        guard self.isTileMoved() else { return }
+
+        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+        let currentAccessableObjectCount = accessableNodes.count
+
+        guard currentAccessableObjectCount != 0
+                || self.accessableGameObjects.first != nil else { return }
+
+        for index in 0..<self.accessableGameObjects.count {
+            self.accessableGameObjects[index] = nil
+        }
+
+        for (index, accessableNode) in accessableNodes.enumerated() {
+            self.accessableGameObjects[index] = accessableNode
+        }
     }
 
     // MARK: - edit
@@ -340,19 +361,13 @@ class WorldScene: SKScene {
 
     // MARK: - etc
     // TODO: implement
-//    func isMovedTile(touch: UITouch) -> Bool {
-//        let currentTouchLocation = touch.location(in: view)
-//        let previousTouchLocation = touch.previousLocation(in: view)
-//        let difference = currentTouchLocation - previousTouchLocation
-//        let currentLocation =
-//
-//        let previousTile = getTile()
-//        let currentTile = getTile()
-//        return currentTile != previousTile
-//    }
+    func isTileMoved() -> Bool {
+        let currentPosition = -self.movingLayer.position
 
-    func getTile() {
+        let lastTile = TileCoordinate(self.lastPosition)
+        let currentTile = TileCoordinate(currentPosition)
 
+        return currentTile != lastTile
     }
 
 }

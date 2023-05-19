@@ -37,7 +37,7 @@
 		039037C62A14D6020014A571 /* GameObjectWoodWall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037C52A14D6010014A571 /* GameObjectWoodWall.swift */; };
 		039037C92A15B7320014A571 /* WorldSceneController+EventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037C82A15B7320014A571 /* WorldSceneController+EventHandler.swift */; };
 		039037CB2A15FBCD0014A571 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CA2A15FBCD0014A571 /* Extension.swift */; };
-		039037CD2A17AB3E0014A571 /* CharacterCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CC2A17AB3E0014A571 /* CharacterCoordinate.swift */; };
+		039037CD2A17AB3E0014A571 /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CC2A17AB3E0014A571 /* TileCoordinate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,7 +72,7 @@
 		039037C52A14D6010014A571 /* GameObjectWoodWall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectWoodWall.swift; sourceTree = "<group>"; };
 		039037C82A15B7320014A571 /* WorldSceneController+EventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorldSceneController+EventHandler.swift"; sourceTree = "<group>"; };
 		039037CA2A15FBCD0014A571 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
-		039037CC2A17AB3E0014A571 /* CharacterCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCoordinate.swift; sourceTree = "<group>"; };
+		039037CC2A17AB3E0014A571 /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,7 +155,7 @@
 				039037C52A14D6010014A571 /* GameObjectWoodWall.swift */,
 				039037BA2A11C77F0014A571 /* GameObjectCoordinate.swift */,
 				031D57552A076DC8007EF383 /* CharacterModel.swift */,
-				039037CC2A17AB3E0014A571 /* CharacterCoordinate.swift */,
+				039037CC2A17AB3E0014A571 /* TileCoordinate.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -312,7 +312,7 @@
 				030ABFC32A0E290E00BAB9B8 /* DataModel.xcdatamodeld in Sources */,
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
 				039037C42A14A10B0014A571 /* GameObjectPineTree.swift in Sources */,
-				039037CD2A17AB3E0014A571 /* CharacterCoordinate.swift in Sources */,
+				039037CD2A17AB3E0014A571 /* TileCoordinate.swift in Sources */,
 				038330AA2A02850A008DEA10 /* ViewController.swift in Sources */,
 				039037C02A1376BB0014A571 /* UserDefaultsController.swift in Sources */,
 				039037C92A15B7320014A571 /* WorldSceneController+EventHandler.swift in Sources */,
