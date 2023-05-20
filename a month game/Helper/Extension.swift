@@ -29,6 +29,10 @@ extension SKNode {
         return array
     }
 
+    var firstIndexFromParent: Int? {
+        return self.parent?.children.firstIndex(of: self)
+    }
+
     // MOVE
     /// Return true if collision resolved else false
     func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {

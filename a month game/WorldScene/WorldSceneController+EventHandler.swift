@@ -10,9 +10,9 @@ import SpriteKit
 
 extension WorldSceneController: GameObjectDelegate {
 
-    // TODO: implement
     func interact(_ gameObject: GameObject, with leftHand: GameObject?, and rightHand: GameObject?) {
-        print("GameObjectDelegate.interact(\(gameObject))")
+        // modify method name
+        // TODO: implement
     }
 
 }

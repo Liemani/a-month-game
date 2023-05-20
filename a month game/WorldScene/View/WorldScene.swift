@@ -14,14 +14,29 @@ class WorldScene: SKScene {
 
     // Position of moving layer represents character coordinate
     var movingLayer: SKNode!
+    var worldLayer: SKNode!
     var tileMap: SKTileMapNode!
-    var gameObjectField: SKNode!
+    var gameObjectLayer: SKNode!
 
     var ui: SKNode!
     var menuButton: SKNode!
     var accessBox: SKNode!
-    var inventory: [SKNode]!
+    var inventory: SKNode!
     var thirdHand: SKNode!
+
+    var leftHandGameObject: SKNode? {
+        let firstInventoryCell = self.inventory.children.first
+        return firstInventoryCell?.children.first
+    }
+
+    var rightHandGameObject: SKNode? {
+        let lastInventoryCell = self.inventory.children.last
+        return lastInventoryCell?.children.first
+    }
+
+    var thirdHandGameObject: SKNode? {
+        return self.thirdHand.children.first
+    }
 
     var menuWindow: SKNode!
     var exitWorldButton: SKNode!
@@ -44,8 +59,8 @@ class WorldScene: SKScene {
         self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
 
-        addMovingLayer(to: self)
-        addFixedLayer(to: self)
+        self.addMovingLayer(to: self)
+        self.addFixedLayer(to: self)
     }
 
     // MARK: add moving layer
@@ -57,7 +72,7 @@ class WorldScene: SKScene {
         parent.addChild(movingLayer)
         self.movingLayer = movingLayer
 
-        addWorldLayer(to: movingLayer)
+        self.addWorldLayer(to: movingLayer)
     }
 
     func addWorldLayer(to parent: SKNode) {
@@ -66,27 +81,20 @@ class WorldScene: SKScene {
         worldLayer.position = Constant.sceneCenter
 
         parent.addChild(worldLayer)
+        self.worldLayer = worldLayer
 
-        addBackground(to: worldLayer)
-        addGameObjectField(to: worldLayer)
+        self.addTileMap(to: worldLayer)
+        self.addGameObjectField(to: worldLayer)
     }
 
-    func addBackground(to parent: SKNode) {
-        let background = SKNode()
-
-        background.zPosition = Constant.ZPosition.background
-
-        parent.addChild(background)
-        addTileMapNode(to: background)
-    }
-
-    func addTileMapNode(to parent: SKNode) {
+    func addTileMap(to parent: SKNode) {
         let tileGroups = Resource.tileTypeToResource.map { $0.tileGroup }
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
         let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
 
         tileMap.position = Constant.tileMapNodePosition
+        tileMap.zPosition = Constant.ZPosition.tileMap
 
         parent.addChild(tileMap)
         self.tileMap = tileMap
@@ -95,10 +103,10 @@ class WorldScene: SKScene {
     func addGameObjectField(to parent: SKNode) {
         let gameObjectField = SKNode()
 
-        gameObjectField.zPosition = Constant.ZPosition.gameObjectField
+        gameObjectField.zPosition = Constant.ZPosition.gameObjectLayer
 
         parent.addChild(gameObjectField)
-        self.gameObjectField = gameObjectField
+        self.gameObjectLayer = gameObjectField
     }
 
     // MARK: add fixed layer
@@ -107,19 +115,8 @@ class WorldScene: SKScene {
 
         parent.addChild(fixedLayer)
 
-        addAccessBox(to: fixedLayer)
-        addUI(to: fixedLayer)
-        addMenuWindow(to: fixedLayer)
-    }
-
-    func addAccessBox(to parent: SKNode) {
-        let accessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 2.0)
-
-        accessBox.position = Constant.sceneCenter
-        accessBox.alpha = 0.1
-
-        parent.addChild(accessBox)
-        self.accessBox = accessBox
+        self.addUI(to: fixedLayer)
+        self.addMenuWindow(to: fixedLayer)
     }
 
     func addUI(to parent: SKNode) {
@@ -130,19 +127,11 @@ class WorldScene: SKScene {
         parent.addChild(ui)
         self.ui = ui
 
-        self.addCharacter(to: ui)
         self.addMenuButton(to: ui)
+        self.addCharacter(to: ui)
+        self.addAccessBox(to: ui)
         self.addInventory(to: ui)
         self.addThirdHand(to: ui)
-    }
-
-    func addCharacter(to parent: SKNode) {
-        let character: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
-
-        character.position = Constant.Frame.character.origin
-        character.size = Constant.Frame.character.size
-
-        parent.addChild(character)
     }
 
     func addMenuButton(to parent: SKNode) {
@@ -155,7 +144,28 @@ class WorldScene: SKScene {
         self.menuButton = menuButton
     }
 
+    func addCharacter(to parent: SKNode) {
+        let character: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
+
+        character.position = Constant.Frame.character.origin
+        character.size = Constant.Frame.character.size
+
+        parent.addChild(character)
+    }
+
+    func addAccessBox(to parent: SKNode) {
+        let accessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 2.0)
+
+        accessBox.position = Constant.sceneCenter
+        accessBox.alpha = 0.1
+
+        parent.addChild(accessBox)
+        self.accessBox = accessBox
+    }
+
     func addInventory(to parent: SKNode) {
+        let inventory = SKNode()
+
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
         let inventoryCellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
         var inventoryArray = [SKNode](repeating: SKNode(), count: Constant.inventoryCellCount)
@@ -166,11 +176,12 @@ class WorldScene: SKScene {
             inventoryCell.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
             inventoryCell.size = Constant.defaultNodeSize
 
-            parent.addChild(inventoryCell)
+            inventory.addChild(inventoryCell)
             inventoryArray[index] = inventoryCell
         }
 
-        self.inventory = inventoryArray
+        parent.addChild(inventory)
+        self.inventory = inventory
     }
 
     func addThirdHand(to parent: SKNode) {
@@ -219,48 +230,91 @@ class WorldScene: SKScene {
     // STRUCT
     var gameObjectMoveTouch: UITouch? = nil
 
+    // STRUCT
+    var gameObjectTouch: UITouch? = nil
+    var touchedGameObject: SKNode? = nil
+
+    // MARK: touch down
     func touchDown(touch: UITouch) {
-        guard !self.isMenuOpen else {
+        if self.isMenuOpen {
             menuWindowTouchDown(touch: touch)
             return
         }
 
-        guard !touch.is(onThe: self.menuButton) else {
+        if touch.is(onThe: self.menuButton) {
             self.menuButton.alpha = 0.5
             menuButtonTouch = touch
             return
         }
 
-        if let gameObject = self.gameObjectField.child(at: touch) {
-            if self.accessableGameObjects.contains(gameObject) {
-                self.gameObjectMoveTouch = touch
-                gameObject.move(toParent: self.thirdHand)
-                self.sceneController.move(gameObject, to: GameObjectCoordinate(inventory: .thirdHand, x: 0, y: 0))
-                return
-            }
+        if let thirdHandGameObject = self.thirdHandGameObject,
+           touch.is(onThe: thirdHandGameObject) {
+            self.gameObjectMoveTouch = touch
+            return
+        }
+
+        if let gameObject = self.gameObjectLayer.child(at: touch),
+            self.accessableGameObjects.contains(gameObject) {
+            self.gameObjectTouch = touch
+            self.touchedGameObject = gameObject
+            return
+        }
+
+        if let gameObject = self.inventory.child(at: touch) {
+            self.gameObjectTouch = touch
+            self.touchedGameObject = gameObject
+            return
         }
 
         moveTouch = touch
         previousMoveTouchTimestamp1 = touch.timestamp
     }
 
-    // TODO: implement
     func menuWindowTouchDown(touch: UITouch) {
-        print("menuWindowTouchDown()")
+        // TODO: implement
     }
 
+    // MARK: touch moved
     func touchMoved(touch: UITouch) {
         if self.isMenuOpen {
+            menuWindowTouchMoved(touch: touch)
             return
         }
 
         if touch == self.menuButtonTouch {
             self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
-        } else if touch == self.moveTouch {
-            self.move(with: touch)
-        } else {
-            print("no matching touch")
+            return
         }
+
+        if touch == self.gameObjectMoveTouch {
+            self.thirdHand.position = touch.location(in: self.ui)
+            return
+        }
+
+        if touch == self.gameObjectTouch {
+            if !touch.is(onThe: self.touchedGameObject!) {
+                if self.thirdHandGameObject == nil {
+                    self.gameObjectMoveTouch = touch
+                    self.thirdHand.position = touch.location(in: self.ui)
+                    self.touchedGameObject!.move(toParent: self.thirdHand)
+                    self.touchedGameObject!.position = CGPoint()
+                    self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventory: .thirdHand, x: 0, y: 0))
+                }
+
+                self.gameObjectTouch = nil
+                self.touchedGameObject = nil
+            }
+            return
+        }
+
+        if touch == self.moveTouch {
+            self.move(with: touch)
+            return
+        }
+    }
+
+    func menuWindowTouchMoved(touch: UITouch) {
+        // TODO: implement
     }
 
     func move(with touch: UITouch) {
@@ -275,15 +329,10 @@ class WorldScene: SKScene {
         self.previousMoveTouchLocation2 = previousPoint
     }
 
+    // MARK: touch up
     private func touchUp(touch: UITouch) {
         if self.isMenuOpen {
-            let currentLocation = touch.location(in: self)
-            if self.exitWorldButton.contains(currentLocation) {
-                performSegueToPortalScene()
-            } else {
-                self.menuWindow.isHidden = true
-            }
-
+            menuWindowTouchUp(touch: touch)
             return
         }
 
@@ -294,22 +343,68 @@ class WorldScene: SKScene {
             }
             self.menuButton.alpha = 1.0
             self.menuButtonTouch = nil
-        } else if touch == self.moveTouch {
+            return
+        }
+
+        if touch == self.gameObjectTouch {
+            self.sceneController.interact(with: self.touchedGameObject!, leftHand: self.leftHandGameObject, righthand: self.rightHandGameObject)
+            self.gameObjectTouch = nil
+            self.touchedGameObject = nil
+        }
+
+        if touch == self.gameObjectMoveTouch {
+            if let cell = self.inventory.child(at: touch) {
+                let movingGameObject = self.thirdHandGameObject!
+                movingGameObject.move(toParent: cell)
+                movingGameObject.position = CGPoint()
+                self.sceneController.move(movingGameObject, to: GameObjectCoordinate(inventory: .inventory, x: cell.firstIndexFromParent!, y: 0))
+
+                self.gameObjectMoveTouch = nil
+                return
+            }
+
+            let characterTileCoordinate = TileCoordinate(self.characterPosition)
+            let touchTileCoordinate = TileCoordinate(touch.location(in: worldLayer))
+            if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
+                let movingGameObject = self.thirdHandGameObject!
+                movingGameObject.move(toParent: gameObjectLayer)
+                // TODO: make function for calculate tile coordinate
+                movingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
+                self.sceneController.move(movingGameObject, to: GameObjectCoordinate(inventory: .field, x: touchTileCoordinate.x, y: touchTileCoordinate.y))
+
+                self.gameObjectMoveTouch = nil
+                return
+            }
+        }
+
+        if touch == self.moveTouch {
             setVelocityVector()
+            return
         }
     }
 
+    func menuWindowTouchUp(touch: UITouch) {
+        let currentLocation = touch.location(in: self)
+        if self.exitWorldButton.contains(currentLocation) {
+            performSegueToPortalScene()
+        } else {
+            self.menuWindow.isHidden = true
+        }
+    }
+
+    func performSegueToPortalScene() {
+        self.sceneController.viewController.setPortalScene()
+    }
+
     func setVelocityVector() {
+        guard let previousLocation2 = self.previousMoveTouchLocation2 else { return }
         let previousLocation1 = self.moveTouch!.previousLocation(in: self)
-        let previousLocation2 = self.previousMoveTouchLocation2!
         let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
 
         self.velocityVector = -(previousLocation1 - previousLocation2) / timeInterval
     }
 
-    private func performSegueToPortalScene() {
-        self.sceneController.viewController.setPortalScene()
-    }
+
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchDown(touch: touch) }
@@ -356,7 +451,7 @@ class WorldScene: SKScene {
     func updateAccessableGameObjects() {
         guard self.isMovedTile() else { return }
 
-        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+        let accessableNodes = self.gameObjectLayer.nodes(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
 
         guard currentAccessableObjectCount != 0
@@ -372,7 +467,7 @@ class WorldScene: SKScene {
     }
 
     func resolveCollision() {
-        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+        let accessableNodes = self.gameObjectLayer.nodes(at: self.accessBox)
         for accessableNode in accessableNodes {
             let gameObject = self.sceneController.gameObjectNodeToModel[accessableNode]!
             guard !gameObject.isWalkable else { continue }
@@ -397,12 +492,13 @@ class WorldScene: SKScene {
 
         node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
 
-        self.gameObjectField.addChild(node)
+        self.gameObjectLayer.addChild(node)
 
         return node
     }
 
     // MARK: - etc
+    // MOVE
     func isMovedTile() -> Bool {
         let currentPosition = self.characterPosition
 

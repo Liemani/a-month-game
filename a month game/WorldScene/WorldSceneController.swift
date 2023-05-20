@@ -81,8 +81,8 @@ final class WorldSceneController: SceneController {
         gameObjectNode.removeFromParent()
     }
 
-    // TODO: implement hand
-    func interactObject(by node: SKNode) {
+    func interact(with node: SKNode, leftHand: SKNode?, righthand: SKNode?) {
+        // TODO: implement hand
         let gameObject = self.gameObjectNodeToModel[node]!
         gameObject.interact(leftHand: nil, rightHand: nil)
     }

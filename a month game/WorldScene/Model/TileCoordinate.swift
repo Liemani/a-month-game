@@ -17,6 +17,10 @@ final class TileCoordinate {
         self.y = y
     }
 
+    convenience init() {
+        self.init(x: 0, y: 0)
+    }
+
     convenience init(_ worldPoint: CGPoint) {
         let x = Int(worldPoint.x) / Int(Constant.tileSide)
         let y = Int(worldPoint.y) / Int(Constant.tileSide)
@@ -25,6 +29,14 @@ final class TileCoordinate {
 
     func toCGPoint() -> CGPoint {
         return CGPoint(x: self.x, y: self.y)
+    }
+
+    func isAdjacent(coordinate: TileCoordinate) -> Bool {
+        let differenceX = self.x - coordinate.x
+        let differenceY = self.y - coordinate.y
+
+        return (-1 <= differenceX && differenceX <= 1)
+            && (-1 <= differenceY && differenceY <= 1)
     }
 
     static func == (left: TileCoordinate, right: TileCoordinate) -> Bool {

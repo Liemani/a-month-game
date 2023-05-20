@@ -9,6 +9,7 @@ import Foundation
 
 struct GameObjectCoordinate {
 
+    #warning("modify to TileCoordinate")
     var inventory: InventoryType
     var x: Int
     var y: Int
