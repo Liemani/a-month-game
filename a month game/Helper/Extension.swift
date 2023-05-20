@@ -53,6 +53,15 @@ extension SKNode {
     }
 
     func getPointCollisionPointWithCircle(ofOrigin circleOrigin: CGPoint, andRadius circleRadius: Double) -> CGPoint? {
+        if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
+            return CGPoint(x: self.frame.minX, y: self.frame.minY)
+        } else if CGVector(dx: circleOrigin.x - self.frame.maxX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
+            return CGPoint(x: self.frame.maxX, y: self.frame.minY)
+        } else if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.maxY).magnitude < circleRadius {
+            return CGPoint(x: self.frame.minX, y: self.frame.maxY)
+        } else if CGVector(dx: circleOrigin.x - self.frame.maxX, dy: circleOrigin.y - self.frame.maxY).magnitude < circleRadius {
+            return CGPoint(x: self.frame.maxX, y: self.frame.maxY)
+        }
 
         return nil
     }
