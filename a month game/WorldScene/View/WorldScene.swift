@@ -33,8 +33,8 @@ class WorldScene: SKScene {
         get {
             return -self.movingLayer.position
         }
-        set(point) {
-            self.movingLayer.position = -point
+        set {
+            self.movingLayer.position = -newValue
         }
     }
 
@@ -234,43 +234,22 @@ class WorldScene: SKScene {
         if touch == self.menuButtonTouch {
             self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
         } else if touch == self.moveTouch {
-            self.moveCamera(touch: touch)
+            self.move(with: touch)
         } else {
             print("no matching touch")
         }
     }
 
-    func moveCamera(touch: UITouch) {
+    func move(with touch: UITouch) {
         let previousPoint = touch.previousLocation(in: self)
         let currentPoint = touch.location(in: self)
         let difference = currentPoint - previousPoint
 
         self.movingLayer.position += difference
 
-        resolveCollision()
-
         self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
         self.previousMoveTouchTimestamp1 = touch.timestamp
         self.previousMoveTouchLocation2 = previousPoint
-    }
-
-    func resolveCollision() {
-        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
-        for accessableNode in accessableNodes {
-            let gameObject = self.worldSceneController.gameObjectNodeToModelDictionary[accessableNode]!
-            if gameObject.isWalkable {
-                continue
-            }
-
-            if let collisionPoint = accessableNode.getSideCollisionPointWithCircle(ofOrigin: self.characterPosition, andRadius: Constant.characterRadius) {
-                print("resolve side collision: \(collisionPoint)")
-                return
-            } else if let collisionPoint = accessableNode.getPointCollisionPointWithCircle(ofOrigin: self.characterPosition, andRadius: Constant.characterRadius) {
-                print("resolve point collision: \(collisionPoint)")
-                return
-            }
-        }
-        print("no collision")
     }
 
     private func touchUp(touch: UITouch) {
@@ -332,17 +311,15 @@ class WorldScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - lastUpdateTime
 
-        updateCamera(timeInterval: timeInterval)
+        self.characterPosition += self.velocityVector * timeInterval
 
         updateVelocity(timeInterval: timeInterval)
+
         updateAccessableGameObjects()
+        resolveCollision()
 
         lastUpdateTime = currentTime
         lastPosition = self.characterPosition
-    }
-
-    func updateCamera(timeInterval: TimeInterval) {
-        self.movingLayer.position += self.velocityVector * timeInterval
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
@@ -368,6 +345,18 @@ class WorldScene: SKScene {
 
         for (index, accessableNode) in accessableNodes.enumerated() {
             self.accessableGameObjects[index] = accessableNode
+        }
+    }
+
+    func resolveCollision() {
+        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+        for accessableNode in accessableNodes {
+            let gameObject = self.worldSceneController.gameObjectNodeToModelDictionary[accessableNode]!
+            guard !gameObject.isWalkable else { continue }
+
+            if !accessableNode.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
+                accessableNode.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
+            }
         }
     }
 
