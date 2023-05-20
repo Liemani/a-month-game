@@ -9,7 +9,7 @@ import Foundation
 
 struct GameObjectCoordinate {
 
-    var inventory: Int
+    var inventory: InventoryType
     var x: Int
     var y: Int
 

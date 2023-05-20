@@ -235,7 +235,7 @@ class WorldScene: SKScene {
             if self.accessableGameObjects.contains(gameObject) {
                 self.gameObjectMoveTouch = touch
                 gameObject.move(toParent: self.thirdHand)
-                self.sceneController.move(gameObject, to: GameObjectCoordinate(inventory: 2, x: 0, y: 0))
+                self.sceneController.move(gameObject, to: GameObjectCoordinate(inventory: .thirdHand, x: 0, y: 0))
                 return
             }
         }

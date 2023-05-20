@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum InventoryID: Int {
+enum InventoryType: Int {
     case field = 0
     case inventory
     case thirdHand

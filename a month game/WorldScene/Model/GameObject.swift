@@ -25,6 +25,7 @@ class GameObject {
 
     let id: Int
     var coordinate: GameObjectCoordinate
+    var inventoryID: Int { return self.coordinate.inventory.rawValue }
 
     required init(id: Int?, coordinate: GameObjectCoordinate) {
         self.id = id ?? GameObject.idGenerator.generate()

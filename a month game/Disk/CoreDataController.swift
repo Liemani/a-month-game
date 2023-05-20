@@ -52,7 +52,7 @@ final class CoreDataController {
 
         managedObject.id = Int32(gameObject.id)
         managedObject.typeID = Int32(Resource.getTypeID(of: gameObject))
-        managedObject.inventory = Int32(gameObject.coordinate.inventory)
+        managedObject.inventory = Int32(gameObject.inventoryID)
         managedObject.x = Int32(gameObject.coordinate.x)
         managedObject.y = Int32(gameObject.coordinate.y)
 
@@ -68,7 +68,7 @@ final class CoreDataController {
         let results = try! context.fetch(request)
         let targetObject = results.first!
 
-        targetObject.inventory = Int32(newCoordinate.inventory)
+        targetObject.inventory = Int32(newCoordinate.inventory.rawValue)
         targetObject.x = Int32(newCoordinate.x)
         targetObject.y = Int32(newCoordinate.y)
 

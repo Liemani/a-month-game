@@ -42,8 +42,10 @@ final class WorldSceneModel {
         for gameObjectManagedObject in gameObjectManagedObjectArray {
             let typeID = Int(gameObjectManagedObject.typeID)
             let id = Int(gameObjectManagedObject.id)
+            let inventoryValue = Int(gameObjectManagedObject.inventory)
             let coordinate = GameObjectCoordinate(
-                inventory: Int(gameObjectManagedObject.inventory),
+                // FIX: <- force unwrap from external data
+                inventory: InventoryType(rawValue: inventoryValue)!,
                 x: Int(gameObjectManagedObject.x),
                 y: Int(gameObjectManagedObject.y))
             let gameObject = GameObject.new(ofTypeID: typeID, id: id, coordinate: coordinate)
