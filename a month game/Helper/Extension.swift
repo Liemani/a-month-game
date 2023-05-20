@@ -17,6 +17,46 @@ extension SKNode {
         return touchedNodes.first
     }
 
+    func nodes(at node: SKNode) -> [SKNode] {
+        var array = [SKNode]()
+
+        for child in children {
+            if child.intersects(node) {
+                array.append(child)
+            }
+        }
+
+        return array
+    }
+
+    func getSideCollisionPointWithCircle(ofOrigin circleOrigin: CGPoint, andRadius circleRadius: Double) -> CGPoint? {
+        let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
+        if self.position.x - circleOrigin.x < minimalDistanceToCollision
+            && circleOrigin.x <= self.position.x
+            && self.frame.minY < circleOrigin.y && circleOrigin.y < self.frame.maxY {
+            return CGPoint(x: self.frame.minX, y: circleOrigin.y)
+        } else if circleOrigin.x - self.position.x < minimalDistanceToCollision
+            && self.position.x <= circleOrigin.x
+            && self.frame.minY < circleOrigin.y && circleOrigin.y < self.frame.maxY {
+            return CGPoint(x: self.frame.maxX, y: circleOrigin.y)
+        } else if self.position.y - circleOrigin.y < minimalDistanceToCollision
+            && circleOrigin.y <= self.position.y
+            && self.frame.minX < circleOrigin.x && circleOrigin.x < self.frame.maxX {
+            return CGPoint(x: circleOrigin.x, y: self.frame.minY)
+        } else if circleOrigin.y - self.position.y < minimalDistanceToCollision
+            && self.position.y <= circleOrigin.y
+            && self.frame.minX < circleOrigin.x && circleOrigin.x < self.frame.maxX {
+            return CGPoint(x: circleOrigin.x, y: self.frame.maxY)
+        }
+
+        return nil
+    }
+
+    func getPointCollisionPointWithCircle(ofOrigin circleOrigin: CGPoint, andRadius circleRadius: Double) -> CGPoint? {
+
+        return nil
+    }
+
 }
 
 extension UITouch {
@@ -113,19 +153,4 @@ extension CGVector {
         return (self.dx * self.dx + self.dy * self.dy).squareRoot()
     }
 
-}
-
-extension SKNode {
-
-    func nodes(at node: SKNode) -> [SKNode] {
-        var array = [SKNode]()
-
-        for child in children {
-            if child.intersects(node) {
-                array.append(child)
-            }
-        }
-
-        return array
-    }
 }

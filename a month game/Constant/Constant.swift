@@ -35,7 +35,7 @@ struct Constant {
     static let tileMapNodePosition = CGPoint() + (Constant.tileMapSide / 2.0)
 
     static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
-    static let characterRadius = Constant.defaultSize - 2.0
+    static let characterRadius = Constant.defaultSize / 3.0
     static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
     static let inventoryCellCount = 5

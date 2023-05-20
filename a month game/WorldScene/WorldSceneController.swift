@@ -12,6 +12,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
+    // TODO: rename gameObjectNodeToModel
     var gameObjectNodeToModelDictionary: [SKNode: GameObject] = [:]
 
     // MARK: - init

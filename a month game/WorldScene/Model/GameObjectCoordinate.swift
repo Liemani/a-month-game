@@ -13,7 +13,7 @@ struct GameObjectCoordinate {
     var x: Int
     var y: Int
 
-    func cgPoint() -> CGPoint {
+    func toCGPoint() -> CGPoint {
         return CGPoint(x: x, y: y)
     }
 

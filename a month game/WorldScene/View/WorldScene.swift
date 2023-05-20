@@ -10,6 +10,7 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
+    // TODO: rename to sceneController
     weak var worldSceneController: WorldSceneController!
 
     // Position of moving layer represents character coordinate
@@ -30,10 +31,10 @@ class WorldScene: SKScene {
 
     var characterPosition: CGPoint {
         get {
-            return self.movingLayer.position
+            return -self.movingLayer.position
         }
         set(point) {
-            self.movingLayer.position = point
+            self.movingLayer.position = -point
         }
     }
 
@@ -244,7 +245,7 @@ class WorldScene: SKScene {
         let currentPoint = touch.location(in: self)
         let difference = currentPoint - previousPoint
 
-        self.characterPosition += difference
+        self.movingLayer.position += difference
 
         resolveCollision()
 
@@ -254,17 +255,22 @@ class WorldScene: SKScene {
     }
 
     func resolveCollision() {
-//
-//        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
-//        for accessableNode in accessableNodes {
-//            let collisionFrame = accessableNode.frame
-//            let x = destinationPoint.x
-//            let y = destinationPoint.y
-//
-//            if accessableNode.contains(destinationPoint) {
-//                destinationPoint
-//            }
-//        }
+        let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
+        for accessableNode in accessableNodes {
+            let gameObject = self.worldSceneController.gameObjectNodeToModelDictionary[accessableNode]!
+            if gameObject.isWalkable {
+                continue
+            }
+
+            if let collisionPoint = accessableNode.getSideCollisionPointWithCircle(ofOrigin: self.characterPosition, andRadius: Constant.characterRadius) {
+                print("resolve side collision: \(collisionPoint)")
+                return
+            } else if let collisionPoint = accessableNode.getPointCollisionPointWithCircle(ofOrigin: self.characterPosition, andRadius: Constant.characterRadius) {
+                print("resolve point collision: \(collisionPoint)")
+                return
+            }
+        }
+        print("no collision")
     }
 
     private func touchUp(touch: UITouch) {
@@ -332,11 +338,11 @@ class WorldScene: SKScene {
         updateAccessableGameObjects()
 
         lastUpdateTime = currentTime
-        lastPosition = -self.characterPosition
+        lastPosition = self.characterPosition
     }
 
     func updateCamera(timeInterval: TimeInterval) {
-        self.characterPosition -= self.velocityVector * timeInterval
+        self.movingLayer.position += self.velocityVector * timeInterval
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
@@ -377,7 +383,7 @@ class WorldScene: SKScene {
         let texture = Resource.getTexture(of: gameObject)
         let node = SKSpriteNode(texture: texture)
 
-        node.position = (gameObject.coordinate.cgPoint() + 0.5) * Constant.defaultSize
+        node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
 
         self.gameObjectField.addChild(node)
 
@@ -387,7 +393,7 @@ class WorldScene: SKScene {
     // MARK: - etc
     // TODO: implement
     func isTileMoved() -> Bool {
-        let currentPosition = -self.characterPosition
+        let currentPosition = self.characterPosition
 
         let lastTile = TileCoordinate(self.lastPosition)
         let currentTile = TileCoordinate(currentPosition)
