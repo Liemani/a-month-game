@@ -33,7 +33,7 @@ extension SKNode {
         return self.parent?.children.firstIndex(of: self)
     }
 
-    // MOVE
+    // TODO: move
     /// Return true if collision resolved else false
     func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {
         let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
@@ -63,7 +63,7 @@ extension SKNode {
     }
 
     // NOTE: optimization possible
-    // MOVE
+    // TODO: move
     func resolvePointCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) {
         if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
             let xDifference = self.position.x - circleOrigin.x

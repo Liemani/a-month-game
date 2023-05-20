@@ -20,7 +20,7 @@ final class TileMapFileController {
 
     /// Call this function before calling load and save method
     func setToWorld(with directoryURL: URL) {
-        // NOTE: URL.path is deprecated
+        // TODO: 99 URL.path is deprecated
         let filePath = directoryURL.appending(path: Constant.tileMapFileName).path
         self.filePath = filePath
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class TileCoordinate {
+struct TileCoordinate {
 
     var x: Int
     var y: Int
@@ -17,11 +17,11 @@ final class TileCoordinate {
         self.y = y
     }
 
-    convenience init() {
+    init() {
         self.init(x: 0, y: 0)
     }
 
-    convenience init(_ worldPoint: CGPoint) {
+    init(_ worldPoint: CGPoint) {
         let x = Int(worldPoint.x) / Int(Constant.tileSide)
         let y = Int(worldPoint.y) / Int(Constant.tileSide)
         self.init(x: x, y: y)

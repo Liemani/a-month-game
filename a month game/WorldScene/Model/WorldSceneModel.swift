@@ -43,7 +43,7 @@ final class WorldSceneModel {
             let typeID = Int(gameObjectManagedObject.typeID)
             let id = Int(gameObjectManagedObject.id)
             let inventoryValue = Int(gameObjectManagedObject.inventory)
-            #warning("force unwrap from external data")
+            #warning("force unwrapping from external data")
             let coordinate = GameObjectCoordinate(
                 inventory: InventoryType(rawValue: inventoryValue)!,
                 x: Int(gameObjectManagedObject.x),

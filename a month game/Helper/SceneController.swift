@@ -13,7 +13,6 @@ class SceneController {
 
     var scene: SKScene!
 
-    // must init scene in subclass
     required init(viewController: ViewController) {
         self.viewController = viewController
     }

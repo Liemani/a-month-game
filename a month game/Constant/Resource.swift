@@ -81,7 +81,4 @@ struct Resource {
         return Resource.gameObjectTypeIDToResource[objectIdentifier]!.texture
     }
 
-    // MARK: - etc
-//    static let moveTouchValidityDuration = 0.1
-
 }

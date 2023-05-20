@@ -88,9 +88,8 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: -etc
-    // TODO: implement
-    // MOVE
-    // move gameObject data to specific coordinate
+    // TODO: implement: move gameObject data to specific coordinate
+    // TODO: move
     func move(_ gameObjectNode: SKNode, to coordinate: GameObjectCoordinate) {
     }
 

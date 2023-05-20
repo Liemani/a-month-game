@@ -44,13 +44,13 @@ struct Constant {
 
     // MARK: - z position
     struct ZPosition {
-        static let movingLayer = -1.0
-        static let tileMap = -2.0
+        static let movingLayer = -20.0
+        static let tileMap = -10.0
         static let gameObjectLayer = 0.0
 
-        static let fixedLayer = 1.0
+        static let fixedLayer = 20.0
         static let ui = 0.0
-        static let menu = 2.0
+        static let menuWindow = 10.0
     }
 
     // MARK: - frame

@@ -10,8 +10,7 @@ import SpriteKit
 
 extension WorldSceneController: GameObjectDelegate {
 
-    func interact(_ gameObject: GameObject, with leftHand: GameObject?, and rightHand: GameObject?) {
-        // modify method name
+    func interact(with gameObject: GameObject, leftHand left: GameObject?, rightHand right: GameObject?) {
         // TODO: implement
     }
 

@@ -10,7 +10,7 @@ import Foundation
 /// Call gameObjectDelegate.initDelegateReference() before call gameObject.interact()
 protocol GameObjectDelegate: SceneController {
 
-    func interact(_ gameObject: GameObject, with leftHand: GameObject?, and rightHand: GameObject?)
+    func interact(with gameObject: GameObject, leftHand left: GameObject?, rightHand right: GameObject?)
 
 }
 
@@ -32,8 +32,8 @@ class GameObject {
         self.coordinate = coordinate
     }
 
-    func interact(leftHand: GameObject?, rightHand: GameObject?) {
-        GameObject.delegate.interact(self, with: leftHand, and: rightHand)
+    func interact(leftHand left: GameObject?, rightHand right: GameObject?) {
+        GameObject.delegate.interact(with: self, leftHand: left, rightHand: right)
     }
 
     // MARK: property to be overriden

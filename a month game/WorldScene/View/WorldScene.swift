@@ -12,7 +12,6 @@ class WorldScene: SKScene {
 
     weak var sceneController: WorldSceneController!
 
-    // Position of moving layer represents character coordinate
     var movingLayer: SKNode!
     var worldLayer: SKNode!
     var tileMap: SKTileMapNode!
@@ -113,6 +112,8 @@ class WorldScene: SKScene {
     func addFixedLayer(to parent: SKNode) {
         let fixedLayer = SKNode()
 
+        fixedLayer.zPosition = Constant.ZPosition.fixedLayer
+
         parent.addChild(fixedLayer)
 
         self.addUI(to: fixedLayer)
@@ -196,7 +197,7 @@ class WorldScene: SKScene {
     func addMenuWindow(to parent: SKNode) {
         let menuWindow = SKNode()
 
-        menuWindow.zPosition = Constant.ZPosition.menu
+        menuWindow.zPosition = Constant.ZPosition.menuWindow
         menuWindow.isHidden = true
 
         parent.addChild(menuWindow)
@@ -217,20 +218,20 @@ class WorldScene: SKScene {
 
 
     // MARK: - touch
-    // STRUCT
+    // TODO: struct
     var menuButtonTouch: UITouch? = nil
 
-    // STRUCT
+    // TODO: struct
     var moveTouch: UITouch? = nil
     var previousMoveTouchTimestamp2: TimeInterval!
     var previousMoveTouchTimestamp1: TimeInterval!
     var previousMoveTouchLocation2: CGPoint!
     var velocityVector = CGVector(dx: 0.0, dy: 0.0)
 
-    // STRUCT
+    // TODO: struct
     var gameObjectMoveTouch: UITouch? = nil
 
-    // STRUCT
+    // TODO: struct
     var gameObjectTouch: UITouch? = nil
     var touchedGameObject: SKNode? = nil
 
@@ -249,18 +250,21 @@ class WorldScene: SKScene {
 
         if let thirdHandGameObject = self.thirdHandGameObject,
            touch.is(onThe: thirdHandGameObject) {
+            print("zPosition: \(thirdHandGameObject.zPosition)")
             self.gameObjectMoveTouch = touch
             return
         }
 
         if let gameObject = self.gameObjectLayer.child(at: touch),
-            self.accessableGameObjects.contains(gameObject) {
+           self.accessableGameObjects.contains(gameObject) {
+            print("zPosition: \(gameObject.zPosition)")
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
         }
 
         if let gameObject = self.inventory.child(at: touch) {
+            print("zPosition: \(gameObject.zPosition)")
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
@@ -357,7 +361,8 @@ class WorldScene: SKScene {
                 let movingGameObject = self.thirdHandGameObject!
                 movingGameObject.move(toParent: cell)
                 movingGameObject.position = CGPoint()
-                self.sceneController.move(movingGameObject, to: GameObjectCoordinate(inventory: .inventory, x: cell.firstIndexFromParent!, y: 0))
+                let coordinate = GameObjectCoordinate(inventory: .inventory, tileCoordinate: TileCoordinate(x: cell.firstIndexFromParent!, y: 0))
+                self.sceneController.move(movingGameObject, to: coordinate)
 
                 self.gameObjectMoveTouch = nil
                 return
@@ -370,7 +375,8 @@ class WorldScene: SKScene {
                 movingGameObject.move(toParent: gameObjectLayer)
                 // TODO: make function for calculate tile coordinate
                 movingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
-                self.sceneController.move(movingGameObject, to: GameObjectCoordinate(inventory: .field, x: touchTileCoordinate.x, y: touchTileCoordinate.y))
+                let coordinate = GameObjectCoordinate(inventory: .field, tileCoordinate: touchTileCoordinate)
+                self.sceneController.move(movingGameObject, to: coordinate)
 
                 self.gameObjectMoveTouch = nil
                 return
@@ -491,6 +497,7 @@ class WorldScene: SKScene {
         let node = SKSpriteNode(texture: texture)
 
         node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
+        node.zPosition = 1.0
 
         self.gameObjectLayer.addChild(node)
 
@@ -498,7 +505,6 @@ class WorldScene: SKScene {
     }
 
     // MARK: - etc
-    // MOVE
     func isMovedTile() -> Bool {
         let currentPosition = self.characterPosition
 

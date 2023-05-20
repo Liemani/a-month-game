@@ -13,7 +13,6 @@ class CharacterModel {
 
     init() {
         // TODO: load coordinate
-//        self.coordinate = CharacterCoordinate(x: 49, y: 49)
         self.coordinate = TileCoordinate(x: 49, y: 49)
     }
 
