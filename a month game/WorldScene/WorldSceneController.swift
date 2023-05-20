@@ -12,8 +12,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    // TODO: rename gameObjectNodeToModel
-    var gameObjectNodeToModelDictionary: [SKNode: GameObject] = [:]
+    var gameObjectNodeToModel: [SKNode: GameObject] = [:]
 
     // MARK: - init
     required init(viewController: ViewController) {
@@ -55,7 +54,7 @@ final class WorldSceneController: SceneController {
             let scene = self.scene as! WorldScene
             let gameObjectNode = scene.add(gameObject)
 
-            self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
+            self.gameObjectNodeToModel[gameObjectNode] = gameObject
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
@@ -70,13 +69,13 @@ final class WorldSceneController: SceneController {
         let scene = self.scene as! WorldScene
         let gameObjectNode = scene.add(gameObject)
 
-        self.gameObjectNodeToModelDictionary[gameObjectNode] = gameObject
+        self.gameObjectNodeToModel[gameObjectNode] = gameObject
     }
 
     func removeGameObject(by gameObjectNode: SKNode) {
-        let gameObject = self.gameObjectNodeToModelDictionary[gameObjectNode]!
+        let gameObject = self.gameObjectNodeToModel[gameObjectNode]!
 
-        self.gameObjectNodeToModelDictionary.removeValue(forKey: gameObjectNode)
+        self.gameObjectNodeToModel.removeValue(forKey: gameObjectNode)
 
         self.worldSceneModel.remove(gameObject)
         gameObjectNode.removeFromParent()
@@ -84,7 +83,7 @@ final class WorldSceneController: SceneController {
 
     // TODO: implement hand
     func interactObject(by node: SKNode) {
-        let gameObject = self.gameObjectNodeToModelDictionary[node]!
+        let gameObject = self.gameObjectNodeToModel[node]!
         gameObject.interact(leftHand: nil, rightHand: nil)
     }
 
@@ -93,7 +92,6 @@ final class WorldSceneController: SceneController {
         for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
             print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
         }
-
     }
 
 }

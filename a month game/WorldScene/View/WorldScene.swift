@@ -10,8 +10,7 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    // TODO: rename to sceneController
-    weak var worldSceneController: WorldSceneController!
+    weak var sceneController: WorldSceneController!
 
     // Position of moving layer represents character coordinate
     var movingLayer: SKNode!
@@ -42,7 +41,7 @@ class WorldScene: SKScene {
 
     // MARK: - set up
     func setUp(worldSceneController: WorldSceneController) {
-        self.worldSceneController = worldSceneController
+        self.sceneController = worldSceneController
 
         self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
@@ -285,7 +284,7 @@ class WorldScene: SKScene {
     }
 
     private func performSegueToPortalScene() {
-        self.worldSceneController.viewController.setPortalScene()
+        self.sceneController.viewController.setPortalScene()
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -331,7 +330,7 @@ class WorldScene: SKScene {
     }
 
     func updateAccessableGameObjects() {
-        guard self.isTileMoved() else { return }
+        guard self.isMovedTile() else { return }
 
         let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
@@ -351,7 +350,7 @@ class WorldScene: SKScene {
     func resolveCollision() {
         let accessableNodes = self.gameObjectField.nodes(at: self.accessBox)
         for accessableNode in accessableNodes {
-            let gameObject = self.worldSceneController.gameObjectNodeToModelDictionary[accessableNode]!
+            let gameObject = self.sceneController.gameObjectNodeToModel[accessableNode]!
             guard !gameObject.isWalkable else { continue }
 
             if !accessableNode.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
@@ -380,8 +379,7 @@ class WorldScene: SKScene {
     }
 
     // MARK: - etc
-    // TODO: implement
-    func isTileMoved() -> Bool {
+    func isMovedTile() -> Bool {
         let currentPosition = self.characterPosition
 
         let lastTile = TileCoordinate(self.lastPosition)
