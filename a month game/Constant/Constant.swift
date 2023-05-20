@@ -72,6 +72,11 @@ struct Constant {
     // MARK: - UserDefaults key
     static let idGenerator = "idGenerator"
 
+    // MARK: - inventory id
+    static let field: Int = 0
+    static let inventory: Int = 1
+    static let thirdHand: Int = 2
+
     // MARK: - etc
     static let gridSize: Int = 100
 

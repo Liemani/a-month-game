@@ -20,6 +20,8 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var menuButton: SKNode!
     var accessBox: SKNode!
+    var inventory: [SKNode]!
+    var thirdHand: SKNode!
 
     var menuWindow: SKNode!
     var exitWorldButton: SKNode!
@@ -29,12 +31,8 @@ class WorldScene: SKScene {
     }
 
     var characterPosition: CGPoint {
-        get {
-            return -self.movingLayer.position
-        }
-        set {
-            self.movingLayer.position = -newValue
-        }
+        get { return -self.movingLayer.position }
+        set { self.movingLayer.position = -newValue }
     }
 
     var accessableGameObjects = [SKNode?](repeating: nil, count: 9)
@@ -132,32 +130,56 @@ class WorldScene: SKScene {
         parent.addChild(ui)
         self.ui = ui
 
+        self.addCharacter(to: ui)
+        self.addMenuButton(to: ui)
+        self.addInventory(to: ui)
+        self.addThirdHand(to: ui)
+    }
+
+    func addCharacter(to parent: SKNode) {
         let character: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
 
         character.position = Constant.Frame.character.origin
         character.size = Constant.Frame.character.size
 
-        ui.addChild(character)
+        parent.addChild(character)
+    }
 
+    func addMenuButton(to parent: SKNode) {
         let menuButton: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.menuButton)
 
         menuButton.position = Constant.Frame.menuButton.origin
         menuButton.size = Constant.Frame.menuButton.size
 
-        ui.addChild(menuButton)
+        parent.addChild(menuButton)
         self.menuButton = menuButton
+    }
 
+    func addInventory(to parent: SKNode) {
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
-
         let inventoryCellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
+        var inventoryArray = [SKNode](repeating: SKNode(), count: Constant.inventoryCellCount)
+
         for index in 0..<Constant.inventoryCellCount {
-            let inventoryCellNode = SKSpriteNode(texture: inventoryCellTexture)
+            let inventoryCell = SKSpriteNode(texture: inventoryCellTexture)
 
-            inventoryCellNode.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
-            inventoryCellNode.size = Constant.defaultNodeSize
+            inventoryCell.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
+            inventoryCell.size = Constant.defaultNodeSize
 
-            ui.addChild(inventoryCellNode)
+            parent.addChild(inventoryCell)
+            inventoryArray[index] = inventoryCell
         }
+
+        self.inventory = inventoryArray
+    }
+
+    func addThirdHand(to parent: SKNode) {
+        let thirdHand = SKNode()
+
+        thirdHand.alpha = 0.5
+
+        parent.addChild(thirdHand)
+        self.thirdHand = thirdHand
     }
 
     func addMenuWindow(to parent: SKNode) {
@@ -184,46 +206,48 @@ class WorldScene: SKScene {
 
 
     // MARK: - touch
+    // STRUCT
     var menuButtonTouch: UITouch? = nil
 
+    // STRUCT
     var moveTouch: UITouch? = nil
     var previousMoveTouchTimestamp2: TimeInterval!
     var previousMoveTouchTimestamp1: TimeInterval!
     var previousMoveTouchLocation2: CGPoint!
     var velocityVector = CGVector(dx: 0.0, dy: 0.0)
 
+    // STRUCT
+    var gameObjectMoveTouch: UITouch? = nil
+
     func touchDown(touch: UITouch) {
-        if self.isMenuOpen {
+        guard !self.isMenuOpen else {
+            menuWindowTouchDown(touch: touch)
             return
         }
 
-        if touch.is(onThe: self.menuButton) {
+        guard !touch.is(onThe: self.menuButton) else {
             self.menuButton.alpha = 0.5
             menuButtonTouch = touch
-        } else if let gameObject = self.gameObjectField.child(at: touch) {
-            print("start touch game object node \(gameObject)")
-        } else {
-            moveTouch = touch
-            previousMoveTouchTimestamp1 = touch.timestamp
+            return
         }
+
+        if let gameObject = self.gameObjectField.child(at: touch) {
+            if self.accessableGameObjects.contains(gameObject) {
+                self.gameObjectMoveTouch = touch
+                gameObject.move(toParent: self.thirdHand)
+                self.sceneController.move(gameObject, to: GameObjectCoordinate(inventory: 2, x: 0, y: 0))
+                return
+            }
+        }
+
+        moveTouch = touch
+        previousMoveTouchTimestamp1 = touch.timestamp
     }
 
-    private func startDragging(touch: UITouch) {
+    // TODO: implement
+    func menuWindowTouchDown(touch: UITouch) {
+        print("menuWindowTouchDown()")
     }
-
-//    private func addGameObjectAtTouchLocation(touch: UITouch) {
-//        let scene = self.scene as! WorldScene
-//        let location = touch.location(in: scene)
-//        let x = Int(location.x) / Int(Constant.defaultSize)
-//        let y = Int(location.y) / Int(Constant.defaultSize)
-//
-//        let coordinate = GameObjectCoordinate(inventory: 0, x: x, y: y)
-//        let typeID = Int(arc4random_uniform(3) + 1)
-//
-//        let gameObject = GameObject.new(ofTypeID: typeID, id: nil, coordinate: coordinate)
-//
-//        self.worldSceneController.add(gameObject)
-//    }
 
     func touchMoved(touch: UITouch) {
         if self.isMenuOpen {

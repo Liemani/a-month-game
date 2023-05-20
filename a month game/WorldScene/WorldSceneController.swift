@@ -87,6 +87,13 @@ final class WorldSceneController: SceneController {
         gameObject.interact(leftHand: nil, rightHand: nil)
     }
 
+    // MARK: -etc
+    // TODO: implement
+    // MOVE
+    // move gameObject data to specific coordinate
+    func move(_ gameObjectNode: SKNode, to coordinate: GameObjectCoordinate) {
+    }
+
     // MARK: - debug code
     func debugCode() {
         for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
