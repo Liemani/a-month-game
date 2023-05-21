@@ -32,7 +32,7 @@ struct Constant {
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
 
     static let tileMapSide = Constant.tileSide * Double(Constant.gridSize)
-    static let tileMapNodePosition = CGPoint() + (Constant.tileMapSide / 2.0)
+    static let tileMapPosition = CGPoint() + (Constant.tileMapSide / 2.0)
 
     static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
     static let characterRadius = Constant.defaultSize / 3.0
@@ -41,6 +41,9 @@ struct Constant {
     static let inventoryCellCount = 5
     static let inventoryCellFirstPosition = CGPoint() + Constant.defaultSize
     static let inventoryCellLastPosition = CGPoint(x: Constant.sceneSize.width - defaultSize, y: defaultSize)
+
+    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: Constant.tileMapSide, height: Constant.tileMapSide))
+    static let moveableArea = CGRect(origin: CGPoint() + Constant.characterRadius, size: Constant.worldBorder.size - (Constant.characterRadius * 2.0))
 
     // MARK: - z position
     struct ZPosition {

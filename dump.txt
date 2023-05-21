@@ -105,10 +105,12 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+prevent object on object
+interact
+craft
 fix flick persist direction
 menu -> cancel all touch
 menu window touch
-pickable non-pickable
 make object unstackable
 when flick wall pass bug
 PortalScene touch
@@ -286,6 +288,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+pickable non-pickable
 
 # implementation
 enum CompassDirection {

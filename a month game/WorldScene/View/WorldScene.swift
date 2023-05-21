@@ -92,7 +92,7 @@ class WorldScene: SKScene {
 
         let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
 
-        tileMap.position = Constant.tileMapNodePosition
+        tileMap.position = Constant.tileMapPosition
         tileMap.zPosition = Constant.ZPosition.tileMap
 
         parent.addChild(tileMap)
@@ -441,6 +441,7 @@ class WorldScene: SKScene {
         updateVelocity(timeInterval: timeInterval)
 
         updateAccessableGameObjects()
+        resolveWorldBorderCollision()
         resolveCollision()
 
         lastUpdateTime = currentTime
@@ -471,6 +472,21 @@ class WorldScene: SKScene {
         for (index, accessableNode) in accessableNodes.enumerated() {
             self.accessableGameObjects[index] = accessableNode
         }
+    }
+
+    func resolveWorldBorderCollision() {
+        self.characterPosition.x = characterPosition.x < Constant.moveableArea.minX
+            ? Constant.moveableArea.minX
+            : self.characterPosition.x
+        self.characterPosition.x = characterPosition.x > Constant.moveableArea.maxX
+            ? Constant.moveableArea.maxX
+            : self.characterPosition.x
+        self.characterPosition.y = characterPosition.y < Constant.moveableArea.minY
+            ? Constant.moveableArea.minY
+            : self.characterPosition.y
+        self.characterPosition.y = characterPosition.y > Constant.moveableArea.maxY
+            ? Constant.moveableArea.maxY
+            : self.characterPosition.y
     }
 
     func resolveCollision() {
