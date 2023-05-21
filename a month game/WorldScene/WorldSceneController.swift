@@ -49,7 +49,7 @@ final class WorldSceneController: SceneController {
             }
         }
 
-        let gameObjectDictionary = self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary
+        let gameObjectDictionary = self.worldSceneModel.loadGameObjectDictionary()
         for gameObject in gameObjectDictionary.values {
             let scene = self.scene as! WorldScene
             let gameObjectNode = scene.add(gameObject)
@@ -60,6 +60,12 @@ final class WorldSceneController: SceneController {
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
         let position = (characterCoordinate.toCGPoint() + 0.5) * Constant.tileSide
         scene.movingLayer.position = -position
+    }
+
+    func debugCode() {
+        for gameObject in self.gameObjectNodeToModel.values {
+            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
+        }
     }
 
     // MARK: - edit model and scene
@@ -91,13 +97,6 @@ final class WorldSceneController: SceneController {
     // TODO: implement: move gameObject data to specific coordinate
     // TODO: move
     func move(_ gameObjectNode: SKNode, to coordinate: GameObjectCoordinate) {
-    }
-
-    // MARK: - debug code
-    func debugCode() {
-        for gameObject in self.worldSceneModel.worldSceneGameObjectModel.gameObjectDictionary.values {
-            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
-        }
     }
 
 }

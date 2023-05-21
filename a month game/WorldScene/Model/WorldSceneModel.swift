@@ -15,7 +15,6 @@ final class WorldSceneModel {
     weak var worldSceneController: WorldSceneController!
 
     var worldSceneTileModel: WorldSceneTileModel!
-    var worldSceneGameObjectModel: WorldSceneGameObjectModel!
     var characterModel: CharacterModel!
 
     // MARK: - init
@@ -29,13 +28,10 @@ final class WorldSceneModel {
         let tileMapData = self.diskController.loadTileData()
         self.worldSceneTileModel = WorldSceneTileModel(tileMapData: tileMapData)
 
-        let gameObjectDictionary = self.loadGameObjectDictionary()
-        self.worldSceneGameObjectModel = WorldSceneGameObjectModel(gameObjectDictionary: gameObjectDictionary)
-
         self.characterModel = CharacterModel()
     }
 
-    private func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
+    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
         var gameObjectDictionary = Dictionary<Int, GameObject>()
 
         let gameObjectManagedObjectArray = self.diskController.loadGameObjectManagedObjectArray()
@@ -69,14 +65,10 @@ final class WorldSceneModel {
     }
 
     func add(_ gameObject: GameObject) {
-        self.worldSceneGameObjectModel.add(gameObject)
-
         self.diskController.store(gameObject)
     }
 
     func remove(_ gameObject: GameObject) {
-        self.worldSceneGameObjectModel.remove(gameObject)
-
         self.diskController.delete(gameObject)
     }
 

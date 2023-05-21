@@ -11,7 +11,6 @@
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
 		030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */; };
 		030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB92A0CE8F600BAB9B8 /* Helper.swift */; };
-		030ABFBE2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBD2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift */; };
 		030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */; };
 		030ABFC32A0E290E00BAB9B8 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC12A0E290E00BAB9B8 /* DataModel.xcdatamodeld */; };
 		030ABFC52A0E314000BAB9B8 /* GameObjectPineCone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFC42A0E314000BAB9B8 /* GameObjectPineCone.swift */; };
@@ -46,7 +45,6 @@
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
 		030ABFB52A0C93AA00BAB9B8 /* TileMapFileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMapFileController.swift; sourceTree = "<group>"; };
 		030ABFB92A0CE8F600BAB9B8 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
-		030ABFBD2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneGameObjectModel.swift; sourceTree = "<group>"; };
 		030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
 		030ABFC22A0E290E00BAB9B8 /* GameModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GameModel.xcdatamodel; sourceTree = "<group>"; };
 		030ABFC42A0E314000BAB9B8 /* GameObjectPineCone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectPineCone.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 			children = (
 				031D575B2A07C24C007EF383 /* WorldSceneModel.swift */,
 				031D575D2A07C311007EF383 /* WorldSceneTileModel.swift */,
-				030ABFBD2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift */,
 				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
 				030ABFC42A0E314000BAB9B8 /* GameObjectPineCone.swift */,
 				039037C32A14A10A0014A571 /* GameObjectPineTree.swift */,
@@ -303,7 +300,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				039037C22A137B110014A571 /* IDGenerator.swift in Sources */,
-				030ABFBE2A0E10F600BAB9B8 /* WorldSceneGameObjectModel.swift in Sources */,
 				031D575E2A07C311007EF383 /* WorldSceneTileModel.swift in Sources */,
 				030ABFD02A10D44A00BAB9B8 /* SceneController.swift in Sources */,
 				030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */,

@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 
+// TODO: rename class and instances of TileMapModel
 final class WorldSceneTileModel {
 
     var tileMapData: Data!
