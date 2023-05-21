@@ -98,6 +98,8 @@ final class CoreDataController {
             self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 50, y: 53),
             self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 51),
             self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 52),
+            self.store(typeID: 4, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 53),
+            self.store(typeID: 5, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 54),
         ]
 
         try! self.persistentContainer.viewContext.save()

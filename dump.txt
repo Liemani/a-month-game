@@ -105,6 +105,7 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+fix moving game object to out of world border
 prevent object on object
 interact
 craft
