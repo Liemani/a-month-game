@@ -21,7 +21,7 @@
 		031D57562A076DC8007EF383 /* CharacterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterModel.swift */; };
 		031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57582A07731A007EF383 /* WorldSceneController.swift */; };
 		031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575B2A07C24C007EF383 /* WorldSceneModel.swift */; };
-		031D575E2A07C311007EF383 /* WorldSceneTileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575D2A07C311007EF383 /* WorldSceneTileModel.swift */; };
+		031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575D2A07C311007EF383 /* TileMapModel.swift */; };
 		0368AD352A18EA2E00498A4B /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0368AD342A18EA2E00498A4B /* Enum.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
 		038330A82A02850A008DEA10 /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A72A02850A008DEA10 /* WorldScene.swift */; };
@@ -55,7 +55,7 @@
 		031D57552A076DC8007EF383 /* CharacterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterModel.swift; sourceTree = "<group>"; };
 		031D57582A07731A007EF383 /* WorldSceneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneController.swift; sourceTree = "<group>"; };
 		031D575B2A07C24C007EF383 /* WorldSceneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneModel.swift; sourceTree = "<group>"; };
-		031D575D2A07C311007EF383 /* WorldSceneTileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneTileModel.swift; sourceTree = "<group>"; };
+		031D575D2A07C311007EF383 /* TileMapModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMapModel.swift; sourceTree = "<group>"; };
 		0368AD342A18EA2E00498A4B /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		038330A12A02850A008DEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				031D575B2A07C24C007EF383 /* WorldSceneModel.swift */,
-				031D575D2A07C311007EF383 /* WorldSceneTileModel.swift */,
+				031D575D2A07C311007EF383 /* TileMapModel.swift */,
 				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
 				030ABFC42A0E314000BAB9B8 /* GameObjectPineCone.swift */,
 				039037C32A14A10A0014A571 /* GameObjectPineTree.swift */,
@@ -300,7 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				039037C22A137B110014A571 /* IDGenerator.swift in Sources */,
-				031D575E2A07C311007EF383 /* WorldSceneTileModel.swift in Sources */,
+				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
 				030ABFD02A10D44A00BAB9B8 /* SceneController.swift in Sources */,
 				030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */,
 				030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */,

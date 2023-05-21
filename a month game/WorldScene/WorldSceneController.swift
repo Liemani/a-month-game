@@ -12,8 +12,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    // TODO: rename nodeToGameObject
-    var gameObjectNodeToModel: [SKNode: GameObject] = [:]
+    var nodeToGameObject: [SKNode: GameObject] = [:]
 
     // MARK: - init
     required init(viewController: ViewController) {
@@ -40,7 +39,7 @@ final class WorldSceneController: SceneController {
     private func initSceneByModel() {
         let scene = self.scene as! WorldScene
 
-        let tileModel: WorldSceneTileModel = self.worldSceneModel.worldSceneTileModel
+        let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
         for x in 0..<Constant.gridSize {
             for y in 0..<Constant.gridSize {
                 let tileType = tileModel.getTileType(fromX: x, y: y)
@@ -53,7 +52,7 @@ final class WorldSceneController: SceneController {
             let scene = self.scene as! WorldScene
             let gameObjectNode = scene.add(gameObject)
 
-            self.gameObjectNodeToModel[gameObjectNode] = gameObject
+            self.nodeToGameObject[gameObjectNode] = gameObject
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
@@ -62,7 +61,7 @@ final class WorldSceneController: SceneController {
     }
 
     func debugCode() {
-        for gameObject in self.gameObjectNodeToModel.values {
+        for gameObject in self.nodeToGameObject.values {
             print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
         }
     }
@@ -74,13 +73,13 @@ final class WorldSceneController: SceneController {
         let scene = self.scene as! WorldScene
         let gameObjectNode = scene.add(gameObject)
 
-        self.gameObjectNodeToModel[gameObjectNode] = gameObject
+        self.nodeToGameObject[gameObjectNode] = gameObject
     }
 
     func removeGameObject(by gameObjectNode: SKNode) {
-        let gameObject = self.gameObjectNodeToModel[gameObjectNode]!
+        let gameObject = self.nodeToGameObject[gameObjectNode]!
 
-        self.gameObjectNodeToModel.removeValue(forKey: gameObjectNode)
+        self.nodeToGameObject.removeValue(forKey: gameObjectNode)
 
         self.worldSceneModel.remove(gameObject)
         gameObjectNode.removeFromParent()
@@ -88,7 +87,7 @@ final class WorldSceneController: SceneController {
 
     func interact(with node: SKNode, leftHand: SKNode?, righthand: SKNode?) {
         // TODO: implement hand
-        let gameObject = self.gameObjectNodeToModel[node]!
+        let gameObject = self.nodeToGameObject[node]!
         gameObject.interact(leftHand: nil, rightHand: nil)
     }
 
@@ -96,7 +95,7 @@ final class WorldSceneController: SceneController {
     // TODO: implement: move gameObject data to specific coordinate
     // TODO: move
     func move(_ node: SKNode, to newCoordinate: GameObjectCoordinate) {
-        let gameObject = self.gameObjectNodeToModel[node]!
+        let gameObject = self.nodeToGameObject[node]!
         self.worldSceneModel.move(gameObject, to: newCoordinate)
     }
 

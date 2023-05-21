@@ -107,7 +107,7 @@ final class DiskController {
     }
 
     // MARK: - helper
-    // TODO: 99 support same name of worlds
+    // TODO: support same name of worlds
     private func worldDirectoryURL(ofName name: String) -> URL {
         return self.fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: name)
     }

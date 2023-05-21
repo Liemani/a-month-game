@@ -8,8 +8,7 @@
 import Foundation
 import CoreData
 
-// TODO: rename class and instances of TileMapModel
-final class WorldSceneTileModel {
+final class TileMapModel {
 
     var tileMapData: Data!
     var tileMap: UnsafeMutableBufferPointer<Int>!

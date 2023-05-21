@@ -14,7 +14,7 @@ final class WorldSceneModel {
 
     weak var worldSceneController: WorldSceneController!
 
-    var worldSceneTileModel: WorldSceneTileModel!
+    var tileMapModel: TileMapModel!
     var characterModel: CharacterModel!
 
     // MARK: - init
@@ -26,7 +26,7 @@ final class WorldSceneModel {
         self.worldSceneController = worldSceneController
 
         let tileMapData = self.diskController.loadTileData()
-        self.worldSceneTileModel = WorldSceneTileModel(tileMapData: tileMapData)
+        self.tileMapModel = TileMapModel(tileMapData: tileMapData)
 
         self.characterModel = CharacterModel()
     }
@@ -57,7 +57,7 @@ final class WorldSceneModel {
 
     // MARK: - edit
     func update(tileType: Int, toX x: Int, y: Int) {
-        self.worldSceneTileModel.set(tileType: tileType, toX: x, y: y)
+        self.tileMapModel.set(tileType: tileType, toX: x, y: y)
 
         var value = tileType
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))

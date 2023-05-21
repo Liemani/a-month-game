@@ -473,7 +473,7 @@ class WorldScene: SKScene {
     func resolveCollision() {
         let accessableNodes = self.gameObjectLayer.nodes(at: self.accessBox)
         for accessableNode in accessableNodes {
-            let gameObject = self.sceneController.gameObjectNodeToModel[accessableNode]!
+            let gameObject = self.sceneController.nodeToGameObject[accessableNode]!
             guard !gameObject.isWalkable else { continue }
 
             if !accessableNode.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
