@@ -8,6 +8,17 @@
 import Foundation
 import SpriteKit
 
+// MARK: - Array
+extension Array {
+
+    func safeSubscrirpt(_ index: Int) -> Element {
+        let index = self.indices.contains(index) ? index : 0
+        return self[index]
+    }
+
+}
+
+// MARK: - SKNode
 extension SKNode {
 
     func child(at touch: UITouch) -> SKNode? {
@@ -114,6 +125,7 @@ extension SKNode {
 
 }
 
+// MARK: - UITouch
 extension UITouch {
 
     func `is`(onThe node: SKNode) -> Bool {
@@ -126,6 +138,7 @@ extension UITouch {
 
 }
 
+// MARK: - CGPoint
 extension CGPoint {
 
     // MARK: prefix
@@ -170,6 +183,7 @@ extension CGPoint {
 
 }
 
+// MARK: - CGSize
 extension CGSize {
 
     static func - (left: CGSize, right: Double) -> CGSize {
@@ -186,6 +200,7 @@ extension CGSize {
 
 }
 
+// MARK: - CGVector
 extension CGVector {
 
     static prefix func - (vector: CGVector) -> CGVector {

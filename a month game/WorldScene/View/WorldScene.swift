@@ -188,6 +188,7 @@ class WorldScene: SKScene {
     func addThirdHand(to parent: SKNode) {
         let thirdHand = SKNode()
 
+        thirdHand.position = Constant.sceneCenter
         thirdHand.alpha = 0.5
 
         parent.addChild(thirdHand)
@@ -250,21 +251,18 @@ class WorldScene: SKScene {
 
         if let thirdHandGameObject = self.thirdHandGameObject,
            touch.is(onThe: thirdHandGameObject) {
-            print("zPosition: \(thirdHandGameObject.zPosition)")
             self.gameObjectMoveTouch = touch
             return
         }
 
         if let gameObject = self.gameObjectLayer.child(at: touch),
            self.accessableGameObjects.contains(gameObject) {
-            print("zPosition: \(gameObject.zPosition)")
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
         }
 
         if let gameObject = self.inventory.child(at: touch) {
-            print("zPosition: \(gameObject.zPosition)")
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
@@ -496,10 +494,20 @@ class WorldScene: SKScene {
         let texture = Resource.getTexture(of: gameObject)
         let node = SKSpriteNode(texture: texture)
 
-        node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
         node.zPosition = 1.0
 
-        self.gameObjectLayer.addChild(node)
+        switch gameObject.coordinate.inventory {
+        case .field:
+            node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
+
+            self.gameObjectLayer.addChild(node)
+        case .inventory:
+            let inventoryIndex = gameObject.coordinate.x
+            let inventoryCell = self.inventory.children.safeSubscrirpt(inventoryIndex)
+            inventoryCell.addChild(node)
+        case .thirdHand:
+            self.thirdHand.addChild(node)
+        }
 
         return node
     }

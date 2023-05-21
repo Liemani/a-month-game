@@ -59,7 +59,7 @@ final class CoreDataController {
         try! context.save()
     }
 
-    func moveCoordinate(of gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
         let context = self.persistentContainer.viewContext
 
         let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)

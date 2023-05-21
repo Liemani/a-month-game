@@ -12,6 +12,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
+    // TODO: rename nodeToGameObject
     var gameObjectNodeToModel: [SKNode: GameObject] = [:]
 
     // MARK: - init
@@ -22,17 +23,15 @@ final class WorldSceneController: SceneController {
 
     }
 
+    // TODO: clean
     convenience init(viewController: ViewController, worldName: String) {
         self.init(viewController: viewController)
 
         self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
 
         let scene = WorldScene()
-
         scene.setUp(worldSceneController: self)
-
         self.scene = scene
-
         self.initSceneByModel()
 
         self.debugCode()
@@ -96,7 +95,9 @@ final class WorldSceneController: SceneController {
     // MARK: -etc
     // TODO: implement: move gameObject data to specific coordinate
     // TODO: move
-    func move(_ gameObjectNode: SKNode, to coordinate: GameObjectCoordinate) {
+    func move(_ node: SKNode, to newCoordinate: GameObjectCoordinate) {
+        let gameObject = self.gameObjectNodeToModel[node]!
+        self.worldSceneModel.move(gameObject, to: newCoordinate)
     }
 
 }

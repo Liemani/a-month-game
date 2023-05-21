@@ -83,8 +83,8 @@ final class DiskController {
         self.coreDataController.delete(gameObject)
     }
 
-    func moveCoordinate(of gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
-        self.coreDataController.moveCoordinate(of: gameObject, to: newCoordinate)
+    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+        self.coreDataController.move(gameObject, to: newCoordinate)
     }
 
     // MARK: - FileManager

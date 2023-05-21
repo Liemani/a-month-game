@@ -72,4 +72,8 @@ final class WorldSceneModel {
         self.diskController.delete(gameObject)
     }
 
+    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+        self.diskController.move(gameObject, to: newCoordinate)
+    }
+
 }
