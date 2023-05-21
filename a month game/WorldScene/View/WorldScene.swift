@@ -277,6 +277,7 @@ class WorldScene: SKScene {
     }
 
     // MARK: touch moved
+    // TODO: can make table for optimization
     func touchMoved(touch: UITouch) {
         if self.isMenuOpen {
             menuWindowTouchMoved(touch: touch)
@@ -295,7 +296,9 @@ class WorldScene: SKScene {
 
         if touch == self.gameObjectTouch {
             if !touch.is(onThe: self.touchedGameObject!) {
-                if self.thirdHandGameObject == nil {
+                if self.thirdHandGameObject == nil,
+                   let gameObject = self.sceneController.nodeToGameObject[self.touchedGameObject!],
+                   gameObject.isPickable {
                     self.gameObjectMoveTouch = touch
                     self.thirdHand.position = touch.location(in: self.ui)
                     self.touchedGameObject!.move(toParent: self.thirdHand)

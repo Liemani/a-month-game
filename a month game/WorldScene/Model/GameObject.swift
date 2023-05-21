@@ -25,7 +25,7 @@ class GameObject {
 
     let id: Int
     var coordinate: GameObjectCoordinate
-    
+
     var inventoryID: Int { return self.coordinate.inventory.rawValue }
 
     required init(id: Int?, coordinate: GameObjectCoordinate) {
@@ -39,6 +39,7 @@ class GameObject {
 
     // MARK: property to be overriden
     var isWalkable: Bool { return true }
+    var isPickable: Bool { return true }
 
 }
 
