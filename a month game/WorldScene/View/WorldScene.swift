@@ -346,6 +346,11 @@ class WorldScene: SKScene {
 
         if touch == self.gameObjectMoveTouch {
             if let cell = self.inventory.directChild(at: touch) {
+                if self.inventory.gameObject(at: touch) != nil {
+                    self.gameObjectMoveTouch = nil
+                    return
+                }
+
                 let movingGameObject = self.thirdHandGameObject!
                 movingGameObject.move(toParent: cell)
                 movingGameObject.position = CGPoint()
@@ -359,6 +364,11 @@ class WorldScene: SKScene {
             let characterTileCoordinate = TileCoordinate(self.characterPosition)
             let touchTileCoordinate = TileCoordinate(touch.location(in: worldLayer))
             if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
+                if self.gameObjectLayer.directChild(at: touch) != nil {
+                    self.gameObjectMoveTouch = nil
+                    return
+                }
+
                 let movingGameObject = self.thirdHandGameObject!
                 movingGameObject.move(toParent: gameObjectLayer)
                 // TODO: make function for calculate tile coordinate
