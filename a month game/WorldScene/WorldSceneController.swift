@@ -50,9 +50,9 @@ final class WorldSceneController: SceneController {
         let gameObjectDictionary = self.worldSceneModel.loadGameObjectDictionary()
         for gameObject in gameObjectDictionary.values {
             let scene = self.scene as! WorldScene
-            let gameObjectNode = scene.add(gameObject)
+            let node = scene.add(gameObject)
 
-            self.nodeToGameObject[gameObjectNode] = gameObject
+            self.nodeToGameObject[node] = gameObject
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate

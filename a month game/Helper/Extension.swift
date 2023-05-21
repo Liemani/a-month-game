@@ -21,17 +21,34 @@ extension Array {
 // MARK: - SKNode
 extension SKNode {
 
-    func child(at touch: UITouch) -> SKNode? {
+    func directChild(at touch: UITouch) -> SKNode? {
         let touchLocation = touch.location(in: self)
-        let touchedNodes = nodes(at: touchLocation)
+        for child in self.children {
+            if child.contains(touchLocation) {
+                return child
+            }
+        }
 
-        return touchedNodes.first
+        return nil
     }
 
-    func nodes(at node: SKNode) -> [SKNode] {
+    // TODO: move
+    func getInventoryGameObject(at touch: UITouch) -> SKNode? {
+        let touchLocation = touch.location(in: self)
+        for cell in self.children {
+            if let gameObject = cell.children.first,
+               cell.contains(touchLocation) {
+                return gameObject
+            }
+        }
+
+        return nil
+    }
+
+    func directNodes(at node: SKNode) -> [SKNode] {
         var array = [SKNode]()
 
-        for child in children {
+        for child in self.children {
             if child.intersects(node) {
                 array.append(child)
             }

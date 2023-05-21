@@ -255,14 +255,14 @@ class WorldScene: SKScene {
             return
         }
 
-        if let gameObject = self.gameObjectLayer.child(at: touch),
+        if let gameObject = self.gameObjectLayer.directChild(at: touch),
            self.accessableGameObjects.contains(gameObject) {
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
         }
 
-        if let gameObject = self.inventory.child(at: touch) {
+        if let gameObject = self.inventory.getInventoryGameObject(at: touch) {
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return
@@ -355,7 +355,7 @@ class WorldScene: SKScene {
         }
 
         if touch == self.gameObjectMoveTouch {
-            if let cell = self.inventory.child(at: touch) {
+            if let cell = self.inventory.directChild(at: touch) {
                 let movingGameObject = self.thirdHandGameObject!
                 movingGameObject.move(toParent: cell)
                 movingGameObject.position = CGPoint()
@@ -455,7 +455,7 @@ class WorldScene: SKScene {
     func updateAccessableGameObjects() {
         guard self.isMovedTile() else { return }
 
-        let accessableNodes = self.gameObjectLayer.nodes(at: self.accessBox)
+        let accessableNodes = self.gameObjectLayer.directNodes(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
 
         guard currentAccessableObjectCount != 0
@@ -471,7 +471,7 @@ class WorldScene: SKScene {
     }
 
     func resolveCollision() {
-        let accessableNodes = self.gameObjectLayer.nodes(at: self.accessBox)
+        let accessableNodes = self.gameObjectLayer.directNodes(at: self.accessBox)
         for accessableNode in accessableNodes {
             let gameObject = self.sceneController.nodeToGameObject[accessableNode]!
             guard !gameObject.isWalkable else { continue }
