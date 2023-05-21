@@ -255,8 +255,11 @@ class WorldScene: SKScene {
             return
         }
 
-        moveTouch = touch
-        previousMoveTouchTimestamp1 = touch.timestamp
+        if moveTouch == nil {
+            moveTouch = touch
+            previousMoveTouchTimestamp1 = touch.timestamp
+            return
+        }
     }
 
     func menuWindowTouchDown(touch: UITouch) {
@@ -328,6 +331,7 @@ class WorldScene: SKScene {
             return
         }
 
+        // TODO: refine
         if touch == self.menuButtonTouch {
             if touch.is(onThe: self.menuButton) {
                 self.menuWindow.isHidden = false
@@ -383,6 +387,8 @@ class WorldScene: SKScene {
 
         if touch == self.moveTouch {
             setVelocityVector()
+
+            self.moveTouch = nil
             return
         }
     }
