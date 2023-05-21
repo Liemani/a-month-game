@@ -32,19 +32,6 @@ extension SKNode {
         return nil
     }
 
-    // TODO: move
-    func getInventoryGameObject(at touch: UITouch) -> SKNode? {
-        let touchLocation = touch.location(in: self)
-        for cell in self.children {
-            if let gameObject = cell.children.first,
-               cell.contains(touchLocation) {
-                return gameObject
-            }
-        }
-
-        return nil
-    }
-
     func directNodes(at node: SKNode) -> [SKNode] {
         var array = [SKNode]()
 

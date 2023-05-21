@@ -105,23 +105,20 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+fix not to drop third hand at posessed tile
+save character position
+inventoryNode: SKNode
+game object touch -> alpha: 0.5
 fix moving game object to out of world border
-prevent object on object
 interact
 craft
-fix flick persist direction
+fix flick to persist direction
 menu -> cancel all touch
 menu window touch
-make object unstackable
-when flick wall pass bug
 PortalScene touch
-border collision
-TODO 추가하기
-remove WorldSceneController comment
 터치 간의 상관 관계
     메뉴 버튼 터치 -> 드래그 중단
 PortalScene 에 reset window 추가
-isWalkable 구현
 interact 구현
     씨앗 -> 나무
     나무 맨손 -> 나뭇가지 or 씨앗
@@ -289,6 +286,10 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+remove WorldSceneController comment
+when flick wall pass bug
+isWalkable 구현
+border collision
 pickable non-pickable
 
 # implementation
@@ -346,6 +347,7 @@ class Hammer: GameObject, Pickable {
 }
 
 # bonus
+make object unstackable
 상호작용 피드백
     사용된 인벤토리의 아이템이 회전
 애니메이션 강화

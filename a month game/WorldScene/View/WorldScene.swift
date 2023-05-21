@@ -20,7 +20,7 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var menuButton: SKNode!
     var accessBox: SKNode!
-    var inventory: SKNode!
+    var inventory: InventoryNode!
     var thirdHand: SKNode!
 
     var leftHandGameObject: SKNode? {
@@ -165,21 +165,8 @@ class WorldScene: SKScene {
     }
 
     func addInventory(to parent: SKNode) {
-        let inventory = SKNode()
-
-        let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
-        let inventoryCellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
-        var inventoryArray = [SKNode](repeating: SKNode(), count: Constant.inventoryCellCount)
-
-        for index in 0..<Constant.inventoryCellCount {
-            let inventoryCell = SKSpriteNode(texture: inventoryCellTexture)
-
-            inventoryCell.position = CGPoint(x: Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index), y: Constant.inventoryCellFirstPosition.y)
-            inventoryCell.size = Constant.defaultNodeSize
-
-            inventory.addChild(inventoryCell)
-            inventoryArray[index] = inventoryCell
-        }
+        let inventory = InventoryNode()
+        inventory.initialize()
 
         parent.addChild(inventory)
         self.inventory = inventory
@@ -262,7 +249,7 @@ class WorldScene: SKScene {
             return
         }
 
-        if let gameObject = self.inventory.getInventoryGameObject(at: touch) {
+        if let gameObject = self.inventory.gameObject(at: touch) {
             self.gameObjectTouch = touch
             self.touchedGameObject = gameObject
             return

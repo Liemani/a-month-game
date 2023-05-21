@@ -18,6 +18,8 @@ struct Resource {
         static let inventoryCell = "inventory cell"
         static let bgPortal = "bg_portal"
         static let button = "button"
+        static let leftHand = "left_hand"
+        static let rightHand = "right_hand"
 
         // MARK: tile
         static let grassTile = "tile_grass"
