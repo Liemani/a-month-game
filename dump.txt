@@ -61,7 +61,7 @@ isWalkable == false 인 타일 위를 움직일 때 빗겨가도록 움직이는
 진행 바
 update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데, 내부에서 분기가 일어나지 않도록 개선할 수 있을까?
 
-# 일정
+# 일정 및 진행 작업 기록
 1주 2023-05-03 ~ 2023-05-09
 계획 및 기초 개발
     2023-05-03 어떤 게임을 만들 것인지 구상
@@ -77,18 +77,18 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-10 DataController 추가
     2023-05-11 PortalScene 추가
     2023-05-12 WorldScene 에서 menu layer 추가
-    2023-05-13 
-    2023-05-14
-    2023-05-15
-    2023-05-16
+    2023-05-13 CoreData
+    2023-05-14 save GameObject
+    2023-05-15 remove GameObject
+    2023-05-16 CoreData
 
 3주 2023-05-17 ~ 2023-05-23
 광고 추가, 컨텐츠 추가
-    2023-05-17
-    2023-05-18
-    2023-05-19
-    2023-05-20
-    2023-05-21
+    2023-05-17 DiskController
+    2023-05-18 GameObjectDelegate, touch move
+    2023-05-19 accessable object
+    2023-05-20 collision
+    2023-05-21 world border, reinforce touch
     2023-05-22
     2023-05-23
 
@@ -98,24 +98,33 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-25
     2023-05-26
     2023-05-27
-    2023-05-28
-    2023-05-29
-    2023-05-30 ppt 준비
+    2023-05-28 정리
+    2023-05-29 ppt 준비
+    2023-05-30 마무리 
 
     2023-05-31 마감
 
 # issue
-fix not to drop third hand at posessed tile
-save character position
-inventoryNode: SKNode
+singleton -> lazy
+ManagedObject -> MO
 game object touch -> alpha: 0.5
-fix moving game object to out of world border
+일단 데이터는 그대로 간다
+저장, 로드는 곳곳에서 한다
+단, 너무 깊숙하게는 말고, 가능하면 큰 변화가 확실한 곳에서 한다
+remove GameObject
+increase accessable area node to cover the center of accessable tile
 interact
 craft
+fix taht some object is below hand texture in inventory
+fix moving game object to out of world border
 fix flick to persist direction
 menu -> cancel all touch
 menu window touch
+save character position
 PortalScene touch
+change portal button texture
+set app icon
+
 터치 간의 상관 관계
     메뉴 버튼 터치 -> 드래그 중단
 PortalScene 에 reset window 추가
@@ -286,6 +295,8 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+inventoryNode: SKNode
+fix not to drop third hand at posessed tile
 remove WorldSceneController comment
 when flick wall pass bug
 isWalkable 구현

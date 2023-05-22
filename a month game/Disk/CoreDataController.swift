@@ -35,8 +35,8 @@ final class CoreDataController {
     }
 
     // MARK: - edit
-    func loadGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
-        let request = GameObjectManagedObject.fetchRequest()
+    func loadGameObjectManagedObjectArray() -> [GameObjectMO] {
+        let request = GameObjectMO.fetchRequest()
         let context = self.persistentContainer.viewContext
         let gameObjectManagedObjectArray = try! context.fetch(request)
 
@@ -45,61 +45,40 @@ final class CoreDataController {
             : self.generateInitialGameObjectManagedObjectArray()
     }
 
-    func store(_ gameObject: GameObject) {
+    func store(_ gameObjectMO: GameObjectMO) {
         let context = self.persistentContainer.viewContext
 
-        let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
-
-        managedObject.id = Int32(gameObject.id)
-        managedObject.typeID = Int32(Resource.getTypeID(of: gameObject))
-        managedObject.inventory = Int32(gameObject.inventoryID)
-        managedObject.x = Int32(gameObject.coordinate.x)
-        managedObject.y = Int32(gameObject.coordinate.y)
+        context.insert(gameObjectMO)
 
         try! context.save()
     }
 
-    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+    func contextSave() {
         let context = self.persistentContainer.viewContext
-
-        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
-        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
-
-        let results = try! context.fetch(request)
-        let targetObject = results.first!
-
-        targetObject.inventory = Int32(newCoordinate.inventory.rawValue)
-        targetObject.x = Int32(newCoordinate.x)
-        targetObject.y = Int32(newCoordinate.y)
 
         try! context.save()
     }
 
-    func delete(_ gameObject: GameObject) {
+    func delete(_ gameObjectMO: GameObjectMO) {
         let context = self.persistentContainer.viewContext
 
-        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
-        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
-
-        let results = try! context.fetch(request)
-        let targetObject = results.first!
-        context.delete(targetObject)
+        context.delete(gameObjectMO)
 
         try! context.save()
     }
 
     // MARK: - private
-    private func generateInitialGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
+    private func generateInitialGameObjectManagedObjectArray() -> [GameObjectMO] {
         let idGenerator = IDGenerator.default
 
         let gameObjectManagedObject = [
-            self.store(typeID: 1, id: Int32(idGenerator.generate()), inventory: 0, x: 51, y: 51),
-            self.store(typeID: 2, id: Int32(idGenerator.generate()), inventory: 0, x: 52, y: 52),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 50, y: 53),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 51),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 52),
-            self.store(typeID: 4, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 53),
-            self.store(typeID: 5, id: Int32(idGenerator.generate()), inventory: 0, x: 48, y: 54),
+            self.store(typeID: 1, id: Int32(idGenerator.generate()), inventoryID: 0, x: 51, y: 51),
+            self.store(typeID: 2, id: Int32(idGenerator.generate()), inventoryID: 0, x: 52, y: 52),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 50, y: 53),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 51),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 52),
+            self.store(typeID: 4, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 53),
+            self.store(typeID: 5, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 54),
         ]
 
         try! self.persistentContainer.viewContext.save()
@@ -107,14 +86,14 @@ final class CoreDataController {
         return gameObjectManagedObject
     }
 
-    private func store(typeID: Int32, id: Int32, inventory: Int32, x: Int32, y: Int32) -> GameObjectManagedObject {
+    private func store(typeID: Int32, id: Int32, inventoryID: Int32, x: Int32, y: Int32) -> GameObjectMO {
         let context = self.persistentContainer.viewContext
 
-        let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectManagedObject
+        let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectMO
 
         managedObject.typeID = typeID
         managedObject.id = id
-        managedObject.inventory = inventory
+        managedObject.inventoryID = inventoryID
         managedObject.x = x
         managedObject.y = y
 

@@ -71,20 +71,20 @@ final class DiskController {
     }
 
     // MARK: - CoreData
-    func loadGameObjectManagedObjectArray() -> [GameObjectManagedObject] {
+    func loadGameObjectManagedObjectArray() -> [GameObjectMO] {
         return self.coreDataController.loadGameObjectManagedObjectArray()
     }
 
-    func store(_ gameObject: GameObject) {
-        self.coreDataController.store(gameObject)
+    func store(_ gameObjectMO: GameObjectMO) {
+        self.coreDataController.store(gameObjectMO)
     }
 
-    func delete(_ gameObject: GameObject) {
-        self.coreDataController.delete(gameObject)
+    func delete(_ gameObjectMO: GameObjectMO) {
+        self.coreDataController.delete(gameObjectMO)
     }
 
-    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
-        self.coreDataController.move(gameObject, to: newCoordinate)
+    func contextSave() {
+        self.coreDataController.contextSave()
     }
 
     // MARK: - FileManager

@@ -9,10 +9,6 @@ import Foundation
 
 final class GameObjectStone: GameObject {
 
-    required init(id: Int?, coordinate: GameObjectCoordinate) {
-        super.init(id: id, coordinate: coordinate)
-    }
-
     // MARK: - override
 
 }

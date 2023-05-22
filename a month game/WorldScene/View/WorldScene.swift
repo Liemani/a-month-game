@@ -33,8 +33,8 @@ class WorldScene: SKScene {
         return lastInventoryCell?.children.first
     }
 
-    var thirdHandGameObject: SKNode? {
-        return self.thirdHand.children.first
+    var thirdHandGameObject: GameObject? {
+        return self.thirdHand.children.first as! GameObject?
     }
 
     var menuWindow: SKNode!
@@ -49,10 +49,10 @@ class WorldScene: SKScene {
         set { self.movingLayer.position = -newValue }
     }
 
-    var accessableGameObjects = [SKNode?](repeating: nil, count: 9)
+    var accessableGameObjects = [GameObject?](repeating: nil, count: 9)
 
-    // MARK: - set up
-    func setUp(worldSceneController: WorldSceneController) {
+    // MARK: - initialize
+    func initialize(worldSceneController: WorldSceneController) {
         self.sceneController = worldSceneController
 
         self.size = Constant.sceneSize
@@ -216,13 +216,6 @@ class WorldScene: SKScene {
     var previousMoveTouchLocation2: CGPoint!
     var velocityVector = CGVector(dx: 0.0, dy: 0.0)
 
-    // TODO: struct
-    var gameObjectMoveTouch: UITouch? = nil
-
-    // TODO: struct
-    var gameObjectTouch: UITouch? = nil
-    var touchedGameObject: SKNode? = nil
-
     // MARK: touch down
     func touchDown(touch: UITouch) {
         if self.isMenuOpen {
@@ -238,14 +231,13 @@ class WorldScene: SKScene {
 
         if let thirdHandGameObject = self.thirdHandGameObject,
            touch.is(onThe: thirdHandGameObject) {
-            self.gameObjectMoveTouch = touch
+            self.gameObjectMoveTouchMove(touch: touch)
             return
         }
 
-        if let gameObject = self.gameObjectLayer.directChild(at: touch),
+        if let gameObject = self.gameObjectLayer.directChild(at: touch) as! GameObject?,
            self.accessableGameObjects.contains(gameObject) {
-            self.gameObjectTouch = touch
-            self.touchedGameObject = gameObject
+            self.gameObjectTouchDown(touch: touch, gameObject: gameObject)
             return
         }
 
@@ -286,14 +278,12 @@ class WorldScene: SKScene {
 
         if touch == self.gameObjectTouch {
             if !touch.is(onThe: self.touchedGameObject!) {
-                if self.thirdHandGameObject == nil,
-                   let gameObject = self.sceneController.nodeToGameObject[self.touchedGameObject!],
-                   gameObject.isPickable {
+                if self.thirdHandGameObject == nil && self.touchedGameObject!.isPickable {
                     self.gameObjectMoveTouch = touch
                     self.thirdHand.position = touch.location(in: self.ui)
                     self.touchedGameObject!.move(toParent: self.thirdHand)
                     self.touchedGameObject!.position = CGPoint()
-                    self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventory: .thirdHand, x: 0, y: 0))
+                    self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventoryType: .thirdHand, x: 0, y: 0))
                 }
 
                 self.gameObjectTouch = nil
@@ -358,7 +348,7 @@ class WorldScene: SKScene {
                 let movingGameObject = self.thirdHandGameObject!
                 movingGameObject.move(toParent: cell)
                 movingGameObject.position = CGPoint()
-                let coordinate = GameObjectCoordinate(inventory: .inventory, tileCoordinate: TileCoordinate(x: cell.firstIndexFromParent!, y: 0))
+                let coordinate = GameObjectCoordinate(inventoryType: .inventory, tileCoordinate: TileCoordinate(x: cell.firstIndexFromParent!, y: 0))
                 self.sceneController.move(movingGameObject, to: coordinate)
 
                 self.gameObjectMoveTouch = nil
@@ -377,7 +367,7 @@ class WorldScene: SKScene {
                 movingGameObject.move(toParent: gameObjectLayer)
                 // TODO: make function for calculate tile coordinate
                 movingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
-                let coordinate = GameObjectCoordinate(inventory: .field, tileCoordinate: touchTileCoordinate)
+                let coordinate = GameObjectCoordinate(inventoryType: .field, tileCoordinate: touchTileCoordinate)
                 self.sceneController.move(movingGameObject, to: coordinate)
 
                 self.gameObjectMoveTouch = nil
@@ -414,8 +404,34 @@ class WorldScene: SKScene {
         self.velocityVector = -(previousLocation1 - previousLocation2) / timeInterval
     }
 
+    // MARK: game object touch
+    var gameObjectTouch: UITouch? = nil
+    var touchedGameObject: GameObject? = nil
 
+    var gameObjectMoveTouch: UITouch? = nil
 
+    func gameObjectTouchDown(touch: UITouch, gameObject: GameObject) {
+        self.gameObjectTouch = touch
+        self.touchedGameObject = gameObject
+    }
+
+    func gameObjectTouchMove() {
+
+    }
+
+    func gameObjectTouchUp() {
+
+    }
+
+    func gameObjectMoveTouchMove(touch: UITouch) {
+        self.gameObjectMoveTouch = touch
+    }
+
+    func gameObjectMoveTouchUp() {
+
+    }
+
+    // MARK: ovverride
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchDown(touch: touch) }
     }
@@ -472,8 +488,9 @@ class WorldScene: SKScene {
             self.accessableGameObjects[index] = nil
         }
 
+        // TODO: prevent force unwrap
         for (index, accessableNode) in accessableNodes.enumerated() {
-            self.accessableGameObjects[index] = accessableNode
+            self.accessableGameObjects[index] = accessableNode as! GameObject?
         }
     }
 
@@ -493,13 +510,11 @@ class WorldScene: SKScene {
     }
 
     func resolveCollision() {
-        let accessableNodes = self.gameObjectLayer.directNodes(at: self.accessBox)
-        for accessableNode in accessableNodes {
-            let gameObject = self.sceneController.nodeToGameObject[accessableNode]!
-            guard !gameObject.isWalkable else { continue }
+        for gameObject in self.accessableGameObjects {
+            guard let gameObject = gameObject, !gameObject.isWalkable else { continue }
 
-            if !accessableNode.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
-                accessableNode.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
+            if !gameObject.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
+                gameObject.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
             }
         }
     }
@@ -512,26 +527,28 @@ class WorldScene: SKScene {
         self.tileMap.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: y, row: x)
     }
 
-    func add(_ gameObject: GameObject) -> SKSpriteNode {
-        let texture = Resource.getTexture(of: gameObject)
-        let node = SKSpriteNode(texture: texture)
+    func add(by gameObjectMO: GameObjectMO) -> GameObject {
+        let type = Resource.gameObjectTypeIDToInformation[Int(gameObjectMO.typeID)].type
 
-        node.zPosition = 1.0
+        let texture = Resource.getTexture(of: type)
+        let gameObject = type.init(texture: texture)
 
-        switch gameObject.coordinate.inventory {
+        gameObject.zPosition = 1.0
+
+        switch gameObjectMO.inventoryType {
         case .field:
-            node.position = (gameObject.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
+            gameObject.position = (gameObjectMO.position + 0.5) * Constant.defaultSize
 
-            self.gameObjectLayer.addChild(node)
+            self.gameObjectLayer.addChild(gameObject)
         case .inventory:
-            let inventoryIndex = gameObject.coordinate.x
+            let inventoryIndex = Int(gameObjectMO.x)
             let inventoryCell = self.inventory.children.safeSubscrirpt(inventoryIndex)
-            inventoryCell.addChild(node)
+            inventoryCell.addChild(gameObject)
         case .thirdHand:
-            self.thirdHand.addChild(node)
+            self.thirdHand.addChild(gameObject)
         }
 
-        return node
+        return gameObject
     }
 
     // MARK: - etc

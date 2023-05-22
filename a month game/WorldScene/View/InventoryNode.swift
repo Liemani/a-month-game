@@ -25,7 +25,7 @@ class InventoryNode: SKNode {
             let y = Constant.inventoryCellFirstPosition.y
 
             cell.position = CGPoint(x: x, y: y)
-            cell.zPosition = -1.0
+            cell.zPosition = -0.1
             cell.size = Constant.defaultNodeSize
 
             self.addChild(cell)
@@ -44,13 +44,13 @@ class InventoryNode: SKNode {
         self.addChild(rightHand)
     }
 
-    func gameObject(at touch: UITouch) -> SKNode? {
+    func gameObject(at touch: UITouch) -> GameObject? {
         let touchPoint = touch.location(in: self)
 
         for index in 0..<Constant.inventoryCellCount {
             if let gameObject = self.children[index].children.first,
                gameObject.parent!.contains(touchPoint) {
-                return gameObject
+                return gameObject as! GameObject?
             }
         }
 

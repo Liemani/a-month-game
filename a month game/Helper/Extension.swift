@@ -18,6 +18,32 @@ extension Array {
 
 }
 
+// MARK: -
+extension GameObjectMO {
+
+    var inventoryType: InventoryType {
+        return InventoryType(rawValue: Int(self.inventoryID)) ?? .field
+    }
+
+    var position:  CGPoint {
+        return TileCoordinate(x: Int(self.x), y: Int(self.y)).toCGPoint()
+    }
+
+//    required init(id: Int?, coordinate: GameObjectCoordinate) {
+//        self.id = id ?? GameObject.idGenerator.generate()
+//        self.coordinate = coordinate
+//    }
+//
+//    static private let idGenerator = IDGenerator.default
+//
+//    static func new(ofTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
+//        let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
+//        let type = Resource.gameObjectTypeIDToInformation[typeID].type
+//        return type.init(id: id, coordinate: coordinate)
+//    }
+
+}
+
 // MARK: - SKNode
 extension SKNode {
 

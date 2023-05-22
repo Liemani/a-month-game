@@ -69,7 +69,7 @@ struct Resource {
         (GameObjectAxe.self, Resource.Name.gameObjectAxe),
     ]
 
-    private static let gameObjectTypeIDToResource: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = ({
+    static let gameObjectTypeIDToResource: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = ({
         var dictionary: [ObjectIdentifier: (typeID: Int, texture: SKTexture)] = [:]
 
         for (index, information) in Resource.gameObjectTypeIDToInformation.enumerated() {
@@ -82,13 +82,8 @@ struct Resource {
         return dictionary
     })()
 
-    static func getTypeID(of gameObject: GameObject) -> Int {
-        let objectIdentifier = ObjectIdentifier(type(of: gameObject))
-        return Resource.gameObjectTypeIDToResource[objectIdentifier]!.typeID
-    }
-
-    static func getTexture(of gameObject: GameObject) -> SKTexture {
-        let objectIdentifier = ObjectIdentifier(type(of: gameObject))
+    static func getTexture(of gameObjectType: GameObject.Type) -> SKTexture {
+        let objectIdentifier = ObjectIdentifier(gameObjectType)
         return Resource.gameObjectTypeIDToResource[objectIdentifier]!.texture
     }
 

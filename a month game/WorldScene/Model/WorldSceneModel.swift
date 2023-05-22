@@ -31,23 +31,8 @@ final class WorldSceneModel {
         self.characterModel = CharacterModel()
     }
 
-    func loadGameObjectDictionary() -> Dictionary<Int, GameObject> {
-        var gameObjectDictionary = Dictionary<Int, GameObject>()
-
-        let gameObjectManagedObjectArray = self.diskController.loadGameObjectManagedObjectArray()
-        for gameObjectManagedObject in gameObjectManagedObjectArray {
-            let typeID = Int(gameObjectManagedObject.typeID)
-            let id = Int(gameObjectManagedObject.id)
-            let inventoryValue = Int(gameObjectManagedObject.inventory)
-            let coordinate = GameObjectCoordinate(
-                inventory: InventoryType(rawValue: inventoryValue)!,
-                x: Int(gameObjectManagedObject.x),
-                y: Int(gameObjectManagedObject.y))
-            let gameObject = GameObject.new(ofTypeID: typeID, id: id, coordinate: coordinate)
-            gameObjectDictionary[id] = gameObject
-        }
-
-        return gameObjectDictionary
+    func loadGameObjectDictionary() -> [GameObjectMO] {
+        return self.diskController.loadGameObjectManagedObjectArray()
     }
 
     deinit {
@@ -63,16 +48,16 @@ final class WorldSceneModel {
         self.diskController.save(tileData: tileData, toX: x, y: y)
     }
 
-    func add(_ gameObject: GameObject) {
-        self.diskController.store(gameObject)
+    func add(_ gameObjectMO: GameObjectMO) {
+        self.diskController.store(gameObjectMO)
     }
 
-    func remove(_ gameObject: GameObject) {
-        self.diskController.delete(gameObject)
+    func remove(_ gameObjectMO: GameObjectMO) {
+        self.diskController.delete(gameObjectMO)
     }
 
-    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
-        self.diskController.move(gameObject, to: newCoordinate)
+    func contextSave() {
+        self.diskController.contextSave()
     }
 
 }

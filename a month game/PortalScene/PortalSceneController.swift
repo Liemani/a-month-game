@@ -9,7 +9,7 @@ import UIKit
 
 class PortalSceneController: SceneController {
 
-    required init(viewController: ViewController) {
+    override init(viewController: ViewController) {
         super.init(viewController: viewController)
 
         let scene = PortalScene()

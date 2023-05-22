@@ -12,24 +12,17 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    var nodeToGameObject: [SKNode: GameObject] = [:]
+    var gameObjectToMO: [GameObject: GameObjectMO] = [:]
 
     // MARK: - init
-    required init(viewController: ViewController) {
-        super.init(viewController: viewController)
-
-        self.setGameObjectDelegateReference()
-
-    }
-
     // TODO: clean
-    convenience init(viewController: ViewController, worldName: String) {
-        self.init(viewController: viewController)
+    init(viewController: ViewController, worldName: String) {
+        super.init(viewController: viewController)
 
         self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
 
         let scene = WorldScene()
-        scene.setUp(worldSceneController: self)
+        scene.initialize(worldSceneController: self)
         self.scene = scene
         self.initSceneByModel()
 
@@ -47,12 +40,12 @@ final class WorldSceneController: SceneController {
             }
         }
 
-        let gameObjectDictionary = self.worldSceneModel.loadGameObjectDictionary()
-        for gameObject in gameObjectDictionary.values {
+        let gameObjectMOArray = self.worldSceneModel.loadGameObjectDictionary()
+        for gameObjectMO in gameObjectMOArray {
             let scene = self.scene as! WorldScene
-            let node = scene.add(gameObject)
+            let gameObject = scene.add(by: gameObjectMO)
 
-            self.nodeToGameObject[node] = gameObject
+            self.gameObjectToMO[gameObject] = gameObjectMO
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
@@ -61,42 +54,51 @@ final class WorldSceneController: SceneController {
     }
 
     func debugCode() {
-        for gameObject in self.nodeToGameObject.values {
-            print("id: \(gameObject.id), coordinate: \(gameObject.coordinate), type: \(Resource.getTypeID(of: gameObject))")
+        for gameObjectMO in self.gameObjectToMO.values {
+            print("id: \(gameObjectMO.id), typeID: \(gameObjectMO.typeID), inventoryID: \(gameObjectMO.inventoryID), coordinate: (\(gameObjectMO.x), \(gameObjectMO.y))")
         }
     }
 
     // MARK: - edit model and scene
-    func add(_ gameObject: GameObject) {
-        self.worldSceneModel.add(gameObject)
+    func add(_ gameObjectMO: GameObjectMO) {
+//        let gameObjectMO = GameObjectMO()
+//
+//        gameObjectMO.id = Int32(IDGenerator.default.generate())
+//        gameObjectMO.typeID = Int32(gameObject.typeID)
+//        gameObjectMO.inventory = Int32(gameObject.inventoryID)
+//        gameObjectMO.x = Int32(gameObject.coordinate.x)
+//        gameObjectMO.y = Int32(gameObject.coordinate.y)
 
         let scene = self.scene as! WorldScene
-        let gameObjectNode = scene.add(gameObject)
+        let gameObjectNode = scene.add(by: gameObjectMO)
 
-        self.nodeToGameObject[gameObjectNode] = gameObject
+        self.gameObjectToMO[gameObjectNode] = gameObjectMO
     }
 
-    func removeGameObject(by gameObjectNode: SKNode) {
-        let gameObject = self.nodeToGameObject[gameObjectNode]!
+    func removeGameObject(by gameObject: GameObject) {
+        let gameObjectMO = self.gameObjectToMO[gameObject]!
 
-        self.nodeToGameObject.removeValue(forKey: gameObjectNode)
+        self.gameObjectToMO.removeValue(forKey: gameObject)
+        gameObject.removeFromParent()
 
-        self.worldSceneModel.remove(gameObject)
-        gameObjectNode.removeFromParent()
+        self.worldSceneModel.remove(gameObjectMO)
     }
 
-    func interact(with node: SKNode, leftHand: SKNode?, righthand: SKNode?) {
+    func interact(with gameObject: GameObject, leftHand: SKNode?, righthand: SKNode?) {
         // TODO: implement hand
-        let gameObject = self.nodeToGameObject[node]!
         gameObject.interact(leftHand: nil, rightHand: nil)
     }
 
-    // MARK: -etc
-    // TODO: implement: move gameObject data to specific coordinate
+    // MARK: - etc
     // TODO: move
-    func move(_ node: SKNode, to newCoordinate: GameObjectCoordinate) {
-        let gameObject = self.nodeToGameObject[node]!
-        self.worldSceneModel.move(gameObject, to: newCoordinate)
+    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
+        let gameObjectMO = self.gameObjectToMO[gameObject]!
+
+        gameObjectMO.inventoryID = Int32(newCoordinate.inventoryType.rawValue)
+        gameObjectMO.x = Int32(newCoordinate.x)
+        gameObjectMO.y = Int32(newCoordinate.y)
+
+        self.worldSceneModel.contextSave()
     }
 
 }
