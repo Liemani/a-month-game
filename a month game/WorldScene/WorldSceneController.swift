@@ -60,6 +60,7 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: - edit model and scene
+    // TODO: clean
     func add(_ gameObjectMO: GameObjectMO) {
 //        let gameObjectMO = GameObjectMO()
 //

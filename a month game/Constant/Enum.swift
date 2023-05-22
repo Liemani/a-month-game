@@ -7,6 +7,7 @@
 
 import Foundation
 
+// TODO: rename to ContainerType
 enum InventoryType: Int {
     case field = 0
     case inventory

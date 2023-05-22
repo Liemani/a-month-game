@@ -57,4 +57,17 @@ class InventoryNode: SKNode {
         return nil
     }
 
+    func inventoryCell(at touch: UITouch) -> SKNode? {
+        let touchPoint = touch.location(in: self)
+
+        for index in 0..<Constant.inventoryCellCount {
+            let cell = self.children[index]
+            if cell.contains(touchPoint) {
+                return cell
+            }
+        }
+
+        return nil
+    }
+
 }

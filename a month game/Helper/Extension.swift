@@ -29,6 +29,7 @@ extension GameObjectMO {
         return TileCoordinate(x: Int(self.x), y: Int(self.y)).toCGPoint()
     }
 
+    // TODO: clean
 //    required init(id: Int?, coordinate: GameObjectCoordinate) {
 //        self.id = id ?? GameObject.idGenerator.generate()
 //        self.coordinate = coordinate
@@ -47,6 +48,7 @@ extension GameObjectMO {
 // MARK: - SKNode
 extension SKNode {
 
+    // TODO: rename to child
     func directChild(at touch: UITouch) -> SKNode? {
         let touchLocation = touch.location(in: self)
         for child in self.children {
@@ -58,6 +60,7 @@ extension SKNode {
         return nil
     }
 
+    // TODO: rename to dildren
     func directNodes(at node: SKNode) -> [SKNode] {
         var array = [SKNode]()
 

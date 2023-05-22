@@ -33,7 +33,7 @@ class WorldScene: SKScene {
         return lastInventoryCell?.children.first
     }
 
-    var thirdHandGameObject: GameObject? {
+    var carryingGameObject: GameObject? {
         return self.thirdHand.children.first as! GameObject?
     }
 
@@ -176,7 +176,6 @@ class WorldScene: SKScene {
         let thirdHand = SKNode()
 
         thirdHand.position = Constant.sceneCenter
-        thirdHand.alpha = 0.5
 
         parent.addChild(thirdHand)
         self.thirdHand = thirdHand
@@ -204,105 +203,149 @@ class WorldScene: SKScene {
         self.exitWorldButton = exitWorldButton
     }
 
-
     // MARK: - touch
-    // TODO: struct
-    var menuButtonTouch: UITouch? = nil
-
-    // TODO: struct
-    var moveTouch: UITouch? = nil
-    var previousMoveTouchTimestamp2: TimeInterval!
-    var previousMoveTouchTimestamp1: TimeInterval!
-    var previousMoveTouchLocation2: CGPoint!
-    var velocityVector = CGVector(dx: 0.0, dy: 0.0)
-
-    // MARK: touch down
-    func touchDown(touch: UITouch) {
+    // TODO: remove touch argument label
+    // MARK: touch began
+    func touchBegan(_ touch: UITouch) {
         if self.isMenuOpen {
-            menuWindowTouchDown(touch: touch)
+            self.menuWindowTouchBegan(touch)
             return
         }
 
-        if touch.is(onThe: self.menuButton) {
-            self.menuButton.alpha = 0.5
-            menuButtonTouch = touch
+        if self.isMenuButtonTouched(touch) {
+            self.menuButtonTouchBegan(touch)
             return
         }
 
-        if let thirdHandGameObject = self.thirdHandGameObject,
-           touch.is(onThe: thirdHandGameObject) {
-            self.gameObjectMoveTouchMove(touch: touch)
+        if self.isThirdHandObjectTouch(touch) {
+            self.carryTouchBegan(touch)
             return
         }
 
-        if let gameObject = self.gameObjectLayer.directChild(at: touch) as! GameObject?,
-           self.accessableGameObjects.contains(gameObject) {
-            self.gameObjectTouchDown(touch: touch, gameObject: gameObject)
+        if self.isFieldGameObjectTouched(touch) {
+            self.gameObjectTouchBegan(touch)
             return
         }
 
-        if let gameObject = self.inventory.gameObject(at: touch) {
-            self.gameObjectTouch = touch
-            self.touchedGameObject = gameObject
+        if self.isInventoryGameObjectTouched(touch) {
+            self.gameObjectTouchBegan(touch)
             return
         }
 
         if moveTouch == nil {
-            moveTouch = touch
-            previousMoveTouchTimestamp1 = touch.timestamp
+            moveTouchBegan(touch)
             return
         }
-    }
-
-    func menuWindowTouchDown(touch: UITouch) {
-        // TODO: implement
     }
 
     // MARK: touch moved
-    // TODO: can make table for optimization
-    func touchMoved(touch: UITouch) {
+    func touchMoved(_ touch: UITouch) {
         if self.isMenuOpen {
-            menuWindowTouchMoved(touch: touch)
+            self.menuWindowTouchMoved(touch)
             return
         }
 
-        if touch == self.menuButtonTouch {
-            self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
-            return
-        }
-
-        if touch == self.gameObjectMoveTouch {
-            self.thirdHand.position = touch.location(in: self.ui)
-            return
-        }
-
-        if touch == self.gameObjectTouch {
-            if !touch.is(onThe: self.touchedGameObject!) {
-                if self.thirdHandGameObject == nil && self.touchedGameObject!.isPickable {
-                    self.gameObjectMoveTouch = touch
-                    self.thirdHand.position = touch.location(in: self.ui)
-                    self.touchedGameObject!.move(toParent: self.thirdHand)
-                    self.touchedGameObject!.position = CGPoint()
-                    self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventoryType: .thirdHand, x: 0, y: 0))
-                }
-
-                self.gameObjectTouch = nil
-                self.touchedGameObject = nil
-            }
-            return
-        }
-
-        if touch == self.moveTouch {
-            self.move(with: touch)
-            return
+        switch touch {
+        case self.menuButtonTouch:
+            self.menuButtonTouchMoved(touch)
+        case self.gameObjectTouch:
+            self.gameObjectTouchMoved(touch)
+        case self.carryTouch:
+            carryTouchMoved(touch)
+        case self.moveTouch:
+            self.moveTouchMoved(touch)
+        default: break
         }
     }
 
-    func menuWindowTouchMoved(touch: UITouch) {
-        // TODO: implement
+    // MARK: touch ended
+    private func touchEnded(_ touch: UITouch) {
+        if self.isMenuOpen {
+            self.menuWindowTouchEnded(touch)
+            return
+        }
+
+        switch touch {
+        case self.menuButtonTouch:
+            self.menuButtonTouchEnded(touch)
+        case self.gameObjectTouch:
+            self.gameObjectTouchEnded(touch)
+        case self.carryTouch:
+            carryTouchEnded(touch)
+        case self.moveTouch:
+            self.moveTouchEnded(touch)
+        default: break
+        }
     }
 
-    func move(with touch: UITouch) {
+    // MARK: touch cancelled
+    func touchCancelled(_ touch: UITouch) {
+        if self.isMenuOpen {
+            self.menuWindowTouchCancelled(touch)
+            return
+        }
+
+        switch touch {
+        case self.menuButtonTouch:
+            self.menuButtonTouchCancelled(touch)
+        case self.gameObjectTouch:
+            self.gameObjectTouchCancelled(touch)
+        case self.carryTouch:
+            carryTouchCancelled(touch)
+        case self.moveTouch:
+            self.moveTouchCancelled(touch)
+        default: break
+        }
+    }
+
+    // MARK: - touch structure
+    // MARK: - button touch
+    var menuButtonTouch: UITouch? = nil
+
+    func isMenuButtonTouched(_ touch: UITouch) -> Bool {
+        return touch.is(onThe: self.menuButton)
+    }
+
+    func menuButtonTouchBegan(_ touch: UITouch) {
+        self.menuButton.alpha = 0.5
+        self.menuButtonTouch = touch
+    }
+
+    func menuButtonTouchMoved(_ touch: UITouch) {
+        self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
+    }
+
+    func menuButtonTouchEnded(_ touch: UITouch) {
+        if touch.is(onThe: self.menuButton) {
+            self.menuWindow.isHidden = false
+            self.moveTouchCancelled(touch)
+            self.gameObjectTouchCancelled(touch)
+            self.carryTouchCancelled(touch)
+        }
+        self.menuButtonTouchReset(touch)
+    }
+
+    func menuButtonTouchCancelled(_ touch: UITouch) {
+        self.menuButtonTouchReset(touch)
+    }
+
+    func menuButtonTouchReset(_ touch: UITouch) {
+        self.menuButton.alpha = 1.0
+        self.menuButtonTouch = nil
+    }
+
+    // MARK: - move touch
+    var moveTouch: UITouch? = nil
+    var previousMoveTouchTimestamp2: TimeInterval!
+    var previousMoveTouchTimestamp1: TimeInterval!
+    var previousMoveTouchLocation2: CGPoint!
+
+    func moveTouchBegan(_ touch: UITouch) {
+        self.moveTouch = touch
+        self.previousMoveTouchTimestamp1 = touch.timestamp
+    }
+
+    func moveTouchMoved(_ touch: UITouch) {
         let previousPoint = touch.previousLocation(in: self)
         let currentPoint = touch.location(in: self)
         let difference = currentPoint - previousPoint
@@ -314,86 +357,18 @@ class WorldScene: SKScene {
         self.previousMoveTouchLocation2 = previousPoint
     }
 
-    // MARK: touch up
-    private func touchUp(touch: UITouch) {
-        if self.isMenuOpen {
-            menuWindowTouchUp(touch: touch)
-            return
-        }
+    func moveTouchEnded(_ touch: UITouch) {
+        setVelocityVector()
 
-        // TODO: refine
-        if touch == self.menuButtonTouch {
-            if touch.is(onThe: self.menuButton) {
-                self.menuWindow.isHidden = false
-                self.moveTouch = nil
-            }
-            self.menuButton.alpha = 1.0
-            self.menuButtonTouch = nil
-            return
-        }
-
-        if touch == self.gameObjectTouch {
-            self.sceneController.interact(with: self.touchedGameObject!, leftHand: self.leftHandGameObject, righthand: self.rightHandGameObject)
-            self.gameObjectTouch = nil
-            self.touchedGameObject = nil
-        }
-
-        if touch == self.gameObjectMoveTouch {
-            if let cell = self.inventory.directChild(at: touch) {
-                if self.inventory.gameObject(at: touch) != nil {
-                    self.gameObjectMoveTouch = nil
-                    return
-                }
-
-                let movingGameObject = self.thirdHandGameObject!
-                movingGameObject.move(toParent: cell)
-                movingGameObject.position = CGPoint()
-                let coordinate = GameObjectCoordinate(inventoryType: .inventory, tileCoordinate: TileCoordinate(x: cell.firstIndexFromParent!, y: 0))
-                self.sceneController.move(movingGameObject, to: coordinate)
-
-                self.gameObjectMoveTouch = nil
-                return
-            }
-
-            let characterTileCoordinate = TileCoordinate(self.characterPosition)
-            let touchTileCoordinate = TileCoordinate(touch.location(in: worldLayer))
-            if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
-                if self.gameObjectLayer.directChild(at: touch) != nil {
-                    self.gameObjectMoveTouch = nil
-                    return
-                }
-
-                let movingGameObject = self.thirdHandGameObject!
-                movingGameObject.move(toParent: gameObjectLayer)
-                // TODO: make function for calculate tile coordinate
-                movingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
-                let coordinate = GameObjectCoordinate(inventoryType: .field, tileCoordinate: touchTileCoordinate)
-                self.sceneController.move(movingGameObject, to: coordinate)
-
-                self.gameObjectMoveTouch = nil
-                return
-            }
-        }
-
-        if touch == self.moveTouch {
-            setVelocityVector()
-
-            self.moveTouch = nil
-            return
-        }
+        self.moveTouchReset(touch)
     }
 
-    func menuWindowTouchUp(touch: UITouch) {
-        let currentLocation = touch.location(in: self)
-        if self.exitWorldButton.contains(currentLocation) {
-            performSegueToPortalScene()
-        } else {
-            self.menuWindow.isHidden = true
-        }
+    func moveTouchCancelled(_ touch: UITouch) {
+        self.moveTouchReset(touch)
     }
 
-    func performSegueToPortalScene() {
-        self.sceneController.viewController.setPortalScene()
+    func moveTouchReset(_ touch: UITouch) {
+        self.moveTouch = nil
     }
 
     func setVelocityVector() {
@@ -404,51 +379,188 @@ class WorldScene: SKScene {
         self.velocityVector = -(previousLocation1 - previousLocation2) / timeInterval
     }
 
-    // MARK: game object touch
+    // MARK: - game object touch
     var gameObjectTouch: UITouch? = nil
     var touchedGameObject: GameObject? = nil
 
-    var gameObjectMoveTouch: UITouch? = nil
+    func isFieldGameObjectTouched(_ touch: UITouch) -> Bool {
+        if let gameObject = self.gameObjectLayer.directChild(at: touch) as! GameObject?,
+           self.accessableGameObjects.contains(gameObject) {
+            self.touchedGameObject = gameObject
+            return true
+        }
 
-    func gameObjectTouchDown(touch: UITouch, gameObject: GameObject) {
+        return false
+    }
+
+    func isInventoryGameObjectTouched(_ touch: UITouch) -> Bool {
+        if let gameObject = self.inventory.gameObject(at: touch) {
+            self.touchedGameObject = gameObject
+            return true
+        }
+
+        return false
+    }
+
+    func gameObjectTouchBegan(_ touch: UITouch) {
         self.gameObjectTouch = touch
-        self.touchedGameObject = gameObject
+        self.touchedGameObject!.alpha = 0.5
     }
 
-    func gameObjectTouchMove() {
+    func gameObjectTouchMoved(_ touch: UITouch) {
+        if !touch.is(onThe: self.touchedGameObject!) {
+            if self.carryingGameObject == nil && self.touchedGameObject!.isPickable {
+                self.thirdHand.position = touch.location(in: self.ui)
+                self.touchedGameObject!.move(toParent: self.thirdHand)
+                self.touchedGameObject!.position = CGPoint()
+                self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventoryType: .thirdHand, x: 0, y: 0))
 
+                self.gameObjectTouchReset(touch)
+                self.carryTouchBegan(touch)
+            } else {
+                self.gameObjectTouchCancelled(touch)
+            }
+        }
     }
 
-    func gameObjectTouchUp() {
+    func gameObjectTouchEnded(_ touch: UITouch) {
+        self.sceneController.interact(with: self.touchedGameObject!, leftHand: self.leftHandGameObject, righthand: self.rightHandGameObject)
+        self.touchedGameObject!.alpha = 1.0
 
+        self.gameObjectTouchReset(touch)
     }
 
-    func gameObjectMoveTouchMove(touch: UITouch) {
-        self.gameObjectMoveTouch = touch
+    func gameObjectTouchCancelled(_ touch: UITouch) {
+        self.touchedGameObject?.alpha = 1.0
+
+        self.gameObjectTouchReset(touch)
     }
 
-    func gameObjectMoveTouchUp() {
-
+    func gameObjectTouchReset(_ touch: UITouch) {
+        self.gameObjectTouch = nil
+        self.touchedGameObject = nil
     }
 
-    // MARK: ovverride
+    // MARK: - carry touch
+    var carryTouch: UITouch? = nil
+
+    func isThirdHandObjectTouch(_ touch: UITouch) -> Bool {
+        if let thirdHandGameObject = self.carryingGameObject,
+           touch.is(onThe: thirdHandGameObject) {
+            return true
+        }
+
+        return false
+    }
+
+    func carryTouchBegan(_ touch: UITouch) {
+        self.carryTouch = touch
+    }
+
+    func carryTouchMoved(_ touch: UITouch) {
+        self.thirdHand.position = touch.location(in: self.ui)
+    }
+
+    func carryTouchEnded(_ touch: UITouch) {
+        if let touchedInventoryCell = self.inventory.inventoryCell(at: touch) {
+            guard touchedInventoryCell.children.first == nil else {
+                self.carryTouchCancelled(touch)
+                return
+            }
+
+            let carryingGameObject = self.carryingGameObject!
+            carryingGameObject.move(toParent: touchedInventoryCell)
+            carryingGameObject.position = CGPoint()
+            carryingGameObject.alpha = 1.0
+
+            let tileCoordinate = TileCoordinate(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
+            let coordinate = GameObjectCoordinate(inventoryType: .inventory, tileCoordinate: tileCoordinate)
+            self.sceneController.move(carryingGameObject, to: coordinate)
+
+            self.carryTouchReset(touch)
+            return
+        }
+
+        let characterTileCoordinate = TileCoordinate(self.characterPosition)
+        let touchTileCoordinate = TileCoordinate(touch.location(in: worldLayer))
+        if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
+            guard self.gameObjectLayer.directChild(at: touch) == nil else {
+                self.carryTouchCancelled(touch)
+                return
+            }
+
+            let carryingGameObject = self.carryingGameObject!
+            carryingGameObject.move(toParent: gameObjectLayer)
+            // TODO: make function for calculate tile coordinate
+            carryingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
+            carryingGameObject.alpha = 1.0
+
+            let coordinate = GameObjectCoordinate(inventoryType: .field, tileCoordinate: touchTileCoordinate)
+            self.sceneController.move(carryingGameObject, to: coordinate)
+
+            self.carryTouchReset(touch)
+            return
+        }
+    }
+
+    func carryTouchCancelled(_ touch: UITouch) {
+        self.carryTouchReset(touch)
+    }
+
+    func carryTouchReset(_ touch: UITouch) {
+        self.carryTouch = nil
+    }
+
+    // MARK: - menu window touch
+    func menuWindowTouchBegan(_ touch: UITouch) {
+        // TODO: implement
+    }
+
+    func menuWindowTouchMoved(_ touch: UITouch) {
+        // TODO: implement
+    }
+
+    func menuWindowTouchEnded(_ touch: UITouch) {
+        let currentLocation = touch.location(in: self)
+        if self.exitWorldButton.contains(currentLocation) {
+            performSegueToPortalScene()
+        } else {
+            self.menuWindow.isHidden = true
+        }
+
+        self.menuWindowTouchReset(touch)
+    }
+
+    func menuWindowTouchCancelled(_ touch: UITouch) {
+        self.menuWindowTouchReset(touch)
+    }
+
+    func menuWindowTouchReset(_ touch: UITouch) {
+    }
+
+    func performSegueToPortalScene() {
+        self.sceneController.viewController.setPortalScene()
+    }
+
+    // MARK: - ovverride
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchDown(touch: touch) }
+        for touch in touches { self.touchBegan(touch) }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchMoved(touch: touch) }
+        for touch in touches { self.touchMoved(touch) }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchUp(touch: touch) }
+        for touch in touches { self.touchEnded(touch) }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchUp(touch: touch) }
+        for touch in touches { self.touchCancelled(touch) }
     }
 
     // MARK: - update scene
+    var velocityVector = CGVector(dx: 0.0, dy: 0.0)
     var lastUpdateTime: TimeInterval = 0.0
     var lastPosition: CGPoint = CGPoint()
 
@@ -538,13 +650,13 @@ class WorldScene: SKScene {
         switch gameObjectMO.inventoryType {
         case .field:
             gameObject.position = (gameObjectMO.position + 0.5) * Constant.defaultSize
-
             self.gameObjectLayer.addChild(gameObject)
         case .inventory:
             let inventoryIndex = Int(gameObjectMO.x)
             let inventoryCell = self.inventory.children.safeSubscrirpt(inventoryIndex)
             inventoryCell.addChild(gameObject)
         case .thirdHand:
+            gameObject.alpha = 0.5
             self.thirdHand.addChild(gameObject)
         }
 
