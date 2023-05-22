@@ -10,17 +10,7 @@ import Foundation
 /// Handle all disk related function
 final class DiskController {
 
-    static private var _default: DiskController?
-    static var `default`: DiskController {
-        get {
-            if let diskController = DiskController._default {
-                return diskController
-            }
-            let diskController = DiskController()
-            DiskController._default = diskController
-            return diskController
-        }
-    }
+    static var `default` = DiskController()
 
     let fileManager: FileManager
 

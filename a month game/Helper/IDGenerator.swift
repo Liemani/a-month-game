@@ -9,17 +9,7 @@ import Foundation
 
 class IDGenerator {
 
-    static private var _default: IDGenerator?
-    static var `default`: IDGenerator {
-        get {
-            if let idGenerator = IDGenerator._default {
-                return idGenerator
-            }
-            let idGenerator = IDGenerator()
-            IDGenerator._default = idGenerator
-            return idGenerator
-        }
-    }
+    static var `default` = IDGenerator()
 
     private let diskController: DiskController
 
