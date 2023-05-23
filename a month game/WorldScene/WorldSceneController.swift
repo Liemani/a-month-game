@@ -35,7 +35,7 @@ final class WorldSceneController: SceneController {
         let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
         for x in 0..<Constant.gridSize {
             for y in 0..<Constant.gridSize {
-                let tileType = tileModel.getTileType(fromX: x, y: y)
+                let tileType = tileModel.tileType(atX: x, y: y)
                 scene.set(tileType: tileType, toX: x, y: y)
             }
         }
@@ -60,21 +60,13 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: - edit model and scene
-    // TODO: clean
-    func add(_ gameObjectMO: GameObjectMO) {
-//        let gameObjectMO = GameObjectMO()
+    // TODO: review
+//    func add(_ gameObject: GameObject) {
+//        let scene = self.scene as! WorldScene
+//        let gameObjectNode = scene.add(by: gameObjectMO)
 //
-//        gameObjectMO.id = Int32(IDGenerator.default.generate())
-//        gameObjectMO.typeID = Int32(gameObject.typeID)
-//        gameObjectMO.inventory = Int32(gameObject.inventoryID)
-//        gameObjectMO.x = Int32(gameObject.coordinate.x)
-//        gameObjectMO.y = Int32(gameObject.coordinate.y)
-
-        let scene = self.scene as! WorldScene
-        let gameObjectNode = scene.add(by: gameObjectMO)
-
-        self.gameObjectToMO[gameObjectNode] = gameObjectMO
-    }
+//        self.gameObjectToMO[gameObjectNode] = gameObjectMO
+//    }
 
     func removeGameObject(by gameObject: GameObject) {
         let gameObjectMO = self.gameObjectToMO[gameObject]!
@@ -95,7 +87,7 @@ final class WorldSceneController: SceneController {
     func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
         let gameObjectMO = self.gameObjectToMO[gameObject]!
 
-        gameObjectMO.inventoryID = Int32(newCoordinate.inventoryType.rawValue)
+        gameObjectMO.inventoryID = Int32(newCoordinate.containerType.rawValue)
         gameObjectMO.x = Int32(newCoordinate.x)
         gameObjectMO.y = Int32(newCoordinate.y)
 

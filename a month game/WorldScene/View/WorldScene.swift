@@ -87,7 +87,7 @@ class WorldScene: SKScene {
     }
 
     func addTileMap(to parent: SKNode) {
-        let tileGroups = Resource.tileTypeToResource.map { $0.tileGroup }
+        let tileGroups = TileType.tileGroups
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
         let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
@@ -204,8 +204,6 @@ class WorldScene: SKScene {
     }
 
     // MARK: - touch
-    // TODO: remove touch argument label
-    // MARK: touch began
     func touchBegan(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchBegan(touch)
@@ -238,7 +236,6 @@ class WorldScene: SKScene {
         }
     }
 
-    // MARK: touch moved
     func touchMoved(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchMoved(touch)
@@ -258,7 +255,6 @@ class WorldScene: SKScene {
         }
     }
 
-    // MARK: touch ended
     private func touchEnded(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchEnded(touch)
@@ -278,7 +274,6 @@ class WorldScene: SKScene {
         }
     }
 
-    // MARK: touch cancelled
     func touchCancelled(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchCancelled(touch)
@@ -413,7 +408,8 @@ class WorldScene: SKScene {
                 self.thirdHand.position = touch.location(in: self.ui)
                 self.touchedGameObject!.move(toParent: self.thirdHand)
                 self.touchedGameObject!.position = CGPoint()
-                self.sceneController.move(self.touchedGameObject!, to: GameObjectCoordinate(inventoryType: .thirdHand, x: 0, y: 0))
+                let coordinate = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
+                self.sceneController.move(self.touchedGameObject!, to: coordinate)
 
                 self.gameObjectTouchReset(touch)
                 self.carryTouchBegan(touch)
@@ -474,7 +470,7 @@ class WorldScene: SKScene {
             carryingGameObject.alpha = 1.0
 
             let tileCoordinate = TileCoordinate(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
-            let coordinate = GameObjectCoordinate(inventoryType: .inventory, tileCoordinate: tileCoordinate)
+            let coordinate = GameObjectCoordinate(containerType: .inventory, tileCoordinate: tileCoordinate)
             self.sceneController.move(carryingGameObject, to: coordinate)
 
             self.carryTouchReset(touch)
@@ -495,7 +491,7 @@ class WorldScene: SKScene {
             carryingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
             carryingGameObject.alpha = 1.0
 
-            let coordinate = GameObjectCoordinate(inventoryType: .field, tileCoordinate: touchTileCoordinate)
+            let coordinate = GameObjectCoordinate(containerType: .field, tileCoordinate: touchTileCoordinate)
             self.sceneController.move(carryingGameObject, to: coordinate)
 
             self.carryTouchReset(touch)
@@ -632,11 +628,8 @@ class WorldScene: SKScene {
     }
 
     // MARK: - edit
-    func set(tileType: Int, toX x: Int, y: Int) {
-        let resourceIndex = Resource.tileTypeToResource.indices.contains(tileType) ? tileType : 0
-        let tileInformation = Resource.tileTypeToResource[resourceIndex]
-
-        self.tileMap.setTileGroup(tileInformation.tileGroup, andTileDefinition: tileInformation.1, forColumn: y, row: x)
+    func set(tileType: TileType, toX x: Int, y: Int) {
+        self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
     func add(by gameObjectMO: GameObjectMO) -> GameObject {
@@ -647,7 +640,7 @@ class WorldScene: SKScene {
 
         gameObject.zPosition = 1.0
 
-        switch gameObjectMO.inventoryType {
+        switch gameObjectMO.containerType {
         case .field:
             gameObject.position = (gameObjectMO.position + 0.5) * Constant.defaultSize
             self.gameObjectLayer.addChild(gameObject)

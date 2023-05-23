@@ -21,10 +21,6 @@ struct Resource {
         static let leftHand = "left_hand"
         static let rightHand = "right_hand"
 
-        // MARK: tile
-        static let grassTile = "tile_grass"
-        static let woodTile = "tile_wood"
-
         // MARK: game object
         static let gameObjectDefault = "game_object_default"
         static let gameObjectPineCone = "game_object_pine_cone"
@@ -34,28 +30,6 @@ struct Resource {
         static let gameObjectBranch = "game_object_branch"
         static let gameObjectAxe = "game_object_axe"
     }
-
-    // MARK: - tile
-    /// Define tile type
-    static let tileTypeToResourceName: [String] = [
-        Resource.Name.grassTile,
-        Resource.Name.woodTile,
-    ]
-
-    static let tileTypeToResource: [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
-        let emptyElement = (SKTileGroup(), SKTileDefinition())
-        let count = Resource.tileTypeToResourceName.count
-        var array = [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)](repeating: emptyElement, count: count)
-
-        for tileType in 0..<Resource.tileTypeToResourceName.count {
-            let tileTexture = SKTexture(imageNamed: Resource.tileTypeToResourceName[tileType])
-            let tileDefinition = SKTileDefinition(texture: tileTexture)
-            let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
-            array[tileType] = (tileGroup, tileDefinition)
-        }
-
-        return array
-    })()
 
     // MARK: - game object
     /// Define GameObject type
@@ -85,6 +59,67 @@ struct Resource {
     static func getTexture(of gameObjectType: GameObject.Type) -> SKTexture {
         let objectIdentifier = ObjectIdentifier(gameObjectType)
         return Resource.gameObjectTypeIDToResource[objectIdentifier]!.texture
+    }
+
+}
+
+// MARK: - tile
+struct TileType {
+
+    typealias RawValue = Int
+
+    let rawValue: RawValue
+
+    static let GRASS = TileType(rawValue: 0)
+    static let WOOD = TileType(rawValue: 1)
+
+    private struct Resource {
+        static let name: [String] = [
+            "tile_grass",
+            "tile_wood",
+        ]
+
+        static let GeneratedResource: [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
+            let emptyElement = (SKTileGroup(), SKTileDefinition())
+            let tileTypeCount = TileType.count
+            var array = [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)](repeating: emptyElement, count: tileTypeCount)
+
+            for tileTypeValue in 0..<tileTypeCount {
+                let tileType = TileType(rawValue: tileTypeValue)
+                let tileTexture = SKTexture(imageNamed: tileType.resourceName)
+                let tileDefinition = SKTileDefinition(texture: tileTexture)
+                let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
+                array[tileTypeValue] = (tileGroup, tileDefinition)
+            }
+
+            return array
+        })()
+    }
+
+    static var count: Int {
+        return TileType.Resource.name.count
+    }
+
+    static var tileGroups: [SKTileGroup] {
+        return TileType.Resource.GeneratedResource.map { $0.tileGroup }
+    }
+
+    init(rawValue: RawValue) {
+        self.rawValue = (RawValue(0) <= rawValue && rawValue < TileType.count)
+            ? rawValue
+            : 0
+    }
+
+    var resourceName: String {
+        return TileType.Resource.name[self.rawValue]
+    }
+
+    var tileGroup: SKTileGroup {
+        return TileType.Resource.GeneratedResource[self.rawValue].tileGroup
+    }
+
+    var tileDefinition: SKTileDefinition {
+        return TileType.Resource.GeneratedResource[self.rawValue].tileDefinition
     }
 
 }

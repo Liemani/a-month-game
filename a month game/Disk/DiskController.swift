@@ -14,7 +14,7 @@ final class DiskController {
 
     let fileManager: FileManager
 
-    let coreDataController: CoreDataController
+    let persistentContainer: PersistentContainer
     let tileMapFileController: TileMapFileController
     let userDefaultsController: UserDefaultsController
 
@@ -22,7 +22,7 @@ final class DiskController {
     init() {
         self.fileManager = FileManager.default
 
-        self.coreDataController = CoreDataController()
+        self.persistentContainer = PersistentContainer(name: Constant.worldDataModelName)
         self.tileMapFileController = TileMapFileController()
         self.userDefaultsController = UserDefaultsController()
     }
@@ -33,7 +33,7 @@ final class DiskController {
 
         let worldDirectoryURL = self.worldDirectoryURL(ofName: name)
 
-        self.coreDataController.setToWorld(with: worldDirectoryURL)
+        self.persistentContainer.setToWorld(with: worldDirectoryURL)
         self.tileMapFileController.setToWorld(with: worldDirectoryURL)
     }
 
@@ -47,7 +47,7 @@ final class DiskController {
 
     /// Call this methods after all use
     func close() {
-        self.coreDataController.removeFirstPersistentStore()
+        self.persistentContainer.removeFirstPersistentStore()
         self.tileMapFileController.close()
     }
 
@@ -62,19 +62,19 @@ final class DiskController {
 
     // MARK: - CoreData
     func loadGameObjectManagedObjectArray() -> [GameObjectMO] {
-        return self.coreDataController.loadGameObjectManagedObjectArray()
+        return self.persistentContainer.fetchGameObjectMOArray()
     }
 
     func store(_ gameObjectMO: GameObjectMO) {
-        self.coreDataController.store(gameObjectMO)
+        self.persistentContainer.store(gameObjectMO)
     }
 
     func delete(_ gameObjectMO: GameObjectMO) {
-        self.coreDataController.delete(gameObjectMO)
+        self.persistentContainer.delete(gameObjectMO)
     }
 
     func contextSave() {
-        self.coreDataController.contextSave()
+        self.persistentContainer.contextSave()
     }
 
     // MARK: - FileManager

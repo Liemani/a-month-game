@@ -21,8 +21,8 @@ extension Array {
 // MARK: -
 extension GameObjectMO {
 
-    var inventoryType: InventoryType {
-        return InventoryType(rawValue: Int(self.inventoryID)) ?? .field
+    var containerType: ContainerType {
+        return ContainerType(rawValue: Int(self.inventoryID)) ?? .field
     }
 
     var position:  CGPoint {

@@ -9,19 +9,19 @@ import Foundation
 
 struct GameObjectCoordinate {
 
-    var inventoryType: InventoryType
+    var containerType: ContainerType
     var tileCoordinate: TileCoordinate
 
     var x: Int { get { return self.tileCoordinate.x } set { self.tileCoordinate.x = newValue } }
     var y: Int { get { return self.tileCoordinate.y } set { self.tileCoordinate.y = newValue } }
 
-    init(inventoryType: InventoryType, tileCoordinate: TileCoordinate) {
-        self.inventoryType = inventoryType
+    init(containerType: ContainerType, tileCoordinate: TileCoordinate) {
+        self.containerType = containerType
         self.tileCoordinate = tileCoordinate
     }
 
-    init(inventoryType: InventoryType, x: Int, y: Int) {
-        self.inventoryType = inventoryType
+    init(containerType: ContainerType, x: Int, y: Int) {
+        self.containerType = containerType
         let tileCoordinate = TileCoordinate(x: x, y: y)
         self.tileCoordinate = tileCoordinate
     }

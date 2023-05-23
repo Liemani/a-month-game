@@ -7,8 +7,7 @@
 
 import Foundation
 
-// TODO: rename to ContainerType
-enum InventoryType: Int {
+enum ContainerType: Int {
     case field = 0
     case inventory
     case thirdHand

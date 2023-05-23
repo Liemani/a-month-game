@@ -8,20 +8,19 @@
 import Foundation
 import CoreData
 
-final class CoreDataController {
-
-    var persistentContainer: NSPersistentContainer!
-
-    init() {
-        self.persistentContainer = NSPersistentContainer(name: Constant.worldDataModelName)
-    }
+final class PersistentContainer: NSPersistentContainer {
 
     func setToWorld(with worldDirectoryURL: URL) {
-        let persistentStoreDescription = self.persistentContainer.persistentStoreDescriptions.first!
-        let worldDataModelURL = worldDirectoryURL.appending(path: Constant.dataModelFileName)
-        persistentStoreDescription.url = worldDataModelURL
+        print(self.persistentStoreDescriptions.count)
+        print(self.persistentStoreCoordinator.persistentStores.count)
+        self.loadPersistentStore(from: worldDirectoryURL)
+    }
 
-        self.persistentContainer.loadPersistentStores { description, error in
+    func loadPersistentStore(from directoryURL: URL) {
+        let worldDataModelURL = directoryURL.appending(path: Constant.dataModelFileName)
+        self.persistentStoreDescriptions[0].url = worldDataModelURL
+
+        self.loadPersistentStores { description, error in
             if let error = error {
                 fatalError("Unable to load persistent stores: \(error)")
             }
@@ -29,24 +28,23 @@ final class CoreDataController {
     }
 
     func removeFirstPersistentStore() {
-        let persistentStoreCoordinator = self.persistentContainer.persistentStoreCoordinator
+        let persistentStoreCoordinator = self.persistentStoreCoordinator
         let persistentStore = persistentStoreCoordinator.persistentStores.first!
         try! persistentStoreCoordinator.remove(persistentStore)
     }
 
     // MARK: - edit
-    func loadGameObjectManagedObjectArray() -> [GameObjectMO] {
+    func fetchGameObjectMOArray() -> [GameObjectMO] {
         let request = GameObjectMO.fetchRequest()
-        let context = self.persistentContainer.viewContext
-        let gameObjectManagedObjectArray = try! context.fetch(request)
+        let gameObjectManagedObjectArray = try! self.viewContext.fetch(request)
 
         return gameObjectManagedObjectArray.count > 0
             ? gameObjectManagedObjectArray
-            : self.generateInitialGameObjectManagedObjectArray()
+            : self.generateGameObjectMOArray()
     }
 
     func store(_ gameObjectMO: GameObjectMO) {
-        let context = self.persistentContainer.viewContext
+        let context = self.viewContext
 
         context.insert(gameObjectMO)
 
@@ -54,13 +52,13 @@ final class CoreDataController {
     }
 
     func contextSave() {
-        let context = self.persistentContainer.viewContext
+        let context = self.viewContext
 
         try! context.save()
     }
 
     func delete(_ gameObjectMO: GameObjectMO) {
-        let context = self.persistentContainer.viewContext
+        let context = self.viewContext
 
         context.delete(gameObjectMO)
 
@@ -68,7 +66,7 @@ final class CoreDataController {
     }
 
     // MARK: - private
-    private func generateInitialGameObjectManagedObjectArray() -> [GameObjectMO] {
+    private func generateGameObjectMOArray() -> [GameObjectMO] {
         let idGenerator = IDGenerator.default
 
         let gameObjectManagedObject = [
@@ -81,13 +79,13 @@ final class CoreDataController {
             self.store(typeID: 5, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 54),
         ]
 
-        try! self.persistentContainer.viewContext.save()
+        try! self.viewContext.save()
 
         return gameObjectManagedObject
     }
 
     private func store(typeID: Int32, id: Int32, inventoryID: Int32, x: Int32, y: Int32) -> GameObjectMO {
-        let context = self.persistentContainer.viewContext
+        let context = self.viewContext
 
         let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectMO
 
