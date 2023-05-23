@@ -105,6 +105,8 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+check tiletype() and containertype() optional check
+뭔가 item drag move 가 실패하는 경우가 있다..
 container node 만들기
 game object touch -> alpha: 0.5
 increase accessable area node to cover the center of accessable tile

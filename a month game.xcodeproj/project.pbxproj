@@ -28,10 +28,9 @@
 		03311DD22A1A3E3F0020ADB5 /* InventoryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03311DD12A1A3E3F0020ADB5 /* InventoryNode.swift */; };
 		033C9E612A1C2D83000E1D50 /* ContainerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C9E602A1C2D83000E1D50 /* ContainerNode.swift */; };
 		033C9E632A1C2DCA000E1D50 /* FieldNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C9E622A1C2DCA000E1D50 /* FieldNode.swift */; };
-		033C9E652A1C2DE1000E1D50 /* CharacterInventoryNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033C9E642A1C2DE1000E1D50 /* CharacterInventoryNode.swift */; };
 		0368AD352A18EA2E00498A4B /* ContainerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0368AD342A18EA2E00498A4B /* ContainerType.swift */; };
 		037E3F412A1CA030008A50CA /* RawTypeWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F402A1CA030008A50CA /* RawTypeWrapper.swift */; };
-		037E3F442A1CA512008A50CA /* ThirdHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F432A1CA512008A50CA /* ThirdHand.swift */; };
+		037E3F442A1CA512008A50CA /* ThirdHandNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F432A1CA512008A50CA /* ThirdHandNode.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
 		038330A82A02850A008DEA10 /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A72A02850A008DEA10 /* WorldScene.swift */; };
 		038330AA2A02850A008DEA10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A92A02850A008DEA10 /* ViewController.swift */; };
@@ -70,10 +69,9 @@
 		03311DD12A1A3E3F0020ADB5 /* InventoryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryNode.swift; sourceTree = "<group>"; };
 		033C9E602A1C2D83000E1D50 /* ContainerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerNode.swift; sourceTree = "<group>"; };
 		033C9E622A1C2DCA000E1D50 /* FieldNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldNode.swift; sourceTree = "<group>"; };
-		033C9E642A1C2DE1000E1D50 /* CharacterInventoryNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterInventoryNode.swift; sourceTree = "<group>"; };
 		0368AD342A18EA2E00498A4B /* ContainerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerType.swift; sourceTree = "<group>"; };
 		037E3F402A1CA030008A50CA /* RawTypeWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RawTypeWrapper.swift; sourceTree = "<group>"; };
-		037E3F432A1CA512008A50CA /* ThirdHand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdHand.swift; sourceTree = "<group>"; };
+		037E3F432A1CA512008A50CA /* ThirdHandNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdHandNode.swift; sourceTree = "<group>"; };
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		038330A12A02850A008DEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		038330A72A02850A008DEA10 /* WorldScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScene.swift; sourceTree = "<group>"; };
@@ -191,8 +189,7 @@
 				03311DCF2A1A3AE40020ADB5 /* GameObjectAxe.swift */,
 				033C9E602A1C2D83000E1D50 /* ContainerNode.swift */,
 				033C9E622A1C2DCA000E1D50 /* FieldNode.swift */,
-				033C9E642A1C2DE1000E1D50 /* CharacterInventoryNode.swift */,
-				037E3F432A1CA512008A50CA /* ThirdHand.swift */,
+				037E3F432A1CA512008A50CA /* ThirdHandNode.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -348,10 +345,9 @@
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
 				039037CB2A15FBCD0014A571 /* Extension.swift in Sources */,
 				039037BB2A11C77F0014A571 /* GameObjectCoordinate.swift in Sources */,
-				033C9E652A1C2DE1000E1D50 /* CharacterInventoryNode.swift in Sources */,
 				033C9E612A1C2D83000E1D50 /* ContainerNode.swift in Sources */,
 				038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */,
-				037E3F442A1CA512008A50CA /* ThirdHand.swift in Sources */,
+				037E3F442A1CA512008A50CA /* ThirdHandNode.swift in Sources */,
 				039037C62A14D6020014A571 /* GameObjectWoodWall.swift in Sources */,
 				031D57562A076DC8007EF383 /* CharacterModel.swift in Sources */,
 				031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */,

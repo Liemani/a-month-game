@@ -18,11 +18,25 @@ extension Array {
 
 }
 
+extension Array {
+
+    subscript<T>(index: T) -> Element where T: RawTypeWrapper {
+        get {
+            return self[index.rawValue]
+        }
+        set {
+            self[index.rawValue] = newValue
+        }
+    }
+
+}
+
 // MARK: -
 extension GameObjectMO {
 
-    var containerType: ContainerType {
-        return ContainerType(rawValue: Int(self.inventoryID)) ?? .field
+    // TODO rename inventoryID to containerID at model
+    var containerType: ContainerType? {
+        return ContainerType(rawValue: Int(self.inventoryID))
     }
 
     var position:  CGPoint {

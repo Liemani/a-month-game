@@ -8,6 +8,6 @@
 import Foundation
 import SpriteKit
 
-class ThirdHand: ContainerNode {
+class ThirdHandNode: ContainerNode {
 
 }

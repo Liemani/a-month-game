@@ -8,11 +8,12 @@
 import Foundation
 import SpriteKit
 
-class InventoryNode: SKNode {
+class InventoryNode: ContainerNode {
 
     var leftHand: SKNode? { return self.children[0].children.first }
     var rightHand: SKNode? { return self.children[Constant.inventoryCellCount].children.first }
 
+    // TODO: what about make init()
     func initialize() {
         let cellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
 

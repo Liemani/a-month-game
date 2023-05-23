@@ -67,18 +67,16 @@ struct Resource {
 // tile type constant
 extension TileType {
 
-    static let GRASS = TileType(rawValue: 0)
-    static let WOOD = TileType(rawValue: 1)
+    static let GRASS = TileType(rawValue: 0)!
+    static let WOOD = TileType(rawValue: 1)!
 
 }
 
 // MARK: - tile
 // TODO: move to new file at constant directory tile type define to Extension.swift in constant directory and gat resource name from constant
-struct TileType: RawTypeWrapper {
+class TileType: RawTypeWrapper {
 
     typealias RawValue = Int
-
-    let rawValue: RawValue
 
     private struct Resource {
         static let name: [String] = [
@@ -92,7 +90,7 @@ struct TileType: RawTypeWrapper {
             var array = [(tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)](repeating: emptyElement, count: tileTypeCount)
 
             for tileTypeValue in 0..<tileTypeCount {
-                let tileType = TileType(rawValue: tileTypeValue)
+                let tileType = TileType(rawValue: tileTypeValue)!
                 let tileTexture = SKTexture(imageNamed: tileType.resourceName)
                 let tileDefinition = SKTileDefinition(texture: tileTexture)
                 let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
@@ -103,7 +101,7 @@ struct TileType: RawTypeWrapper {
         })()
     }
 
-    static var count: Int {
+    override class var count: Int {
         return TileType.Resource.name.count
     }
 
@@ -112,10 +110,8 @@ struct TileType: RawTypeWrapper {
     }
 
     // TODO: upgrade readability
-    init(rawValue: RawValue) {
-        self.rawValue = (RawValue(0) <= rawValue && rawValue < TileType.count)
-            ? rawValue
-            : 0
+    override init?(rawValue: RawValue) {
+        super.init(rawValue: rawValue)
     }
 
     var resourceName: String {

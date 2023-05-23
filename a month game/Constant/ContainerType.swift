@@ -9,24 +9,18 @@ import Foundation
 
 extension ContainerType {
 
-    static let FIELD = ContainerType(rawValue: 0)
-    static let INVENTORY = ContainerType(rawValue: 1)
-    static let THIRD_HAND = ContainerType(rawValue: 2)
+    static let FIELD = ContainerType(rawValue: 0)!
+    static let INVENTORY = ContainerType(rawValue: 1)!
+    static let THIRD_HAND = ContainerType(rawValue: 2)!
 
 }
 
 class ContainerType: RawTypeWrapper {
 
-    typealias RawValue = Int
+    override class var count: Int { return 3 }
 
-    let rawValue: Int
-
-    static var count: Int { return 3 }
-
-    required init(rawValue: Int) {
-        self.rawValue = (0..<TileType.count).contains(rawValue)
-            ? rawValue
-            : 0
+    override init?(rawValue: Int) {
+        super.init(rawValue: rawValue)
     }
 
 }

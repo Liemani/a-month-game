@@ -7,14 +7,20 @@
 
 import Foundation
 
-protocol RawTypeWrapper {
+class RawTypeWrapper: Equatable {
 
-    associatedtype RawValue
+    static func == (lhs: RawTypeWrapper, rhs: RawTypeWrapper) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
 
-    var rawValue: RawValue { get }
+    let rawValue: Int
 
-    static var count: Int { get }
+    class var count: Int { return 0 }
 
-    init(rawValue: RawValue)
+    init?(rawValue: Int) {
+        guard 0 <= rawValue && rawValue < type(of: self).count else { return nil }
+
+        self.rawValue = rawValue
+    }
 
 }
