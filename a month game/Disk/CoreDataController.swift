@@ -70,13 +70,13 @@ final class PersistentContainer: NSPersistentContainer {
         let idGenerator = IDGenerator.default
 
         let gameObjectManagedObject = [
-            self.store(typeID: 1, id: Int32(idGenerator.generate()), inventoryID: 0, x: 51, y: 51),
-            self.store(typeID: 2, id: Int32(idGenerator.generate()), inventoryID: 0, x: 52, y: 52),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 50, y: 53),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 51),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 52),
-            self.store(typeID: 4, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 53),
-            self.store(typeID: 5, id: Int32(idGenerator.generate()), inventoryID: 0, x: 48, y: 54),
+            self.store(typeID: 1, id: Int32(idGenerator.generate()), containerID: 0, x: 51, y: 51),
+            self.store(typeID: 2, id: Int32(idGenerator.generate()), containerID: 0, x: 52, y: 52),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 50, y: 53),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 51),
+            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 52),
+            self.store(typeID: 4, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 53),
+            self.store(typeID: 5, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 54),
         ]
 
         try! self.viewContext.save()
@@ -84,14 +84,14 @@ final class PersistentContainer: NSPersistentContainer {
         return gameObjectManagedObject
     }
 
-    private func store(typeID: Int32, id: Int32, inventoryID: Int32, x: Int32, y: Int32) -> GameObjectMO {
+    private func store(typeID: Int32, id: Int32, containerID: Int32, x: Int32, y: Int32) -> GameObjectMO {
         let context = self.viewContext
 
         let managedObject = NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: context) as! GameObjectMO
 
         managedObject.typeID = typeID
         managedObject.id = id
-        managedObject.inventoryID = inventoryID
+        managedObject.containerID = containerID
         managedObject.x = x
         managedObject.y = y
 

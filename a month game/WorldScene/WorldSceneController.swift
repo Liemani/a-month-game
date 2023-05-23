@@ -43,7 +43,7 @@ final class WorldSceneController: SceneController {
         let gameObjectMOArray = self.worldSceneModel.loadGameObjectDictionary()
         for gameObjectMO in gameObjectMOArray {
             let scene = self.scene as! WorldScene
-            let gameObject = scene.add(by: gameObjectMO)
+            guard let gameObject = scene.add(by: gameObjectMO) else { return }
 
             self.gameObjectToMO[gameObject] = gameObjectMO
         }
@@ -55,12 +55,12 @@ final class WorldSceneController: SceneController {
 
     func debugCode() {
         for gameObjectMO in self.gameObjectToMO.values {
-            print("id: \(gameObjectMO.id), typeID: \(gameObjectMO.typeID), inventoryID: \(gameObjectMO.inventoryID), coordinate: (\(gameObjectMO.x), \(gameObjectMO.y))")
+            print("id: \(gameObjectMO.id), typeID: \(gameObjectMO.typeID), containerID: \(gameObjectMO.containerID), coordinate: (\(gameObjectMO.x), \(gameObjectMO.y))")
         }
     }
 
     // MARK: - edit model and scene
-    // TODO: review
+    // TODO: review after implementing GameObject.interact()
 //    func add(_ gameObject: GameObject) {
 //        let scene = self.scene as! WorldScene
 //        let gameObjectNode = scene.add(by: gameObjectMO)
@@ -77,17 +77,12 @@ final class WorldSceneController: SceneController {
         self.worldSceneModel.remove(gameObjectMO)
     }
 
-    func interact(with gameObject: GameObject, leftHand: SKNode?, righthand: SKNode?) {
-        // TODO: implement hand
-        gameObject.interact(leftHand: nil, rightHand: nil)
-    }
-
     // MARK: - etc
     // TODO: move
     func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
         let gameObjectMO = self.gameObjectToMO[gameObject]!
 
-        gameObjectMO.inventoryID = Int32(newCoordinate.containerType.rawValue)
+        gameObjectMO.containerID = Int32(newCoordinate.containerType.rawValue)
         gameObjectMO.x = Int32(newCoordinate.x)
         gameObjectMO.y = Int32(newCoordinate.y)
 

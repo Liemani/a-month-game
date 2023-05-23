@@ -21,7 +21,7 @@ final class TileMapModel {
     // MARK: - get set
     // TODO: change argument to coordinate
     func tileType(atX x: Int, y: Int) -> TileType {
-        return TileType(rawValue: self.tileMap[Constant.gridSize * x + y]) ?? TileType.GRASS
+        return TileType(rawValue: self.tileMap[Constant.gridSize * x + y]) ?? .grass
     }
 
     // TODO: what about get tileType and coordinate as argument?

@@ -10,12 +10,12 @@ import SpriteKit
 
 class InventoryNode: ContainerNode {
 
-    var leftHand: SKNode? { return self.children[0].children.first }
-    var rightHand: SKNode? { return self.children[Constant.inventoryCellCount].children.first }
+    var leftHand: GameObject? { return self.children[0].children.first as! GameObject? }
+    var rightHand: GameObject? { return self.children[Constant.inventoryCellCount].children.first as! GameObject? }
 
     // TODO: what about make init()
     func initialize() {
-        let cellTexture = SKTexture(imageNamed: Resource.Name.inventoryCell)
+        let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
 
         let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
 
@@ -32,13 +32,13 @@ class InventoryNode: ContainerNode {
             self.addChild(cell)
         }
 
-        let leftHandTexture = SKTexture(imageNamed: Resource.Name.leftHand)
+        let leftHandTexture = SKTexture(imageNamed: Constant.ResourceName.leftHand)
         let leftHand = SKSpriteNode(texture: leftHandTexture)
         leftHand.position = Constant.inventoryCellFirstPosition
         leftHand.alpha = 0.5
         self.addChild(leftHand)
 
-        let rightHandTexture = SKTexture(imageNamed: Resource.Name.rightHand)
+        let rightHandTexture = SKTexture(imageNamed: Constant.ResourceName.rightHand)
         let rightHand = SKSpriteNode(texture: rightHandTexture)
         rightHand.position = Constant.inventoryCellLastPosition
         rightHand.alpha = 0.5

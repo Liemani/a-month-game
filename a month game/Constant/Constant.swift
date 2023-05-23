@@ -86,4 +86,14 @@ struct Constant {
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
 
+    struct ResourceName {
+        static let character = "character"
+        static let menuButton = "menu button"
+        static let inventoryCell = "inventory cell"
+        static let bgPortal = "bg_portal"
+        static let button = "button"
+        static let leftHand = "left_hand"
+        static let rightHand = "right_hand"
+    }
+
 }

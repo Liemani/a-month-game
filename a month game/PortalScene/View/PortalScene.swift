@@ -22,7 +22,7 @@ class PortalScene: SKScene {
     }
 
     func initBackground() {
-        let backgroundNode = SKSpriteNode(imageNamed: Resource.Name.bgPortal)
+        let backgroundNode = SKSpriteNode(imageNamed: Constant.ResourceName.bgPortal)
 
         backgroundNode.position = Constant.screenUpRight
         backgroundNode.zPosition = -1.0
@@ -33,7 +33,7 @@ class PortalScene: SKScene {
     func initUI() {
         let uiLayer = SKNode()
 
-        let buttonTexture = SKTexture(imageNamed: Resource.Name.button)
+        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
 
         self.enterButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.enterButton, labelText: "Enter World", andAddTo: uiLayer)
         self.resetButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.resetButton, labelText: "Reset", andAddTo: uiLayer)

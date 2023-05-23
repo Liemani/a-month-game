@@ -20,7 +20,7 @@ extension Array {
 
 extension Array {
 
-    subscript<T>(index: T) -> Element where T: RawTypeWrapper {
+    subscript<T>(index: T) -> Element where T: RawRepresentable, T.RawValue == Int {
         get {
             return self[index.rawValue]
         }
@@ -31,19 +31,18 @@ extension Array {
 
 }
 
-// MARK: -
+// MARK: - GameObjectMO
 extension GameObjectMO {
 
-    // TODO rename inventoryID to containerID at model
     var containerType: ContainerType? {
-        return ContainerType(rawValue: Int(self.inventoryID))
+        return ContainerType(rawValue: Int(self.containerID))
     }
 
     var position:  CGPoint {
         return TileCoordinate(x: Int(self.x), y: Int(self.y)).toCGPoint()
     }
 
-    // TODO: clean
+    // TODO: clean after implementing GameObject.interact()
 //    required init(id: Int?, coordinate: GameObjectCoordinate) {
 //        self.id = id ?? GameObject.idGenerator.generate()
 //        self.coordinate = coordinate
@@ -62,8 +61,7 @@ extension GameObjectMO {
 // MARK: - SKNode
 extension SKNode {
 
-    // TODO: rename to child
-    func directChild(at touch: UITouch) -> SKNode? {
+    func child(at touch: UITouch) -> SKNode? {
         let touchLocation = touch.location(in: self)
         for child in self.children {
             if child.contains(touchLocation) {
@@ -74,24 +72,23 @@ extension SKNode {
         return nil
     }
 
-    // TODO: rename to dildren
-    func directNodes(at node: SKNode) -> [SKNode] {
-        var array = [SKNode]()
+    func children(at node: SKNode) -> [SKNode] {
+        var childrenAt = [SKNode]()
 
         for child in self.children {
             if child.intersects(node) {
-                array.append(child)
+                childrenAt.append(child)
             }
         }
 
-        return array
+        return childrenAt
     }
 
     var firstIndexFromParent: Int? {
         return self.parent?.children.firstIndex(of: self)
     }
 
-    // TODO: move
+    // TODO: move to physics(?) module
     /// Return true if collision resolved else false
     func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {
         let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
@@ -121,7 +118,7 @@ extension SKNode {
     }
 
     // NOTE: optimization possible
-    // TODO: move
+    // TODO: move to physics(?) module
     func resolvePointCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) {
         if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
             let xDifference = self.position.x - circleOrigin.x

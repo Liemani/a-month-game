@@ -7,20 +7,14 @@
 
 import Foundation
 
-extension ContainerType {
+enum ContainerType: Int, CaseIterable {
 
-    static let FIELD = ContainerType(rawValue: 0)!
-    static let INVENTORY = ContainerType(rawValue: 1)!
-    static let THIRD_HAND = ContainerType(rawValue: 2)!
+    case field
+    case inventory
+    case thirdHand
 
-}
-
-class ContainerType: RawTypeWrapper {
-
-    override class var count: Int { return 3 }
-
-    override init?(rawValue: Int) {
-        super.init(rawValue: rawValue)
+    static var caseCount: Int {
+        return self.allCases.count
     }
 
 }

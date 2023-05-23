@@ -12,18 +12,18 @@ class WorldScene: SKScene {
 
     weak var sceneController: WorldSceneController!
 
-    var containerArray: [ContainerNode] = [ContainerNode].init(repeating: ContainerNode(), count: 3)
+    var containerArray: [ContainerNode] = [ContainerNode].init(repeating: ContainerNode(), count: ContainerType.caseCount)
 
     var field: FieldNode {
-        return self.containerArray[ContainerType.FIELD] as! FieldNode
+        return self.containerArray[ContainerType.field] as! FieldNode
     }
 
     var inventory: InventoryNode {
-        return self.containerArray[ContainerType.INVENTORY] as! InventoryNode
+        return self.containerArray[ContainerType.inventory] as! InventoryNode
     }
 
     var thirdHand: ThirdHandNode {
-        return self.containerArray[ContainerType.THIRD_HAND] as! ThirdHandNode
+        return self.containerArray[ContainerType.thirdHand] as! ThirdHandNode
     }
 
     var movingLayer: SKNode!
@@ -34,11 +34,11 @@ class WorldScene: SKScene {
     var menuButton: SKNode!
     var accessBox: SKNode!
 
-    var leftHandGameObject: SKNode? {
+    var leftHandGameObject: GameObject? {
         return self.inventory.leftHand
     }
 
-    var rightHandGameObject: SKNode? {
+    var rightHandGameObject: GameObject? {
         return self.inventory.rightHand
     }
 
@@ -114,7 +114,7 @@ class WorldScene: SKScene {
         field.zPosition = Constant.ZPosition.gameObjectLayer
 
         parent.addChild(field)
-        self.containerArray[ContainerType.FIELD] = field
+        self.containerArray[ContainerType.field] = field
     }
 
     // MARK: add fixed layer
@@ -145,7 +145,7 @@ class WorldScene: SKScene {
     }
 
     func addMenuButton(to parent: SKNode) {
-        let menuButton: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.menuButton)
+        let menuButton: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.menuButton)
 
         menuButton.position = Constant.Frame.menuButton.origin
         menuButton.size = Constant.Frame.menuButton.size
@@ -155,7 +155,7 @@ class WorldScene: SKScene {
     }
 
     func addCharacter(to parent: SKNode) {
-        let character: SKSpriteNode = SKSpriteNode(imageNamed: Resource.Name.character)
+        let character: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.character)
 
         character.position = Constant.Frame.character.origin
         character.size = Constant.Frame.character.size
@@ -178,7 +178,7 @@ class WorldScene: SKScene {
         characterInventory.initialize()
 
         parent.addChild(characterInventory)
-        self.containerArray[ContainerType.INVENTORY] = characterInventory
+        self.containerArray[ContainerType.inventory] = characterInventory
     }
 
     func addThirdHand(to parent: SKNode) {
@@ -187,7 +187,7 @@ class WorldScene: SKScene {
         thirdHand.position = Constant.sceneCenter
 
         parent.addChild(thirdHand)
-        self.containerArray[ContainerType.THIRD_HAND] = thirdHand
+        self.containerArray[ContainerType.thirdHand] = thirdHand
     }
 
     func addMenuWindow(to parent: SKNode) {
@@ -207,7 +207,7 @@ class WorldScene: SKScene {
 
         menuWindow.addChild(background)
 
-        let buttonTexture = SKTexture(imageNamed: Resource.Name.button)
+        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
         let exitWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuWindow)
         self.exitWorldButton = exitWorldButton
     }
@@ -388,7 +388,7 @@ class WorldScene: SKScene {
     var touchedGameObject: GameObject? = nil
 
     func isFieldGameObjectTouched(_ touch: UITouch) -> Bool {
-        if let gameObject = self.containerArray[ContainerType.FIELD].directChild(at: touch) as! GameObject?,
+        if let gameObject = self.containerArray[ContainerType.field].child(at: touch) as! GameObject?,
            self.accessableGameObjects.contains(gameObject) {
             self.touchedGameObject = gameObject
             return true
@@ -417,7 +417,7 @@ class WorldScene: SKScene {
                 self.thirdHand.position = touch.location(in: self.ui)
                 self.touchedGameObject!.move(toParent: self.thirdHand)
                 self.touchedGameObject!.position = CGPoint()
-                let coordinate = GameObjectCoordinate(containerType: ContainerType.THIRD_HAND, x: 0, y: 0)
+                let coordinate = GameObjectCoordinate(containerType: ContainerType.thirdHand, x: 0, y: 0)
                 self.sceneController.move(self.touchedGameObject!, to: coordinate)
 
                 self.gameObjectTouchReset(touch)
@@ -429,7 +429,7 @@ class WorldScene: SKScene {
     }
 
     func gameObjectTouchEnded(_ touch: UITouch) {
-        self.sceneController.interact(with: self.touchedGameObject!, leftHand: self.leftHandGameObject, righthand: self.rightHandGameObject)
+        self.touchedGameObject!.interact(leftHand: self.leftHandGameObject, rightHand: self.rightHandGameObject)
         self.touchedGameObject!.alpha = 1.0
 
         self.gameObjectTouchReset(touch)
@@ -479,7 +479,7 @@ class WorldScene: SKScene {
             carryingGameObject.alpha = 1.0
 
             let tileCoordinate = TileCoordinate(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
-            let coordinate = GameObjectCoordinate(containerType: ContainerType.INVENTORY, tileCoordinate: tileCoordinate)
+            let coordinate = GameObjectCoordinate(containerType: ContainerType.inventory, tileCoordinate: tileCoordinate)
             self.sceneController.move(carryingGameObject, to: coordinate)
 
             self.carryTouchReset(touch)
@@ -489,7 +489,7 @@ class WorldScene: SKScene {
         let characterTileCoordinate = TileCoordinate(self.characterPosition)
         let touchTileCoordinate = TileCoordinate(touch.location(in: worldLayer))
         if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
-            guard self.containerArray[ContainerType.FIELD].directChild(at: touch) == nil else {
+            guard self.containerArray[ContainerType.field].child(at: touch) == nil else {
                 self.carryTouchCancelled(touch)
                 return
             }
@@ -500,7 +500,7 @@ class WorldScene: SKScene {
             carryingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
             carryingGameObject.alpha = 1.0
 
-            let coordinate = GameObjectCoordinate(containerType: ContainerType.FIELD, tileCoordinate: touchTileCoordinate)
+            let coordinate = GameObjectCoordinate(containerType: ContainerType.field, tileCoordinate: touchTileCoordinate)
             self.sceneController.move(carryingGameObject, to: coordinate)
 
             self.carryTouchReset(touch)
@@ -595,7 +595,7 @@ class WorldScene: SKScene {
     func updateAccessableGameObjects() {
         guard self.isMovedTile() else { return }
 
-        let accessableNodes = self.containerArray[ContainerType.FIELD].directNodes(at: self.accessBox)
+        let accessableNodes = self.containerArray[ContainerType.field].children(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
 
         guard currentAccessableObjectCount != 0
@@ -641,23 +641,22 @@ class WorldScene: SKScene {
         self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
-    func add(by gameObjectMO: GameObjectMO) -> GameObject {
-        let type = Resource.gameObjectTypeIDToInformation[Int(gameObjectMO.typeID)].type
-
-        let texture = Resource.getTexture(of: type)
-        let gameObject = type.init(texture: texture)
+    func add(by gameObjectMO: GameObjectMO) -> GameObject? {
+        guard let gameObject = GameObjectType.new(typeID: Int(gameObjectMO.typeID)) else {
+            return nil
+        }
 
         gameObject.zPosition = 1.0
 
         switch gameObjectMO.containerType {
-        case ContainerType.FIELD:
+        case .field:
             gameObject.position = (gameObjectMO.position + 0.5) * Constant.defaultSize
-            self.containerArray[ContainerType.FIELD].addChild(gameObject)
-        case ContainerType.INVENTORY:
+            self.containerArray[ContainerType.field].addChild(gameObject)
+        case .inventory:
             let inventoryIndex = Int(gameObjectMO.x)
             let inventoryCell = self.inventory.children.safeSubscrirpt(inventoryIndex)
             inventoryCell.addChild(gameObject)
-        case ContainerType.THIRD_HAND:
+        case .thirdHand:
             gameObject.alpha = 0.5
             self.thirdHand.addChild(gameObject)
         default: break

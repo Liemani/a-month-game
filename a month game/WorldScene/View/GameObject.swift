@@ -19,9 +19,4 @@ class GameObject: SKSpriteNode {
 
     }
 
-    var typeID: Int {
-        let objectIdentifier = ObjectIdentifier(type(of: self))
-        return Resource.gameObjectTypeIDToResource[objectIdentifier]!.typeID
-    }
-
 }
