@@ -63,15 +63,22 @@ struct Resource {
 
 }
 
+// TODO: move
+// tile type constant
+extension TileType {
+
+    static let GRASS = TileType(rawValue: 0)
+    static let WOOD = TileType(rawValue: 1)
+
+}
+
 // MARK: - tile
-struct TileType {
+// TODO: move to new file at constant directory tile type define to Extension.swift in constant directory and gat resource name from constant
+struct TileType: RawTypeWrapper {
 
     typealias RawValue = Int
 
     let rawValue: RawValue
-
-    static let GRASS = TileType(rawValue: 0)
-    static let WOOD = TileType(rawValue: 1)
 
     private struct Resource {
         static let name: [String] = [
@@ -104,6 +111,7 @@ struct TileType {
         return TileType.Resource.GeneratedResource.map { $0.tileGroup }
     }
 
+    // TODO: upgrade readability
     init(rawValue: RawValue) {
         self.rawValue = (RawValue(0) <= rawValue && rawValue < TileType.count)
             ? rawValue

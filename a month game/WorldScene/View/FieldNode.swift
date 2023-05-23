@@ -8,6 +8,6 @@
 import Foundation
 import SpriteKit
 
-class FieldNode: SKNode {
+class FieldNode: ContainerNode {
 
 }
