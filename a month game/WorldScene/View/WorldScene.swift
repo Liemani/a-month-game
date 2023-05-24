@@ -466,7 +466,6 @@ class WorldScene: SKScene {
         self.thirdHand.position = touch.location(in: self.ui)
     }
 
-    // TODO: review from the InventoryNode's point of view
     func carryTouchEnded(_ touch: UITouch) {
         if let touchedInventoryCell = self.inventory.inventoryCell(at: touch) {
             guard touchedInventoryCell.children.first == nil else {
@@ -487,9 +486,9 @@ class WorldScene: SKScene {
             return
         }
 
-        let characterTileCoordinate = TileCoordinate(from: self.characterPosition)
-        let touchedTileCoordinate = TileCoordinate(from: touch.location(in: worldLayer))
-        guard touchedTileCoordinate.isAdjacent(with: characterTileCoordinate) else {
+        let characterTC = TileCoordinate(from: self.characterPosition)
+        let touchedTC = TileCoordinate(from: touch.location(in: worldLayer))
+        guard touchedTC.isAdjacent(with: characterTC) else {
             return
         }
 
@@ -500,11 +499,12 @@ class WorldScene: SKScene {
 
         let carryingGO = self.carryingGO!
         carryingGO.move(toParent: self.field)
-        // TODO: make function for calculate tile coordinate
-        carryingGO.position = touchedTileCoordinate.fieldPoint
+        carryingGO.position = touchedTC.fieldPoint
         carryingGO.alpha = 1.0
 
-        let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTileCoordinate.value)
+        self.addAccessableGO(carryingGO)
+
+        let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
         self.sceneController.move(carryingGO, to: coordinate)
 
         self.carryTouchReset(touch)
@@ -573,18 +573,18 @@ class WorldScene: SKScene {
     var lastPosition: CGPoint = CGPoint()
 
     override func update(_ currentTime: TimeInterval) {
-        let timeInterval: TimeInterval = currentTime - lastUpdateTime
+        let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
         self.characterPosition += self.velocityVector * timeInterval
 
-        updateVelocity(timeInterval: timeInterval)
+        self.updateVelocity(timeInterval: timeInterval)
 
-        updateAccessableGOs()
-        resolveWorldBorderCollision()
-        resolveCollision()
+        self.updateAccessableGOs()
+        self.resolveWorldBorderCollision()
+        self.resolveCollision()
 
-        lastUpdateTime = currentTime
-        lastPosition = self.characterPosition
+        self.lastUpdateTime = currentTime
+        self.lastPosition = self.characterPosition
     }
 
     func updateVelocity(timeInterval: TimeInterval) {
@@ -595,6 +595,7 @@ class WorldScene: SKScene {
             : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
     }
 
+    // MARK: accessable go
     func updateAccessableGOs() {
         guard self.isChangedTile() else { return }
 
@@ -613,17 +614,18 @@ class WorldScene: SKScene {
         }
     }
 
+    // MARK: resolve collision
     func resolveWorldBorderCollision() {
-        self.characterPosition.x = characterPosition.x < Constant.moveableArea.minX
+        self.characterPosition.x = self.characterPosition.x < Constant.moveableArea.minX
             ? Constant.moveableArea.minX
             : self.characterPosition.x
-        self.characterPosition.x = characterPosition.x > Constant.moveableArea.maxX
+        self.characterPosition.x = self.characterPosition.x > Constant.moveableArea.maxX
             ? Constant.moveableArea.maxX
             : self.characterPosition.x
-        self.characterPosition.y = characterPosition.y < Constant.moveableArea.minY
+        self.characterPosition.y = self.characterPosition.y < Constant.moveableArea.minY
             ? Constant.moveableArea.minY
             : self.characterPosition.y
-        self.characterPosition.y = characterPosition.y > Constant.moveableArea.maxY
+        self.characterPosition.y = self.characterPosition.y > Constant.moveableArea.maxY
             ? Constant.moveableArea.maxY
             : self.characterPosition.y
     }
@@ -665,6 +667,15 @@ class WorldScene: SKScene {
         let currentTile = TileCoordinate(from: currentPosition)
 
         return currentTile != lastTile
+    }
+
+    func addAccessableGO(_ go: GameObject) {
+        for (index, accessableGO) in self.accessableGOs.enumerated() {
+            if accessableGO == nil {
+                self.accessableGOs[index] = go
+                return
+            }
+        }
     }
 
 }

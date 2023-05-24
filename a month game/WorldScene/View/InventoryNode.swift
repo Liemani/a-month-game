@@ -17,7 +17,6 @@ class InventoryNode: SKNode {
 
     static var inventoryCellCount: Int { return Constant.inventoryCellCount }
 
-    // TODO: what about make init()
     func setUp() {
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
 
