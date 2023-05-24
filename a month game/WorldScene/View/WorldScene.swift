@@ -466,6 +466,7 @@ class WorldScene: SKScene {
         self.thirdHand.position = touch.location(in: self.ui)
     }
 
+    // TODO: review from the InventoryNode's point of view
     func carryTouchEnded(_ touch: UITouch) {
         if let touchedInventoryCell = self.inventory.inventoryCell(at: touch) {
             guard touchedInventoryCell.children.first == nil else {
@@ -478,34 +479,36 @@ class WorldScene: SKScene {
             carryingGameObject.position = CGPoint()
             carryingGameObject.alpha = 1.0
 
-            let tileCoordinate = Coordinate(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
-            let coordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: tileCoordinate)
-            self.sceneController.move(carryingGameObject, to: coordinate)
+            let coordinate = Coordinate<Int>(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
+            let gameObjectCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
+            self.sceneController.move(carryingGameObject, to: gameObjectCoordinate)
 
             self.carryTouchReset(touch)
             return
         }
 
-        let characterTileCoordinate = Helper.tileCoordinate(from: self.characterPosition)
-        let touchTileCoordinate = Helper.tileCoordinate(from: touch.location(in: worldLayer))
-        if touchTileCoordinate.isAdjacent(coordinate: characterTileCoordinate) {
-            guard self.field.gameObject(at: touch) == nil else {
-                self.carryTouchCancelled(touch)
-                return
-            }
-
-            let carryingGameObject = self.carryingGameObject!
-            carryingGameObject.move(toParent: self.field)
-            // TODO: make function for calculate tile coordinate
-            carryingGameObject.position = (touchTileCoordinate.toCGPoint() + 0.5) * Constant.tileSide
-            carryingGameObject.alpha = 1.0
-
-            let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchTileCoordinate)
-            self.sceneController.move(carryingGameObject, to: coordinate)
-
-            self.carryTouchReset(touch)
+        let characterTileCoordinate = TileCoordinate(from: self.characterPosition)
+        let touchedTileCoordinate = TileCoordinate(from: touch.location(in: worldLayer))
+        guard touchedTileCoordinate.isAdjacent(with: characterTileCoordinate) else {
             return
         }
+
+        guard self.field.gameObject(at: touch) == nil else {
+            self.carryTouchCancelled(touch)
+            return
+        }
+
+        let carryingGameObject = self.carryingGameObject!
+        carryingGameObject.move(toParent: self.field)
+        // TODO: make function for calculate tile coordinate
+        carryingGameObject.position = touchedTileCoordinate.fieldPoint
+        carryingGameObject.alpha = 1.0
+
+        let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTileCoordinate.value)
+        self.sceneController.move(carryingGameObject, to: coordinate)
+
+        self.carryTouchReset(touch)
+        return
     }
 
     func carryTouchCancelled(_ touch: UITouch) {
@@ -593,7 +596,7 @@ class WorldScene: SKScene {
     }
 
     func updateAccessableGameObjects() {
-        guard self.isMovedTile() else { return }
+        guard self.isChangedTile() else { return }
 
         let accessableNodes = self.field.gameObjects(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
@@ -651,12 +654,11 @@ class WorldScene: SKScene {
     }
 
     // MARK: - etc
-    // TODO: move to class TileCoordinate: Coordinate<Int>
-    func isMovedTile() -> Bool {
+    func isChangedTile() -> Bool {
         let currentPosition = self.characterPosition
 
-        let lastTile = Helper.tileCoordinate(from: self.lastPosition)
-        let currentTile = Helper.tileCoordinate(from: currentPosition)
+        let lastTile = TileCoordinate(from: self.lastPosition)
+        let currentTile = TileCoordinate(from: currentPosition)
 
         return currentTile != lastTile
     }

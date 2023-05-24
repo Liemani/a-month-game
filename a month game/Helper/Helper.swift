@@ -27,11 +27,4 @@ struct Helper {
         return spriteNode
     }
 
-    // TODO: move to class TileCoordinate: Coordinate<Int>
-    static func tileCoordinate(from point: CGPoint) -> Coordinate<Int> {
-        let x = Int(point.x) / Int(Constant.tileSide)
-        let y = Int(point.y) / Int(Constant.tileSide)
-        return Coordinate<Int>(x: x, y: y)
-    }
-
 }

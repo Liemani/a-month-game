@@ -45,6 +45,7 @@
 		039037CB2A15FBCD0014A571 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CA2A15FBCD0014A571 /* Extension.swift */; };
 		039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CC2A17AB3E0014A571 /* Coordinate.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
+		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		039037CA2A15FBCD0014A571 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		039037CC2A17AB3E0014A571 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
+		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 				031D575D2A07C311007EF383 /* TileMapModel.swift */,
 				031D57552A076DC8007EF383 /* CharacterModel.swift */,
 				039037CC2A17AB3E0014A571 /* Coordinate.swift */,
+				03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -329,6 +332,7 @@
 				030ABFBA2A0CE8F600BAB9B8 /* Helper.swift in Sources */,
 				038330A82A02850A008DEA10 /* WorldScene.swift in Sources */,
 				031D57592A07731A007EF383 /* WorldSceneController.swift in Sources */,
+				03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,
 				030ABFCD2A10C6ED00BAB9B8 /* DiskController.swift in Sources */,
 				033C9E632A1C2DCA000E1D50 /* FieldNode.swift in Sources */,
