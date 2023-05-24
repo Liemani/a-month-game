@@ -105,10 +105,6 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
-item is on third hand, move character, put down third hand to tile, pick up the item again, it trigger move touch
-Where to get the position of game object on field?
-Container.gameobject add remove
-game object touch -> alpha: 0.5
 interact
 container node 만들기
 뭔가 item drag move 가 실패하는 경우가 있다..
@@ -294,6 +290,10 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+game object touch -> alpha: 0.5
+Container.gameobject add remove
+Where to get the position of game object on field?
+item is on third hand, move character, put down third hand to tile, pick up the item again, it trigger move touch
 check tiletype() and containertype() optional check
 remove GameObject
 디스크 관리

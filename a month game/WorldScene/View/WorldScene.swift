@@ -429,7 +429,7 @@ class WorldScene: SKScene {
     }
 
     func gameObjectTouchEnded(_ touch: UITouch) {
-        self.touchedGO!.interact(leftHand: self.leftHandGO, rightHand: self.rightHandGO)
+        self.interact(self.touchedGO!, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
         self.touchedGO!.alpha = 1.0
 
         self.gameObjectTouchReset(touch)
@@ -657,6 +657,11 @@ class WorldScene: SKScene {
 
     func move(_ go: GameObject, to goCoordinate: GameObjectCoordinate) {
         self.sceneController.move(go, to: goCoordinate)
+    }
+
+    // MARK: - interact
+    func interact(_ touchedGO: GameObject, leftHand lGO: GameObject?, rightHand rGO: GameObject?) {
+
     }
 
     // MARK: - etc

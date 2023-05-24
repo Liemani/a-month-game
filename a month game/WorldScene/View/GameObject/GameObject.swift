@@ -15,8 +15,4 @@ class GameObject: SKSpriteNode {
     var isWalkable: Bool { return true }
     var isPickable: Bool { return true }
 
-    func interact(leftHand: GameObject?, rightHand: GameObject?) {
-
-    }
-
 }
