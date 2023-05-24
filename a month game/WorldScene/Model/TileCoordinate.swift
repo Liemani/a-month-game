@@ -20,13 +20,13 @@ struct TileCoordinate {
     }
 
     init(x: Int, y: Int) {
-        self.value = Coordinate<Int>(x: x, y: y)
+        self.value = Coordinate(x, y)
     }
 
     init(from point: CGPoint) {
         let x = Int(point.x) / Int(Constant.tileSide)
         let y = Int(point.y) / Int(Constant.tileSide)
-        self.value = Coordinate<Int>(x: x, y: y)
+        self.value = Coordinate(x, y)
     }
 
     var fieldPoint: CGPoint {

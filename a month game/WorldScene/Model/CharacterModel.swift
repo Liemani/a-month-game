@@ -13,7 +13,7 @@ class CharacterModel {
 
     init() {
         // TODO: 99 load coordinate
-        self.coordinate = Coordinate<Int>(x: 49, y: 49)
+        self.coordinate = Coordinate(49, 49)
     }
 
 }

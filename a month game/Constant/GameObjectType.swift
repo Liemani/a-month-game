@@ -23,8 +23,8 @@ enum GameObjectType: Int, CaseIterable {
         (GameObjectPineCone.self, "game_object_pine_cone"),
         (GameObjectPineTree.self, "game_object_pine_tree"),
         (GameObjectWoodWall.self, "game_object_wood_wall"),
-        (GameObjectBranch.self, "game_object_stone"),
-        (GameObjectStone.self, "game_object_branch"),
+        (GameObjectBranch.self, "game_object_branch"),
+        (GameObjectStone.self, "game_object_stone"),
         (GameObjectAxe.self, "game_object_axe"),
     ]
 
@@ -58,6 +58,11 @@ enum GameObjectType: Int, CaseIterable {
         let type = self.rawResources[typeID].type
         let texture = self.resource[ObjectIdentifier(type)]!.texture
         return type.init(texture: texture)
+    }
+
+    init(byGO go: GameObject) {
+        let typeID = GameObjectType.resource[go.objectIdentifier]!.typeID
+        self.init(rawValue: typeID)!
     }
 
 }

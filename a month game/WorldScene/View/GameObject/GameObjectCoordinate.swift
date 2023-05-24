@@ -22,7 +22,7 @@ struct GameObjectCoordinate {
 
     init(containerType: ContainerType, x: Int, y: Int) {
         self.containerType = containerType
-        self.coordinate = Coordinate(x: x, y: y)
+        self.coordinate = Coordinate(x, y)
     }
 
     func toCGPoint() -> CGPoint {

@@ -65,8 +65,8 @@ final class DiskController {
         return self.persistentContainer.fetchGOMOArray()
     }
 
-    func store(_ goMO: GameObjectMO) {
-        self.persistentContainer.store(goMO)
+    func newGOMO() -> GameObjectMO {
+        return self.persistentContainer.newGOMO()
     }
 
     func delete(_ goMO: GameObjectMO) {

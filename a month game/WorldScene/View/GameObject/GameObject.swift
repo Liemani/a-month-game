@@ -11,6 +11,12 @@ import SpriteKit
 // MARK: - class GameObject
 class GameObject: SKSpriteNode {
 
+    var worldScene: WorldScene { return self.scene as! WorldScene }
+
+    var objectIdentifier: ObjectIdentifier {
+        return ObjectIdentifier(type(of: self))
+    }
+
     // MARK: property to be overriden
     var isWalkable: Bool { return true }
     var isPickable: Bool { return true }

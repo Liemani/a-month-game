@@ -429,7 +429,7 @@ class WorldScene: SKScene {
     }
 
     func gameObjectTouchEnded(_ touch: UITouch) {
-        self.interact(self.touchedGO!, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
+        self.sceneController.interact(self.touchedGO!, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
         self.touchedGO!.alpha = 1.0
 
         self.gameObjectTouchReset(touch)
@@ -478,7 +478,7 @@ class WorldScene: SKScene {
             carryingGO.position = CGPoint()
             carryingGO.alpha = 1.0
 
-            let coordinate = Coordinate<Int>(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
+            let coordinate = Coordinate(touchedInventoryCell.firstIndexFromParent!, 0)
             let goCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
             self.move(carryingGO, to: goCoordinate)
 
@@ -646,9 +646,7 @@ class WorldScene: SKScene {
     }
 
     func add(by goMO: GameObjectMO) -> GameObject? {
-        guard let containerType = goMO.containerType else {
-            return nil
-        }
+        guard let containerType = goMO.containerType else { return nil }
 
         let go = self.containerArray[containerType]!.add(by: goMO)
 
@@ -657,11 +655,6 @@ class WorldScene: SKScene {
 
     func move(_ go: GameObject, to goCoordinate: GameObjectCoordinate) {
         self.sceneController.move(go, to: goCoordinate)
-    }
-
-    // MARK: - interact
-    func interact(_ touchedGO: GameObject, leftHand lGO: GameObject?, rightHand rGO: GameObject?) {
-
     }
 
     // MARK: - etc

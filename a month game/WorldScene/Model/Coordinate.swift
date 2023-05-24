@@ -14,7 +14,7 @@ struct Coordinate<T> where T: Numeric {
     var x: T
     var y: T
 
-    init(x: T, y: T) {
+    init(_ x: T, _ y: T) {
         self.x = x
         self.y = y
     }
@@ -27,12 +27,16 @@ struct Coordinate<T> where T: Numeric {
         return !(lhs == rhs)
     }
 
+    static func + (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Coordinate<T> {
+        return Coordinate(lhs.x + rhs.x, lhs.y + rhs.y)
+    }
+
 }
 
 extension Coordinate<Int> {
 
     init() {
-        self.init(x: T(0), y: T(0))
+        self.init(T(0), T(0))
     }
 
     func toCGPoint() -> CGPoint {

@@ -48,8 +48,8 @@ final class WorldSceneModel {
         self.diskController.save(tileData: tileData, toX: x, y: y)
     }
 
-    func add(_ goMO: GameObjectMO) {
-        self.diskController.store(goMO)
+    func newGOMO() -> GameObjectMO {
+        return self.diskController.newGOMO()
     }
 
     func remove(_ goMO: GameObjectMO) {

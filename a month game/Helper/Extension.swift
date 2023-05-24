@@ -30,17 +30,18 @@ extension GameObjectMO {
     }
 
     var coordinate: Coordinate<Int> {
-        return Coordinate<Int>(x: Int(self.x), y: Int(self.y))
+        return Coordinate(Int(self.x), Int(self.y))
     }
 
     // TODO: clean after implementing GameObject.interact()
-//    required init(id: Int?, coordinate: GameObjectCoordinate) {
-//        self.id = id ?? GameObject.idGenerator.generate()
-//        self.coordinate = coordinate
-//    }
-//
-//    static private let idGenerator = IDGenerator.default
-//
+    func setUp(gameObjectType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
+        self.id = Int32(IDGenerator.generate())
+        self.typeID = Int32(gameObjectType.rawValue)
+        self.containerID = Int32(containerType.rawValue)
+        self.x = Int32(x)
+        self.y = Int32(y)
+    }
+
 //    static func new(ofTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
 //        let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
 //        let type = Resource.gameObjectTypeIDToInformation[typeID].type

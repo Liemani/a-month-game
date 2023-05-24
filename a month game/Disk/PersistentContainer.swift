@@ -11,8 +11,6 @@ import CoreData
 final class PersistentContainer: NSPersistentContainer {
 
     func setToWorld(with worldDirectoryURL: URL) {
-        print(self.persistentStoreDescriptions.count)
-        print(self.persistentStoreCoordinator.persistentStores.count)
         self.loadPersistentStore(from: worldDirectoryURL)
     }
 
@@ -38,7 +36,7 @@ final class PersistentContainer: NSPersistentContainer {
         let request = GameObjectMO.fetchRequest()
         let goMOs = try! self.viewContext.fetch(request)
 
-        return goMOs.count > 0 ? goMOs : self.generateGOMOArray()
+        return goMOs.count > 0 ? goMOs : self.generateGOMOs()
     }
 
     func store(_ goMO: GameObjectMO) {
@@ -47,6 +45,10 @@ final class PersistentContainer: NSPersistentContainer {
         context.insert(goMO)
 
         try! context.save()
+    }
+
+    func newGOMO() -> GameObjectMO {
+        return NSEntityDescription.insertNewObject(forEntityName: Constant.gameObjectDataEntityName, into: self.viewContext) as! GameObjectMO
     }
 
     func contextSave() {
@@ -64,17 +66,15 @@ final class PersistentContainer: NSPersistentContainer {
     }
 
     // MARK: - private
-    private func generateGOMOArray() -> [GameObjectMO] {
-        let idGenerator = IDGenerator.default
-
+    private func generateGOMOs() -> [GameObjectMO] {
         let goMOs = [
-            self.store(typeID: 1, id: Int32(idGenerator.generate()), containerID: 0, x: 51, y: 51),
-            self.store(typeID: 2, id: Int32(idGenerator.generate()), containerID: 0, x: 52, y: 52),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 50, y: 53),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 51),
-            self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 52),
-            self.store(typeID: 4, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 53),
-            self.store(typeID: 5, id: Int32(idGenerator.generate()), containerID: 0, x: 48, y: 54),
+            self.store(typeID: 1, id: Int32(IDGenerator.generate()), containerID: 0, x: 51, y: 51),
+            self.store(typeID: 2, id: Int32(IDGenerator.generate()), containerID: 0, x: 52, y: 52),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 50, y: 53),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 51),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 52),
+            self.store(typeID: 4, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 53),
+            self.store(typeID: 5, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 54),
         ]
 
         try! self.viewContext.save()
