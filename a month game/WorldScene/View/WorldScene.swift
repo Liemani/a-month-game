@@ -34,15 +34,15 @@ class WorldScene: SKScene {
     var menuButton: SKNode!
     var accessBox: SKNode!
 
-    var leftHandGameObject: GameObject? {
-        return self.inventory.leftHand
+    var leftHandGO: GameObject? {
+        return self.inventory.leftHandGO
     }
 
-    var rightHandGameObject: GameObject? {
-        return self.inventory.rightHand
+    var rightHandGO: GameObject? {
+        return self.inventory.rightHandGO
     }
 
-    var carryingGameObject: GameObject? {
+    var carryingGO: GameObject? {
         return self.thirdHand.children.first as! GameObject?
     }
 
@@ -58,7 +58,7 @@ class WorldScene: SKScene {
         set { self.movingLayer.position = -newValue }
     }
 
-    var accessableGameObjects = [GameObject?](repeating: nil, count: 9)
+    var accessableGOs = [GameObject?](repeating: nil, count: 9)
 
     // MARK: - initialize
     func setUp(sceneController: WorldSceneController) {
@@ -229,12 +229,12 @@ class WorldScene: SKScene {
             return
         }
 
-        if self.isFieldGameObjectTouched(touch) {
+        if self.isFieldGOTouched(touch) {
             self.gameObjectTouchBegan(touch)
             return
         }
 
-        if self.isInventoryGameObjectTouched(touch) {
+        if self.isInventoryGOTouched(touch) {
             self.gameObjectTouchBegan(touch)
             return
         }
@@ -385,21 +385,21 @@ class WorldScene: SKScene {
 
     // MARK: - game object touch
     var gameObjectTouch: UITouch? = nil
-    var touchedGameObject: GameObject? = nil
+    var touchedGO: GameObject? = nil
 
-    func isFieldGameObjectTouched(_ touch: UITouch) -> Bool {
-        if let gameObject = self.field.gameObject(at: touch),
-           self.accessableGameObjects.contains(gameObject) {
-            self.touchedGameObject = gameObject
+    func isFieldGOTouched(_ touch: UITouch) -> Bool {
+        if let go = self.field.gameObject(at: touch),
+           self.accessableGOs.contains(go) {
+            self.touchedGO = go
             return true
         }
 
         return false
     }
 
-    func isInventoryGameObjectTouched(_ touch: UITouch) -> Bool {
-        if let gameObject = self.inventory.gameObject(at: touch) {
-            self.touchedGameObject = gameObject
+    func isInventoryGOTouched(_ touch: UITouch) -> Bool {
+        if let go = self.inventory.gameObject(at: touch) {
+            self.touchedGO = go
             return true
         }
 
@@ -408,17 +408,17 @@ class WorldScene: SKScene {
 
     func gameObjectTouchBegan(_ touch: UITouch) {
         self.gameObjectTouch = touch
-        self.touchedGameObject!.alpha = 0.5
+        self.touchedGO!.alpha = 0.5
     }
 
     func gameObjectTouchMoved(_ touch: UITouch) {
-        if !touch.is(onThe: self.touchedGameObject!) {
-            if self.carryingGameObject == nil && self.touchedGameObject!.isPickable {
+        if !touch.is(onThe: self.touchedGO!) {
+            if self.carryingGO == nil && self.touchedGO!.isPickable {
                 self.thirdHand.position = touch.location(in: self.ui)
-                self.touchedGameObject!.move(toParent: self.thirdHand)
-                self.touchedGameObject!.position = CGPoint()
+                self.touchedGO!.move(toParent: self.thirdHand)
+                self.touchedGO!.position = CGPoint()
                 let coordinate = GameObjectCoordinate(containerType: ContainerType.thirdHand, x: 0, y: 0)
-                self.sceneController.move(self.touchedGameObject!, to: coordinate)
+                self.sceneController.move(self.touchedGO!, to: coordinate)
 
                 self.gameObjectTouchReset(touch)
                 self.carryTouchBegan(touch)
@@ -429,29 +429,29 @@ class WorldScene: SKScene {
     }
 
     func gameObjectTouchEnded(_ touch: UITouch) {
-        self.touchedGameObject!.interact(leftHand: self.leftHandGameObject, rightHand: self.rightHandGameObject)
-        self.touchedGameObject!.alpha = 1.0
+        self.touchedGO!.interact(leftHand: self.leftHandGO, rightHand: self.rightHandGO)
+        self.touchedGO!.alpha = 1.0
 
         self.gameObjectTouchReset(touch)
     }
 
     func gameObjectTouchCancelled(_ touch: UITouch) {
-        self.touchedGameObject?.alpha = 1.0
+        self.touchedGO?.alpha = 1.0
 
         self.gameObjectTouchReset(touch)
     }
 
     func gameObjectTouchReset(_ touch: UITouch) {
         self.gameObjectTouch = nil
-        self.touchedGameObject = nil
+        self.touchedGO = nil
     }
 
     // MARK: - carry touch
     var carryTouch: UITouch? = nil
 
     func isThirdHandObjectTouch(_ touch: UITouch) -> Bool {
-        if let thirdHandGameObject = self.carryingGameObject,
-           touch.is(onThe: thirdHandGameObject) {
+        if let thirdHandGO = self.carryingGO,
+           touch.is(onThe: thirdHandGO) {
             return true
         }
 
@@ -474,14 +474,14 @@ class WorldScene: SKScene {
                 return
             }
 
-            let carryingGameObject = self.carryingGameObject!
-            carryingGameObject.move(toParent: touchedInventoryCell)
-            carryingGameObject.position = CGPoint()
-            carryingGameObject.alpha = 1.0
+            let carryingGO = self.carryingGO!
+            carryingGO.move(toParent: touchedInventoryCell)
+            carryingGO.position = CGPoint()
+            carryingGO.alpha = 1.0
 
             let coordinate = Coordinate<Int>(x: touchedInventoryCell.firstIndexFromParent!, y: 0)
-            let gameObjectCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
-            self.sceneController.move(carryingGameObject, to: gameObjectCoordinate)
+            let goCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
+            self.move(carryingGO, to: goCoordinate)
 
             self.carryTouchReset(touch)
             return
@@ -498,14 +498,14 @@ class WorldScene: SKScene {
             return
         }
 
-        let carryingGameObject = self.carryingGameObject!
-        carryingGameObject.move(toParent: self.field)
+        let carryingGO = self.carryingGO!
+        carryingGO.move(toParent: self.field)
         // TODO: make function for calculate tile coordinate
-        carryingGameObject.position = touchedTileCoordinate.fieldPoint
-        carryingGameObject.alpha = 1.0
+        carryingGO.position = touchedTileCoordinate.fieldPoint
+        carryingGO.alpha = 1.0
 
         let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTileCoordinate.value)
-        self.sceneController.move(carryingGameObject, to: coordinate)
+        self.sceneController.move(carryingGO, to: coordinate)
 
         self.carryTouchReset(touch)
         return
@@ -579,7 +579,7 @@ class WorldScene: SKScene {
 
         updateVelocity(timeInterval: timeInterval)
 
-        updateAccessableGameObjects()
+        updateAccessableGOs()
         resolveWorldBorderCollision()
         resolveCollision()
 
@@ -595,21 +595,21 @@ class WorldScene: SKScene {
             : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
     }
 
-    func updateAccessableGameObjects() {
+    func updateAccessableGOs() {
         guard self.isChangedTile() else { return }
 
         let accessableNodes = self.field.gameObjects(at: self.accessBox)
         let currentAccessableObjectCount = accessableNodes.count
 
         guard currentAccessableObjectCount != 0
-                || self.accessableGameObjects.first != nil else { return }
+                || self.accessableGOs.first != nil else { return }
 
-        for index in 0..<self.accessableGameObjects.count {
-            self.accessableGameObjects[index] = nil
+        for index in 0..<self.accessableGOs.count {
+            self.accessableGOs[index] = nil
         }
 
         for (index, accessableNode) in accessableNodes.enumerated() {
-            self.accessableGameObjects[index] = accessableNode
+            self.accessableGOs[index] = accessableNode
         }
     }
 
@@ -629,11 +629,11 @@ class WorldScene: SKScene {
     }
 
     func resolveCollision() {
-        for gameObject in self.accessableGameObjects {
-            guard let gameObject = gameObject, !gameObject.isWalkable else { continue }
+        for go in self.accessableGOs {
+            guard let go = go, !go.isWalkable else { continue }
 
-            if !gameObject.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
-                gameObject.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
+            if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
+                go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
             }
         }
     }
@@ -643,14 +643,18 @@ class WorldScene: SKScene {
         self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
-    func add(by gameObjectMO: GameObjectMO) -> GameObject? {
-        guard let containerType = gameObjectMO.containerType else {
+    func add(by goMO: GameObjectMO) -> GameObject? {
+        guard let containerType = goMO.containerType else {
             return nil
         }
 
-        let gameObject = self.containerArray[containerType]!.add(by: gameObjectMO)
+        let go = self.containerArray[containerType]!.add(by: goMO)
 
-        return gameObject
+        return go
+    }
+
+    func move(_ go: GameObject, to goCoordinate: GameObjectCoordinate) {
+        self.sceneController.move(go, to: goCoordinate)
     }
 
     // MARK: - etc

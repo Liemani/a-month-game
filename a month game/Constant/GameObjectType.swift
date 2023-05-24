@@ -32,9 +32,8 @@ enum GameObjectType: Int, CaseIterable {
 
         var dictionary: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = [:]
 
-        for (typeID, gameObjectType) in rawResources.enumerated() {
+        for (typeID, rawResource) in rawResources.enumerated() {
             let type = GameObjectType(rawValue: typeID)!
-            let rawResource = rawResources[typeID]
             let objectIdentifier = ObjectIdentifier(rawResource.type)
             let resourceName = rawResource.name
             let texture = SKTexture(imageNamed: resourceName)

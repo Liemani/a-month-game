@@ -31,8 +31,8 @@ final class WorldSceneModel {
         self.characterModel = CharacterModel()
     }
 
-    func loadGameObjectDictionary() -> [GameObjectMO] {
-        return self.diskController.loadGameObjectManagedObjectArray()
+    func loadGOs() -> [GameObjectMO] {
+        return self.diskController.loadGOMOArray()
     }
 
     deinit {
@@ -48,12 +48,12 @@ final class WorldSceneModel {
         self.diskController.save(tileData: tileData, toX: x, y: y)
     }
 
-    func add(_ gameObjectMO: GameObjectMO) {
-        self.diskController.store(gameObjectMO)
+    func add(_ goMO: GameObjectMO) {
+        self.diskController.store(goMO)
     }
 
-    func remove(_ gameObjectMO: GameObjectMO) {
-        self.diskController.delete(gameObjectMO)
+    func remove(_ goMO: GameObjectMO) {
+        self.diskController.delete(goMO)
     }
 
     func contextSave() {

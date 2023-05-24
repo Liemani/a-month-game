@@ -10,7 +10,7 @@ import SpriteKit
 
 protocol ContainerNode: SKNode {
 
-    func add(by gameObjectMO: GameObjectMO) -> GameObject?
+    func add(by goMO: GameObjectMO) -> GameObject?
 
     func gameObject(at touch: UITouch) -> GameObject?
 

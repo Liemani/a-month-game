@@ -12,7 +12,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    var gameObjectToMO: [GameObject: GameObjectMO] = [:]
+    var goToMO: [GameObject: GameObjectMO] = [:]
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
 
@@ -42,11 +42,11 @@ final class WorldSceneController: SceneController {
             }
         }
 
-        let gameObjectMOArray = self.worldSceneModel.loadGameObjectDictionary()
-        for gameObjectMO in gameObjectMOArray {
-            guard let gameObject = self.worldScene.add(by: gameObjectMO) else { continue }
+        let goMOs = self.worldSceneModel.loadGOs()
+        for goMO in goMOs {
+            guard let go = self.worldScene.add(by: goMO) else { continue }
 
-            self.gameObjectToMO[gameObject] = gameObjectMO
+            self.goToMO[go] = goMO
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
@@ -56,8 +56,8 @@ final class WorldSceneController: SceneController {
 
 #if DEBUG
     func debugCode() {
-        for gameObjectMO in self.gameObjectToMO.values {
-            print("id: \(gameObjectMO.id), typeID: \(gameObjectMO.typeID), containerID: \(gameObjectMO.containerID), coordinate: (\(gameObjectMO.x), \(gameObjectMO.y))")
+        for goMO in self.goToMO.values {
+            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
         }
     }
 #endif
@@ -71,23 +71,21 @@ final class WorldSceneController: SceneController {
 //        self.gameObjectToMO[gameObjectNode] = gameObjectMO
 //    }
 
-    func removeGameObject(by gameObject: GameObject) {
-        let gameObjectMO = self.gameObjectToMO[gameObject]!
+    func removeGO(by go: GameObject) {
+        let goMO = self.goToMO[go]!
 
-        self.gameObjectToMO.removeValue(forKey: gameObject)
-        gameObject.removeFromParent()
+        self.goToMO.removeValue(forKey: go)
+        go.removeFromParent()
 
-        self.worldSceneModel.remove(gameObjectMO)
+        self.worldSceneModel.remove(goMO)
     }
 
-    // MARK: - etc
-    // TODO: move
-    func move(_ gameObject: GameObject, to newCoordinate: GameObjectCoordinate) {
-        let gameObjectMO = self.gameObjectToMO[gameObject]!
+    func move(_ go: GameObject, to newCoordinate: GameObjectCoordinate) {
+        let goMO = self.goToMO[go]!
 
-        gameObjectMO.containerID = Int32(newCoordinate.containerType.rawValue)
-        gameObjectMO.x = Int32(newCoordinate.x)
-        gameObjectMO.y = Int32(newCoordinate.y)
+        goMO.containerID = Int32(newCoordinate.containerType.rawValue)
+        goMO.x = Int32(newCoordinate.x)
+        goMO.y = Int32(newCoordinate.y)
 
         self.worldSceneModel.contextSave()
     }

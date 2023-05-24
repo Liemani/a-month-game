@@ -12,8 +12,8 @@ class InventoryNode: SKNode {
 
     var inventoryCells: [SKNode]!
 
-    var leftHand: GameObject? { return self.children[0].children.first as! GameObject? }
-    var rightHand: GameObject? { return self.children[Constant.inventoryCellCount].children.first as! GameObject? }
+    var leftHandGO: GameObject? { return self.children[0].children.first as! GameObject? }
+    var rightHandGO: GameObject? { return self.children[Constant.inventoryCellCount].children.first as! GameObject? }
 
     static var inventoryCellCount: Int { return Constant.inventoryCellCount }
 
@@ -71,28 +71,32 @@ class InventoryNode: SKNode {
 
 extension InventoryNode: ContainerNode {
 
-    func add(by gameObjectMO: GameObjectMO) -> GameObject? {
-        let typeID = Int(gameObjectMO.typeID)
-        guard let gameObject = GameObjectType.new(typeID: typeID) else { return nil }
+    func add(by goMO: GameObjectMO) -> GameObject? {
+        let typeID = Int(goMO.typeID)
+        guard let go = GameObjectType.new(typeID: typeID) else {
+            return nil
+        }
 
-        gameObject.zPosition = Constant.ZPosition.gameObject
+        go.zPosition = Constant.ZPosition.gameObject
 
-        let inventoryIndex = Int(gameObjectMO.x)
-        guard 0 <= inventoryIndex && inventoryIndex < InventoryNode.inventoryCellCount else { return nil }
+        let inventoryIndex = Int(goMO.x)
+        guard 0 <= inventoryIndex && inventoryIndex < InventoryNode.inventoryCellCount else {
+            return nil
+        }
 
         let inventoryCell = self.inventoryCells[inventoryIndex]
-        inventoryCell.addChild(gameObject)
+        inventoryCell.addChild(go)
 
-        return gameObject
+        return go
     }
 
     func gameObject(at touch: UITouch) -> GameObject? {
         let touchPoint = touch.location(in: self)
 
         for index in 0..<Constant.inventoryCellCount {
-            if let gameObject = self.children[index].children.first,
-               gameObject.parent!.contains(touchPoint) {
-                return gameObject as! GameObject?
+            if let go = self.children[index].children.first,
+               go.parent!.contains(touchPoint) {
+                return go as! GameObject?
             }
         }
 

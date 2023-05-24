@@ -11,34 +11,34 @@ import SpriteKit
 class FieldNode: SKNode {
 
     func gameObjects(at node: SKNode) -> [GameObject] {
-        var gameObjectsAt = [GameObject]()
+        var gosAt = [GameObject]()
 
         for child in self.children {
             let child = child as! GameObject
             if child.intersects(node) {
-                gameObjectsAt.append(child)
+                gosAt.append(child)
             }
         }
 
-        return gameObjectsAt
+        return gosAt
     }
 
 }
 
 extension FieldNode: ContainerNode {
 
-    func add(by gameObjectMO: GameObjectMO) -> GameObject? {
-        let typeID = Int(gameObjectMO.typeID)
-        guard let gameObject = GameObjectType.new(typeID: typeID) else { return nil }
+    func add(by goMO: GameObjectMO) -> GameObject? {
+        let typeID = Int(goMO.typeID)
+        guard let go = GameObjectType.new(typeID: typeID) else { return nil }
 
-        gameObject.zPosition = Constant.ZPosition.gameObject
+        go.zPosition = Constant.ZPosition.gameObject
 
-        let position = (gameObjectMO.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
-        gameObject.position = position
+        let position = (goMO.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
+        go.position = position
 
-        self.addChild(gameObject)
+        self.addChild(go)
 
-        return gameObject
+        return go
     }
 
     func gameObject(at touch: UITouch) -> GameObject? {

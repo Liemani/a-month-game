@@ -34,19 +34,17 @@ final class PersistentContainer: NSPersistentContainer {
     }
 
     // MARK: - edit
-    func fetchGameObjectMOArray() -> [GameObjectMO] {
+    func fetchGOMOArray() -> [GameObjectMO] {
         let request = GameObjectMO.fetchRequest()
-        let gameObjectManagedObjectArray = try! self.viewContext.fetch(request)
+        let goMOs = try! self.viewContext.fetch(request)
 
-        return gameObjectManagedObjectArray.count > 0
-            ? gameObjectManagedObjectArray
-            : self.generateGameObjectMOArray()
+        return goMOs.count > 0 ? goMOs : self.generateGOMOArray()
     }
 
-    func store(_ gameObjectMO: GameObjectMO) {
+    func store(_ goMO: GameObjectMO) {
         let context = self.viewContext
 
-        context.insert(gameObjectMO)
+        context.insert(goMO)
 
         try! context.save()
     }
@@ -57,19 +55,19 @@ final class PersistentContainer: NSPersistentContainer {
         try! context.save()
     }
 
-    func delete(_ gameObjectMO: GameObjectMO) {
+    func delete(_ goMO: GameObjectMO) {
         let context = self.viewContext
 
-        context.delete(gameObjectMO)
+        context.delete(goMO)
 
         try! context.save()
     }
 
     // MARK: - private
-    private func generateGameObjectMOArray() -> [GameObjectMO] {
+    private func generateGOMOArray() -> [GameObjectMO] {
         let idGenerator = IDGenerator.default
 
-        let gameObjectManagedObject = [
+        let goMOs = [
             self.store(typeID: 1, id: Int32(idGenerator.generate()), containerID: 0, x: 51, y: 51),
             self.store(typeID: 2, id: Int32(idGenerator.generate()), containerID: 0, x: 52, y: 52),
             self.store(typeID: 3, id: Int32(idGenerator.generate()), containerID: 0, x: 50, y: 53),
@@ -81,7 +79,7 @@ final class PersistentContainer: NSPersistentContainer {
 
         try! self.viewContext.save()
 
-        return gameObjectManagedObject
+        return goMOs
     }
 
     private func store(typeID: Int32, id: Int32, containerID: Int32, x: Int32, y: Int32) -> GameObjectMO {

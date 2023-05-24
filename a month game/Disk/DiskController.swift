@@ -61,16 +61,16 @@ final class DiskController {
     }
 
     // MARK: - CoreData
-    func loadGameObjectManagedObjectArray() -> [GameObjectMO] {
-        return self.persistentContainer.fetchGameObjectMOArray()
+    func loadGOMOArray() -> [GameObjectMO] {
+        return self.persistentContainer.fetchGOMOArray()
     }
 
-    func store(_ gameObjectMO: GameObjectMO) {
-        self.persistentContainer.store(gameObjectMO)
+    func store(_ goMO: GameObjectMO) {
+        self.persistentContainer.store(goMO)
     }
 
-    func delete(_ gameObjectMO: GameObjectMO) {
-        self.persistentContainer.delete(gameObjectMO)
+    func delete(_ goMO: GameObjectMO) {
+        self.persistentContainer.delete(goMO)
     }
 
     func contextSave() {
