@@ -9,11 +9,11 @@ import Foundation
 
 class CharacterModel {
 
-    var coordinate: TileCoordinate
+    var coordinate: Coordinate<Int>
 
     init() {
-        // TODO: load coordinate
-        self.coordinate = TileCoordinate(x: 49, y: 49)
+        // TODO: 99 load coordinate
+        self.coordinate = Coordinate<Int>(x: 49, y: 49)
     }
 
 }

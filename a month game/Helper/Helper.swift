@@ -8,7 +8,7 @@
 import UIKit
 import SpriteKit
 
-class Helper {
+struct Helper {
 
     @discardableResult
     static func createLabeledSpriteNode(texture: SKTexture, in frame: CGRect, labelText: String, andAddTo parentNode: SKNode) -> SKSpriteNode{
@@ -25,6 +25,13 @@ class Helper {
         parentNode.addChild(spriteNode)
 
         return spriteNode
+    }
+
+    // TODO: move to class TileCoordinate: Coordinate<Int>
+    static func tileCoordinate(from point: CGPoint) -> Coordinate<Int> {
+        let x = Int(point.x) / Int(Constant.tileSide)
+        let y = Int(point.y) / Int(Constant.tileSide)
+        return Coordinate<Int>(x: x, y: y)
     }
 
 }

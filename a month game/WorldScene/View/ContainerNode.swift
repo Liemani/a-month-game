@@ -8,6 +8,10 @@
 import Foundation
 import SpriteKit
 
-class ContainerNode: SKNode {
+protocol ContainerNode: SKNode {
+
+    func add(by gameObjectMO: GameObjectMO) -> GameObject?
+
+    func gameObject(at touch: UITouch) -> GameObject?
 
 }

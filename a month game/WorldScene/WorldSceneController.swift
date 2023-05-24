@@ -14,6 +14,8 @@ final class WorldSceneController: SceneController {
 
     var gameObjectToMO: [GameObject: GameObjectMO] = [:]
 
+    var worldScene: WorldScene { return self.scene as! WorldScene }
+
     // MARK: - init
     // TODO: clean
     init(viewController: ViewController, worldName: String) {
@@ -21,43 +23,44 @@ final class WorldSceneController: SceneController {
 
         self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
 
-        let scene = WorldScene()
-        scene.initialize(worldSceneController: self)
-        self.scene = scene
-        self.initSceneByModel()
+        self.scene = WorldScene()
+        self.setUpScene()
 
+        #if DEBUG
         self.debugCode()
+        #endif
     }
 
-    private func initSceneByModel() {
-        let scene = self.scene as! WorldScene
+    private func setUpScene() {
+        self.worldScene.setUp(sceneController: self)
 
         let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
         for x in 0..<Constant.gridSize {
             for y in 0..<Constant.gridSize {
                 let tileType = tileModel.tileType(atX: x, y: y)
-                scene.set(tileType: tileType, toX: x, y: y)
+                self.worldScene.set(tileType: tileType, toX: x, y: y)
             }
         }
 
         let gameObjectMOArray = self.worldSceneModel.loadGameObjectDictionary()
         for gameObjectMO in gameObjectMOArray {
-            let scene = self.scene as! WorldScene
-            guard let gameObject = scene.add(by: gameObjectMO) else { return }
+            guard let gameObject = self.worldScene.add(by: gameObjectMO) else { continue }
 
             self.gameObjectToMO[gameObject] = gameObjectMO
         }
 
         let characterCoordinate = self.worldSceneModel.characterModel.coordinate
         let position = (characterCoordinate.toCGPoint() + 0.5) * Constant.tileSide
-        scene.movingLayer.position = -position
+        self.worldScene.movingLayer.position = -position
     }
 
+#if DEBUG
     func debugCode() {
         for gameObjectMO in self.gameObjectToMO.values {
             print("id: \(gameObjectMO.id), typeID: \(gameObjectMO.typeID), containerID: \(gameObjectMO.containerID), coordinate: (\(gameObjectMO.x), \(gameObjectMO.y))")
         }
     }
+#endif
 
     // MARK: - edit model and scene
     // TODO: review after implementing GameObject.interact()

@@ -10,24 +10,23 @@ import Foundation
 struct GameObjectCoordinate {
 
     var containerType: ContainerType
-    var tileCoordinate: TileCoordinate
+    var coordinate: Coordinate<Int>
 
-    var x: Int { get { return self.tileCoordinate.x } set { self.tileCoordinate.x = newValue } }
-    var y: Int { get { return self.tileCoordinate.y } set { self.tileCoordinate.y = newValue } }
+    var x: Int { get { return self.coordinate.x } set { self.coordinate.x = newValue } }
+    var y: Int { get { return self.coordinate.y } set { self.coordinate.y = newValue } }
 
-    init(containerType: ContainerType, tileCoordinate: TileCoordinate) {
+    init(containerType: ContainerType, coordinate: Coordinate<Int>) {
         self.containerType = containerType
-        self.tileCoordinate = tileCoordinate
+        self.coordinate = coordinate
     }
 
     init(containerType: ContainerType, x: Int, y: Int) {
         self.containerType = containerType
-        let tileCoordinate = TileCoordinate(x: x, y: y)
-        self.tileCoordinate = tileCoordinate
+        self.coordinate = Coordinate<Int>(x: x, y: y)
     }
 
     func toCGPoint() -> CGPoint {
-        return CGPoint(x: x, y: y)
+        return self.coordinate.toCGPoint()
     }
 
 }

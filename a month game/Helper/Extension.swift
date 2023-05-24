@@ -11,15 +11,6 @@ import SpriteKit
 // MARK: - Array
 extension Array {
 
-    func safeSubscrirpt(_ index: Int) -> Element {
-        let index = self.indices.contains(index) ? index : 0
-        return self[index]
-    }
-
-}
-
-extension Array {
-
     subscript<T>(index: T) -> Element where T: RawRepresentable, T.RawValue == Int {
         get {
             return self[index.rawValue]
@@ -38,8 +29,8 @@ extension GameObjectMO {
         return ContainerType(rawValue: Int(self.containerID))
     }
 
-    var position:  CGPoint {
-        return TileCoordinate(x: Int(self.x), y: Int(self.y)).toCGPoint()
+    var coordinate: Coordinate<Int> {
+        return Coordinate<Int>(x: Int(self.x), y: Int(self.y))
     }
 
     // TODO: clean after implementing GameObject.interact()
@@ -70,18 +61,6 @@ extension SKNode {
         }
 
         return nil
-    }
-
-    func children(at node: SKNode) -> [SKNode] {
-        var childrenAt = [SKNode]()
-
-        for child in self.children {
-            if child.intersects(node) {
-                childrenAt.append(child)
-            }
-        }
-
-        return childrenAt
     }
 
     var firstIndexFromParent: Int? {
@@ -191,38 +170,38 @@ extension CGPoint {
     }
 
     // MARK: CGPoint, CGPoint
-    static func + (left: CGPoint, right: CGPoint) -> CGPoint {
-        return CGPoint(x: left.x + right.x, y: left.y + right.y)
+    static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 
-    static func - (left: CGPoint, right: CGPoint) -> CGVector {
-        return CGVector(dx: left.x - right.x, dy: left.y - right.y)
+    static func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
+        return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
     }
 
     // MARK: CGPoint, Double
-    static func + (left: CGPoint, right: Double) -> CGPoint {
-        return CGPoint(x: left.x + right, y: left.y + right)
+    static func + (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs, y: lhs.y + rhs)
     }
 
-    static func * (left: CGPoint, right: Double) -> CGPoint {
-        return CGPoint(x: left.x * right, y: left.y * right)
+    static func * (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
     }
 
     // MARK: CGPoint, CGVector
-    static func + (left: CGPoint, right: CGVector) -> CGPoint {
-        return CGPoint(x: left.x + right.dx, y: left.y + right.dy)
+    static func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
     }
 
-    static func += (left: inout CGPoint, right: CGVector) {
-        left = left + right
+    static func += (lhs: inout CGPoint, rhs: CGVector) {
+        lhs = lhs + rhs
     }
 
-    static func - (left: CGPoint, right: CGVector) -> CGPoint {
-        return CGPoint(x: left.x - right.dx, y: left.y - right.dy)
+    static func - (lhs: CGPoint, rhs: CGVector) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs.dx, y: lhs.y - rhs.dy)
     }
 
-    static func -= (left: inout CGPoint, right: CGVector) {
-        left = left - right
+    static func -= (lhs: inout CGPoint, rhs: CGVector) {
+        lhs = lhs - rhs
     }
 
 }
@@ -230,12 +209,12 @@ extension CGPoint {
 // MARK: - CGSize
 extension CGSize {
 
-    static func - (left: CGSize, right: Double) -> CGSize {
-        return CGSize(width: left.width - right, height: left.height - right)
+    static func - (lhs: CGSize, rhs: Double) -> CGSize {
+        return CGSize(width: lhs.width - rhs, height: lhs.height - rhs)
     }
 
-    static func * (left: CGSize, right: Double) -> CGSize {
-        return CGSize(width: left.width * right, height: left.height * right)
+    static func * (lhs: CGSize, rhs: Double) -> CGSize {
+        return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
     }
 
     func toCGPoint() -> CGPoint {
@@ -251,16 +230,16 @@ extension CGVector {
         return CGVector(dx: -vector.dx, dy: -vector.dy)
     }
 
-    static func * (left: CGVector, right: Double) -> CGVector {
-        return CGVector(dx: left.dx * right, dy: left.dy * right)
+    static func * (lhs: CGVector, rhs: Double) -> CGVector {
+        return CGVector(dx: lhs.dx * rhs, dy: lhs.dy * rhs)
     }
 
-    static func *= (left: inout CGVector, right: Double) {
-        left = left * right
+    static func *= (lhs: inout CGVector, rhs: Double) {
+        lhs = lhs * rhs
     }
 
-    static func / (left: CGVector, right: Double) -> CGVector {
-        return CGVector(dx: left.dx / right, dy: left.dy / right)
+    static func / (lhs: CGVector, rhs: Double) -> CGVector {
+        return CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
     }
 
     var magnitude: CGFloat {
