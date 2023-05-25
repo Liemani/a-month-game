@@ -173,16 +173,6 @@ class WorldScene: SKScene {
 
         parent.addChild(accessBox)
         self.accessBox = accessBox
-
-        self.addVisualAccessBox(to: accessBox)
-    }
-
-    func addVisualAccessBox(to parent: SKNode) {
-        let visualAccessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 3.0)
-
-        accessBox.alpha = 0.1
-
-        parent.addChild(visualAccessBox)
     }
 
     func addCharacterInventory(to parent: SKNode) {
@@ -630,11 +620,16 @@ class WorldScene: SKScene {
                 || self.accessableGOs.first != nil else { return }
 
         for index in 0..<self.accessableGOs.count {
+            let go = self.accessableGOs[index]
+            go?.colorBlendFactor = 0.0
+
             self.accessableGOs[index] = nil
         }
 
-        for (index, accessableNode) in accessableNodes.enumerated() {
-            self.accessableGOs[index] = accessableNode
+        for (index, accessableGO) in accessableNodes.enumerated() {
+            self.accessableGOs[index] = accessableGO
+            accessableGO.color = .green.withAlphaComponent(0.9)
+            accessableGO.colorBlendFactor = Constant.accessableGOColorBlendFactor
         }
     }
 

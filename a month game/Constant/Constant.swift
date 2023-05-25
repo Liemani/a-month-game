@@ -86,12 +86,8 @@ struct Constant {
     static let gameObjectDataEntityName = "GameObjectMO"
 
     // MARK: - UserDefaults key
+    // TODO: rename idGeneratorKey or something better
     static let idGenerator = "idGenerator"
-
-    // MARK: - inventory id
-    static let field: Int = 0
-    static let inventory: Int = 1
-    static let thirdHand: Int = 2
 
     // MARK: - etc
     static let gridSize: Int = 100
@@ -109,5 +105,7 @@ struct Constant {
         static let leftHand = "left_hand"
         static let rightHand = "right_hand"
     }
+
+    static let accessableGOColorBlendFactor = 0.5
 
 }
