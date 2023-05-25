@@ -650,6 +650,12 @@ class WorldScene: SKScene {
 
         let go = self.containerArray[containerType]!.add(by: goMO)
 
+        let characterCoord = TileCoordinate(from: self.characterPosition).value
+        if let go = go,
+           goMO.coordinate.isAdjacent(with: characterCoord) {
+            self.addAccessableGO(go)
+        }
+
         return go
     }
 
