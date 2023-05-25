@@ -63,11 +63,20 @@ final class WorldSceneController: SceneController {
 #endif
 
     // MARK: - edit model and scene
-    // TODO: review after implementing GameObject.interact()
     func add(_ goMO: GameObjectMO) {
-        guard let go = self.worldScene.add(by: goMO) else { return }
+        guard let go = self.worldScene.add(by: goMO) else {
+            return
+        }
 
         self.gameObjectToMO[go] = goMO
+    }
+
+    func add(gameObjectType goType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
+        let newGOMO = self.worldSceneModel.newGOMO()
+        newGOMO.setUp(gameObjectType: goType, containerType: containerType, x: x, y: y)
+        self.worldSceneModel.contextSave()
+
+        self.add(newGOMO)
     }
 
     func removeGO(by go: GameObject) {
@@ -94,6 +103,7 @@ final class WorldSceneController: SceneController {
     func spareSpaces(_ selfGOMO: GameObjectMO) -> [Coordinate<Int>] {
         var occupySpaceBitFlags: UInt8 = 0
 
+        // TODO: move to constant
         let spaceShiftTable: [UInt8] = [
             6, 7, 0,
             5, 8, 1,
@@ -111,6 +121,7 @@ final class WorldSceneController: SceneController {
             }
         }
 
+        // TODO: move to constant
         let coordVectorTable = [
             Coordinate(1, 1),
             Coordinate(1, 0),

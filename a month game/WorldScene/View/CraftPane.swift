@@ -38,13 +38,14 @@ class CraftPane: SKSpriteNode {
 
             self.addChild(cell)
 
-            let craftObject = SKSpriteNode()
+            let craftObject = CraftObject()
             craftObject.size = Constant.defaultNodeSize
             craftObject.zPosition = Constant.ZPosition.craftObject
             cell.addChild(craftObject)
         }
     }
 
+    // MARK: update
     func update(with accessableGOs: [GameObject]) {
         // TODO: move to constant
         // TODO: move local array [6, 7, 0...] also to constant
@@ -67,15 +68,16 @@ class CraftPane: SKSpriteNode {
         }
     }
 
-    func reset() {
+    private func reset() {
         for cell in self.children {
             let craftObject = cell.children[0] as! SKSpriteNode
+            // TODO: rename base to none
             craftObject.texture = GameObjectType.base.texture
             cell.alpha = 0.2
         }
     }
 
-    func hasIngredient(gameObjects gos: [GameObject], forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gameObjects gos: [GameObject], forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
         var recipe = recipe
 
         for go in gos {
@@ -98,9 +100,27 @@ class CraftPane: SKSpriteNode {
 
     func set(index craftObjectIndex: Int, type goType: GameObjectType) {
         let cell = self.children[craftObjectIndex]
-        let craftObject = cell.children[0] as! SKSpriteNode
-        craftObject.texture = goType.texture
+        let craftObject = cell.children[0] as! CraftObject
+        craftObject.set(goType)
         cell.alpha = 1.0
+    }
+
+    func craftObject(at touch: UITouch) -> CraftObject? {
+        var touchPoint = touch.location(in: self)
+
+        for cell in self.children {
+            if cell.contains(touchPoint), self.isCellActivated(cell) {
+                let craftObject = cell.children[0] as! CraftObject
+                craftObject.activate()
+                return craftObject
+            }
+        }
+
+        return nil
+    }
+
+    func isCellActivated(_ cell: SKNode) -> Bool {
+        return cell.alpha == 1.0
     }
 
 }

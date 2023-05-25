@@ -243,12 +243,17 @@ class WorldScene: SKScene {
             return
         }
 
-        if self.isFieldGOTouched(touch) {
+        if self.isInventoryGOTouched(touch) {
             self.gameObjectTouchBegan(touch)
             return
         }
 
-        if self.isInventoryGOTouched(touch) {
+        if self.isCraftObjectTouched(touch) {
+            self.craftObjectTouchBegan(touch)
+            return
+        }
+
+        if self.isFieldGOTouched(touch) {
             self.gameObjectTouchBegan(touch)
             return
         }
@@ -271,9 +276,11 @@ class WorldScene: SKScene {
         case self.gameObjectTouch:
             self.gameObjectTouchMoved(touch)
         case self.carryTouch:
-            carryTouchMoved(touch)
+            self.carryTouchMoved(touch)
         case self.moveTouch:
             self.moveTouchMoved(touch)
+        case self.craftObjectTouch:
+            self.craftObjectTouchMoved(touch)
         default: break
         }
     }
@@ -290,9 +297,11 @@ class WorldScene: SKScene {
         case self.gameObjectTouch:
             self.gameObjectTouchEnded(touch)
         case self.carryTouch:
-            carryTouchEnded(touch)
+            self.carryTouchEnded(touch)
         case self.moveTouch:
             self.moveTouchEnded(touch)
+        case self.craftObjectTouch:
+            self.craftObjectTouchEnded(touch)
         default: break
         }
     }
@@ -309,9 +318,11 @@ class WorldScene: SKScene {
         case self.gameObjectTouch:
             self.gameObjectTouchCancelled(touch)
         case self.carryTouch:
-            carryTouchCancelled(touch)
+            self.carryTouchCancelled(touch)
         case self.moveTouch:
             self.moveTouchCancelled(touch)
+        case self.craftObjectTouch:
+            self.craftObjectTouchCancelled(touch)
         default: break
         }
     }
@@ -378,14 +389,14 @@ class WorldScene: SKScene {
     func moveTouchEnded(_ touch: UITouch) {
         setVelocityVector()
 
-        self.moveTouchReset(touch)
+        self.moveTouchReset()
     }
 
     func moveTouchCancelled(_ touch: UITouch) {
-        self.moveTouchReset(touch)
+        self.moveTouchReset()
     }
 
-    func moveTouchReset(_ touch: UITouch) {
+    func moveTouchReset() {
         self.moveTouch = nil
     }
 
@@ -434,7 +445,7 @@ class WorldScene: SKScene {
                 let coordinate = GameObjectCoordinate(containerType: ContainerType.thirdHand, x: 0, y: 0)
                 self.sceneController.move(self.touchedGO!, to: coordinate)
 
-                self.gameObjectTouchReset(touch)
+                self.gameObjectTouchReset()
                 self.carryTouchBegan(touch)
             } else {
                 self.gameObjectTouchCancelled(touch)
@@ -446,18 +457,67 @@ class WorldScene: SKScene {
         self.sceneController.interact(self.touchedGO!, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
         self.touchedGO!.alpha = 1.0
 
-        self.gameObjectTouchReset(touch)
+        self.gameObjectTouchReset()
     }
 
     func gameObjectTouchCancelled(_ touch: UITouch) {
         self.touchedGO?.alpha = 1.0
 
-        self.gameObjectTouchReset(touch)
+        self.gameObjectTouchReset()
     }
 
-    func gameObjectTouchReset(_ touch: UITouch) {
+    func gameObjectTouchReset() {
         self.gameObjectTouch = nil
         self.touchedGO = nil
+    }
+
+    // MARK: - craft object touch
+    var craftObjectTouch: UITouch? = nil
+    var touchedCraftObject: CraftObject? = nil
+
+    func isCraftObjectTouched(_ touch: UITouch) -> Bool {
+        if let touchedCraftObject = self.craftPane.craftObject(at: touch) {
+            self.touchedCraftObject = touchedCraftObject
+            return true
+        }
+
+        return false
+    }
+
+    func craftObjectTouchBegan(_ touch: UITouch) {
+        self.craftObjectTouch = touch
+    }
+
+    func craftObjectTouchMoved(_ touch: UITouch) {
+        guard !touch.is(onThe: self.touchedCraftObject!) else {
+            return
+        }
+
+        let goType = touchedCraftObject!.gameObjectType
+        let containerType = ContainerType.thirdHand
+        let x = 0
+        let y = 0
+        self.sceneController.add(gameObjectType: goType, containerType: containerType, x: x, y: y)
+
+        self.carryTouchBegan(touch)
+        self.craftObjectTouchEnded(touch)
+    }
+
+    func craftObjectTouchEnded(_ touch: UITouch) {
+        self.touchedCraftObject!.deactivate()
+
+        self.craftObjectTouchReset()
+    }
+
+    func craftObjectTouchCancelled(_ touch: UITouch) {
+        self.touchedCraftObject!.deactivate()
+
+        self.craftObjectTouchReset()
+    }
+
+    func craftObjectTouchReset() {
+        self.craftObjectTouch = nil
+        self.touchedCraftObject = nil
     }
 
     // MARK: - carry touch
@@ -496,7 +556,7 @@ class WorldScene: SKScene {
             let goCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
             self.move(carryingGO, to: goCoordinate)
 
-            self.carryTouchReset(touch)
+            self.carryTouchReset()
             return
         }
 
@@ -521,15 +581,15 @@ class WorldScene: SKScene {
         let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
         self.sceneController.move(carryingGO, to: coordinate)
 
-        self.carryTouchReset(touch)
+        self.carryTouchReset()
         return
     }
 
     func carryTouchCancelled(_ touch: UITouch) {
-        self.carryTouchReset(touch)
+        self.carryTouchReset()
     }
 
-    func carryTouchReset(_ touch: UITouch) {
+    func carryTouchReset() {
         self.carryTouch = nil
     }
 
@@ -637,7 +697,7 @@ class WorldScene: SKScene {
     }
 
     func updateCraftPane() {
-        var accessableGOs = self.accessableGOs + self.inventory.gameObjects
+        let accessableGOs = self.accessableGOs + self.inventory.gameObjects
 
         self.craftPane.update(with: accessableGOs)
     }

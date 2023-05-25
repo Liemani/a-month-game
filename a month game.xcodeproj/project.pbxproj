@@ -47,6 +47,7 @@
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
 		03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */; };
+		03E755922A1FA36A00BF5C0F /* CraftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755912A1FA36A00BF5C0F /* CraftObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -91,6 +92,7 @@
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 		03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPane.swift; sourceTree = "<group>"; };
+		03E755912A1FA36A00BF5C0F /* CraftObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +188,7 @@
 				03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */,
 				03E7558D2A1E4FC300BF5C0F /* GameObject */,
 				03E7558E2A1E4FEE00BF5C0F /* Container */,
+				03E755912A1FA36A00BF5C0F /* CraftObject.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -361,6 +364,7 @@
 				039037C42A14A10B0014A571 /* GameObjectPineTree.swift in Sources */,
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
 				038330AA2A02850A008DEA10 /* ViewController.swift in Sources */,
+				03E755922A1FA36A00BF5C0F /* CraftObject.swift in Sources */,
 				039037C02A1376BB0014A571 /* UserDefaultsController.swift in Sources */,
 				03311DCC2A1A3AD00020ADB5 /* GameObjectBranch.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* PersistentContainer.swift in Sources */,
