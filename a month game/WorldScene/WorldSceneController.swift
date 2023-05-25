@@ -135,7 +135,7 @@ final class WorldSceneController: SceneController {
 
     // MARK: - interact
     func interact(_ touchedGO: GameObject, leftHand lGO: GameObject?, rightHand rGO: GameObject?) {
-        switch GameObjectType(byGO: touchedGO){
+        switch touchedGO.type {
         case .pineTree:
             guard Double.random(in: 0.0...1.0) <= 0.33 else { return }
 

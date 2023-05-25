@@ -67,6 +67,7 @@ struct Constant {
 
         static let inventoryCell = -0.1
         static let craftCell = -0.1
+        static let craftObject = 1.0
     }
 
     // MARK: - frame
@@ -84,6 +85,12 @@ struct Constant {
     static let dataModelFileName = "DataModel.sqlite"
     static let worldDataModelName = "DataModel"
     static let gameObjectDataEntityName = "GameObjectMO"
+
+    // MARK: - recipe
+    static let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = [
+        .woodWall: [(.branch, 3)],
+        .axe: [(.stone, 1), (.branch, 1)],
+    ]
 
     // MARK: - UserDefaults key
     // TODO: rename idGeneratorKey or something better

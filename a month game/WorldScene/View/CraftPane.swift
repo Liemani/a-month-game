@@ -34,9 +34,73 @@ class CraftPane: SKSpriteNode {
             cell.position = CGPoint(x: x, y: y)
             cell.zPosition = Constant.ZPosition.craftCell
             cell.size = Constant.defaultNodeSize
+            cell.alpha = 0.2
 
             self.addChild(cell)
+
+            let craftObject = SKSpriteNode()
+            craftObject.size = Constant.defaultNodeSize
+            craftObject.zPosition = Constant.ZPosition.craftObject
+            cell.addChild(craftObject)
         }
+    }
+
+    func update(with accessableGOs: [GameObject]) {
+        // TODO: move to constant
+        // TODO: move local array [6, 7, 0...] also to constant
+        let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
+
+        self.reset()
+
+        var craftObjectIndex = 0
+        for (resultGOType, recipe) in recipes {
+            guard self.hasIngredient(gameObjects: accessableGOs, forRecipe: recipe) else {
+                continue
+            }
+
+            self.set(index: craftObjectIndex, type: resultGOType)
+
+            if craftObjectIndex == CraftPane.cellCount - 1 {
+                return
+            }
+            craftObjectIndex += 1
+        }
+    }
+
+    func reset() {
+        for cell in self.children {
+            let craftObject = cell.children[0] as! SKSpriteNode
+            craftObject.texture = GameObjectType.base.texture
+            cell.alpha = 0.2
+        }
+    }
+
+    func hasIngredient(gameObjects gos: [GameObject], forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+        var recipe = recipe
+
+        for go in gos {
+            let goType = go.type
+            for index in 0..<recipe.count {
+                if goType == recipe[index].type {
+                    recipe[index].count -= 1
+                }
+            }
+        }
+
+        for (_, count) in recipe {
+            if count > 0 {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    func set(index craftObjectIndex: Int, type goType: GameObjectType) {
+        let cell = self.children[craftObjectIndex]
+        let craftObject = cell.children[0] as! SKSpriteNode
+        craftObject.texture = goType.texture
+        cell.alpha = 1.0
     }
 
 }

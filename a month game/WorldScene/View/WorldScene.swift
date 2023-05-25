@@ -59,7 +59,7 @@ class WorldScene: SKScene {
         set { self.movingLayer.position = -newValue }
     }
 
-    var accessableGOs = [GameObject?](repeating: nil, count: 9)
+    var accessableGOs: [GameObject] = []
 
     // MARK: - initialize
     func setUp(sceneController: WorldSceneController) {
@@ -516,7 +516,7 @@ class WorldScene: SKScene {
         carryingGO.position = touchedTC.fieldPoint
         carryingGO.alpha = 1.0
 
-        self.addAccessableGO(carryingGO)
+        self.accessableGOs.append(carryingGO)
 
         let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
         self.sceneController.move(carryingGO, to: coordinate)
@@ -613,24 +613,33 @@ class WorldScene: SKScene {
     func updateAccessableGOs() {
         guard self.isChangedTile() else { return }
 
-        let accessableNodes = self.field.gameObjects(at: self.accessBox)
-        let currentAccessableObjectCount = accessableNodes.count
+        let accessableGOs = self.field.gameObjects(at: self.accessBox)
+        let currentAccessableObjectCount = accessableGOs.count
 
-        guard currentAccessableObjectCount != 0
-                || self.accessableGOs.first != nil else { return }
-
-        for index in 0..<self.accessableGOs.count {
-            let go = self.accessableGOs[index]
-            go?.colorBlendFactor = 0.0
-
-            self.accessableGOs[index] = nil
+        if currentAccessableObjectCount == 0
+            && self.accessableGOs.isEmpty {
+            return
         }
 
-        for (index, accessableGO) in accessableNodes.enumerated() {
-            self.accessableGOs[index] = accessableGO
+        for go in self.accessableGOs {
+            go.colorBlendFactor = 0.0
+        }
+
+        self.accessableGOs.removeAll()
+
+        for accessableGO in accessableGOs {
             accessableGO.color = .green.withAlphaComponent(0.9)
             accessableGO.colorBlendFactor = Constant.accessableGOColorBlendFactor
+            self.accessableGOs.append(accessableGO)
         }
+
+        self.updateCraftPane()
+    }
+
+    func updateCraftPane() {
+        var accessableGOs = self.accessableGOs + self.inventory.gameObjects
+
+        self.craftPane.update(with: accessableGOs)
     }
 
     // MARK: resolve collision
@@ -651,7 +660,7 @@ class WorldScene: SKScene {
 
     func resolveCollision() {
         for go in self.accessableGOs {
-            guard let go = go, !go.isWalkable else { continue }
+            guard !go.isWalkable else { continue }
 
             if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
                 go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
@@ -672,7 +681,7 @@ class WorldScene: SKScene {
         let characterCoord = TileCoordinate(from: self.characterPosition).value
         if let go = go,
            goMO.coordinate.isAdjacent(with: characterCoord) {
-            self.addAccessableGO(go)
+            self.accessableGOs.append(go)
         }
 
         return go
@@ -690,15 +699,6 @@ class WorldScene: SKScene {
         let currentTile = TileCoordinate(from: currentPosition)
 
         return currentTile != lastTile
-    }
-
-    func addAccessableGO(_ go: GameObject) {
-        for (index, accessableGO) in self.accessableGOs.enumerated() {
-            if accessableGO == nil {
-                self.accessableGOs[index] = go
-                return
-            }
-        }
     }
 
 }

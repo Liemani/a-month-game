@@ -13,8 +13,13 @@ class GameObject: SKSpriteNode {
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
 
-    var objectIdentifier: ObjectIdentifier {
-        return ObjectIdentifier(type(of: self))
+    var typeID: Int {
+        let objectIdentifier = ObjectIdentifier(Swift.type(of: self))
+        return GameObjectType.resource[objectIdentifier]!.typeID
+    }
+
+    var type: GameObjectType {
+        return GameObjectType(rawValue: self.typeID)!
     }
 
     // MARK: property to be overriden

@@ -74,6 +74,18 @@ class InventoryNode: SKNode {
         return nil
     }
 
+    var gameObjects: [GameObject] {
+        var gos: [GameObject] = []
+
+        for cell in self.inventoryCells {
+            guard let go = cell.children.first else { continue }
+
+            gos.append(go as! GameObject)
+        }
+
+        return gos
+    }
+
 }
 
 extension InventoryNode: ContainerNode {

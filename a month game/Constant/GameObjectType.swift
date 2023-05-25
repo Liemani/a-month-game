@@ -28,7 +28,7 @@ enum GameObjectType: Int, CaseIterable {
         (GameObjectAxe.self, "game_object_axe"),
     ]
 
-    private static let resource: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = ({
+    static let resource: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = ({
 
         var dictionary: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = [:]
 
@@ -48,11 +48,6 @@ enum GameObjectType: Int, CaseIterable {
         return GameObjectType.allCases.count
     }
 
-    func typeID() -> Int {
-        let objectIdentifier = ObjectIdentifier(type(of: self))
-        return GameObjectType.resource[objectIdentifier]!.typeID
-    }
-
     static func new(typeID: Int) -> GameObject? {
         guard 0 <= typeID && typeID < self.caseCount else { return nil }
         let type = self.rawResources[typeID].type
@@ -60,9 +55,17 @@ enum GameObjectType: Int, CaseIterable {
         return type.init(texture: texture)
     }
 
-    init(byGO go: GameObject) {
-        let typeID = GameObjectType.resource[go.objectIdentifier]!.typeID
-        self.init(rawValue: typeID)!
+    var metatype: GameObject.Type {
+        return GameObjectType.rawResources[self.rawValue].type
+    }
+
+    var typeID: Int {
+        return self.rawValue
+    }
+
+    var texture: SKTexture {
+        let objectIdentifier = ObjectIdentifier(self.metatype)
+        return GameObjectType.resource[objectIdentifier]!.texture
     }
 
 }
