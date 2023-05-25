@@ -19,7 +19,7 @@ enum GameObjectType: Int, CaseIterable {
     case axe
 
     private static let rawResources: [(type: GameObject.Type, name: String)] = [
-        (GameObject.self, "game_object_default"),
+        (GameObject.self, "game_object_none"),
         (GameObjectPineCone.self, "game_object_pine_cone"),
         (GameObjectPineTree.self, "game_object_pine_tree"),
         (GameObjectWoodWall.self, "game_object_wood_wall"),
