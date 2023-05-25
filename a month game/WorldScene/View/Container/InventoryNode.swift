@@ -15,20 +15,28 @@ class InventoryNode: SKNode {
     var leftHandGO: GameObject? { return self.children[0].children.first as! GameObject? }
     var rightHandGO: GameObject? { return self.children[Constant.inventoryCellCount].children.first as! GameObject? }
 
-    static var inventoryCellCount: Int { return Constant.inventoryCellCount }
+    static var cellCount: Int { return Constant.inventoryCellCount }
 
     func setUp() {
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
 
-        let inventoryCellPositionGap: CGFloat = (Constant.inventoryCellLastPosition.x - Constant.inventoryCellFirstPosition.x) / CGFloat(Constant.inventoryCellCount - 1)
+        let defaultSize = Constant.defaultSize
+        let inventoryPaneSize = Constant.inventoryPaneSize
 
-        var inventoryCells = [SKNode?](repeating: nil, count: InventoryNode.inventoryCellCount)
+        let cellCount = InventoryNode.cellCount
 
-        for index in 0..<Constant.inventoryCellCount {
+        let inventoryCellFirstPosition = CGPoint() + defaultSize / 2.0
+        let inventoryCellLastPosition = CGPoint(x: inventoryPaneSize.width - defaultSize / 2.0, y: defaultSize / 2.0)
+
+        let inventoryCellPositionGap: CGFloat = (inventoryCellLastPosition.x - inventoryCellFirstPosition.x) / CGFloat(cellCount - 1)
+
+        var inventoryCells = [SKNode?](repeating: nil, count: cellCount)
+
+        for index in 0..<cellCount {
             let cell = SKSpriteNode(texture: cellTexture)
 
-            let x = Constant.inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index)
-            let y = Constant.inventoryCellFirstPosition.y
+            let x = inventoryCellFirstPosition.x + inventoryCellPositionGap * CGFloat(index)
+            let y = inventoryCellFirstPosition.y
 
             cell.position = CGPoint(x: x, y: y)
             cell.zPosition = Constant.ZPosition.inventoryCell
@@ -42,13 +50,13 @@ class InventoryNode: SKNode {
 
         let leftHandTexture = SKTexture(imageNamed: Constant.ResourceName.leftHand)
         let leftHand = SKSpriteNode(texture: leftHandTexture)
-        leftHand.position = Constant.inventoryCellFirstPosition
+        leftHand.position = inventoryCellFirstPosition
         leftHand.alpha = 0.5
         self.addChild(leftHand)
 
         let rightHandTexture = SKTexture(imageNamed: Constant.ResourceName.rightHand)
         let rightHand = SKSpriteNode(texture: rightHandTexture)
-        rightHand.position = Constant.inventoryCellLastPosition
+        rightHand.position = inventoryCellLastPosition
         rightHand.alpha = 0.5
         self.addChild(rightHand)
     }
@@ -56,7 +64,7 @@ class InventoryNode: SKNode {
     func inventoryCell(at touch: UITouch) -> SKNode? {
         let touchPoint = touch.location(in: self)
 
-        for index in 0..<Constant.inventoryCellCount {
+        for index in 0..<InventoryNode.cellCount {
             let cell = self.children[index]
             if cell.contains(touchPoint) {
                 return cell
@@ -79,7 +87,7 @@ extension InventoryNode: ContainerNode {
         go.zPosition = Constant.ZPosition.gameObject
 
         let inventoryIndex = Int(goMO.x)
-        guard 0 <= inventoryIndex && inventoryIndex < InventoryNode.inventoryCellCount else {
+        guard 0 <= inventoryIndex && inventoryIndex < InventoryNode.cellCount else {
             return nil
         }
 

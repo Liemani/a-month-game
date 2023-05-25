@@ -33,6 +33,7 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var menuButton: SKNode!
     var accessBox: SKNode!
+    var craftPane: CraftPane!
 
     var leftHandGO: GameObject? {
         return self.inventory.leftHandGO
@@ -142,6 +143,7 @@ class WorldScene: SKScene {
         self.addAccessBox(to: ui)
         self.addCharacterInventory(to: ui)
         self.addThirdHand(to: ui)
+        self.addCraftPane(to: ui)
     }
 
     func addMenuButton(to parent: SKNode) {
@@ -184,11 +186,13 @@ class WorldScene: SKScene {
     }
 
     func addCharacterInventory(to parent: SKNode) {
-        let characterInventory = InventoryNode()
-        characterInventory.setUp()
+        let inventoryPane = InventoryNode()
+        inventoryPane.setUp()
 
-        parent.addChild(characterInventory)
-        self.containerArray[ContainerType.inventory] = characterInventory
+        inventoryPane.position = Constant.inventoryPanePosition
+
+        parent.addChild(inventoryPane)
+        self.containerArray[ContainerType.inventory] = inventoryPane
     }
 
     func addThirdHand(to parent: SKNode) {
@@ -198,6 +202,16 @@ class WorldScene: SKScene {
 
         parent.addChild(thirdHand)
         self.containerArray[ContainerType.thirdHand] = thirdHand
+    }
+
+    func addCraftPane(to parent: SKNode) {
+        let craftPane = CraftPane()
+        craftPane.setUp()
+
+        craftPane.position = Constant.craftPanePosition
+
+        parent.addChild(craftPane)
+        self.craftPane = craftPane
     }
 
     func addMenuWindow(to parent: SKNode) {

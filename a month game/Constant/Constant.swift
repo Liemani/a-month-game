@@ -11,7 +11,10 @@ import SpriteKit
 struct Constant {
 
     static let defaultSize = 250.0
-    static let tileSide = Constant.defaultSize
+    static let tileSide = defaultSize
+    static let margin = defaultSize / 5.0
+
+    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
@@ -28,22 +31,28 @@ struct Constant {
     static let resetButtonPosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
     static let resetButtonSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
-    // MARK: world scene
-    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
+    // MARK: tile map
+    static let tileMapSide = tileSide * Double(gridSize)
+    static let tileMapPosition = CGPoint() + (tileMapSide / 2.0)
 
-    static let tileMapSide = Constant.tileSide * Double(Constant.gridSize)
-    static let tileMapPosition = CGPoint() + (Constant.tileMapSide / 2.0)
-
-    static let menuPosition = (Constant.sceneSize - Constant.defaultSize).toCGPoint()
-    static let characterRadius = Constant.defaultSize / 3.0
+    // MARK: misc
+    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toCGPoint()
+    static let characterRadius = defaultSize / 3.0
     static let exitWorldButtonSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
+    // MARK: inventory
+    static let inventoryPanePosition = CGPoint() + margin
+    static let inventoryPaneSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultSize)
     static let inventoryCellCount = 5
-    static let inventoryCellFirstPosition = CGPoint() + Constant.defaultSize
-    static let inventoryCellLastPosition = CGPoint(x: Constant.sceneSize.width - defaultSize, y: defaultSize)
 
-    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: Constant.tileMapSide, height: Constant.tileMapSide))
-    static let moveableArea = CGRect(origin: CGPoint() + Constant.characterRadius, size: Constant.worldBorder.size - (Constant.characterRadius * 2.0))
+    // MARK: craft pane
+    static let craftPanePosition = CGPoint(x: margin, y: (sceneSize.height - inventoryPaneSize.width) / 2.0)
+    static let craftPaneSize = CGSize(width: inventoryPaneSize.height, height: inventoryPaneSize.width)
+    static let craftPaneCellCount = 5
+
+    // MARK: world box
+    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: tileMapSide, height: tileMapSide))
+    static let moveableArea = CGRect(origin: CGPoint() + characterRadius, size: worldBorder.size - (characterRadius * 2.0))
 
     // MARK: - z position
     struct ZPosition {
@@ -57,15 +66,16 @@ struct Constant {
         static let menuWindow = 10.0
 
         static let inventoryCell = -0.1
+        static let craftCell = -0.1
     }
 
     // MARK: - frame
     struct Frame {
         static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButton = CGRect(origin: menuPosition, size: CGSize(width: defaultSize, height: defaultSize))
-        static let enterButton = CGRect(origin: enterButtonPosition, size: enterButtonSize)
-        static let resetButton = CGRect(origin: resetButtonPosition, size: resetButtonSize)
-        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: exitWorldButtonSize)
+        static let menuButton = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultSize, height: Constant.defaultSize))
+        static let enterButton = CGRect(origin: Constant.enterButtonPosition, size: Constant.enterButtonSize)
+        static let resetButton = CGRect(origin: Constant.resetButtonPosition, size: Constant.resetButtonSize)
+        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonSize)
     }
 
     // MARK: - data
@@ -92,7 +102,8 @@ struct Constant {
     struct ResourceName {
         static let character = "character"
         static let menuButton = "menu button"
-        static let inventoryCell = "inventory cell"
+        static let inventoryCell = "inventory_cell"
+        static let craftCell = "craft_cell"
         static let bgPortal = "bg_portal"
         static let button = "button"
         static let leftHand = "left_hand"

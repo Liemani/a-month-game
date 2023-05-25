@@ -46,6 +46,7 @@
 		039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039037CC2A17AB3E0014A571 /* Coordinate.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
+		03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -89,6 +90,7 @@
 		039037CC2A17AB3E0014A571 /* Coordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
+		03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPane.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				038330A72A02850A008DEA10 /* WorldScene.swift */,
+				03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */,
 				03E7558D2A1E4FC300BF5C0F /* GameObject */,
 				03E7558E2A1E4FEE00BF5C0F /* Container */,
 			);
@@ -374,6 +377,7 @@
 				030ABFC52A0E314000BAB9B8 /* GameObjectPineCone.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				03311DD02A1A3AE40020ADB5 /* GameObjectAxe.swift in Sources */,
+				03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */,
 				030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
