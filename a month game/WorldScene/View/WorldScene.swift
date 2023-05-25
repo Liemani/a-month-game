@@ -164,13 +164,23 @@ class WorldScene: SKScene {
     }
 
     func addAccessBox(to parent: SKNode) {
-        let accessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 2.0)
+        let accessBox = SKSpriteNode()
 
         accessBox.position = Constant.sceneCenter
-        accessBox.alpha = 0.1
+        accessBox.size = Constant.defaultNodeSize * 2.0
 
         parent.addChild(accessBox)
         self.accessBox = accessBox
+
+        self.addVisualAccessBox(to: accessBox)
+    }
+
+    func addVisualAccessBox(to parent: SKNode) {
+        let visualAccessBox = SKSpriteNode(color: .green, size: Constant.defaultNodeSize * 3.0)
+
+        accessBox.alpha = 0.1
+
+        parent.addChild(visualAccessBox)
     }
 
     func addCharacterInventory(to parent: SKNode) {

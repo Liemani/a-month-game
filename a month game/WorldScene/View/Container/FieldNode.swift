@@ -10,6 +10,7 @@ import SpriteKit
 
 class FieldNode: SKNode {
 
+    /// - Returns: child GOs that intersects with node
     func gameObjects(at node: SKNode) -> [GameObject] {
         var gosAt = [GameObject]()
 

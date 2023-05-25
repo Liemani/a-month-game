@@ -69,7 +69,7 @@ extension SKNode {
     }
 
     // TODO: move to physics(?) module
-    /// Return true if collision resolved else false
+    /// - Returns: true if collision resolved else false
     func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {
         let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
         if self.position.x - circleOrigin.x < minimalDistanceToCollision
