@@ -19,7 +19,7 @@ struct TileCoordinate {
         self.value = Coordinate<Int>()
     }
 
-    init(x: Int, y: Int) {
+    init(_ x: Int, _ y: Int) {
         self.value = Coordinate(x, y)
     }
 

@@ -47,8 +47,6 @@ class CraftPane: SKSpriteNode {
 
     // MARK: update
     func update(with accessableGOs: [GameObject]) {
-        // TODO: move to constant
-        // TODO: move local array [6, 7, 0...] also to constant
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
 
         self.reset()
@@ -106,7 +104,7 @@ class CraftPane: SKSpriteNode {
     }
 
     func craftObject(at touch: UITouch) -> CraftObject? {
-        var touchPoint = touch.location(in: self)
+        let touchPoint = touch.location(in: self)
 
         for cell in self.children {
             if cell.contains(touchPoint), self.isCellActivated(cell) {

@@ -493,6 +493,8 @@ class WorldScene: SKScene {
             return
         }
 
+        let recipe = getRecipe()
+
         let goType = touchedCraftObject!.gameObjectType
         let containerType = ContainerType.thirdHand
         let x = 0
@@ -576,7 +578,7 @@ class WorldScene: SKScene {
         carryingGO.position = touchedTC.fieldPoint
         carryingGO.alpha = 1.0
 
-        self.accessableGOs.append(carryingGO)
+        self.addAccessableGOs(carryingGO)
 
         let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
         self.sceneController.move(carryingGO, to: coordinate)
@@ -669,40 +671,48 @@ class WorldScene: SKScene {
             : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
     }
 
-    // MARK: accessable go
+    // MARK: - accessable GOs
     func updateAccessableGOs() {
         guard self.isChangedTile() else { return }
 
-        let accessableGOs = self.field.gameObjects(at: self.accessBox)
-        let currentAccessableObjectCount = accessableGOs.count
+        let newAccessableGOs = self.field.gameObjects(at: self.accessBox)
+        let currentAccessableObjectCount = newAccessableGOs.count
 
-        if currentAccessableObjectCount == 0
-            && self.accessableGOs.isEmpty {
+        guard currentAccessableObjectCount != 0
+            || !self.accessableGOs.isEmpty else {
             return
         }
 
+        self.resetGOs()
+        self.accessableGOs += newAccessableGOs
+        self.applyGOsUpdate()
+    }
+
+    func resetGOs() {
         for go in self.accessableGOs {
             go.colorBlendFactor = 0.0
         }
-
         self.accessableGOs.removeAll()
+    }
 
-        for accessableGO in accessableGOs {
-            accessableGO.color = .green.withAlphaComponent(0.9)
-            accessableGO.colorBlendFactor = Constant.accessableGOColorBlendFactor
-            self.accessableGOs.append(accessableGO)
-        }
-
+    func applyGOsUpdate() {
+        self.setBlendFactor()
         self.updateCraftPane()
     }
 
-    func updateCraftPane() {
-        let accessableGOs = self.accessableGOs + self.inventory.gameObjects
-
-        self.craftPane.update(with: accessableGOs)
+    func setBlendFactor() {
+        for go in self.accessableGOs {
+            go.color = .green.withAlphaComponent(0.9)
+            go.colorBlendFactor = Constant.accessableGOColorBlendFactor
+        }
     }
 
-    // MARK: resolve collision
+    func updateCraftPane() {
+        let resourceGOs = self.accessableGOs + self.inventory.gameObjects
+        self.craftPane.update(with: resourceGOs)
+    }
+
+    // MARK: - resolve collision
     func resolveWorldBorderCollision() {
         self.characterPosition.x = self.characterPosition.x < Constant.moveableArea.minX
             ? Constant.moveableArea.minX
@@ -733,18 +743,63 @@ class WorldScene: SKScene {
         self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
-    func add(by goMO: GameObjectMO) -> GameObject? {
-        guard let containerType = goMO.containerType else { return nil }
+    // TODO: 0 caller could use add gomos
+    func add(from goMO: GameObjectMO) -> GameObject? {
+        guard let containerType = goMO.containerType else {
+            return nil
+        }
 
-        let go = self.containerArray[containerType]!.add(by: goMO)
+        let container = self.containerArray[containerType]!
+        guard let go = container.add(by: goMO) else {
+            return nil
+        }
+
+        guard goMO.containerType == .field else {
+            return go
+        }
 
         let characterCoord = TileCoordinate(from: self.characterPosition).value
-        if let go = go,
-           goMO.coordinate.isAdjacent(with: characterCoord) {
-            self.accessableGOs.append(go)
+        if goMO.coordinate.isAdjacent(with: characterCoord) {
+            self.addAccessableGOs(go)
         }
 
         return go
+    }
+
+    func add(from goMOs: [GameObjectMO]) -> [GameObject] {
+        let characterCoord = TileCoordinate(from: self.characterPosition).value
+
+        var gos: [GameObject] = []
+        var accessableGOs: [GameObject] = []
+
+        for goMO in goMOs {
+            guard let containerType = goMO.containerType else {
+                continue
+            }
+
+            let container = self.containerArray[containerType]!
+            guard let go = container.add(by: goMO) else {
+                continue
+            }
+
+            guard goMO.containerType == .field else {
+                gos.append(go)
+                continue
+            }
+
+            if goMO.coordinate.isAdjacent(with: characterCoord) {
+                accessableGOs.append(go)
+            }
+
+            gos.append(go)
+        }
+
+        if !accessableGOs.isEmpty {
+            self.addAccessableGOs(accessableGOs)
+            self.accessableGOsUpdated()
+        }
+
+        return gos
     }
 
     func move(_ go: GameObject, to goCoordinate: GameObjectCoordinate) {

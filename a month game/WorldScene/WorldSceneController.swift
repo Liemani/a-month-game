@@ -8,11 +8,28 @@
 import UIKit
 import SpriteKit
 
+
 final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    var gameObjectToMO: [GameObject: GameObjectMO] = [:]
+    let goToGOMO: GOToGOMO<GameObject>!
+
+    var gos: [GameObject] {
+        var gos: [GameObject] = []
+        for goToMOOgContainer in self.gameObjectToMO {
+            gos += goToMOOgContainer.keys
+        }
+        return gos
+    }
+
+    var goMOs: [GameObjectMO] {
+        var goMOs: [GameObjectMO] = []
+        for goToMOOgContainer in self.gameObjectToMO {
+            goMOs += goToMOOgContainer.values
+        }
+        return goMOs
+    }
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
 
@@ -44,19 +61,21 @@ final class WorldSceneController: SceneController {
 
         let goMOs = self.worldSceneModel.loadGOs()
         for goMO in goMOs {
-            guard let go = self.worldScene.add(by: goMO) else { continue }
-
-            self.gameObjectToMO[go] = goMO
+            if let goContainerType = goMO.containerType {
+                if let go = self.worldScene.add(from: goMO) {
+                    self.gameObjectToMO[goContainerType][go] = goMO
+                }
+            }
         }
+        self.worldScene.applyGOsUpdate()
 
-        let characterCoord = self.worldSceneModel.characterModel.coordinate
-        let position = (characterCoord.toCGPoint() + 0.5) * Constant.tileSide
-        self.worldScene.movingLayer.position = -position
+        let characterPosition = self.worldSceneModel.characterModel.position
+        self.worldScene.characterPosition = characterPosition
     }
 
 #if DEBUG
     func debugCode() {
-        for goMO in self.gameObjectToMO.values {
+        for goMO in self.goMOs {
             print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
         }
     }
@@ -64,7 +83,7 @@ final class WorldSceneController: SceneController {
 
     // MARK: - edit model and scene
     func add(_ goMO: GameObjectMO) {
-        guard let go = self.worldScene.add(by: goMO) else {
+        guard let go = self.worldScene.add(from: goMO) else {
             return
         }
 
@@ -100,7 +119,7 @@ final class WorldSceneController: SceneController {
 
     // MARK: - etc
     /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
-    func spareSpaces(_ selfGOMO: GameObjectMO) -> [Coordinate<Int>] {
+    func spareSpaces(_ lhGOMO: GameObjectMO) -> [Coordinate<Int>] {
         var occupySpaceBitFlags: UInt8 = 0
 
         // TODO: move to constant
@@ -110,12 +129,12 @@ final class WorldSceneController: SceneController {
             4, 3, 2,
         ]
 
-        let selfCoord = selfGOMO.coordinate
-        for goMO in self.gameObjectToMO.values {
-            let goMOCoord = goMO.coordinate
-            if goMOCoord.isAdjacent(with: selfCoord) {
-                let differenceX = goMOCoord.x - selfCoord.x
-                let differenceY = goMOCoord.y - selfCoord.y
+        let lhGOMOCoord = lhGOMO.coordinate
+        for rhGOMO in self.goMOsInField {
+            let rhGOMOCoord = rhGOMO.coordinate
+            if rhGOMOCoord.isAdjacent(with: lhGOMOCoord) {
+                let differenceX = rhGOMOCoord.x - lhGOMOCoord.x
+                let differenceY = rhGOMOCoord.y - lhGOMOCoord.y
                 let tableIndex = (differenceY - 1) * -3 + (differenceX + 1)
                 occupySpaceBitFlags |= 0x1 << spaceShiftTable[tableIndex]
             }
