@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Bijective model
 class Container {
 
     private var goMOToGO: [GameObjectMO: GameObject] = [:]
@@ -68,6 +69,14 @@ class Container {
             return goMO
         }
         return nil
+    }
+
+    var goMOKeys: Dictionary<GameObjectMO, GameObject>.Keys {
+        return self.goMOToGO.keys
+    }
+
+    var goKeys: Dictionary<GameObject, GameObjectMO>.Keys {
+        return self.goToGOMO.keys
     }
 
 }

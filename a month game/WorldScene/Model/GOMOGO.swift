@@ -31,52 +31,81 @@ class GOMOGO {
         return self.containers[ContainerType.thirdHand].goMOs
     }
 
-//    var goMOs: IteratorSequence<DictionaryKeysArrayIterator<GameObjectMO, GameObject>> {
-//        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryArray: self.containers))
-//    }
-
-    subscript(key: GameObjectMO) -> GameObject? {
-        get {
-            guard let containerTypeRawValue = key.containerTypeRawValue else {
-                return nil
-            }
-            return self.containers[containerTypeRawValue][key]
+    var gos: IteratorSequence<DictionaryKeysArrayIterator<GameObject, GameObjectMO>> {
+        var dictionaryKeysArray: [Dictionary<GameObject, GameObjectMO>.Keys] = []
+        for container in containers {
+            dictionaryKeysArray.append(container.goKeys)
         }
-        set(value) {
-            if let containerTypeRawValue = key.containerTypeRawValue {
-                self.containers[containerTypeRawValue][key] = value
-            }
-        }
+        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryKeysArray: dictionaryKeysArray))
     }
 
-    subscript(key: GameObject) -> GameObjectMO? {
-        get {
-            for container in self.containers {
-                if let value = container[key] {
-                    return value
-                }
-            }
-            return nil
+    var goMOs: IteratorSequence<DictionaryKeysArrayIterator<GameObjectMO, GameObject>> {
+        var dictionaryKeysArray: [Dictionary<GameObjectMO, GameObject>.Keys] = []
+        for container in containers {
+            dictionaryKeysArray.append(container.goMOKeys)
         }
-        set(value) {
-            for container in self.containers {
-                if let
-            }
-        }
+        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryKeysArray: dictionaryKeysArray))
     }
 
-    func removeValue(forKey key: GameObjectMO) -> GameObject? {
-        if let containerTypeRawValue = key.containerTypeRawValue {
-            return self.containers[containerTypeRawValue].removeValue(forKey: key)
+    func container(for goMO: GameObjectMO) -> Container? {
+        if let containerTypeRawValue = goMO.containerTypeRawValue {
+            return self.containers[containerTypeRawValue]
         }
         return nil
     }
 
-    func moveContainer(_ goMO: GameObjectMO, from: ContainerType, to: ContainerType) {
-        let go = self.removeValue(forKey: goMO)
-        self[goMO] = go
+    subscript(goMO: GameObjectMO) -> GameObject? {
+        get {
+            if let container = self.container(for: goMO) {
+                return container[goMO]
+            }
+            return nil
+        }
+        set(go) {
+            if let container = self.container(for: goMO) {
+                container[goMO] = go
+            }
+        }
+    }
 
+    subscript(go: GameObject) -> GameObjectMO? {
+        get {
+            for container in self.containers {
+                if let goMO = container[go] {
+                    return goMO
+                }
+            }
+            return nil
+        }
+        set(newGOMO) {
+            if let newGOMO = newGOMO {
+                self[newGOMO] = go
+            } else {
+                for container in self.containers {
+                    if let oldGOMO = container[go] {
+                        container[go] = newGOMO
+                    }
+                }
+            }
+        }
+    }
 
+    func remove(_ goMO: GameObjectMO) -> GameObject? {
+        return self.container(for: goMO)?.remove(goMO)
+    }
+
+    func remove(_ go: GameObject) -> GameObjectMO? {
+        for container in containers {
+            if let goMO = container[go] {
+                return container.remove(go)
+            }
+        }
+        return nil
+    }
+
+    func moveContainer(_ goMO: GameObjectMO, from source: ContainerType, to destination: ContainerType) {
+        let go = self.containers[source].remove(goMO)
+        self.containers[destination][goMO] = go
     }
 
 }
@@ -88,10 +117,10 @@ where Key: Hashable {
     private var dkiArray: [Dictionary<Key, Value>.Keys.Iterator?]
     private var currentDKIArrayIndex: Int
 
-    init(dictionaryArray: [Dictionary<Key, Value>]) {
+    init(dictionaryKeysArray: [Dictionary<Key, Value>.Keys]) {
         self.dkiArray = []
-        for dictionary in dictionaryArray {
-            self.dkiArray.append(dictionary.keys.makeIterator())
+        for dictionaryKeys in dictionaryKeysArray {
+            self.dkiArray.append(dictionaryKeys.makeIterator())
         }
 
         self.currentDKIArrayIndex = 0
@@ -117,62 +146,3 @@ where Key: Hashable {
         }
     }
 }
-
-//class GOMOToGOArray {
-//    /// game object is collected by container type
-//    private var goMOToGOArray: [[GameObjectMO: GameObject]]
-//    private var goToGOMOArray: [[GameObject: GameObjectMO]]
-//
-//    init() {
-//        let arrayCount = ContainerType.allCases.count
-//        let emptyDictionary: [GameObjectMO: GameObject] = [:]
-//        self.goMOToGOArray = [[GameObjectMO: GameObject]](repeating: emptyDictionary, count: arrayCount)
-//    }
-//
-//    var goMOsInField: Dictionary<GameObjectMO, GameObject>.Keys {
-//        return self.goMOToGOArray[ContainerType.field].keys
-//    }
-//
-//    var goMOsInInventory: Dictionary<GameObjectMO, GameObject>.Keys {
-//        return self.goMOToGOArray[ContainerType.inventory].keys
-//    }
-//
-//    var goMOsInThirdHand: Dictionary<GameObjectMO, GameObject>.Keys {
-//        return self.goMOToGOArray[ContainerType.thirdHand].keys
-//    }
-//
-//    var goMOs: IteratorSequence<DictionaryKeysArrayIterator<GameObjectMO, GameObject>> {
-//        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryArray: self.goMOToGOArray))
-//    }
-//
-//    subscript(key: GameObjectMO) -> GameObject? {
-//        get {
-//            for goMOToGO in self.goMOToGOArray {
-//                if let go = goMOToGO[key] {
-//                    return go
-//                }
-//            }
-//            return nil
-//        }
-//        set(value) {
-//            if let containerTypeRawValue = key.containerTypeRawValue {
-//                self.goMOToGOArray[containerTypeRawValue][key] = value
-//            }
-//        }
-//    }
-//
-//    func removeValue(forKey key: GameObjectMO) -> GameObject? {
-//        if let containerTypeRawValue = key.containerTypeRawValue {
-//            return self.goMOToGOArray[containerTypeRawValue].removeValue(forKey: key)
-//        }
-//        return nil
-//    }
-//
-//    func moveContainer(_ goMO: GameObjectMO, from: ContainerType, to: ContainerType) {
-//        let go = self.removeValue(forKey: goMO)
-//        self[goMO] = go
-//
-//
-//    }
-//
-//}
