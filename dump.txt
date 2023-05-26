@@ -108,12 +108,14 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
 setBlendFactor() 를 만들었다
     이제 지운 addAccessableGOs() 를 다시 append 로 교체하고 applyGOsUpdate() 를 호출하도록 수정하자
 trace
+    WorldSceneController.addGOs()
+    WorldSceneController.addGO()
+    WorldSceneController.gameObjectToMO
     WorldScene.updateAccessableGOs()
     WorldScene.updateCraftPane()
     WorldScene.add() +1
     GameObjectMO.coordinate
     GameObjectMO.gameObjectCoordinate
-    WorldSceneController.gameObjectToMO
 consume ingredient
 inventory object is always pickable
 craft

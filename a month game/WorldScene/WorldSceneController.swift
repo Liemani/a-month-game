@@ -13,23 +13,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    let goToGOMO: GOToGOMO<GameObject>!
-
-    var gos: [GameObject] {
-        var gos: [GameObject] = []
-        for goToMOOgContainer in self.gameObjectToMO {
-            gos += goToMOOgContainer.keys
-        }
-        return gos
-    }
-
-    var goMOs: [GameObjectMO] {
-        var goMOs: [GameObjectMO] = []
-        for goToMOOgContainer in self.gameObjectToMO {
-            goMOs += goToMOOgContainer.values
-        }
-        return goMOs
-    }
+    var goMOToGOArray: GOMOGO!
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
 
@@ -60,14 +44,7 @@ final class WorldSceneController: SceneController {
         }
 
         let goMOs = self.worldSceneModel.loadGOs()
-        for goMO in goMOs {
-            if let goContainerType = goMO.containerType {
-                if let go = self.worldScene.add(from: goMO) {
-                    self.gameObjectToMO[goContainerType][go] = goMO
-                }
-            }
-        }
-        self.worldScene.applyGOsUpdate()
+        self.addGOs(goMOs)
 
         let characterPosition = self.worldSceneModel.characterModel.position
         self.worldScene.characterPosition = characterPosition
@@ -75,19 +52,26 @@ final class WorldSceneController: SceneController {
 
 #if DEBUG
     func debugCode() {
-        for goMO in self.goMOs {
+        for goMO in self.goMOToGOArray.goMOs {
             print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
         }
     }
 #endif
 
     // MARK: - edit model and scene
-    func add(_ goMO: GameObjectMO) {
-        guard let go = self.worldScene.add(from: goMO) else {
-            return
+    func addGO(_ goMO: GameObjectMO) {
+        if let go = self.worldScene.add(from: goMO) {
+            self.goMOToGOArray[goMO] = go
         }
+    }
 
-        self.gameObjectToMO[go] = goMO
+    func addGOs(_ goMOs: [GameObjectMO]) {
+        for goMO in goMOs {
+            if let go = self.worldScene.add(from: goMO) {
+                self.goMOToGOArray[goMO] = go
+            }
+        }
+        self.worldScene.applyGOsUpdate()
     }
 
     func add(gameObjectType goType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
@@ -95,16 +79,18 @@ final class WorldSceneController: SceneController {
         newGOMO.setUp(gameObjectType: goType, containerType: containerType, x: x, y: y)
         self.worldSceneModel.contextSave()
 
-        self.add(newGOMO)
+        self.addGO(newGOMO)
     }
 
-    func removeGO(by go: GameObject) {
-        let goMO = self.gameObjectToMO[go]!
+    func remove(_ goMO: GameObjectMO) {
+        let 
 
-        self.gameObjectToMO.removeValue(forKey: go)
-        go.removeFromParent()
-
-        self.worldSceneModel.remove(goMO)
+//        let goMO = self.gameObjectToMO[go]!
+//
+//        self.gameObjectToMO.removeValue(forKey: go)
+//        go.removeFromParent()
+//
+//        self.worldSceneModel.remove(goMO)
     }
 
     func move(_ go: GameObject, to newCoord: GameObjectCoordinate) {
@@ -186,7 +172,7 @@ final class WorldSceneController: SceneController {
             newGOMO.setUp(gameObjectType: typeType, containerType: containerType, x: x, y: y)
             self.worldSceneModel.contextSave()
 
-            self.add(newGOMO)
+            self.addGO(newGOMO)
         default: break
         }
     }

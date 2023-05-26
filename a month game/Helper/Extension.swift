@@ -25,6 +25,14 @@ extension Array {
 // MARK: - GameObjectMO
 extension GameObjectMO {
 
+    var containerTypeRawValue: Int? {
+        let containerTypeRawValue = Int(self.containerID)
+
+        return 0 <= containerTypeRawValue && containerTypeRawValue < ContainerType.caseCount
+            ? containerTypeRawValue
+            : nil
+    }
+
     var containerType: ContainerType? {
         return ContainerType(rawValue: Int(self.containerID))
     }
