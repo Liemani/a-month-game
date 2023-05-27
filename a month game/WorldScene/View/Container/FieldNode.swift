@@ -34,7 +34,7 @@ extension FieldNode: ContainerNode {
 
         go.zPosition = Constant.ZPosition.gameObject
 
-        let position = (goMO.coordinate.toCGPoint() + 0.5) * Constant.defaultSize
+        let position = goMO.tileCoordinate.fieldPoint
         go.position = position
 
         self.addChild(go)

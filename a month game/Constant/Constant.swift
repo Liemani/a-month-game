@@ -93,8 +93,7 @@ struct Constant {
     ]
 
     // MARK: - UserDefaults key
-    // TODO: rename idGeneratorKey or something better
-    static let idGenerator = "idGenerator"
+    static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
     static let gridSize: Int = 100
@@ -114,5 +113,23 @@ struct Constant {
     }
 
     static let accessableGOColorBlendFactor = 0.5
+
+    // MARK: table
+    static let spaceShiftTable: [UInt8] = [
+        6, 7, 0,
+        5, 8, 1,
+        4, 3, 2,
+    ]
+
+    static let coordVectorTable = [
+        Coordinate(1, 1),
+        Coordinate(1, 0),
+        Coordinate(1, -1),
+        Coordinate(0, -1),
+        Coordinate(-1, -1),
+        Coordinate(-1, 0),
+        Coordinate(-1, 1),
+        Coordinate(0, 1),
+    ]
 
 }

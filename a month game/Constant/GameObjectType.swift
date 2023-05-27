@@ -10,7 +10,7 @@ import SpriteKit
 
 enum GameObjectType: Int, CaseIterable {
 
-    case base
+    case none
     case pineCone
     case pineTree
     case woodWall

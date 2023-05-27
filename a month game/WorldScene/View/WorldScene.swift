@@ -61,7 +61,7 @@ class WorldScene: SKScene {
 
     var accessableGOs: [GameObject] = []
 
-    // MARK: - initialize
+    // MARK: - set up
     func setUp(sceneController: WorldSceneController) {
         self.sceneController = sceneController
 
@@ -681,53 +681,6 @@ class WorldScene: SKScene {
             : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
     }
 
-    // MARK: - accessable GOs
-    // TODO: move below edit mark
-    func updateAccessableGOs() {
-        let newAccessableGOs = self.field.gameObjects(at: self.accessBox)
-
-        guard newAccessableGOs.count != 0 || !self.accessableGOs.isEmpty else {
-            return
-        }
-
-        self.resetAccessableGOs()
-
-        self.addAccessableGOs(newAccessableGOs)
-    }
-
-    func resetAccessableGOs() {
-        for go in self.accessableGOs {
-            go.colorBlendFactor = 0.0
-        }
-        self.accessableGOs.removeAll()
-    }
-
-    func addAccessableGO(_ go: GameObject) {
-        self.accessableGOs.append(go)
-    }
-
-    func addAccessableGOs(_ gos: [GameObject]) {
-        self.accessableGOs += gos
-        self.applyGOsUpdate()
-    }
-
-    func applyGOsUpdate() {
-        self.setBlendFactor()
-        self.updateCraftPane()
-    }
-
-    func setBlendFactor() {
-        for go in self.accessableGOs {
-            go.color = .green.withAlphaComponent(0.9)
-            go.colorBlendFactor = Constant.accessableGOColorBlendFactor
-        }
-    }
-
-    func updateCraftPane() {
-        let resourceGOs = self.accessableGOs + self.inventory.gameObjects
-        self.craftPane.update(with: resourceGOs)
-    }
-
     // MARK: - resolve collision
     func resolveWorldBorderCollision() {
         self.characterPosition.x = self.characterPosition.x < Constant.moveableArea.minX
@@ -818,6 +771,52 @@ class WorldScene: SKScene {
 
     func remove(_ go: GameObject) {
         go.removeFromParent()
+    }
+
+    // MARK: - accessable GOs
+    func updateAccessableGOs() {
+        let newAccessableGOs = self.field.gameObjects(at: self.accessBox)
+
+        guard newAccessableGOs.count != 0 || !self.accessableGOs.isEmpty else {
+            return
+        }
+
+        self.resetAccessableGOs()
+
+        self.addAccessableGOs(newAccessableGOs)
+    }
+
+    func resetAccessableGOs() {
+        for go in self.accessableGOs {
+            go.colorBlendFactor = 0.0
+        }
+        self.accessableGOs.removeAll()
+    }
+
+    func addAccessableGO(_ go: GameObject) {
+        self.accessableGOs.append(go)
+    }
+
+    func addAccessableGOs(_ gos: [GameObject]) {
+        self.accessableGOs += gos
+        self.applyGOsUpdate()
+    }
+
+    func applyGOsUpdate() {
+        self.setBlendFactor()
+        self.updateCraftPane()
+    }
+
+    func setBlendFactor() {
+        for go in self.accessableGOs {
+            go.color = .green.withAlphaComponent(0.9)
+            go.colorBlendFactor = Constant.accessableGOColorBlendFactor
+        }
+    }
+
+    func updateCraftPane() {
+        let resourceGOs = self.accessableGOs + self.inventory.gameObjects
+        self.craftPane.update(with: resourceGOs)
     }
 
     // MARK: - etc

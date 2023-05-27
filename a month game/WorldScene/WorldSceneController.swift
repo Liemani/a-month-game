@@ -18,7 +18,6 @@ final class WorldSceneController: SceneController {
     var worldScene: WorldScene { self.scene as! WorldScene }
 
     // MARK: - init
-    // TODO: clean
     init(viewController: ViewController, worldName: String) {
         super.init(viewController: viewController)
 
@@ -123,17 +122,11 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: - etc
-    // TODO: move to extension GameObjectMO
     /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
     func spareDirections(_ lhGOMO: GameObjectMO) -> [Coordinate<Int>] {
         var occupySpaceBitFlags: UInt8 = 0
 
-        // TODO: move to constant
-        let spaceShiftTable: [UInt8] = [
-            6, 7, 0,
-            5, 8, 1,
-            4, 3, 2,
-        ]
+        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
 
         let lhGOMOCoord = lhGOMO.coordinate
         for rhGOMO in self.goMOGO.goMOsInField {
@@ -146,17 +139,7 @@ final class WorldSceneController: SceneController {
             }
         }
 
-        // TODO: move to constant
-        let coordVectorTable = [
-            Coordinate(1, 1),
-            Coordinate(1, 0),
-            Coordinate(1, -1),
-            Coordinate(0, -1),
-            Coordinate(-1, -1),
-            Coordinate(-1, 0),
-            Coordinate(-1, 1),
-            Coordinate(0, 1),
-        ]
+        let coordVectorTable = Constant.coordVectorTable
 
         var spareSpaces: [Coordinate<Int>] = []
 

@@ -37,12 +37,15 @@ extension GameObjectMO {
         return ContainerType(rawValue: Int(self.containerID))
     }
 
-    // TODO: 0 If this caller should use gameObjectCoordinate
     var coordinate: Coordinate<Int> {
         let x = Int(self.x)
         let y = Int(self.y)
 
         return Coordinate(x, y)
+    }
+
+    var tileCoordinate: TileCoordinate {
+        return TileCoordinate(Int(self.x), Int(self.y))
     }
 
     var gameObjectCoordinate: GameObjectCoordinate? {
@@ -56,7 +59,6 @@ extension GameObjectMO {
         return GameObjectCoordinate(containerType: cType, x: x, y: y)
     }
 
-    // TODO: clean after implementing GameObject.interact()
     func setUp(gameObjectType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
         self.id = Int32(IDGenerator.generate())
         self.typeID = Int32(gameObjectType.rawValue)
@@ -85,7 +87,7 @@ extension SKNode {
         return self.parent?.children.firstIndex(of: self)
     }
 
-    // TODO: move to physics(?) module
+    // TODO: 99 move to physics(?) module
     /// - Returns: true if collision resolved else false
     func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {
         let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
@@ -115,7 +117,7 @@ extension SKNode {
     }
 
     // NOTE: optimization possible
-    // TODO: move to physics(?) module
+    // TODO: 99 move to physics(?) module
     func resolvePointCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) {
         if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
             let xDifference = self.position.x - circleOrigin.x

@@ -19,7 +19,7 @@ class IDGenerator {
         let diskController = DiskController.default
         self.diskController = diskController
 
-        self.nextID = diskController.readUserDefaults(forKey: Constant.idGenerator)
+        self.nextID = diskController.readUserDefaults(forKey: Constant.idGeneratorKey)
     }
 
     static func generate() -> Int {
@@ -29,7 +29,7 @@ class IDGenerator {
     private func generate() -> Int {
         let id = self.nextID
         self.nextID += 1
-        self.diskController.updateUserDefaults(self.nextID, forKey: Constant.idGenerator)
+        self.diskController.updateUserDefaults(self.nextID, forKey: Constant.idGeneratorKey)
 
         return id
     }

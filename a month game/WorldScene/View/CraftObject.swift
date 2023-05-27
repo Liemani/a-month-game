@@ -10,7 +10,7 @@ import SpriteKit
 
 class CraftObject: SKSpriteNode {
 
-    var gameObjectType: GameObjectType = .base
+    var gameObjectType: GameObjectType = .none
 
     func set(_ goType: GameObjectType) {
         self.texture = goType.texture

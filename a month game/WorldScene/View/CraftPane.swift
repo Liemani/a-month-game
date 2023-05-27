@@ -69,8 +69,8 @@ class CraftPane: SKSpriteNode {
     private func reset() {
         for cell in self.children {
             let craftObject = cell.children[0] as! SKSpriteNode
-            // TODO: rename base to none
-            craftObject.texture = GameObjectType.base.texture
+            
+            craftObject.texture = GameObjectType.none.texture
             cell.alpha = 0.2
         }
     }
