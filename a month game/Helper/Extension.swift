@@ -25,12 +25,35 @@ extension Array {
 // MARK: - GameObjectMO
 extension GameObjectMO {
 
+    var containerTypeRawValue: Int? {
+        let containerTypeRawValue = Int(self.containerID)
+
+        return 0 <= containerTypeRawValue && containerTypeRawValue < ContainerType.caseCount
+            ? containerTypeRawValue
+            : nil
+    }
+
     var containerType: ContainerType? {
         return ContainerType(rawValue: Int(self.containerID))
     }
 
+    // TODO: 0 If this caller should use gameObjectCoordinate
     var coordinate: Coordinate<Int> {
-        return Coordinate(Int(self.x), Int(self.y))
+        let x = Int(self.x)
+        let y = Int(self.y)
+
+        return Coordinate(x, y)
+    }
+
+    var gameObjectCoordinate: GameObjectCoordinate? {
+        guard let cType = self.containerType else {
+            return nil
+        }
+
+        let x = Int(self.x)
+        let y = Int(self.y)
+
+        return GameObjectCoordinate(containerType: cType, x: x, y: y)
     }
 
     // TODO: clean after implementing GameObject.interact()
@@ -41,12 +64,6 @@ extension GameObjectMO {
         self.x = Int32(x)
         self.y = Int32(y)
     }
-
-//    static func new(ofTypeID typeID: Int, id: Int?, coordinate: GameObjectCoordinate) -> GameObject {
-//        let typeID = Resource.gameObjectTypeIDToInformation.indices.contains(typeID) ? typeID : 0
-//        let type = Resource.gameObjectTypeIDToInformation[typeID].type
-//        return type.init(id: id, coordinate: coordinate)
-//    }
 
 }
 
