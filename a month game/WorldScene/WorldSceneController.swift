@@ -13,7 +13,7 @@ final class WorldSceneController: SceneController {
 
     var worldSceneModel: WorldSceneModel!
 
-    var goMOGO: GOMOGO!
+    var goMOGO: GOMOGO = GOMOGO()
 
     var worldScene: WorldScene { self.scene as! WorldScene }
 

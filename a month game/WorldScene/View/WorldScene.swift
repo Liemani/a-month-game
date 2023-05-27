@@ -584,9 +584,10 @@ class WorldScene: SKScene {
         carryingGO.position = touchedTC.fieldPoint
         carryingGO.alpha = 1.0
 
-        self.addAccessableGOs(carryingGO)
+        self.accessableGOs.append(carryingGO)
+        self.updateAccessableGOs()
 
-        let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
+        let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.coordinate)
         self.sceneController.move(carryingGO, to: coordinate)
 
         self.resetCarryTouch()
@@ -661,7 +662,10 @@ class WorldScene: SKScene {
 
         self.updateVelocity(timeInterval: timeInterval)
 
-        self.updateAccessableGOs()
+        if self.isTileChanged() {
+            self.updateAccessableGOs()
+        }
+
         self.resolveWorldBorderCollision()
         self.resolveCollision()
 
@@ -678,27 +682,33 @@ class WorldScene: SKScene {
     }
 
     // MARK: - accessable GOs
+    // TODO: move below edit mark
     func updateAccessableGOs() {
-        guard self.isChangedTile() else { return }
-
         let newAccessableGOs = self.field.gameObjects(at: self.accessBox)
-        let currentAccessableObjectCount = newAccessableGOs.count
 
-        guard currentAccessableObjectCount != 0
-            || !self.accessableGOs.isEmpty else {
+        guard newAccessableGOs.count != 0 || !self.accessableGOs.isEmpty else {
             return
         }
 
-        self.resetGOs()
-        self.accessableGOs += newAccessableGOs
-        self.applyGOsUpdate()
+        self.resetAccessableGOs()
+
+        self.addAccessableGOs(newAccessableGOs)
     }
 
-    func resetGOs() {
+    func resetAccessableGOs() {
         for go in self.accessableGOs {
             go.colorBlendFactor = 0.0
         }
         self.accessableGOs.removeAll()
+    }
+
+    func addAccessableGO(_ go: GameObject) {
+        self.accessableGOs.append(go)
+    }
+
+    func addAccessableGOs(_ gos: [GameObject]) {
+        self.accessableGOs += gos
+        self.applyGOsUpdate()
     }
 
     func applyGOsUpdate() {
@@ -749,7 +759,7 @@ class WorldScene: SKScene {
         self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
-    // TODO: 0 caller could use add gomos
+    /// Must called at controller
     func add(from goMO: GameObjectMO) -> GameObject? {
         guard let containerType = goMO.containerType else {
             return nil
@@ -760,20 +770,18 @@ class WorldScene: SKScene {
             return nil
         }
 
-        guard goMO.containerType == .field else {
-            return go
-        }
-
-        let characterCoord = TileCoordinate(from: self.characterPosition).value
-        if goMO.coordinate.isAdjacent(to: characterCoord) {
-            self.addAccessableGOs(go)
+        if goMO.containerType == .field {
+            let characterCoord = TileCoordinate(from: self.characterPosition).coordinate
+            if goMO.coordinate.isAdjacent(to: characterCoord) {
+                self.accessableGOs.append(go)
+            }
         }
 
         return go
     }
 
     func add(from goMOs: [GameObjectMO]) -> [GameObject] {
-        let characterCoord = TileCoordinate(from: self.characterPosition).value
+        let characterCoord = TileCoordinate(from: self.characterPosition).coordinate
 
         var gos: [GameObject] = []
         var accessableGOs: [GameObject] = []
@@ -788,13 +796,10 @@ class WorldScene: SKScene {
                 continue
             }
 
-            guard goMO.containerType == .field else {
-                gos.append(go)
-                continue
-            }
-
-            if goMO.coordinate.isAdjacent(to: characterCoord) {
-                accessableGOs.append(go)
+            if goMO.containerType == .field {
+                if goMO.coordinate.isAdjacent(to: characterCoord) {
+                    accessableGOs.append(go)
+                }
             }
 
             gos.append(go)
@@ -802,7 +807,6 @@ class WorldScene: SKScene {
 
         if !accessableGOs.isEmpty {
             self.addAccessableGOs(accessableGOs)
-            self.accessableGOsUpdated()
         }
 
         return gos
@@ -817,7 +821,7 @@ class WorldScene: SKScene {
     }
 
     // MARK: - etc
-    func isChangedTile() -> Bool {
+    func isTileChanged() -> Bool {
         let currentPosition = self.characterPosition
 
         let lastTile = TileCoordinate(from: self.lastPosition)

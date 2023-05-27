@@ -26,7 +26,7 @@ class GOMOGO {
     var inventory: Container {
         return self.containers[ContainerType.inventory]
     }
-    
+
     var thirdHand: Container {
         return self.containers[ContainerType.thirdHand]
     }
@@ -43,20 +43,20 @@ class GOMOGO {
         return self.containers[ContainerType.thirdHand].goMOs
     }
 
-    var gos: IteratorSequence<DictionaryKeysArrayIterator<GameObject, GameObjectMO>> {
-        var dictionaryKeysArray: [Dictionary<GameObject, GameObjectMO>.Keys] = []
+    var gos: sequencesIterator<Dictionary<GameObject, GameObjectMO>.Keys> {
+        var sequences: [Dictionary<GameObject, GameObjectMO>.Keys] = []
         for container in containers {
-            dictionaryKeysArray.append(container.goKeys)
+            sequences.append(container.goKeys)
         }
-        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryKeysArray: dictionaryKeysArray))
+        return sequencesIterator(sequences: sequences)
     }
 
-    var goMOs: IteratorSequence<DictionaryKeysArrayIterator<GameObjectMO, GameObject>> {
-        var dictionaryKeysArray: [Dictionary<GameObjectMO, GameObject>.Keys] = []
+    var goMOs: sequencesIterator<Dictionary<GameObjectMO, GameObject>.Keys> {
+        var sequences: [Dictionary<GameObjectMO, GameObject>.Keys] = []
         for container in containers {
-            dictionaryKeysArray.append(container.goMOKeys)
+            sequences.append(container.goMOKeys)
         }
-        return IteratorSequence(DictionaryKeysArrayIterator(dictionaryKeysArray: dictionaryKeysArray))
+        return sequencesIterator(sequences: sequences)
     }
 
     func container(for goMO: GameObjectMO) -> Container? {
@@ -94,8 +94,9 @@ class GOMOGO {
                 self[newGOMO] = go
             } else {
                 for container in self.containers {
-                    if let oldGOMO = container[go] {
+                    if container[go] != nil {
                         container[go] = newGOMO
+                        return
                     }
                 }
             }
@@ -108,7 +109,7 @@ class GOMOGO {
 
     func remove(_ go: GameObject) -> GameObjectMO? {
         for container in containers {
-            if let goMO = container[go] {
+            if container[go] != nil {
                 return container.remove(go)
             }
         }
@@ -122,39 +123,34 @@ class GOMOGO {
 
 }
 
-struct DictionaryKeysArrayIterator<Key, Value>: IteratorProtocol
-where Key: Hashable {
-    typealias Element = Key
+struct sequencesIterator<S>: Sequence, IteratorProtocol where S: Sequence {
 
-    private var dkiArray: [Dictionary<Key, Value>.Keys.Iterator?]
-    private var currentDKIArrayIndex: Int
+    typealias Element = S.Element
 
-    init(dictionaryKeysArray: [Dictionary<Key, Value>.Keys]) {
-        self.dkiArray = []
-        for dictionaryKeys in dictionaryKeysArray {
-            self.dkiArray.append(dictionaryKeys.makeIterator())
+    private var sequences: [S.Iterator?] = []
+    private var currentIndex: Int = 0
+
+    init(sequences: [S]) {
+        for sequence in sequences {
+            self.sequences.append(sequence.makeIterator())
         }
-
-        self.currentDKIArrayIndex = 0
     }
 
     mutating func next() -> Element? {
-        var dki: Dictionary<Key, Value>.Keys.Iterator!
-
         while true {
-            guard currentDKIArrayIndex < self.dkiArray.count else {
+            guard currentIndex < self.sequences.count else {
                 return nil
             }
 
-            dki = dkiArray[currentDKIArrayIndex]!
-            let currentElement = dki.next()
+            let currentElement = sequences[currentIndex]!.next()
 
             if currentElement != nil {
                 return currentElement
             }
 
-            self.dkiArray[currentDKIArrayIndex] = nil
-            currentDKIArrayIndex += 1
+            self.sequences[currentIndex] = nil
+            currentIndex += 1
         }
     }
+
 }

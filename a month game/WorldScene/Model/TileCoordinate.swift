@@ -10,31 +10,31 @@ import Foundation
 /// Coordinate system structure specifically for tile coordination
 struct TileCoordinate {
 
-    var value: Coordinate<Int>
+    var coordinate: Coordinate<Int>
 
-    var x: Int { get { return self.value.x } set { self.value.x = newValue } }
-    var y: Int { get { return self.value.y } set { self.value.y = newValue } }
+    var x: Int { get { return self.coordinate.x } set { self.coordinate.x = newValue } }
+    var y: Int { get { return self.coordinate.y } set { self.coordinate.y = newValue } }
 
     init() {
-        self.value = Coordinate<Int>()
+        self.coordinate = Coordinate<Int>()
     }
 
     init(_ x: Int, _ y: Int) {
-        self.value = Coordinate(x, y)
+        self.coordinate = Coordinate(x, y)
     }
 
     init(from point: CGPoint) {
         let x = Int(point.x) / Int(Constant.tileSide)
         let y = Int(point.y) / Int(Constant.tileSide)
-        self.value = Coordinate(x, y)
+        self.coordinate = Coordinate(x, y)
     }
 
     var fieldPoint: CGPoint {
-        return (self.value.toCGPoint() + 0.5) * Constant.tileSide
+        return (self.coordinate.toCGPoint() + 0.5) * Constant.tileSide
     }
 
     func isAdjacent(with tileCoordinate: TileCoordinate) -> Bool {
-        self.value.isAdjacent(to: tileCoordinate.value)
+        self.coordinate.isAdjacent(to: tileCoordinate.coordinate)
     }
 
 }
