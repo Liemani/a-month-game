@@ -116,6 +116,10 @@ trace
     WorldScene.add() +1
     GameObjectMO.coordinate
     GameObjectMO.gameObjectCoordinate
+field object touch 및 craft touch 중 캐릭터가 이동하여 타일이 바뀌면 경우에 따라서 취소시키기
+    craft update 는 가능하면 터치중인 오브젝트를 고정시키기
+    만약 없애야 한다면 크래프트 터치를 취소시키기
+remove unneccessary return
 consume ingredient
 inventory object is always pickable
 craft

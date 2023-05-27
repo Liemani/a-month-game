@@ -351,14 +351,14 @@ class WorldScene: SKScene {
             self.gameObjectTouchCancelled(touch)
             self.carryTouchCancelled(touch)
         }
-        self.menuButtonTouchReset(touch)
+        self.resetMenuButtonTouch(touch)
     }
 
     func menuButtonTouchCancelled(_ touch: UITouch) {
-        self.menuButtonTouchReset(touch)
+        self.resetMenuButtonTouch(touch)
     }
 
-    func menuButtonTouchReset(_ touch: UITouch) {
+    func resetMenuButtonTouch(_ touch: UITouch) {
         self.menuButton.alpha = 1.0
         self.menuButtonTouch = nil
     }
@@ -389,14 +389,14 @@ class WorldScene: SKScene {
     func moveTouchEnded(_ touch: UITouch) {
         setVelocityVector()
 
-        self.moveTouchReset()
+        self.resetMoveTouch()
     }
 
     func moveTouchCancelled(_ touch: UITouch) {
-        self.moveTouchReset()
+        self.resetMoveTouch()
     }
 
-    func moveTouchReset() {
+    func resetMoveTouch() {
         self.moveTouch = nil
     }
 
@@ -445,7 +445,7 @@ class WorldScene: SKScene {
                 let coordinate = GameObjectCoordinate(containerType: ContainerType.thirdHand, x: 0, y: 0)
                 self.sceneController.move(self.touchedGO!, to: coordinate)
 
-                self.gameObjectTouchReset()
+                self.resetGameObjectTouch()
                 self.carryTouchBegan(touch)
             } else {
                 self.gameObjectTouchCancelled(touch)
@@ -457,16 +457,16 @@ class WorldScene: SKScene {
         self.sceneController.interact(self.touchedGO!, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
         self.touchedGO!.alpha = 1.0
 
-        self.gameObjectTouchReset()
+        self.resetGameObjectTouch()
     }
 
     func gameObjectTouchCancelled(_ touch: UITouch) {
         self.touchedGO?.alpha = 1.0
 
-        self.gameObjectTouchReset()
+        self.resetGameObjectTouch()
     }
 
-    func gameObjectTouchReset() {
+    func resetGameObjectTouch() {
         self.gameObjectTouch = nil
         self.touchedGO = nil
     }
@@ -493,7 +493,15 @@ class WorldScene: SKScene {
             return
         }
 
-        let recipe = getRecipe()
+        self.craft()
+
+        self.carryTouchBegan(touch)
+        self.craftObjectTouchEnded(touch)
+    }
+
+    func craft() {
+        // TODO: add remove ingredient game object
+//        let recipe = getRecipe()
 
         let goType = touchedCraftObject!.gameObjectType
         let containerType = ContainerType.thirdHand
@@ -501,23 +509,21 @@ class WorldScene: SKScene {
         let y = 0
         self.sceneController.add(gameObjectType: goType, containerType: containerType, x: x, y: y)
 
-        self.carryTouchBegan(touch)
-        self.craftObjectTouchEnded(touch)
     }
 
     func craftObjectTouchEnded(_ touch: UITouch) {
         self.touchedCraftObject!.deactivate()
 
-        self.craftObjectTouchReset()
+        self.resetCraftObjectTouch()
     }
 
     func craftObjectTouchCancelled(_ touch: UITouch) {
         self.touchedCraftObject!.deactivate()
 
-        self.craftObjectTouchReset()
+        self.resetCraftObjectTouch()
     }
 
-    func craftObjectTouchReset() {
+    func resetCraftObjectTouch() {
         self.craftObjectTouch = nil
         self.touchedCraftObject = nil
     }
@@ -558,7 +564,7 @@ class WorldScene: SKScene {
             let goCoordinate = GameObjectCoordinate(containerType: ContainerType.inventory, coordinate: coordinate)
             self.move(carryingGO, to: goCoordinate)
 
-            self.carryTouchReset()
+            self.resetCarryTouch()
             return
         }
 
@@ -583,15 +589,15 @@ class WorldScene: SKScene {
         let coordinate = GameObjectCoordinate(containerType: ContainerType.field, coordinate: touchedTC.value)
         self.sceneController.move(carryingGO, to: coordinate)
 
-        self.carryTouchReset()
+        self.resetCarryTouch()
         return
     }
 
     func carryTouchCancelled(_ touch: UITouch) {
-        self.carryTouchReset()
+        self.resetCarryTouch()
     }
 
-    func carryTouchReset() {
+    func resetCarryTouch() {
         self.carryTouch = nil
     }
 
@@ -612,14 +618,14 @@ class WorldScene: SKScene {
             self.menuWindow.isHidden = true
         }
 
-        self.menuWindowTouchReset(touch)
+        self.resetMenuWindowTouch(touch)
     }
 
     func menuWindowTouchCancelled(_ touch: UITouch) {
-        self.menuWindowTouchReset(touch)
+        self.resetMenuWindowTouch(touch)
     }
 
-    func menuWindowTouchReset(_ touch: UITouch) {
+    func resetMenuWindowTouch(_ touch: UITouch) {
     }
 
     func performSegueToPortalScene() {
@@ -759,7 +765,7 @@ class WorldScene: SKScene {
         }
 
         let characterCoord = TileCoordinate(from: self.characterPosition).value
-        if goMO.coordinate.isAdjacent(with: characterCoord) {
+        if goMO.coordinate.isAdjacent(to: characterCoord) {
             self.addAccessableGOs(go)
         }
 
@@ -787,7 +793,7 @@ class WorldScene: SKScene {
                 continue
             }
 
-            if goMO.coordinate.isAdjacent(with: characterCoord) {
+            if goMO.coordinate.isAdjacent(to: characterCoord) {
                 accessableGOs.append(go)
             }
 
@@ -804,6 +810,10 @@ class WorldScene: SKScene {
 
     func move(_ go: GameObject, to goCoordinate: GameObjectCoordinate) {
         self.sceneController.move(go, to: goCoordinate)
+    }
+
+    func remove(_ go: GameObject) {
+        go.removeFromParent()
     }
 
     // MARK: - etc

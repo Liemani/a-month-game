@@ -19,6 +19,18 @@ class GOMOGO {
         self.containers = [Container](repeating: emptyContainer, count: arrayCount)
     }
 
+    var field: Container {
+        return self.containers[ContainerType.field]
+    }
+
+    var inventory: Container {
+        return self.containers[ContainerType.inventory]
+    }
+    
+    var thirdHand: Container {
+        return self.containers[ContainerType.thirdHand]
+    }
+
     var goMOsInField: Dictionary<GameObjectMO, GameObject>.Keys {
         return self.containers[ContainerType.field].goMOs
     }

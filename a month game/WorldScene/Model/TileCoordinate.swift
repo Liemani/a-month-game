@@ -34,7 +34,7 @@ struct TileCoordinate {
     }
 
     func isAdjacent(with tileCoordinate: TileCoordinate) -> Bool {
-        self.value.isAdjacent(with: tileCoordinate.value)
+        self.value.isAdjacent(to: tileCoordinate.value)
     }
 
 }

@@ -2,6 +2,16 @@ diary.txt
 각 날짜에 몇 시간 동안 어떤 작업을 했는가를 기록
 
 # 2023-05-25
+오늘은 제작한 아이템을 삭제하는 로직을 설계하는 작업을 했다
+기본적으로는 game object -> game object MO 를 하나만 두었는데
+도저히 이걸로는 충분하지 않아서
+game object MO -> game object 인 dictionary 를 추가하였다
+그리고 이 역할을 해주는 동시에 ContainerNode 의 데이터 모델인 Container class를 만들었다
+그리고 이 Container 들을 처리하는 GOMOGO class 를 만들었다
+
+내일은 새로 추가된 class 를 기존 코드와 붙이는 작업을 해야 한다
+
+# 2023-05-25
 투자 시간: 8h 20m
 오늘은 CraftPane 을 만들었다
 아직 재료는 소모하지 않지만 조합은 된다

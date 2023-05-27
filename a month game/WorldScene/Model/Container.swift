@@ -8,6 +8,7 @@
 import Foundation
 
 /// Bijective model
+///  Concentrate data input output without limit
 class Container {
 
     private var goMOToGO: [GameObjectMO: GameObject] = [:]
