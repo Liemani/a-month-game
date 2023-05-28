@@ -10,8 +10,17 @@ import SpriteKit
 
 protocol ContainerNode: SKNode {
 
-    func add(by goMO: GameObjectMO) -> GameObject?
+    /// - Returns whether the coordinate is valid or not. Don't consider whether preceding GO exist or not
+    func isVaid(_ coord: Coordinate<Int>) -> Bool
 
-    func gameObject(at touch: UITouch) -> GameObject?
+    func addGO(_ go: GameObject, to coord: Coordinate<Int>)
+
+    func moveGO(_ go: GameObject, to coord: Coordinate<Int>)
+
+    func moveGOMO(from go: GameObject, to coord: Coordinate<Int>)
+
+    func gameObjectAtLocation(of touch: UITouch) -> GameObject?
+
+    func contains(_ go: GameObject) -> Bool
 
 }

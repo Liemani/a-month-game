@@ -48,11 +48,18 @@ enum GameObjectType: Int, CaseIterable {
         return GameObjectType.allCases.count
     }
 
-    static func new(typeID: Int) -> GameObject? {
-        guard 0 <= typeID && typeID < self.caseCount else { return nil }
-        let type = self.rawResources[typeID].type
+    static func new(typeID: Int32) -> GameObject? {
+        guard 0 <= typeID && typeID < self.caseCount else {
+            return nil
+        }
+
+        let type = self.rawResources[Int(typeID)].type
         let texture = self.resource[ObjectIdentifier(type)]!.texture
-        return type.init(texture: texture)
+
+        let go = type.init(texture: texture)
+        go.setUp()
+
+        return go
     }
 
     var metatype: GameObject.Type {

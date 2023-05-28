@@ -10,56 +10,64 @@ import SpriteKit
 
 class CraftPane: SKSpriteNode {
 
-    static var cellCount: Int { return Constant.craftPaneCellCount }
+    var worldScene: WorldScene { self.scene as! WorldScene }
+    var interactionZone: InteractionZone { self.worldScene.interactionZone }
+
+    var cellCount: Int { Constant.craftPaneCellCount }
 
     func setUp() {
+        self.anchorPoint = CGPoint()
+
+        self.position = Constant.craftPanePosition
+        self.size = Constant.craftPaneSize
+
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.craftCell)
 
         let defaultSize = Constant.defaultSize
         let craftPaneSize = Constant.craftPaneSize
 
-        let cellCount = CraftPane.cellCount
+        let cellCount = self.cellCount
 
         let craftCellFirstPosition = CGPoint(x: defaultSize / 2.0, y: craftPaneSize.height - defaultSize / 2.0)
         let craftCellLastPosition = CGPoint() + defaultSize / 2.0
-
         let craftCellPositionGap: CGFloat = (craftCellFirstPosition.y - craftCellLastPosition.y) / CGFloat(cellCount - 1)
 
-        for index in 0..<cellCount {
-            let cell = SKSpriteNode(texture: cellTexture)
+        let x = craftCellFirstPosition.x
+        var y = craftCellFirstPosition.y
 
-            let x = craftCellFirstPosition.x
-            let y = craftCellFirstPosition.y - craftCellPositionGap * CGFloat(index)
+        for _ in 0..<cellCount {
+            let cell = CraftCell(texture: cellTexture)
 
             cell.position = CGPoint(x: x, y: y)
-            cell.zPosition = Constant.ZPosition.craftCell
-            cell.size = Constant.defaultNodeSize
-            cell.alpha = 0.2
+            cell.setUp()
 
             self.addChild(cell)
 
-            let craftObject = CraftObject()
-            craftObject.size = Constant.defaultNodeSize
-            craftObject.zPosition = Constant.ZPosition.craftObject
-            cell.addChild(craftObject)
+             y -= craftCellPositionGap
         }
     }
 
-    // MARK: update
-    func update(with accessableGOs: [GameObject]) {
+    // MARK: - update
+    func update() {
+        let sequences = [
+            AnySequence<GameObject>(self.interactionZone.gos),
+            AnySequence<GameObject>(self.worldScene.sceneController.goMOGO.inventory.goKeys)
+        ]
+        let gos = SequencesIterator(sequences: sequences)
+
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
 
         self.reset()
 
         var craftObjectIndex = 0
         for (resultGOType, recipe) in recipes {
-            guard self.hasIngredient(gameObjects: accessableGOs, forRecipe: recipe) else {
+            guard self.hasIngredient(gameObjects: gos, forRecipe: recipe) else {
                 continue
             }
 
             self.set(index: craftObjectIndex, type: resultGOType)
 
-            if craftObjectIndex == CraftPane.cellCount - 1 {
+            if craftObjectIndex == self.cellCount - 1 {
                 return
             }
             craftObjectIndex += 1
@@ -69,13 +77,13 @@ class CraftPane: SKSpriteNode {
     private func reset() {
         for cell in self.children {
             let craftObject = cell.children[0] as! SKSpriteNode
-            
+
             craftObject.texture = GameObjectType.none.texture
             cell.alpha = 0.2
         }
     }
 
-    private func hasIngredient(gameObjects gos: [GameObject], forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gameObjects gos: SequencesIterator<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
         var recipe = recipe
 
         for go in gos {
@@ -119,6 +127,14 @@ class CraftPane: SKSpriteNode {
 
     func isCellActivated(_ cell: SKNode) -> Bool {
         return cell.alpha == 1.0
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("craft pane")
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("craft pane moved")
     }
 
 }

@@ -9,24 +9,24 @@ import Foundation
 
 struct GameObjectCoordinate {
 
-    var containerType: ContainerType
-    var coordinate: Coordinate<Int>
+    let containerType: ContainerType
+    let coord: Coordinate<Int>
 
-    var x: Int { get { return self.coordinate.x } set { self.coordinate.x = newValue } }
-    var y: Int { get { return self.coordinate.y } set { self.coordinate.y = newValue } }
+    var x: Int { get { return self.coord.x } }
+    var y: Int { get { return self.coord.y } }
 
     init(containerType: ContainerType, coordinate: Coordinate<Int>) {
         self.containerType = containerType
-        self.coordinate = coordinate
+        self.coord = coordinate
     }
 
     init(containerType: ContainerType, x: Int, y: Int) {
         self.containerType = containerType
-        self.coordinate = Coordinate(x, y)
+        self.coord = Coordinate(x, y)
     }
 
     func toCGPoint() -> CGPoint {
-        return self.coordinate.toCGPoint()
+        return self.coord.toCGPoint()
     }
 
 }

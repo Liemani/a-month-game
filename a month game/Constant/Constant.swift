@@ -56,16 +56,18 @@ struct Constant {
 
     // MARK: - z position
     struct ZPosition {
-        static let movingLayer = -20.0
-        static let tileMap = -10.0
+        static let movingLayer = -500.0
+        static let tileMap = -100.0
         static let gameObjectLayer = 0.0
-        static let gameObject = 1.0
+        static let gameObject = 10.0
 
-        static let fixedLayer = 20.0
+        static let fixedLayer = 0.0
         static let ui = 0.0
-        static let menuWindow = 10.0
+        static let thirdHand = 100.0
+        static let menuWindow = 500.0
 
-        static let inventoryCell = -0.1
+        static let inventoryCell = 0.0
+        static let inventoryCellHand = 1.0
         static let craftCell = -0.1
         static let craftObject = 1.0
     }
@@ -88,7 +90,7 @@ struct Constant {
 
     // MARK: - recipe
     static let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = [
-        .woodWall: [(.branch, 3)],
+        .woodWall: [(.branch, 4)],
         .axe: [(.stone, 1), (.branch, 1)],
     ]
 

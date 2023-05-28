@@ -43,20 +43,20 @@ class GOMOGO {
         return self.containers[ContainerType.thirdHand].goMOs
     }
 
-    var gos: sequencesIterator<Dictionary<GameObject, GameObjectMO>.Keys> {
-        var sequences: [Dictionary<GameObject, GameObjectMO>.Keys] = []
+    var gos: SequencesIterator<GameObject> {
+        var sequences: [AnySequence<GameObject>] = []
         for container in containers {
-            sequences.append(container.goKeys)
+            sequences.append(AnySequence<GameObject>(container.goKeys))
         }
-        return sequencesIterator(sequences: sequences)
+        return SequencesIterator(sequences: sequences)
     }
 
-    var goMOs: sequencesIterator<Dictionary<GameObjectMO, GameObject>.Keys> {
-        var sequences: [Dictionary<GameObjectMO, GameObject>.Keys] = []
+    var goMOs: SequencesIterator<GameObjectMO> {
+        var sequences: [AnySequence<GameObjectMO>] = []
         for container in containers {
-            sequences.append(container.goMOKeys)
+            sequences.append(AnySequence<GameObjectMO>(container.goMOKeys))
         }
-        return sequencesIterator(sequences: sequences)
+        return SequencesIterator(sequences: sequences)
     }
 
     func container(for goMO: GameObjectMO) -> Container? {
@@ -123,14 +123,12 @@ class GOMOGO {
 
 }
 
-struct sequencesIterator<S>: Sequence, IteratorProtocol where S: Sequence {
+struct SequencesIterator<Element>: Sequence, IteratorProtocol {
 
-    typealias Element = S.Element
-
-    private var sequences: [S.Iterator?] = []
+    private var sequences: [AnySequence<Element>.Iterator?] = []
     private var currentIndex: Int = 0
 
-    init(sequences: [S]) {
+    init(sequences: [AnySequence<Element>]) {
         for sequence in sequences {
             self.sequences.append(sequence.makeIterator())
         }
@@ -154,3 +152,35 @@ struct sequencesIterator<S>: Sequence, IteratorProtocol where S: Sequence {
     }
 
 }
+
+//struct SequencesIterator<S>: Sequence, IteratorProtocol where S: Sequence {
+//
+//    typealias Element = S.Element
+//
+//    private var sequences: [S.Iterator?] = []
+//    private var currentIndex: Int = 0
+//
+//    init(sequences: [S]) {
+//        for sequence in sequences {
+//            self.sequences.append(sequence.makeIterator())
+//        }
+//    }
+//
+//    mutating func next() -> Element? {
+//        while true {
+//            guard currentIndex < self.sequences.count else {
+//                return nil
+//            }
+//
+//            let currentElement = sequences[currentIndex]!.next()
+//
+//            if currentElement != nil {
+//                return currentElement
+//            }
+//
+//            self.sequences[currentIndex] = nil
+//            currentIndex += 1
+//        }
+//    }
+//
+//}

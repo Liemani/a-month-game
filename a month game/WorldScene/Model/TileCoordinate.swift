@@ -10,31 +10,35 @@ import Foundation
 /// Coordinate system structure specifically for tile coordination
 struct TileCoordinate {
 
-    var coordinate: Coordinate<Int>
+    let coord: Coordinate<Int>
 
-    var x: Int { get { return self.coordinate.x } set { self.coordinate.x = newValue } }
-    var y: Int { get { return self.coordinate.y } set { self.coordinate.y = newValue } }
+    var x: Int { get { return self.coord.x } }
+    var y: Int { get { return self.coord.y } }
 
     init() {
-        self.coordinate = Coordinate<Int>()
+        self.coord = Coordinate<Int>()
     }
 
     init(_ x: Int, _ y: Int) {
-        self.coordinate = Coordinate(x, y)
+        self.coord = Coordinate(x, y)
+    }
+
+    init(_ coord: Coordinate<Int>) {
+        self.coord = coord
     }
 
     init(from point: CGPoint) {
         let x = Int(point.x) / Int(Constant.tileSide)
         let y = Int(point.y) / Int(Constant.tileSide)
-        self.coordinate = Coordinate(x, y)
+        self.coord = Coordinate(x, y)
     }
 
     var fieldPoint: CGPoint {
-        return (self.coordinate.toCGPoint() + 0.5) * Constant.tileSide
+        return (self.coord.toCGPoint() + 0.5) * Constant.tileSide
     }
 
-    func isAdjacent(with tileCoordinate: TileCoordinate) -> Bool {
-        self.coordinate.isAdjacent(to: tileCoordinate.coordinate)
+    func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {
+        self.coord.isAdjacent(to: tileCoordinate.coord)
     }
 
 }
@@ -42,7 +46,7 @@ struct TileCoordinate {
 extension TileCoordinate: Equatable {
 
     static func == (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {
-        return lhs.x == rhs.x && lhs.y == rhs.y
+        return lhs.coord == rhs.coord
     }
 
     static func != (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {

@@ -58,67 +58,40 @@ final class WorldSceneController: SceneController {
 #endif
 
     // MARK: - edit model and scene
-    func addGO(_ goMO: GameObjectMO) {
-        if let go = self.worldScene.add(from: goMO) {
+    func addGOs(_ goMOs: [GameObjectMO]) {
+        for goMO in goMOs {
+            if let go = self.worldScene.addGO(from: goMO) {
+                self.goMOGO[goMO] = go
+            }
+        }
+        self.worldScene.interactionZone.update()
+    }
+
+    /// Save the context manually
+    /// Apply scene gos change manually
+    func addGOMO(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
+        let goMO = self.worldSceneModel.newGOMO(gameObjectType: goType, goCoord: goCoord)
+        if let go = self.worldScene.addGO(from: goMO) {
             self.goMOGO[goMO] = go
         }
     }
 
-    func addGOs(_ goMOs: [GameObjectMO]) {
-        for goMO in goMOs {
-            if let go = self.worldScene.add(from: goMO) {
-                self.goMOGO[goMO] = go
-            }
-        }
-        self.worldScene.applyGOsUpdate()
-    }
-
-    func add(gameObjectType goType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
-        let newGOMO = self.worldSceneModel.newGOMO()
-        newGOMO.setUp(gameObjectType: goType, containerType: containerType, x: x, y: y)
-        self.worldSceneModel.contextSave()
-
-        self.addGO(newGOMO)
-    }
-
-    func move(_ go: GameObject, to newCoord: GameObjectCoordinate) {
+    func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
         let goMO = self.goMOGO[go]!
-
-        goMO.containerID = Int32(newCoord.containerType.rawValue)
-        goMO.x = Int32(newCoord.x)
-        goMO.y = Int32(newCoord.y)
-
+        goMO.set(goCoord: goCoord)
         self.worldSceneModel.contextSave()
+
+        self.worldScene.moveGO(go, to: goCoord)
     }
 
-    func remove(_ goMO: GameObjectMO) {
-        let go = self.goMOGO.remove(goMO)!
-        self.worldScene.remove(go)
-        self.worldSceneModel.remove(goMO)
-    }
-
-    func remove(_ goMOs: [GameObjectMO]) {
-        for goMO in goMOs {
-            let go = self.goMOGO.remove(goMO)!
-            self.worldScene.remove(go)
-            self.worldSceneModel.remove(goMO)
-        }
-        self.worldScene.applyGOsUpdate()
-    }
-
-    func remove(_ go: GameObject) {
-        let goMO = self.goMOGO.remove(go)!
-        self.worldScene.remove(go)
-        self.worldSceneModel.remove(goMO)
-    }
-
-    func remove(_ gos: [GameObject]) {
+    func removeGOMO(from gos: [GameObject]) {
         for go in gos {
             let goMO = self.goMOGO.remove(go)!
-            self.worldScene.remove(go)
             self.worldSceneModel.remove(goMO)
+            go.removeFromParent()
         }
-        self.worldScene.applyGOsUpdate()
+        self.worldSceneModel.contextSave()
+        self.worldScene.interactionZone.update()
     }
 
     // MARK: - etc
@@ -153,14 +126,18 @@ final class WorldSceneController: SceneController {
     }
 
     // MARK: - interact
-    func interact(_ touchedGO: GameObject, leftHand lGO: GameObject?, rightHand rGO: GameObject?) {
-        switch touchedGO.type {
+    func interact(_ go: GameObject, leftHand lGO: GameObject?, rightHand rGO: GameObject?) {
+        guard go.parent is Field else {
+            return
+        }
+
+        switch go.type {
         case .pineTree:
             guard Double.random(in: 0.0...1.0) <= 0.33 else {
                 return
             }
 
-            let goMO = self.goMOGO.field[touchedGO]!
+            let goMO = self.goMOGO.field[go]!
             let spareDirections = self.spareDirections(goMO)
 
             guard !spareDirections.isEmpty else {
@@ -170,16 +147,12 @@ final class WorldSceneController: SceneController {
             let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
             let newGOMOCoord = goMO.coordinate + coordToAdd
 
-            let typeType = GameObjectType.branch
-            let containerType = ContainerType.field
-            let x = newGOMOCoord.x
-            let y = newGOMOCoord.y
+            let goType = GameObjectType.branch
+            let goCoord = GameObjectCoordinate(containerType: .field, x: newGOMOCoord.x, y: newGOMOCoord.y)
 
-            let newGOMO = self.worldSceneModel.newGOMO()
-            newGOMO.setUp(gameObjectType: typeType, containerType: containerType, x: x, y: y)
+            self.addGOMO(gameObjectType: goType, goCoord: goCoord)
             self.worldSceneModel.contextSave()
-
-            self.addGO(newGOMO)
+            self.worldScene.interactionZone.update()
         default: break
         }
     }

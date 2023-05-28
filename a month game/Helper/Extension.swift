@@ -25,6 +25,18 @@ extension Array {
 // MARK: - GameObjectMO
 extension GameObjectMO {
 
+    func set(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
+        self.id = Int32(IDGenerator.generate())
+        self.typeID = Int32(goType.rawValue)
+        self.set(goCoord: goCoord)
+    }
+
+    func set(goCoord: GameObjectCoordinate) {
+        self.containerID = Int32(goCoord.containerType.rawValue)
+        self.x = Int32(goCoord.x)
+        self.y = Int32(goCoord.y)
+    }
+
     var containerTypeRawValue: Int? {
         let containerTypeRawValue = Int(self.containerID)
 
@@ -59,14 +71,6 @@ extension GameObjectMO {
         return GameObjectCoordinate(containerType: cType, x: x, y: y)
     }
 
-    func setUp(gameObjectType: GameObjectType, containerType: ContainerType, x: Int, y: Int) {
-        self.id = Int32(IDGenerator.generate())
-        self.typeID = Int32(gameObjectType.rawValue)
-        self.containerID = Int32(containerType.rawValue)
-        self.x = Int32(x)
-        self.y = Int32(y)
-    }
-
 }
 
 // MARK: - SKNode
@@ -85,6 +89,10 @@ extension SKNode {
 
     var firstIndexFromParent: Int? {
         return self.parent?.children.firstIndex(of: self)
+    }
+
+    func isAtLocation(of touch: UITouch) -> Bool {
+        return self.contains(touch.location(in: self.parent!))
     }
 
     // TODO: 99 move to physics(?) module
@@ -169,6 +177,7 @@ extension SKNode {
 }
 
 // MARK: - UITouch
+// TODO: remove
 extension UITouch {
 
     func `is`(onThe node: SKNode) -> Bool {

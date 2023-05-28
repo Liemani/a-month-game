@@ -25,7 +25,7 @@ final class TileMapModel {
     }
 
     func tileType(at tileCoordinate: TileCoordinate) -> TileType {
-        let coordinate = tileCoordinate.coordinate
+        let coordinate = tileCoordinate.coord
         return self.tileType(atX: coordinate.x, y: coordinate.y)
     }
 
@@ -35,7 +35,7 @@ final class TileMapModel {
     }
 
     func set(tileType: Int, at tileCoordinate: TileCoordinate) {
-        let coordinate = tileCoordinate.coordinate
+        let coordinate = tileCoordinate.coord
         let index = Constant.gridSize * coordinate.x + coordinate.y
         self.tileMap[index] = tileType
     }

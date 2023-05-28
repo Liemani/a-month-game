@@ -105,26 +105,31 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+ContainerNode 에서 new 를 하다니... 엉망이다
+scene 의 touch 도 각 node 들로 옮겨야 한다
+carry began should reset the status of GO
+rename container node
 field object touch 및 craft touch 중 캐릭터가 이동하여 타일이 바뀌면 경우에 따라서 취소시키기
     craft update 는 가능하면 터치중인 오브젝트를 고정시키기
     만약 없애야 한다면 크래프트 터치를 취소시키기
 remove unneccessary return
-consume ingredient
-inventory object is always pickable
 craft
+    consume ingredient
+inventory object is always pickable
 touoch pine cone make pine tree
 touch wood wall break but not in inventory
-base type to none
-set none texture to nil
 InventoryNode -> InventoryPane
-fix moving game object to out of world border
-fix flick to persist direction
-menu -> cancel all touch
-menu window touch
-save character position
-PortalScene touch
 change portal button texture
 set app icon
+limit multi touch up to two
+
+fix flick to persist direction
+fix moving game object to out of world border
+
+menu window touch
+menu -> cancel all touch
+save character position
+PortalScene touch
 add fade effect
 add sound
 
@@ -298,6 +303,8 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+base type to none
+set none texture to nil
 trace
     WorldScene.updateAccessableGOs()
     WorldScene.updateCraftPane()

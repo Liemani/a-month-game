@@ -13,6 +13,7 @@ class CraftObject: SKSpriteNode {
     var gameObjectType: GameObjectType = .none
 
     func set(_ goType: GameObjectType) {
+        self.isUserInteractionEnabled = true
         self.texture = goType.texture
         self.gameObjectType = goType
     }
@@ -23,6 +24,38 @@ class CraftObject: SKSpriteNode {
 
     func deactivate() {
         self.alpha = 1.0
+    }
+
+    func touchBegan(_ touch: UITouch) {
+    }
+
+    func touchMoved(_ touch: UITouch) {
+    }
+
+    func touchEnded(_ touch: UITouch) {
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+    }
+
+    func resetTouch(_ touch: UITouch) {
+    }
+
+    // MARK: - override
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchBegan(touch) }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchMoved(touch) }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchEnded(touch) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchCancelled(touch) }
     }
 
 }
