@@ -12,13 +12,13 @@ final class WorldSceneModel {
 
     var diskController: DiskController!
 
-    weak var worldSceneController: WorldSceneController!
+    weak var worldSceneController: WorldScene!
 
     var tileMapModel: TileMapModel!
     var characterModel: CharacterModel!
 
     // MARK: - init
-    init(worldSceneController: WorldSceneController, worldName: String) {
+    init(worldSceneController: WorldScene, worldName: String) {
         let diskController = DiskController.default
         diskController.setToWorld(ofName: worldName)
         self.diskController = diskController

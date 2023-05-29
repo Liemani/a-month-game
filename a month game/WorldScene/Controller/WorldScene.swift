@@ -10,9 +10,16 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    weak var sceneController: WorldSceneController!
+    weak var viewController: ViewController!
 
-    // MARK: container
+    // MARK: model
+    var worldSceneModel: WorldSceneModel!
+
+    var goMOGO: GOMOGO = GOMOGO()
+
+    var touchManager: WorldSceneTouchManager = WorldSceneTouchManager()
+
+    // MARK: view
     var containers: [ContainerNode] = [ContainerNode](repeating: ThirdHand(), count: ContainerType.caseCount)
 
     var field: Field { self.containers[ContainerType.field] as! Field }
@@ -39,17 +46,32 @@ class WorldScene: SKScene {
     var isMenuOpen: Bool { return !menuWindow.isHidden }
 
     var characterPosition: CGPoint {
-        get { return -self.movingLayer.position }
+        get { -self.movingLayer.position }
         set { self.movingLayer.position = -newValue }
     }
 
-    var touchManager: TouchManager = TouchManager()
-
     // MARK: - set up
-    func setUp(sceneController: WorldSceneController) {
-        self.containers.reserveCapacity(ContainerType.caseCount)
+    func setUp(viewController: ViewController, worldName: String) {
+        self.viewController = viewController
 
-        self.sceneController = sceneController
+        self.setUpSceneLayer()
+        self.setUpModel(worldName: worldName)
+
+        #if DEBUG
+        self.debugCode()
+        #endif
+    }
+
+#if DEBUG
+    func debugCode() {
+        for goMO in self.goMOGO.goMOs {
+            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
+        }
+    }
+#endif
+
+    func setUpSceneLayer() {
+        self.containers.reserveCapacity(ContainerType.caseCount)
 
         self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
@@ -210,6 +232,35 @@ class WorldScene: SKScene {
         let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
         let exitWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuWindow)
         self.exitWorldButton = exitWorldButton
+    }
+
+    // MARK: set up model
+    func setUpModel(worldName: String) {
+        self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
+
+        self.setUpTile()
+        self.setUpGOMOs()
+        self.setUpCharacter()
+    }
+
+    func setUpTile() {
+        let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
+        for x in 0..<Constant.gridSize {
+            for y in 0..<Constant.gridSize {
+                let tileType = tileModel.tileType(atX: x, y: y)
+                self.set(tileType: tileType, toX: x, y: y)
+            }
+        }
+    }
+
+    func setUpGOMOs() {
+        let goMOs = self.worldSceneModel.loadGOs()
+        self.addGOs(goMOs)
+    }
+
+    func setUpCharacter() {
+        let characterPosition = self.worldSceneModel.characterModel.position
+        self.characterPosition = characterPosition
     }
 
     // MARK: - touch
@@ -409,7 +460,7 @@ class WorldScene: SKScene {
     }
 
     func performSegueToPortalScene() {
-        self.sceneController.viewController.setPortalScene()
+        self.viewController.setPortalScene()
     }
 
     // MARK: - ovverride
@@ -486,15 +537,13 @@ class WorldScene: SKScene {
         }
     }
 
-    // MARK: - edit
+    // MARK: - edit model
+    // MARK: - tile
     func set(tileType: TileType, toX x: Int, y: Int) {
         self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
-    func isValid(_ goCoord: GameObjectCoordinate) -> Bool {
-        return self.containers[goCoord.containerType].isVaid(goCoord.coord)
-    }
-
+    // MARK: - game object
     /// Must called at controller
     func addGO(from goMO: GameObjectMO) -> GameObject? {
         guard let containerType = goMO.containerType else {
@@ -503,11 +552,8 @@ class WorldScene: SKScene {
 
         let container = self.containers[containerType]
 
-        guard container.isVaid(goMO.coordinate) else {
-            return nil
-        }
-
-        guard let go = GameObjectType.new(typeID: goMO.typeID) else {
+        guard container.isVaid(goMO.coordinate),
+              let go = GameObjectType.new(typeID: goMO.typeID) else {
             return nil
         }
 
@@ -516,22 +562,43 @@ class WorldScene: SKScene {
         return go
     }
 
-    func moveGO(_ go: GameObject, to goCoord: GameObjectCoordinate) {
-        let containerType = goCoord.containerType
-
-        self.containers[containerType].moveGO(go, to: goCoord.coord)
+    // MARK: - game object managed object
+    /// Save the context manually
+    /// Apply scene gos change manually
+    func addGOMO(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
+        let goMO = self.worldSceneModel.newGOMO(gameObjectType: goType, goCoord: goCoord)
+        if let go = self.addGO(from: goMO) {
+            self.goMOGO[goMO] = go
+        }
     }
 
-    func removeGO(_ gos: [GameObject]) {
+    func addGOs(_ goMOs: [GameObjectMO]) {
+        for goMO in goMOs {
+            if let go = self.addGO(from: goMO) {
+                self.goMOGO[goMO] = go
+            }
+        }
+        self.interactionZone.update()
+    }
+
+    // MARK: move
+    func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
+        let goMO = self.goMOGO[go]!
+        goMO.set(goCoord: goCoord)
+        self.worldSceneModel.contextSave()
+
+        self.containers[goCoord.containerType].moveGO(go, to: goCoord.coord)
+    }
+
+    // MARK: remove
+    func removeGOMO(from gos: [GameObject]) {
         for go in gos {
+            let goMO = self.goMOGO.remove(go)!
+            self.worldSceneModel.remove(goMO)
             go.removeFromParent()
         }
-        self.interactionZone.applyUpdate()
-    }
-
-    // MARK: - delegate
-    func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
-        self.sceneController.moveGOMO(from: go, to: goCoord)
+        self.worldSceneModel.contextSave()
+        self.interactionZone.update()
     }
 
     // MARK: - etc
@@ -544,8 +611,66 @@ class WorldScene: SKScene {
         return currentTile != lastTile
     }
 
+    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
+    func spareDirections(_ lhGOMO: GameObjectMO) -> [Coordinate<Int>] {
+        var occupySpaceBitFlags: UInt8 = 0
+
+        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
+
+        let lhGOMOCoord = lhGOMO.coordinate
+        for rhGOMO in self.goMOGO.goMOsInField {
+            let rhGOMOCoord = rhGOMO.coordinate
+            if lhGOMOCoord.isAdjacent(to: rhGOMOCoord) {
+                let differenceX = rhGOMOCoord.x - lhGOMOCoord.x
+                let differenceY = rhGOMOCoord.y - lhGOMOCoord.y
+                let tableIndex = (differenceY - 1) * -3 + (differenceX + 1)
+                occupySpaceBitFlags |= 0x1 << spaceShiftTable[tableIndex]
+            }
+        }
+
+        let coordVectorTable = Constant.coordVectorTable
+
+        var spareSpaces: [Coordinate<Int>] = []
+
+        for index in 0..<8 {
+            if (occupySpaceBitFlags >> index) & 0x1 == 0x0 {
+                spareSpaces.append(coordVectorTable[index])
+            }
+        }
+
+        return spareSpaces
+    }
+
+    // MARK: - interact
     func interact(_ go: GameObject) {
-        self.sceneController.interact(go, leftHand: self.leftHandGO, rightHand: self.rightHandGO)
+        guard go.parent is Field else {
+            return
+        }
+
+        switch go.type {
+        case .pineTree:
+            guard Double.random(in: 0.0...1.0) <= 0.33 else {
+                return
+            }
+
+            let goMO = self.goMOGO.field[go]!
+            let spareDirections = self.spareDirections(goMO)
+
+            guard !spareDirections.isEmpty else {
+                return
+            }
+
+            let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
+            let newGOMOCoord = goMO.coordinate + coordToAdd
+
+            let goType = GameObjectType.branch
+            let goCoord = GameObjectCoordinate(containerType: .field, x: newGOMOCoord.x, y: newGOMOCoord.y)
+
+            self.addGOMO(gameObjectType: goType, goCoord: goCoord)
+            self.worldSceneModel.contextSave()
+            self.interactionZone.update()
+        default: break
+        }
     }
 
 }

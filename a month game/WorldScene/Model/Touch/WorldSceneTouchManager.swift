@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class TouchManager {
+class WorldSceneTouchManager {
 
     var touches: [Touch?] = [Touch?](repeating: nil, count: 2)
 

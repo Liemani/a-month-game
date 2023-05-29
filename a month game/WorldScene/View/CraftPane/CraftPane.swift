@@ -51,7 +51,7 @@ class CraftPane: SKSpriteNode {
     func update() {
         let sequences = [
             AnySequence<GameObject>(self.interactionZone.gos),
-            AnySequence<GameObject>(self.worldScene.sceneController.goMOGO.inventory.goKeys)
+            AnySequence<GameObject>(self.worldScene.goMOGO.inventory.goKeys)
         ]
         let gos = SequencesIterator(sequences: sequences)
 

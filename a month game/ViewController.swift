@@ -11,8 +11,6 @@ import GameplayKit
 
 class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    var sceneController: SceneController!
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -23,24 +21,26 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     func setView() {
         let view = self.view as! SKView
         view.ignoresSiblingOrder = true
+#if DEBUG
         view.showsFPS = true
         view.showsNodeCount = true
+#endif
     }
 
     func setPortalScene() {
-        let sceneController = PortalSceneController(viewController: self)
+        let portalScene = PortalScene()
+        portalScene.setUp(viewController: self)
 
         let view = self.view as! SKView
-        view.presentScene(sceneController.scene)
-        self.sceneController = sceneController
+        view.presentScene(portalScene.scene)
     }
 
     func setWorldScene() {
-        let sceneController = WorldSceneController(viewController: self, worldName: Constant.defaultWorldName)
+        let worldScene = WorldScene()
+        worldScene.setUp(viewController: self, worldName: Constant.defaultWorldName)
 
         let view = self.view as! SKView
-        view.presentScene(sceneController.scene)
-        self.sceneController = sceneController
+        view.presentScene(worldScene)
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

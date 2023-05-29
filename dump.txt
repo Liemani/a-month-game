@@ -105,8 +105,9 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+clean merged world scene
 make character class
-
+move controller to scene
 move files according to hierarchy
 game object
     activate

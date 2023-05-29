@@ -12,7 +12,7 @@ import SpriteKit
 class GameObject: SKSpriteNode {
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
-    var touchManager: TouchManager { return self.worldScene.touchManager }
+    var touchManager: WorldSceneTouchManager { return self.worldScene.touchManager }
 
     var typeID: Int {
         let objectIdentifier = ObjectIdentifier(Swift.type(of: self))
