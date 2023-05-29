@@ -50,7 +50,7 @@
 		039EEFC92A243DD900CB93C6 /* Touch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFC82A243DD900CB93C6 /* Touch.swift */; };
 		039EEFCB2A243F6C00CB93C6 /* TouchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFCA2A243F6C00CB93C6 /* TouchManager.swift */; };
 		03D6F8682A20AB26005628F5 /* GOMOGO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D6F8672A20AB26005628F5 /* GOMOGO.swift */; };
-		03D6F86A2A20F343005628F5 /* Container.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D6F8692A20F343005628F5 /* Container.swift */; };
+		03D6F86A2A20F343005628F5 /* ContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D6F8692A20F343005628F5 /* ContainerModel.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
 		03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */; };
@@ -102,7 +102,7 @@
 		039EEFC82A243DD900CB93C6 /* Touch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Touch.swift; sourceTree = "<group>"; };
 		039EEFCA2A243F6C00CB93C6 /* TouchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchManager.swift; sourceTree = "<group>"; };
 		03D6F8672A20AB26005628F5 /* GOMOGO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOMOGO.swift; sourceTree = "<group>"; };
-		03D6F8692A20F343005628F5 /* Container.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Container.swift; sourceTree = "<group>"; };
+		03D6F8692A20F343005628F5 /* ContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerModel.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 		03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPane.swift; sourceTree = "<group>"; };
@@ -123,7 +123,6 @@
 		030ABFAB2A0BCC3A00BAB9B8 /* WorldScene */ = {
 			isa = PBXGroup;
 			children = (
-				031D57582A07731A007EF383 /* WorldSceneController.swift */,
 				031D575F2A07C838007EF383 /* Controller */,
 				031D575A2A07C232007EF383 /* Model */,
 				031D57602A07C849007EF383 /* View */,
@@ -134,7 +133,6 @@
 		030ABFAC2A0BCC4C00BAB9B8 /* PortalScene */ = {
 			isa = PBXGroup;
 			children = (
-				030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */,
 				030ABFAD2A0BCDF000BAB9B8 /* Controller */,
 				030ABFAF2A0BCDFE00BAB9B8 /* Model */,
 				030ABFAE2A0BCDF900BAB9B8 /* View */,
@@ -145,6 +143,8 @@
 		030ABFAD2A0BCDF000BAB9B8 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */,
+				030ABFB02A0BCE6600BAB9B8 /* PortalSceneController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -152,7 +152,6 @@
 		030ABFAE2A0BCDF900BAB9B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -180,12 +179,13 @@
 			isa = PBXGroup;
 			children = (
 				031D575B2A07C24C007EF383 /* WorldSceneModel.swift */,
-				03D6F8692A20F343005628F5 /* Container.swift */,
+				03D6F8692A20F343005628F5 /* ContainerModel.swift */,
 				031D575D2A07C311007EF383 /* TileMapModel.swift */,
 				031D57552A076DC8007EF383 /* CharacterModel.swift */,
 				039037CC2A17AB3E0014A571 /* Coordinate.swift */,
 				03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */,
 				03D6F8672A20AB26005628F5 /* GOMOGO.swift */,
+				039EEFCE2A245AB400CB93C6 /* Touch */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -193,6 +193,8 @@
 		031D575F2A07C838007EF383 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				038330A72A02850A008DEA10 /* WorldScene.swift */,
+				031D57582A07731A007EF383 /* WorldSceneController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -200,15 +202,10 @@
 		031D57602A07C849007EF383 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				038330A72A02850A008DEA10 /* WorldScene.swift */,
-				03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */,
-				039EEFC82A243DD900CB93C6 /* Touch.swift */,
+				034637812A238D3600370C71 /* InteractionZone.swift */,
+				039EEFCD2A24586C00CB93C6 /* CraftPane */,
 				03E7558D2A1E4FC300BF5C0F /* GameObject */,
 				03E7558E2A1E4FEE00BF5C0F /* Container */,
-				03E755912A1FA36A00BF5C0F /* CraftObject.swift */,
-				034637812A238D3600370C71 /* InteractionZone.swift */,
-				034637832A23947400370C71 /* CraftCell.swift */,
-				039EEFCA2A243F6C00CB93C6 /* TouchManager.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -268,6 +265,34 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		039EEFCC2A24584F00CB93C6 /* InventoryPane */ = {
+			isa = PBXGroup;
+			children = (
+				03311DD12A1A3E3F0020ADB5 /* InventoryPane.swift */,
+				0346377F2A233A1400370C71 /* InventoryCell.swift */,
+			);
+			path = InventoryPane;
+			sourceTree = "<group>";
+		};
+		039EEFCD2A24586C00CB93C6 /* CraftPane */ = {
+			isa = PBXGroup;
+			children = (
+				03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */,
+				034637832A23947400370C71 /* CraftCell.swift */,
+				03E755912A1FA36A00BF5C0F /* CraftObject.swift */,
+			);
+			path = CraftPane;
+			sourceTree = "<group>";
+		};
+		039EEFCE2A245AB400CB93C6 /* Touch */ = {
+			isa = PBXGroup;
+			children = (
+				039EEFCA2A243F6C00CB93C6 /* TouchManager.swift */,
+				039EEFC82A243DD900CB93C6 /* Touch.swift */,
+			);
+			path = Touch;
+			sourceTree = "<group>";
+		};
 		03E7558D2A1E4FC300BF5C0F /* GameObject */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,11 +311,10 @@
 		03E7558E2A1E4FEE00BF5C0F /* Container */ = {
 			isa = PBXGroup;
 			children = (
-				03311DD12A1A3E3F0020ADB5 /* InventoryPane.swift */,
 				033C9E602A1C2D83000E1D50 /* ContainerNode.swift */,
 				033C9E622A1C2DCA000E1D50 /* Field.swift */,
 				037E3F432A1CA512008A50CA /* ThirdHand.swift */,
-				0346377F2A233A1400370C71 /* InventoryCell.swift */,
+				039EEFCC2A24584F00CB93C6 /* InventoryPane */,
 			);
 			path = Container;
 			sourceTree = "<group>";
@@ -407,7 +431,7 @@
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				03311DD02A1A3AE40020ADB5 /* GameObjectAxe.swift in Sources */,
 				03D6F8682A20AB26005628F5 /* GOMOGO.swift in Sources */,
-				03D6F86A2A20F343005628F5 /* Container.swift in Sources */,
+				03D6F86A2A20F343005628F5 /* ContainerModel.swift in Sources */,
 				03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */,
 				030ABFB12A0BCE6700BAB9B8 /* PortalSceneController.swift in Sources */,
 				034637842A23947400370C71 /* CraftCell.swift in Sources */,

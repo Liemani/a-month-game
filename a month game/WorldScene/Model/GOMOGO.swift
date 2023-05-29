@@ -11,23 +11,23 @@ import Foundation
 class GOMOGO {
 
     /// Objects are stored according to container type
-    private var containers: [Container]
+    private var containers: [ContainerModel]
 
     init() {
         let arrayCount = ContainerType.allCases.count
-        let emptyContainer = Container()
-        self.containers = [Container](repeating: emptyContainer, count: arrayCount)
+        let emptyContainer = ContainerModel()
+        self.containers = [ContainerModel](repeating: emptyContainer, count: arrayCount)
     }
 
-    var field: Container {
+    var field: ContainerModel {
         return self.containers[ContainerType.field]
     }
 
-    var inventory: Container {
+    var inventory: ContainerModel {
         return self.containers[ContainerType.inventory]
     }
 
-    var thirdHand: Container {
+    var thirdHand: ContainerModel {
         return self.containers[ContainerType.thirdHand]
     }
 
@@ -59,7 +59,7 @@ class GOMOGO {
         return SequencesIterator(sequences: sequences)
     }
 
-    func container(for goMO: GameObjectMO) -> Container? {
+    func container(for goMO: GameObjectMO) -> ContainerModel? {
         if let containerTypeRawValue = goMO.containerTypeRawValue {
             return self.containers[containerTypeRawValue]
         }
