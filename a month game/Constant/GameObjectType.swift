@@ -18,71 +18,32 @@ enum GameObjectType: Int, CaseIterable {
     case stone
     case axe
 
-    private static let rawResources: [(type: GameObject.Type, name: String)] = [
-        (GameObject.self, "game_object_none"),
-        (GameObjectPineCone.self, "game_object_pine_cone"),
-        (GameObjectPineTree.self, "game_object_pine_tree"),
-        (GameObjectWoodWall.self, "game_object_wood_wall"),
-        (GameObjectBranch.self, "game_object_branch"),
-        (GameObjectStone.self, "game_object_stone"),
-        (GameObjectAxe.self, "game_object_axe"),
+    private static let resources: [(isWalkable: Bool, isPickable: Bool, resourceName: String)] = [
+        (true, true, "game_object_none"),
+        (true, true, "game_object_pine_cone"),
+        (false, false, "game_object_pine_tree"),
+        (false, false, "game_object_wood_wall"),
+        (true, true, "game_object_branch"),
+        (true, true, "game_object_stone"),
+        (true, true, "game_object_axe"),
     ]
 
-    static let resource: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = ({
+    private static let textures: [SKTexture] = ({
+        var textures: [SKTexture] = [SKTexture](repeating: SKTexture(), count: GameObjectType.caseCount)
 
-        var dictionary: [ObjectIdentifier: (type: GameObjectType, typeID: Int, texture: SKTexture)] = [:]
-
-        for (typeID, rawResource) in rawResources.enumerated() {
-            let type = GameObjectType(rawValue: typeID)!
-            let objectIdentifier = ObjectIdentifier(rawResource.type)
-            let resourceName = rawResource.name
-            let texture = SKTexture(imageNamed: resourceName)
-            let value = (type: type, typeID: typeID, texture: texture)
-            dictionary[objectIdentifier] = value
+        for (index, resource) in resources.enumerated() {
+            textures[index] = SKTexture(imageNamed: resource.resourceName)
         }
 
-        return dictionary
+        return textures
     })()
 
-    static var caseCount: Int {
-        return GameObjectType.allCases.count
-    }
+    static var caseCount: Int { GameObjectType.allCases.count }
 
-    static func new(typeID: Int32) -> GameObject? {
-        guard 0 <= typeID && typeID < self.caseCount else {
-            return nil
-        }
-
-        let type = self.rawResources[Int(typeID)].type
-        let texture = self.resource[ObjectIdentifier(type)]!.texture
-
-        let go = type.init(texture: texture)
-        go.setUp()
-
-        return go
-    }
-
-    static func new(of goType: GameObjectType) -> GameObject {
-        let type = self.rawResources[goType.rawValue].type
-        let texture = self.resource[ObjectIdentifier(type)]!.texture
-
-        let go = type.init(texture: texture)
-        go.setUp()
-
-        return go
-    }
-
-    var metatype: GameObject.Type {
-        return GameObjectType.rawResources[self.rawValue].type
-    }
-
-    var typeID: Int {
-        return self.rawValue
-    }
-
-    var texture: SKTexture {
-        let objectIdentifier = ObjectIdentifier(self.metatype)
-        return GameObjectType.resource[objectIdentifier]!.texture
-    }
+    var typeID: Int32 { Int32(self.rawValue) }
+    var resources: [(isWalkable: Bool, isPickable: Bool, resourceName: String)] { GameObjectType.resources }
+    var texture: SKTexture { GameObjectType.textures[self.rawValue] }
+    var isWalkable: Bool { self.resources[self.rawValue].isWalkable }
+    var isPickable: Bool { self.resources[self.rawValue].isPickable }
 
 }

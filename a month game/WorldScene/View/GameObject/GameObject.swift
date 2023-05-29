@@ -9,20 +9,30 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObject
-class GameObject: SKSpriteNode {
+class GameObject: SKSpriteNode, BelongEquatableType {
 
-    var typeID: Int {
-        let objectIdentifier = ObjectIdentifier(Swift.type(of: self))
-        return GameObjectType.resource[objectIdentifier]!.typeID
-    }
+    private var _type: GameObjectType!
+    var type: GameObjectType { self._type }
 
     // MARK: property to be overriden
-    var isWalkable: Bool { return true }
-    var isPickable: Bool { return true }
+    var isWalkable: Bool { self.type.isWalkable }
+    var isPickable: Bool { self.type.isPickable }
 
-    // MARK: set up
-    func setUp() {
-        self.zPosition = Constant.ZPosition.gameObject
+    // MARK: - new
+    static func new(from typeID: Int32) -> GameObject? {
+        guard let type = GameObjectType(rawValue: Int(typeID)) else {
+            return nil
+        }
+
+        let go = GameObject(texture: type.texture)
+        go._type = type
+        go.zPosition = Constant.ZPosition.gameObject
+
+        return go
+    }
+
+    static func new(from goMO: GameObjectMO) -> GameObject? {
+        return self.new(from: goMO.typeID)
     }
 
     // MARK: - etc
@@ -150,14 +160,6 @@ class GameObject: SKSpriteNode {
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchCancelled(touch) }
-    }
-
-}
-
-extension GameObject: BelongEquatableType {
-
-    var type: GameObjectType {
-        return GameObjectType(rawValue: self.typeID)!
     }
 
 }

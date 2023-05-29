@@ -483,7 +483,7 @@ class WorldScene: SKScene {
         let container = self.containers[containerType]
 
         guard container.isVaid(goMO.coordinate),
-              let go = GameObjectType.new(typeID: goMO.typeID) else {
+              let go = GameObject.new(from: goMO.typeID) else {
             return nil
         }
 
