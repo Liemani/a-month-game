@@ -26,19 +26,19 @@ class CraftObject: SKSpriteNode {
         self.alpha = 1.0
     }
 
-    func touchBegan(_ touch: UITouch) {
+    override func touchBegan(_ touch: UITouch) {
     }
 
-    func touchMoved(_ touch: UITouch) {
+    override func touchMoved(_ touch: UITouch) {
     }
 
-    func touchEnded(_ touch: UITouch) {
+    override func touchEnded(_ touch: UITouch) {
     }
 
-    func touchCancelled(_ touch: UITouch) {
+    override func touchCancelled(_ touch: UITouch) {
     }
 
-    func resetTouch(_ touch: UITouch) {
+    override func resetTouch(_ touch: UITouch) {
     }
 
     // MARK: - override

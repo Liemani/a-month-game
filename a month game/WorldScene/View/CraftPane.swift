@@ -129,12 +129,4 @@ class CraftPane: SKSpriteNode {
         return cell.alpha == 1.0
     }
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("craft pane")
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("craft pane moved")
-    }
-
 }

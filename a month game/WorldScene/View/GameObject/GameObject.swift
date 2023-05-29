@@ -12,6 +12,7 @@ import SpriteKit
 class GameObject: SKSpriteNode {
 
     var worldScene: WorldScene { return self.scene as! WorldScene }
+    var touchManager: TouchManager { return self.worldScene.touchManager }
 
     var typeID: Int {
         let objectIdentifier = ObjectIdentifier(Swift.type(of: self))
@@ -38,22 +39,17 @@ class GameObject: SKSpriteNode {
     }
 
     // MARK: - touch
-    func touchBegan(_ touch: UITouch) {
+    override func touchBegan(_ touch: UITouch) {
         if self.parent is Field && !self.worldScene.interactionZone.contains(self) {
             return
         }
 
-        let didAdded = self.worldScene.add(GameObjectTouch(touch: touch, go: self))
-
-        guard didAdded else {
-            return
-        }
-
-        self.alpha = 0.5
+        let didAdded = self.touchManager.add(GameObjectTouch(touch: touch, sender: self))
+        self.alpha = !didAdded ? 1.0 : 0.5
     }
 
-    func touchMoved(_ touch: UITouch) {
-        guard self.worldScene.containsTouch(from: touch) else {
+    override func touchMoved(_ touch: UITouch) {
+        guard self.touchManager.first(from: touch) != nil else {
             return
         }
 
@@ -80,8 +76,8 @@ class GameObject: SKSpriteNode {
         }
     }
 
-    func touchEnded(_ touch: UITouch) {
-        guard self.worldScene.containsTouch(from: touch) else {
+    override func touchEnded(_ touch: UITouch) {
+        guard self.touchManager.first(from: touch) != nil else {
             return
         }
 
@@ -123,13 +119,16 @@ class GameObject: SKSpriteNode {
         return
     }
 
-    func touchCancelled(_ touch: UITouch) {
+    override func touchCancelled(_ touch: UITouch) {
+        guard self.touchManager.first(from: touch) != nil else {
+            return
+        }
         self.resetTouch(touch)
     }
 
-    func resetTouch(_ touch: UITouch) {
+    override func resetTouch(_ touch: UITouch) {
         self.alpha = 1.0
-        self.worldScene.removeTouch(from: touch)
+        self.touchManager.removeFirst(from: touch)
     }
 
     // MARK: - override
@@ -151,38 +150,6 @@ class GameObject: SKSpriteNode {
 
 }
 
-// TODO: move
-class Touch {
-
-    let touch: UITouch
-
-    init(_ touch: UITouch) {
-        self.touch = touch
-    }
-
-}
-
-extension Touch: Equatable {
-
-    static func == (lhs: Touch, rhs: Touch) -> Bool {
-        return lhs.touch == rhs.touch
-    }
-
-    public static func != (lhs: Touch, rhs: Touch) -> Bool {
-        return !(lhs == rhs)
-    }
-
-}
-
-// TODO: move
 class GameObjectTouch: Touch {
-
-    let touchedGO: GameObject
-
-    init(touch: UITouch, go touchedGO: GameObject) {
-        self.touchedGO = touchedGO
-
-        super.init(touch)
-    }
 
 }

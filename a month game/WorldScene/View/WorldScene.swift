@@ -43,34 +43,7 @@ class WorldScene: SKScene {
         set { self.movingLayer.position = -newValue }
     }
 
-    // MARK: touch
-    var progressingTouch: [Touch?] = [Touch?](repeating: nil, count: 2)
-
-    // TODO: move
-    func add(_ touch: Touch) -> Bool {
-        if self.progressingTouch[0] == nil {
-            self.progressingTouch[0] = touch
-        } else if self.progressingTouch[1] == nil {
-            self.progressingTouch[1] = touch
-        } else {
-            return false
-        }
-
-        return true
-    }
-
-    func containsTouch(from touch: UITouch) -> Bool {
-        return self.progressingTouch[0]?.touch == touch
-            || self.progressingTouch[1]?.touch == touch
-    }
-
-    func removeTouch(from touch: UITouch) {
-        if self.progressingTouch[0]?.touch == touch {
-            self.progressingTouch[0] = nil
-        } else if self.progressingTouch[1]?.touch == touch {
-            self.progressingTouch[1] = nil
-        }
-    }
+    var touchManager: TouchManager = TouchManager()
 
     // MARK: - set up
     func setUp(sceneController: WorldSceneController) {
@@ -240,7 +213,7 @@ class WorldScene: SKScene {
     }
 
     // MARK: - touch
-    func touchBegan(_ touch: UITouch) {
+    override func touchBegan(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchBegan(touch)
             return
@@ -255,14 +228,9 @@ class WorldScene: SKScene {
             self.craftObjectTouchBegan(touch)
             return
         }
-
-        if moveTouch == nil {
-            moveTouchBegan(touch)
-            return
-        }
     }
 
-    func touchMoved(_ touch: UITouch) {
+    override func touchMoved(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchMoved(touch)
             return
@@ -271,15 +239,13 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchMoved(touch)
-        case self.moveTouch:
-            self.moveTouchMoved(touch)
         case self.craftObjectTouch:
             self.craftObjectTouchMoved(touch)
         default: break
         }
     }
 
-    private func touchEnded(_ touch: UITouch) {
+    override func touchEnded(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchEnded(touch)
             return
@@ -288,15 +254,13 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchEnded(touch)
-        case self.moveTouch:
-            self.moveTouchEnded(touch)
         case self.craftObjectTouch:
             self.craftObjectTouchEnded(touch)
         default: break
         }
     }
 
-    func touchCancelled(_ touch: UITouch) {
+    override func touchCancelled(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchCancelled(touch)
             return
@@ -305,8 +269,6 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchCancelled(touch)
-        case self.moveTouch:
-            self.moveTouchCancelled(touch)
         case self.craftObjectTouch:
             self.craftObjectTouchCancelled(touch)
         default: break
@@ -333,12 +295,8 @@ class WorldScene: SKScene {
     func menuButtonTouchEnded(_ touch: UITouch) {
         if touch.is(onThe: self.menuButton) {
             self.menuWindow.isHidden = false
-            self.moveTouchCancelled(touch)
-            for progressingTouch in self.progressingTouch {
-                if let progressingTouch = progressingTouch as? GameObjectTouch {
-                    progressingTouch.touchedGO.touchCancelled(touch)
-                }
-            }
+            self.touchManager.cancel(of: FieldTouch.self)
+            self.touchManager.cancel(of: GameObjectTouch.self)
         }
         self.resetMenuButtonTouch(touch)
     }
@@ -352,49 +310,18 @@ class WorldScene: SKScene {
         self.menuButtonTouch = nil
     }
 
-    // MARK: - move touch
-    var moveTouch: UITouch? = nil
-    var previousMoveTouchTimestamp2: TimeInterval!
-    var previousMoveTouchTimestamp1: TimeInterval!
-    var previousMoveTouchLocation2: CGPoint!
-
-    func moveTouchBegan(_ touch: UITouch) {
-        self.moveTouch = touch
-        self.previousMoveTouchTimestamp1 = touch.timestamp
-    }
-
-    func moveTouchMoved(_ touch: UITouch) {
-        let previousPoint = touch.previousLocation(in: self)
-        let currentPoint = touch.location(in: self)
-        let difference = currentPoint - previousPoint
-
-        self.movingLayer.position += difference
-
-        self.previousMoveTouchTimestamp2 = self.previousMoveTouchTimestamp1
-        self.previousMoveTouchTimestamp1 = touch.timestamp
-        self.previousMoveTouchLocation2 = previousPoint
-    }
-
-    func moveTouchEnded(_ touch: UITouch) {
-        setVelocityVector()
-
-        self.resetMoveTouch()
-    }
-
-    func moveTouchCancelled(_ touch: UITouch) {
-        self.resetMoveTouch()
-    }
-
-    func resetMoveTouch() {
-        self.moveTouch = nil
-    }
-
+    // MARK: - set velocity
     func setVelocityVector() {
-        guard let previousLocation2 = self.previousMoveTouchLocation2 else { return }
-        let previousLocation1 = self.moveTouch!.previousLocation(in: self)
-        let timeInterval = self.previousMoveTouchTimestamp1 - self.previousMoveTouchTimestamp2
+        let fieldTouch = self.touchManager.first(of: FieldTouch.self) as! FieldTouch
 
-        self.velocityVector = -(previousLocation1 - previousLocation2) / timeInterval
+        guard let previousPreviousLocation = fieldTouch.previousPreviousLocation else {
+            return
+        }
+
+        let previousLocation = fieldTouch.uiTouch.previousLocation(in: self)
+        let timeInterval = fieldTouch.previousTimestamp - fieldTouch.previousPreviousTimestamp
+
+        self.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
     }
 
     // MARK: - craft object touch

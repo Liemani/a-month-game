@@ -105,6 +105,12 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+make character class
+craft update
+craft consume
+craft add
+prevent multi game object touch
+    make class touch manager
 ContainerNode 에서 new 를 하다니... 엉망이다
 scene 의 touch 도 각 node 들로 옮겨야 한다
 carry began should reset the status of GO
