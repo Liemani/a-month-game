@@ -158,6 +158,16 @@
 			path = Disk;
 			sourceTree = "<group>";
 		};
+		031AA8052A24EADC0017EFCD /* Coordinate */ = {
+			isa = PBXGroup;
+			children = (
+				039037BA2A11C77F0014A571 /* GameObjectCoordinate.swift */,
+				03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */,
+				039037CC2A17AB3E0014A571 /* Coordinate.swift */,
+			);
+			path = Coordinate;
+			sourceTree = "<group>";
+		};
 		031D575A2A07C232007EF383 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,9 +175,8 @@
 				03D6F8692A20F343005628F5 /* ContainerModel.swift */,
 				031D575D2A07C311007EF383 /* TileMapModel.swift */,
 				031D57552A076DC8007EF383 /* CharacterModel.swift */,
-				039037CC2A17AB3E0014A571 /* Coordinate.swift */,
-				03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */,
 				03D6F8672A20AB26005628F5 /* GOMOGO.swift */,
+				031AA8052A24EADC0017EFCD /* Coordinate */,
 				039EEFCE2A245AB400CB93C6 /* Touch */,
 			);
 			path = Model;
@@ -185,8 +194,8 @@
 			isa = PBXGroup;
 			children = (
 				034637812A238D3600370C71 /* InteractionZone.swift */,
+				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
 				039EEFCD2A24586C00CB93C6 /* CraftPane */,
-				03E7558D2A1E4FC300BF5C0F /* GameObject */,
 				03E7558E2A1E4FEE00BF5C0F /* Container */,
 			);
 			path = View;
@@ -273,15 +282,6 @@
 				039EEFC82A243DD900CB93C6 /* TouchModel.swift */,
 			);
 			path = Touch;
-			sourceTree = "<group>";
-		};
-		03E7558D2A1E4FC300BF5C0F /* GameObject */ = {
-			isa = PBXGroup;
-			children = (
-				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
-				039037BA2A11C77F0014A571 /* GameObjectCoordinate.swift */,
-			);
-			path = GameObject;
 			sourceTree = "<group>";
 		};
 		03E7558E2A1E4FEE00BF5C0F /* Container */ = {
