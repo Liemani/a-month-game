@@ -58,7 +58,7 @@ struct MaterialInRecipeIteratorSequence<Element>: Sequence, IteratorProtocol whe
 
             var isReady: Bool = true
             for index in 0..<recipe.count {
-                if recipe.count != 0 {
+                if recipe[index].count != 0 {
                     isReady = false
                     if recipe[index].type == material.type {
                         recipe[index].count -= 1

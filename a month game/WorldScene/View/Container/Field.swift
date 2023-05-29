@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Field: SKSpriteNode {
+class Field: SpriteNode {
 
     func setUp() {
         self.isUserInteractionEnabled = true

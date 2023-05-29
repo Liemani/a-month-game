@@ -105,6 +105,11 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+craft cell touch not work
+셀은 터치하면 필드 터치가 안되고 오브젝트는 터치하면 필드 터치가 되는데 혹시 오브젝트 크기가 0인가? 출력해보자
+change the direction of craft display bottom to top
+if i can consume third hand item, i want to possible to craft
+sequenceiterator
 the go in third hand must have 0.5 alpha
 move interact to game object
 make character class
@@ -418,6 +423,7 @@ class Hammer: GameObject, Pickable {
 }
 
 # bonus
+bounce flicked third hand item at the edge of screen
 make object unstackable
 상호작용 피드백
     사용된 인벤토리의 아이템이 회전

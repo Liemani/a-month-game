@@ -20,10 +20,8 @@ class CraftCell: SKSpriteNode {
     }
 
     func addGO(parent: SKNode) {
-        let craftObject = CraftObject(texture: GameObjectType.none.texture)
-        craftObject.setUp()
-
-        parent.addChild(craftObject)
+        let go = GameObject.new(from: 0)!
+        parent.addChild(go)
     }
 
 }

@@ -11,9 +11,9 @@ import SpriteKit
 class TouchModel {
 
     let uiTouch: UITouch
-    let sender: UIResponder
+    let sender: SpriteNode
 
-    init(touch: UITouch, sender: UIResponder) {
+    init(touch: UITouch, sender: SpriteNode) {
         self.uiTouch = touch
         self.sender = sender
     }

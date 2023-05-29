@@ -9,10 +9,12 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObject
-class GameObject: SKSpriteNode, BelongEquatableType {
+class GameObject: SpriteNode, BelongEquatableType {
+
+    var craftPane: CraftPane { self.parent?.parent as! CraftPane }
 
     private var _type: GameObjectType!
-    var type: GameObjectType { self._type }
+    var type: GameObjectType { get { self._type } set { self._type = newValue } }
 
     // MARK: property to be overriden
     var isWalkable: Bool { self.type.isWalkable }
@@ -35,11 +37,13 @@ class GameObject: SKSpriteNode, BelongEquatableType {
         return self.new(from: goMO.typeID)
     }
 
-    // MARK: - etc
-    func setPositionToLocation(of touch: UITouch) {
-        self.position = touch.location(in: self.parent!)
+    // MARK: - set type
+    func setType(_ goType: GameObjectType) {
+        self.type = goType
+        self.texture = goType.texture
     }
 
+    // MARK: - activate
     func activate() {
         self.alpha = 0.5
     }
@@ -50,10 +54,6 @@ class GameObject: SKSpriteNode, BelongEquatableType {
 
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
-        if self.parent is Field && !self.worldScene.interactionZone.contains(self) {
-            return
-        }
-
         let result = self.touchManager.add(GameObjectTouch(touch: touch, sender: self))
 
         if result == true {
@@ -71,66 +71,75 @@ class GameObject: SKSpriteNode, BelongEquatableType {
             return
         }
 
-        if !self.isAtLocation(of: touch) {
-            if self.parent is Field && !self.isPickable {
-                self.touchCancelled(touch)
-                return
-            }
-
-            guard self.worldScene.thirdHand.isEmpty else {
-                self.touchCancelled(touch)
-                return
-            }
-
-            let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-            self.worldScene.interactionZone.remove(self)
-            self.worldScene.moveGOMO(from: self, to: goCoord)
+        if self.isAtLocation(of: touch) {
             return
+        }
+
+        if !self.worldScene.thirdHand.isEmpty {
+            self.touchCancelled(touch)
+            return
+        }
+
+        switch self.parent {
+        case is Field:
+            if !self.isPickable {
+                self.touchCancelled(touch)
+            } else {
+                let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
+                self.worldScene.interactionZone.remove(self)
+                self.worldScene.moveGOMO(from: self, to: goCoord)
+            }
+        case is InventoryCell:
+            let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
+            self.worldScene.moveGOMO(from: self, to: goCoord)
+        case is CraftCell:
+            self.craftPane.refill(self)
+        default: break
         }
     }
 
-    // TODO: clean, when move to third hand, go must activated
     override func touchEnded(_ touch: UITouch) {
         guard self.touchManager.contains(from: touch) else {
             return
         }
 
-        if self.parent is Field || self.parent is InventoryCell {
+        switch self.parent {
+        case is Field:
             self.worldScene.interact(self)
             self.resetTouch(touch)
-            return
-        }
-
-        if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
-            guard touchedCell.isEmpty else {
-                self.resetTouch(touch)
-                return
+        case is InventoryCell:
+            self.worldScene.interact(self)
+            self.resetTouch(touch)
+        case is ThirdHand:
+            if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
+                if touchedCell.isEmpty {
+                    touchedCell.moveGOMO(self)
+                    self.resetTouch(touch)
+                    return
+                } else {
+                    self.touchCancelled(touch)
+                    return
+                }
             }
-
-            touchedCell.moveGOMO(self)
-            self.resetTouch(touch)
-            return
+            let characterTC = TileCoordinate(from: self.worldScene.characterPosition)
+            let touchedTC = TileCoordinate(from: touch.location(in: self.worldScene.field))
+            if touchedTC.isAdjacent(to: characterTC) {
+                let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
+                if goAtLocationOfTouch == nil {
+                    self.worldScene.field.moveGOMO(from: self, to: touchedTC.coord)
+                    self.worldScene.interactionZone.add(self)
+                    self.worldScene.interactionZone.applyUpdate()
+                    self.resetTouch(touch)
+                } else {
+                    self.touchCancelled(touch)
+                }
+            } else {
+                self.touchCancelled(touch)
+            }
+        case is CraftCell:
+            self.touchCancelled(touch)
+        default: break
         }
-
-        let characterTC = TileCoordinate(from: self.worldScene.characterPosition)
-        let touchedTC = TileCoordinate(from: touch.location(in: self.worldScene.field))
-        guard touchedTC.isAdjacent(to: characterTC) else {
-            self.resetTouch(touch)
-            return
-        }
-
-        let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
-        guard goAtLocationOfTouch == nil else {
-            self.resetTouch(touch)
-            return
-        }
-
-        self.worldScene.field.moveGOMO(from: self, to: touchedTC.coord)
-        self.worldScene.interactionZone.add(self)
-        self.worldScene.interactionZone.applyUpdate()
-
-        self.resetTouch(touch)
-        return
     }
 
     override func touchCancelled(_ touch: UITouch) {
@@ -138,6 +147,9 @@ class GameObject: SKSpriteNode, BelongEquatableType {
             return
         }
         self.resetTouch(touch)
+        if self.parent == self.worldScene.thirdHand {
+            self.activate()
+        }
     }
 
     override func resetTouch(_ touch: UITouch) {
@@ -145,21 +157,9 @@ class GameObject: SKSpriteNode, BelongEquatableType {
         self.touchManager.removeFirst(from: touch)
     }
 
-    // MARK: - override
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchBegan(touch) }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchMoved(touch) }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchEnded(touch) }
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchCancelled(touch) }
+    // MARK: - etc
+    func setPositionToLocation(of touch: UITouch) {
+        self.position = touch.location(in: self.parent!)
     }
 
 }

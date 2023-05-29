@@ -66,10 +66,9 @@ struct Constant {
         static let thirdHand = 100.0
         static let menuWindow = 500.0
 
-        static let inventoryCell = 0.0
-        static let inventoryCellHand = 1.0
-        static let craftCell = -0.1
-        static let craftObject = 1.0
+        static let inventoryCell = 1.0
+        static let inventoryCellHand = 2.0
+        static let craftCell = 1.0
     }
 
     // MARK: - frame

@@ -29,6 +29,7 @@ class WorldScene: SKScene {
     var rightHandGO: GameObject? { self.inventory.rightHandGO }
 
     var thirdHand: ThirdHand { self.containers[ContainerType.thirdHand] as! ThirdHand }
+    var thirdHandGO: GameObject? { self.thirdHand.gameObject }
 
     // MARK: layer
     var movingLayer: SKNode!
@@ -264,7 +265,7 @@ class WorldScene: SKScene {
     }
 
     // MARK: - touch
-    override func touchBegan(_ touch: UITouch) {
+    func touchBegan(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchBegan(touch)
             return
@@ -276,7 +277,7 @@ class WorldScene: SKScene {
         }
     }
 
-    override func touchMoved(_ touch: UITouch) {
+    func touchMoved(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchMoved(touch)
             return
@@ -289,7 +290,7 @@ class WorldScene: SKScene {
         }
     }
 
-    override func touchEnded(_ touch: UITouch) {
+    func touchEnded(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchEnded(touch)
             return
@@ -302,7 +303,7 @@ class WorldScene: SKScene {
         }
     }
 
-    override func touchCancelled(_ touch: UITouch) {
+    func touchCancelled(_ touch: UITouch) {
         if self.isMenuOpen {
             self.menuWindowTouchCancelled(touch)
             return
@@ -500,6 +501,11 @@ class WorldScene: SKScene {
         if let go = self.addGO(from: goMO) {
             self.goMOGO[goMO] = go
         }
+    }
+
+    func addGOMO(from go: GameObject, goCoord: GameObjectCoordinate) {
+        let goMO = self.worldSceneModel.newGOMO(gameObjectType: go.type, goCoord: goCoord)
+        self.goMOGO[goMO] = go
     }
 
     func addGOs(_ goMOs: [GameObjectMO]) {

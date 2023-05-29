@@ -15,6 +15,7 @@
 		030ABFCB2A0F2E0800BAB9B8 /* PersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */; };
 		030ABFCD2A10C6ED00BAB9B8 /* DiskController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFCC2A10C6ED00BAB9B8 /* DiskController.swift */; };
 		031AA8042A24A5D20017EFCD /* Iterator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA8032A24A5D20017EFCD /* Iterator.swift */; };
+		031AA8072A24F20E0017EFCD /* SpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA8062A24F20E0017EFCD /* SpriteNode.swift */; };
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterModel.swift */; };
 		031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575B2A07C24C007EF383 /* WorldSceneModel.swift */; };
@@ -46,7 +47,6 @@
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
 		03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */; };
-		03E755922A1FA36A00BF5C0F /* CraftObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755912A1FA36A00BF5C0F /* CraftObject.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +58,7 @@
 		030ABFCA2A0F2E0800BAB9B8 /* PersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentContainer.swift; sourceTree = "<group>"; };
 		030ABFCC2A10C6ED00BAB9B8 /* DiskController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskController.swift; sourceTree = "<group>"; };
 		031AA8032A24A5D20017EFCD /* Iterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Iterator.swift; sourceTree = "<group>"; };
+		031AA8062A24F20E0017EFCD /* SpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteNode.swift; sourceTree = "<group>"; };
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterModel.swift; sourceTree = "<group>"; };
 		031D575B2A07C24C007EF383 /* WorldSceneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneModel.swift; sourceTree = "<group>"; };
@@ -90,7 +91,6 @@
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 		03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPane.swift; sourceTree = "<group>"; };
-		03E755912A1FA36A00BF5C0F /* CraftObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftObject.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +197,7 @@
 				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
 				039EEFCD2A24586C00CB93C6 /* CraftPane */,
 				03E7558E2A1E4FEE00BF5C0F /* Container */,
+				031AA8062A24F20E0017EFCD /* SpriteNode.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -270,7 +271,6 @@
 			children = (
 				03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */,
 				034637832A23947400370C71 /* CraftCell.swift */,
-				03E755912A1FA36A00BF5C0F /* CraftObject.swift */,
 			);
 			path = CraftPane;
 			sourceTree = "<group>";
@@ -384,7 +384,6 @@
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
 				038330AA2A02850A008DEA10 /* ViewController.swift in Sources */,
 				031AA8042A24A5D20017EFCD /* Iterator.swift in Sources */,
-				03E755922A1FA36A00BF5C0F /* CraftObject.swift in Sources */,
 				039037C02A1376BB0014A571 /* UserDefaultsController.swift in Sources */,
 				034637802A233A1400370C71 /* InventoryCell.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* PersistentContainer.swift in Sources */,
@@ -398,6 +397,7 @@
 				037E3F462A1CDFEC008A50CA /* TileType.swift in Sources */,
 				031D57562A076DC8007EF383 /* CharacterModel.swift in Sources */,
 				031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */,
+				031AA8072A24F20E0017EFCD /* SpriteNode.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,
 				03D6F8682A20AB26005628F5 /* GOMOGO.swift in Sources */,
 				03D6F86A2A20F343005628F5 /* ContainerModel.swift in Sources */,

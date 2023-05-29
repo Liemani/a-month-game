@@ -24,13 +24,15 @@ extension ThirdHand: ContainerNode {
 
     func addGO(_ go: GameObject, to coord: Coordinate<Int>) {
         self.addChild(go)
-        go.position = CGPoint()
         go.isUserInteractionEnabled = true
+        go.position = CGPoint()
+        go.activate()
     }
 
     func moveGO(_ go: GameObject, to coord: Coordinate<Int>) {
         go.move(toParent: self)
         go.isUserInteractionEnabled = true
+        go.activate()
     }
 
     func moveGOMO(from go: GameObject, to coord: Coordinate<Int>) {

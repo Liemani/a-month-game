@@ -13,6 +13,7 @@ class CraftPane: SKSpriteNode {
     var cellCount: Int { Constant.craftPaneCellCount }
 
     func setUp() {
+        self.isUserInteractionEnabled = false
         self.anchorPoint = CGPoint()
 
         self.position = Constant.craftPanePosition
@@ -73,9 +74,10 @@ class CraftPane: SKSpriteNode {
 
     private func reset() {
         for cell in self.children {
-            let craftObject = cell.children[0] as! SKSpriteNode
+            let go = cell.children[0] as! GameObject
 
-            craftObject.texture = GameObjectType.none.texture
+            go.setType(.none)
+            go.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }
@@ -102,17 +104,21 @@ class CraftPane: SKSpriteNode {
         return true
     }
 
-    func set(index craftObjectIndex: Int, type goType: GameObjectType) {
-        let cell = self.children[craftObjectIndex]
-        let craftObject = cell.children[0] as! CraftObject
-        craftObject.set(goType)
+    func set(index gameObjectIndex: Int, type goType: GameObjectType) {
+        let cell = self.children[gameObjectIndex]
+        let go = cell.children[0] as! GameObject
+        go.setType(goType)
+        go.isUserInteractionEnabled = true
         cell.alpha = 1.0
     }
 
-    func craft(_ goType: GameObjectType) {
-        self.consumeIngredient(of: goType)
+    func refill(_ go: GameObject) {
+        let cell = go.parent!
+        cell.addChild(GameObject.new(from: 0)!)
         let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-        self.worldScene.addGOMO(gameObjectType: goType, goCoord: goCoord)
+        self.worldScene.thirdHand.moveGO(go, to: goCoord.coord)
+        self.worldScene.addGOMO(from: go, goCoord: goCoord)
+        self.consumeIngredient(of: go.type)
     }
 
     func consumeIngredient(of goType: GameObjectType) {

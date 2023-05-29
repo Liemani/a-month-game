@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InventoryCell: SKSpriteNode {
+class InventoryCell: SpriteNode {
 
     var isEmpty: Bool { self.children.first == nil }
 
