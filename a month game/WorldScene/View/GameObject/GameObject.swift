@@ -11,9 +11,6 @@ import SpriteKit
 // MARK: - class GameObject
 class GameObject: SKSpriteNode {
 
-    var worldScene: WorldScene { return self.scene as! WorldScene }
-    var touchManager: WorldSceneTouchManager { return self.worldScene.touchManager }
-
     var typeID: Int {
         let objectIdentifier = ObjectIdentifier(Swift.type(of: self))
         return GameObjectType.resource[objectIdentifier]!.typeID

@@ -10,7 +10,6 @@ import SpriteKit
 
 class InteractionZone: SKSpriteNode {
 
-    var worldScene: WorldScene { self.scene as! WorldScene }
     var field: Field { self.worldScene.field }
 
     var gos: [GameObject] = []

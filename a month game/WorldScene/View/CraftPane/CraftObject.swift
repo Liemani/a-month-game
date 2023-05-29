@@ -10,12 +10,16 @@ import SpriteKit
 
 class CraftObject: SKSpriteNode {
 
-    var gameObjectType: GameObjectType = .none
+    var goType: GameObjectType = .none
+
+    func setUp() {
+        self.isUserInteractionEnabled = true
+        self.size = Constant.defaultNodeSize
+        self.zPosition = Constant.ZPosition.craftObject
+    }
 
     func set(_ goType: GameObjectType) {
-        self.isUserInteractionEnabled = true
         self.texture = goType.texture
-        self.gameObjectType = goType
     }
 
     func activate() {

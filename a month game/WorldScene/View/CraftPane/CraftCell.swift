@@ -20,10 +20,9 @@ class CraftCell: SKSpriteNode {
     }
 
     func addGO(parent: SKNode) {
-        let texture = GameObjectType.none.texture
-        let craftObject = CraftObject(texture: texture)
-        craftObject.size = Constant.defaultNodeSize
-        craftObject.zPosition = Constant.ZPosition.craftObject
+        let craftObject = CraftObject(texture: GameObjectType.none.texture)
+        craftObject.setUp()
+
         parent.addChild(craftObject)
     }
 

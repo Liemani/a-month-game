@@ -10,10 +10,6 @@ import SpriteKit
 
 class Field: SKSpriteNode {
 
-    var worldScene: WorldScene { self.scene as! WorldScene }
-    var interactionZone: InteractionZone { self.worldScene.interactionZone }
-    var touchManager: WorldSceneTouchManager { self.worldScene.touchManager }
-
     func setUp() {
         self.isUserInteractionEnabled = true
         self.anchorPoint = CGPoint()

@@ -10,8 +10,6 @@ import SpriteKit
 
 class InventoryPane: SKSpriteNode {
 
-    var worldScene: WorldScene { self.scene as! WorldScene }
-
     var cellCount: Int { Constant.inventoryCellCount }
 
     var cells: [InventoryCell]!

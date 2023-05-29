@@ -85,6 +85,15 @@ extension GameObjectMO {
 
 }
 
+// MARK: - SKSpriteNode
+extension SKSpriteNode {
+
+    var worldScene: WorldScene { self.scene as! WorldScene }
+    var touchManager: WorldSceneTouchManager { self.worldScene.touchManager }
+    var interactionZone: InteractionZone { self.worldScene.interactionZone }
+
+}
+
 // MARK: - SKNode
 extension SKNode {
 

@@ -10,9 +10,6 @@ import SpriteKit
 
 class CraftPane: SKSpriteNode {
 
-    var worldScene: WorldScene { self.scene as! WorldScene }
-    var interactionZone: InteractionZone { self.worldScene.interactionZone }
-
     var cellCount: Int { Constant.craftPaneCellCount }
 
     func setUp() {
