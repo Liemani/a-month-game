@@ -43,20 +43,20 @@ class GOMOGO {
         return self.containers[ContainerType.thirdHand].goMOs
     }
 
-    var gos: SequencesIterator<GameObject> {
-        var sequences: [AnySequence<GameObject>] = []
+    var gos: CombineSequence<GameObject> {
+        var sequences: [any Sequence<GameObject>] = []
         for container in containers {
-            sequences.append(AnySequence<GameObject>(container.goKeys))
+            sequences.append(container.goKeys)
         }
-        return SequencesIterator(sequences: sequences)
+        return CombineSequence(sequences: sequences)
     }
 
-    var goMOs: SequencesIterator<GameObjectMO> {
-        var sequences: [AnySequence<GameObjectMO>] = []
+    var goMOs: CombineSequence<GameObjectMO> {
+        var sequences: [any Sequence<GameObjectMO>] = []
         for container in containers {
-            sequences.append(AnySequence<GameObjectMO>(container.goMOKeys))
+            sequences.append(container.goMOKeys)
         }
-        return SequencesIterator(sequences: sequences)
+        return CombineSequence(sequences: sequences)
     }
 
     func container(for goMO: GameObjectMO) -> ContainerModel? {
@@ -122,65 +122,3 @@ class GOMOGO {
     }
 
 }
-
-struct SequencesIterator<Element>: Sequence, IteratorProtocol {
-
-    private var sequences: [AnySequence<Element>.Iterator?] = []
-    private var currentIndex: Int = 0
-
-    init(sequences: [AnySequence<Element>]) {
-        for sequence in sequences {
-            self.sequences.append(sequence.makeIterator())
-        }
-    }
-
-    mutating func next() -> Element? {
-        while true {
-            guard currentIndex < self.sequences.count else {
-                return nil
-            }
-
-            let currentElement = sequences[currentIndex]!.next()
-
-            if currentElement != nil {
-                return currentElement
-            }
-
-            self.sequences[currentIndex] = nil
-            currentIndex += 1
-        }
-    }
-
-}
-
-//struct SequencesIterator<S>: Sequence, IteratorProtocol where S: Sequence {
-//
-//    typealias Element = S.Element
-//
-//    private var sequences: [S.Iterator?] = []
-//    private var currentIndex: Int = 0
-//
-//    init(sequences: [S]) {
-//        for sequence in sequences {
-//            self.sequences.append(sequence.makeIterator())
-//        }
-//    }
-//
-//    mutating func next() -> Element? {
-//        while true {
-//            guard currentIndex < self.sequences.count else {
-//                return nil
-//            }
-//
-//            let currentElement = sequences[currentIndex]!.next()
-//
-//            if currentElement != nil {
-//                return currentElement
-//            }
-//
-//            self.sequences[currentIndex] = nil
-//            currentIndex += 1
-//        }
-//    }
-//
-//}

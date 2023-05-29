@@ -16,23 +16,26 @@ class GameObject: SKSpriteNode {
         return GameObjectType.resource[objectIdentifier]!.typeID
     }
 
-    var type: GameObjectType {
-        return GameObjectType(rawValue: self.typeID)!
-    }
-
     // MARK: property to be overriden
     var isWalkable: Bool { return true }
     var isPickable: Bool { return true }
 
     // MARK: set up
     func setUp() {
-        self.isUserInteractionEnabled = true
         self.zPosition = Constant.ZPosition.gameObject
     }
 
     // MARK: - etc
-    func moveToLocation(of touch: UITouch) {
+    func setPositionToLocation(of touch: UITouch) {
         self.position = touch.location(in: self.parent!)
+    }
+
+    func activate() {
+        self.alpha = 0.5
+    }
+
+    func deactivate() {
+        self.alpha = 1.0
     }
 
     // MARK: - touch
@@ -41,17 +44,20 @@ class GameObject: SKSpriteNode {
             return
         }
 
-        let didAdded = self.touchManager.add(GameObjectTouch(touch: touch, sender: self))
-        self.alpha = !didAdded ? 1.0 : 0.5
+        let result = self.touchManager.add(GameObjectTouch(touch: touch, sender: self))
+
+        if result == true {
+            self.activate()
+        }
     }
 
     override func touchMoved(_ touch: UITouch) {
-        guard self.touchManager.first(from: touch) != nil else {
+        guard self.touchManager.contains(from: touch) else {
             return
         }
 
         if self.parent is ThirdHand {
-            self.moveToLocation(of: touch)
+            self.setPositionToLocation(of: touch)
             return
         }
 
@@ -73,8 +79,9 @@ class GameObject: SKSpriteNode {
         }
     }
 
+    // TODO: clean, when move to third hand, go must activated
     override func touchEnded(_ touch: UITouch) {
-        guard self.touchManager.first(from: touch) != nil else {
+        guard self.touchManager.contains(from: touch) else {
             return
         }
 
@@ -117,14 +124,14 @@ class GameObject: SKSpriteNode {
     }
 
     override func touchCancelled(_ touch: UITouch) {
-        guard self.touchManager.first(from: touch) != nil else {
+        guard self.touchManager.contains(from: touch) else {
             return
         }
         self.resetTouch(touch)
     }
 
     override func resetTouch(_ touch: UITouch) {
-        self.alpha = 1.0
+        self.deactivate()
         self.touchManager.removeFirst(from: touch)
     }
 
@@ -143,6 +150,14 @@ class GameObject: SKSpriteNode {
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchCancelled(touch) }
+    }
+
+}
+
+extension GameObject: BelongEquatableType {
+
+    var type: GameObjectType {
+        return GameObjectType(rawValue: self.typeID)!
     }
 
 }

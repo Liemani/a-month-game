@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol ContainerNode: SKNode {
+protocol ContainerNode: SKNode, Sequence<GameObject> {
 
     /// - Returns whether the coordinate is valid or not. Don't consider whether preceding GO exist or not
     func isVaid(_ coord: Coordinate<Int>) -> Bool

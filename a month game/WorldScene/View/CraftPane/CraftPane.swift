@@ -46,11 +46,11 @@ class CraftPane: SKSpriteNode {
 
     // MARK: - update
     func update() {
-        let sequences = [
-            AnySequence<GameObject>(self.interactionZone.gos),
-            AnySequence<GameObject>(self.worldScene.goMOGO.inventory.goKeys)
+        let sequences: [any Sequence<GameObject>] = [
+            self.interactionZone.gos,
+            self.worldScene.inventory,
         ]
-        let gos = SequencesIterator(sequences: sequences)
+        let gos = CombineSequence(sequences: sequences)
 
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
 
@@ -80,10 +80,11 @@ class CraftPane: SKSpriteNode {
         }
     }
 
-    private func hasIngredient(gameObjects gos: SequencesIterator<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gameObjects gos: any Sequence<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
         var recipe = recipe
 
         for go in gos {
+            let go = go as! GameObject
             let goType = go.type
             for index in 0..<recipe.count {
                 if goType == recipe[index].type {
@@ -108,18 +109,25 @@ class CraftPane: SKSpriteNode {
         cell.alpha = 1.0
     }
 
-    func craftObject(at touch: UITouch) -> CraftObject? {
-        let touchPoint = touch.location(in: self)
+    func craft(_ goType: GameObjectType) {
+        self.consumeIngredient(of: goType)
+        let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
+        self.worldScene.addGOMO(gameObjectType: goType, goCoord: goCoord)
+    }
 
-        for cell in self.children {
-            if cell.contains(touchPoint), self.isCellActivated(cell) {
-                let craftObject = cell.children[0] as! CraftObject
-                craftObject.activate()
-                return craftObject
-            }
-        }
+    func consumeIngredient(of goType: GameObjectType) {
+        let recipes = Constant.recipes
+        let recipe = recipes[goType]!
+        let gosToRemove = MaterialInRecipeIteratorSequence(recipe: recipe, materials: self.resources())
+        self.worldScene.removeGOMO(from: gosToRemove)
+    }
 
-        return nil
+    func resources() -> some Sequence<GameObject> {
+        let resourceSequences: [any Sequence<GameObject>] = [
+            self.interactionZone.gos,
+            self.worldScene.inventory,
+        ]
+        return CombineSequence(sequences: resourceSequences)
     }
 
     func isCellActivated(_ cell: SKNode) -> Bool {

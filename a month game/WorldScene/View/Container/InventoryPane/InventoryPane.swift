@@ -114,4 +114,30 @@ extension InventoryPane: ContainerNode {
         return false
     }
 
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        return InventoryIterator(self)
+    }
+
+}
+
+struct InventoryIterator: IteratorProtocol {
+
+    let inventoryPane: InventoryPane
+    var startIndex: Int = 0
+
+    init(_ inventoryPane: InventoryPane) {
+        self.inventoryPane = inventoryPane
+    }
+
+    mutating func next() -> GameObject? {
+        for index in self.startIndex..<self.inventoryPane.cellCount {
+            let cell = self.inventoryPane.children[index]
+            if let go = cell.children.first as! GameObject? {
+                self.startIndex = index + 1
+                return go
+            }
+        }
+        return nil
+    }
+
 }

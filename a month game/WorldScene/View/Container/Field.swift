@@ -135,6 +135,11 @@ extension Field: ContainerNode {
         return false
     }
 
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        let goChildren = self.children as! [GameObject]
+        return goChildren.makeIterator()
+    }
+
 }
 
 class FieldTouch: TouchModel {

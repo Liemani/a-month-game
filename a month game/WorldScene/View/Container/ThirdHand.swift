@@ -12,6 +12,8 @@ class ThirdHand: SKNode {
 
     var isEmpty: Bool { self.children.isEmpty }
 
+    var gameObject: GameObject? { self.children.first as! GameObject? }
+
 }
 
 extension ThirdHand: ContainerNode {
@@ -23,10 +25,12 @@ extension ThirdHand: ContainerNode {
     func addGO(_ go: GameObject, to coord: Coordinate<Int>) {
         self.addChild(go)
         go.position = CGPoint()
+        go.isUserInteractionEnabled = true
     }
 
     func moveGO(_ go: GameObject, to coord: Coordinate<Int>) {
         go.move(toParent: self)
+        go.isUserInteractionEnabled = true
     }
 
     func moveGOMO(from go: GameObject, to coord: Coordinate<Int>) {
@@ -41,6 +45,11 @@ extension ThirdHand: ContainerNode {
 
     func contains(_ go: GameObject) -> Bool {
         return self.children.first == go
+    }
+
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        let goChildren = self.children as! [GameObject]
+        return goChildren.makeIterator()
     }
 
 }

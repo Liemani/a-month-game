@@ -13,6 +13,15 @@ class WorldSceneTouchManager {
     var touches: [TouchModel?] = [TouchModel?](repeating: nil, count: 2)
 
     // MARK: - edit
+    func contains(from uiTouch: UITouch) -> Bool {
+        if touches[0]?.uiTouch == uiTouch {
+            return true
+        } else if touches[1]?.uiTouch == uiTouch {
+            return true
+        }
+        return false
+    }
+
     func first(from uiTouch: UITouch) -> TouchModel? {
         if let touch = touches[0], touch.uiTouch == uiTouch {
             return touch
@@ -35,12 +44,12 @@ class WorldSceneTouchManager {
     func add(_ touch: TouchModel) -> Bool {
         if touches[0] == nil {
             touches[0] = touch
+            return true
         } else if touches[1] == nil {
             touches[1] = touch
-        } else {
-            return false
+            return true
         }
-        return true
+        return false
     }
 
     func removeFirst(from uiTouch: UITouch) {
@@ -51,17 +60,8 @@ class WorldSceneTouchManager {
         }
     }
 
-    func removeAll(of touchType: TouchModel.Type) {
-        if let touch = touches[0], type(of: touch) == touchType {
-            touches[0] = nil
-        }
-        if let touch = touches[1], type(of: touch) == touchType {
-            touches[1] = nil
-        }
-    }
-
     // MARK: - delegate
-    func cancel(of touchType: TouchModel.Type) {
+    func cancelAll(of touchType: TouchModel.Type) {
         if let touch = touches[0], type(of: touch) == touchType {
             touch.sender.touchCancelled(touch.uiTouch)
         }

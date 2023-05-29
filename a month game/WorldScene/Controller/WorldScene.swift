@@ -20,7 +20,7 @@ class WorldScene: SKScene {
     var touchManager: WorldSceneTouchManager = WorldSceneTouchManager()
 
     // MARK: view
-    var containers: [ContainerNode] = [ContainerNode](repeating: ThirdHand(), count: ContainerType.caseCount)
+    var containers: [any ContainerNode] = [any ContainerNode](repeating: ThirdHand(), count: ContainerType.caseCount)
 
     var field: Field { self.containers[ContainerType.field] as! Field }
 
@@ -274,11 +274,6 @@ class WorldScene: SKScene {
             self.menuButtonTouchBegan(touch)
             return
         }
-
-        if self.isCraftObjectTouched(touch) {
-            self.craftObjectTouchBegan(touch)
-            return
-        }
     }
 
     override func touchMoved(_ touch: UITouch) {
@@ -290,8 +285,6 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchMoved(touch)
-        case self.craftObjectTouch:
-            self.craftObjectTouchMoved(touch)
         default: break
         }
     }
@@ -305,8 +298,6 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchEnded(touch)
-        case self.craftObjectTouch:
-            self.craftObjectTouchEnded(touch)
         default: break
         }
     }
@@ -320,8 +311,6 @@ class WorldScene: SKScene {
         switch touch {
         case self.menuButtonTouch:
             self.menuButtonTouchCancelled(touch)
-        case self.craftObjectTouch:
-            self.craftObjectTouchCancelled(touch)
         default: break
         }
     }
@@ -346,8 +335,8 @@ class WorldScene: SKScene {
     func menuButtonTouchEnded(_ touch: UITouch) {
         if self.menuButton.isAtLocation(of: touch) {
             self.menuWindow.isHidden = false
-            self.touchManager.cancel(of: FieldTouch.self)
-            self.touchManager.cancel(of: GameObjectTouch.self)
+            self.touchManager.cancelAll(of: FieldTouch.self)
+            self.touchManager.cancelAll(of: GameObjectTouch.self)
         }
         self.resetMenuButtonTouch(touch)
     }
@@ -373,63 +362,6 @@ class WorldScene: SKScene {
         let timeInterval = fieldTouch.previousTimestamp - fieldTouch.previousPreviousTimestamp
 
         self.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
-    }
-
-    // MARK: - craft object touch
-    var craftObjectTouch: UITouch? = nil
-    var touchedCraftObject: CraftObject? = nil
-
-    func isCraftObjectTouched(_ touch: UITouch) -> Bool {
-        if let touchedCraftObject = self.craftPane.craftObject(at: touch) {
-            self.touchedCraftObject = touchedCraftObject
-            return true
-        }
-
-        return false
-    }
-
-    func craftObjectTouchBegan(_ touch: UITouch) {
-        self.craftObjectTouch = touch
-    }
-
-    func craftObjectTouchMoved(_ touch: UITouch) {
-        guard self.touchedCraftObject!.isAtLocation(of: touch) else {
-            return
-        }
-
-        self.craft()
-
-        self.craftObjectTouchEnded(touch)
-    }
-
-    func craft() {
-        // TODO: add remove ingredient game object
-//        let recipe = getRecipe()
-
-//        let goType = touchedCraftObject!.gameObjectType
-//        let containerType = ContainerType.thirdHand
-//        let x = 0
-//        let y = 0
-
-        print("crafted something")
-
-    }
-
-    func craftObjectTouchEnded(_ touch: UITouch) {
-        self.touchedCraftObject!.deactivate()
-
-        self.resetCraftObjectTouch()
-    }
-
-    func craftObjectTouchCancelled(_ touch: UITouch) {
-        self.touchedCraftObject!.deactivate()
-
-        self.resetCraftObjectTouch()
-    }
-
-    func resetCraftObjectTouch() {
-        self.craftObjectTouch = nil
-        self.touchedCraftObject = nil
     }
 
     // MARK: - menu window touch
@@ -589,8 +521,9 @@ class WorldScene: SKScene {
     }
 
     // MARK: remove
-    func removeGOMO(from gos: [GameObject]) {
+    func removeGOMO(from gos: any Sequence<GameObject>) {
         for go in gos {
+            let go = go as! GameObject
             let goMO = self.goMOGO.remove(go)!
             self.worldSceneModel.remove(goMO)
             go.removeFromParent()

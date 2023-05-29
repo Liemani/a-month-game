@@ -62,6 +62,16 @@ enum GameObjectType: Int, CaseIterable {
         return go
     }
 
+    static func new(of goType: GameObjectType) -> GameObject {
+        let type = self.rawResources[goType.rawValue].type
+        let texture = self.resource[ObjectIdentifier(type)]!.texture
+
+        let go = type.init(texture: texture)
+        go.setUp()
+
+        return go
+    }
+
     var metatype: GameObject.Type {
         return GameObjectType.rawResources[self.rawValue].type
     }

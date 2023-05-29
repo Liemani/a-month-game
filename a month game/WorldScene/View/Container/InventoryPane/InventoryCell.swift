@@ -20,11 +20,13 @@ class InventoryCell: SKSpriteNode {
     func addGO(_ go: GameObject) {
         self.addChild(go)
         go.position = CGPoint()
+        go.isUserInteractionEnabled = true
     }
 
     func moveGO(_ go: GameObject) {
         go.move(toParent: self)
         go.position = CGPoint()
+        go.isUserInteractionEnabled = true
     }
 
     func moveGOMO(_ go: GameObject) {

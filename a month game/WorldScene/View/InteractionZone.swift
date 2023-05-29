@@ -41,32 +41,38 @@ class InteractionZone: SKSpriteNode {
     // MARK: - edit
     func add(_ go: GameObject) {
         self.gos.append(go)
-        self.setGOBlendFactor(go)
+        self.activate(go)
     }
 
     func add(_ gos: [GameObject]) {
         self.gos += gos
-        self.setGOsBlendFactor()
+        self.activate()
         self.applyUpdate()
     }
 
     func remove(_ go: GameObject) {
         if let index = self.gos.firstIndex(of: go) {
             self.gos.remove(at: index)
-            go.colorBlendFactor = 0.0
+            self.deactivate(go)
         }
     }
 
-    func setGOBlendFactor(_ go: GameObject) {
+    // MARK: - activate
+    func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
         go.colorBlendFactor = Constant.accessableGOColorBlendFactor
+        go.isUserInteractionEnabled = true
     }
 
-    func setGOsBlendFactor() {
+    func activate() {
         for go in self.gos {
-            go.color = .green.withAlphaComponent(0.9)
-            go.colorBlendFactor = Constant.accessableGOColorBlendFactor
+            self.activate(go)
         }
+    }
+
+    func deactivate(_ go: GameObject) {
+        go.colorBlendFactor = 0.0
+        go.isUserInteractionEnabled = false
     }
 
     // MARK: - update
@@ -84,7 +90,7 @@ class InteractionZone: SKSpriteNode {
 
     func reset() {
         for go in self.gos {
-            go.colorBlendFactor = 0.0
+            self.deactivate(go)
         }
         self.gos.removeAll()
     }
