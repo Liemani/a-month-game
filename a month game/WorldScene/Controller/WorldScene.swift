@@ -331,7 +331,7 @@ class WorldScene: SKScene {
     var menuButtonTouch: UITouch? = nil
 
     func isMenuButtonTouched(_ touch: UITouch) -> Bool {
-        return touch.is(onThe: self.menuButton)
+        return self.menuButton.isAtLocation(of: touch)
     }
 
     func menuButtonTouchBegan(_ touch: UITouch) {
@@ -340,11 +340,11 @@ class WorldScene: SKScene {
     }
 
     func menuButtonTouchMoved(_ touch: UITouch) {
-        self.menuButton.alpha = touch.is(onThe: self.menuButton) ? 0.5 : 1.0
+        self.menuButton.alpha = self.menuButton.isAtLocation(of: touch) ? 0.5 : 1.0
     }
 
     func menuButtonTouchEnded(_ touch: UITouch) {
-        if touch.is(onThe: self.menuButton) {
+        if self.menuButton.isAtLocation(of: touch) {
             self.menuWindow.isHidden = false
             self.touchManager.cancel(of: FieldTouch.self)
             self.touchManager.cancel(of: GameObjectTouch.self)
@@ -393,7 +393,7 @@ class WorldScene: SKScene {
     }
 
     func craftObjectTouchMoved(_ touch: UITouch) {
-        guard !touch.is(onThe: self.touchedCraftObject!) else {
+        guard self.touchedCraftObject!.isAtLocation(of: touch) else {
             return
         }
 
@@ -434,11 +434,9 @@ class WorldScene: SKScene {
 
     // MARK: - menu window touch
     func menuWindowTouchBegan(_ touch: UITouch) {
-        // TODO: implement
     }
 
     func menuWindowTouchMoved(_ touch: UITouch) {
-        // TODO: implement
     }
 
     func menuWindowTouchEnded(_ touch: UITouch) {

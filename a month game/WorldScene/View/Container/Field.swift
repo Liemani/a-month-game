@@ -141,7 +141,7 @@ extension Field: ContainerNode {
 
 }
 
-class FieldTouch: Touch {
+class FieldTouch: TouchModel {
 
     var previousPreviousTimestamp: TimeInterval!
     var previousTimestamp: TimeInterval!

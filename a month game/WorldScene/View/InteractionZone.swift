@@ -8,7 +8,6 @@
 import Foundation
 import SpriteKit
 
-// TODO: move
 class InteractionZone: SKSpriteNode {
 
     var worldScene: WorldScene { self.scene as! WorldScene }

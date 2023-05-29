@@ -26,6 +26,7 @@ class CraftObject: SKSpriteNode {
         self.alpha = 1.0
     }
 
+    // MARK: touch
     override func touchBegan(_ touch: UITouch) {
     }
 
@@ -57,5 +58,9 @@ class CraftObject: SKSpriteNode {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchCancelled(touch) }
     }
+
+}
+
+class CraftObjectTouch: TouchModel {
 
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Touch {
+class TouchModel {
 
     let uiTouch: UITouch
     let sender: UIResponder
@@ -20,13 +20,13 @@ class Touch {
 
 }
 
-extension Touch: Equatable {
+extension TouchModel: Equatable {
 
-    static func == (lhs: Touch, rhs: Touch) -> Bool {
+    static func == (lhs: TouchModel, rhs: TouchModel) -> Bool {
         return lhs.uiTouch == rhs.uiTouch
     }
 
-    public static func != (lhs: Touch, rhs: Touch) -> Bool {
+    public static func != (lhs: TouchModel, rhs: TouchModel) -> Bool {
         return !(lhs == rhs)
     }
 

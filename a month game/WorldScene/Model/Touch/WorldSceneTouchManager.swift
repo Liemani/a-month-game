@@ -10,10 +10,10 @@ import SpriteKit
 
 class WorldSceneTouchManager {
 
-    var touches: [Touch?] = [Touch?](repeating: nil, count: 2)
+    var touches: [TouchModel?] = [TouchModel?](repeating: nil, count: 2)
 
     // MARK: - edit
-    func first(from uiTouch: UITouch) -> Touch? {
+    func first(from uiTouch: UITouch) -> TouchModel? {
         if let touch = touches[0], touch.uiTouch == uiTouch {
             return touch
         } else if let touch = touches[1], touch.uiTouch == uiTouch {
@@ -22,7 +22,7 @@ class WorldSceneTouchManager {
         return nil
     }
 
-    func first(of touchType: Touch.Type) -> Touch? {
+    func first(of touchType: TouchModel.Type) -> TouchModel? {
         if let touch = touches[0], type(of: touch) == touchType {
             return touch
         } else if let touch = touches[1], type(of: touch) == touchType {
@@ -32,7 +32,7 @@ class WorldSceneTouchManager {
     }
 
     @discardableResult
-    func add(_ touch: Touch) -> Bool {
+    func add(_ touch: TouchModel) -> Bool {
         if touches[0] == nil {
             touches[0] = touch
         } else if touches[1] == nil {
@@ -51,7 +51,7 @@ class WorldSceneTouchManager {
         }
     }
 
-    func removeAll(of touchType: Touch.Type) {
+    func removeAll(of touchType: TouchModel.Type) {
         if let touch = touches[0], type(of: touch) == touchType {
             touches[0] = nil
         }
@@ -61,7 +61,7 @@ class WorldSceneTouchManager {
     }
 
     // MARK: - delegate
-    func cancel(of touchType: Touch.Type) {
+    func cancel(of touchType: TouchModel.Type) {
         if let touch = touches[0], type(of: touch) == touchType {
             touch.sender.touchCancelled(touch.uiTouch)
         }

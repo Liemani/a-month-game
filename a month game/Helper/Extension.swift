@@ -188,20 +188,6 @@ extension SKNode {
 
 }
 
-// MARK: - UITouch
-// TODO: remove
-extension UITouch {
-
-    func `is`(onThe node: SKNode) -> Bool {
-        guard let parent = node.parent else { return true }
-
-        let touchLocation = self.location(in: parent)
-
-        return node.contains(touchLocation)
-    }
-
-}
-
 // MARK: - CGPoint
 extension CGPoint {
 

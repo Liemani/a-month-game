@@ -150,6 +150,6 @@ class GameObject: SKSpriteNode {
 
 }
 
-class GameObjectTouch: Touch {
+class GameObjectTouch: TouchModel {
 
 }
