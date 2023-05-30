@@ -16,9 +16,9 @@ class ThirdHand: SKNode {
 
 }
 
-extension ThirdHand: ContainerNode {
+extension ThirdHand: Container {
 
-    func isVaid(_ coord: Coordinate<Int>) -> Bool {
+    func isValid(_ coord: Coordinate<Int>) -> Bool {
         return true
     }
 
@@ -31,8 +31,6 @@ extension ThirdHand: ContainerNode {
 
     func moveGO(_ go: GameObject, to coord: Coordinate<Int>) {
         go.move(toParent: self)
-        go.isUserInteractionEnabled = true
-        go.activate()
     }
 
     func moveGOMO(from go: GameObject, to coord: Coordinate<Int>) {

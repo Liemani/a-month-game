@@ -28,10 +28,10 @@ extension GameObjectMO {
     func set(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
         self.id = Int32(IDGenerator.generate())
         self.typeID = Int32(goType.rawValue)
-        self.set(goCoord: goCoord)
+        self.set(to: goCoord)
     }
 
-    func set(goCoord: GameObjectCoordinate) {
+    func set(to goCoord: GameObjectCoordinate) {
         self.containerID = Int32(goCoord.containerType.rawValue)
         self.x = Int32(goCoord.x)
         self.y = Int32(goCoord.y)
@@ -47,6 +47,10 @@ extension GameObjectMO {
 
     var containerType: ContainerType? {
         return ContainerType(rawValue: Int(self.containerID))
+    }
+
+    var gameObjectType: GameObjectType? {
+        return GameObjectType(rawValue: Int(self.typeID))
     }
 
     var coord: Coordinate<Int> {

@@ -105,41 +105,19 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+Add interaction
+    wood wall with axe
+    pine cone
+    pine tree with axe
 a bug that can't move from touch of out of world bound
-굳이 복잡한 이터레이터를 보내야 하나?
-    그냥 시그널만 전달하고 나중에 일괄 처리가 단순하다
-    context save also same
-check update flow of zone and pane
-move all touch event out of scene
-move interact to game object
-make character class
-button class
-menu button class
-menu window class
-craft update
-craft consume
-craft add
-prevent multi game object touch
-    make class touch manager
-ContainerNode 에서 new 를 하다니... 엉망이다
-scene 의 touch 도 각 node 들로 옮겨야 한다
-carry began should reset the status of GO
-rename container node
-field object touch 및 craft touch 중 캐릭터가 이동하여 타일이 바뀌면 경우에 따라서 취소시키기
-    craft update 는 가능하면 터치중인 오브젝트를 고정시키기
-    만약 없애야 한다면 크래프트 터치를 취소시키기
-remove unneccessary return
-craft
-    consume ingredient
-inventory object is always pickable
-touoch pine cone make pine tree
-touch wood wall break but not in inventory
-InventoryNode -> InventoryPane
-change portal button texture
-set app icon
-limit multi touch up to two
+check CraftPane
+    consume
+    update
+check game object touch
+if craft object type changed while touching, cancel the touch
+touch pine cone make pine tree
 swap with inventory go
-바닥에 아이템을 주웠을 때 크래프트 페인이 변경되지 않으나, 손에 아이템이 있으면 제작이 실패하기 때문에 섭틀한 부분이 있다
+when pick up item from inventory or field, reserve craft pane update
 
 fix flick to persist direction
 fix moving game object to out of world border
@@ -321,6 +299,35 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+touch wood wall break but not in inventory
+check update flow of zone and pane
+굳이 복잡한 이터레이터를 보내야 하나?
+    그냥 시그널만 전달하고 나중에 일괄 처리가 단순하다
+    context save also same
+바닥에 아이템을 주웠을 때 크래프트 페인이 변경되지 않으나, 손에 아이템이 있으면 제작이 실패하기 때문에 섭틀한 부분이 있다
+limit multi touch up to two
+set app icon
+change portal button texture
+InventoryNode -> InventoryPane
+inventory object is always pickable
+remove unneccessary return
+field object touch 및 craft touch 중 캐릭터가 이동하여 타일이 바뀌면 경우에 따라서 취소시키기
+    craft update 는 가능하면 터치중인 오브젝트를 고정시키기
+    만약 없애야 한다면 크래프트 터치를 취소시키기
+carry began should reset the status of GO
+rename container node
+scene 의 touch 도 각 node 들로 옮겨야 한다
+ContainerNode 에서 new 를 하다니... 엉망이다
+prevent multi game object touch
+    make class touch manager
+craft add
+craft consume
+menu window class
+menu button class
+button class
+make character class
+move interact to game object
+move all touch event out of scene
 game object
     activate
     deactivate

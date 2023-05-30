@@ -66,6 +66,7 @@ class GOMOGO {
         return nil
     }
 
+    // MARK: - subscript
     subscript(goMO: GameObjectMO) -> GameObject? {
         get {
             if let container = self.container(for: goMO) {
@@ -103,6 +104,7 @@ class GOMOGO {
         }
     }
 
+    // MARK: - remove
     func remove(_ goMO: GameObjectMO) -> GameObject? {
         return self.container(for: goMO)?.remove(goMO)
     }

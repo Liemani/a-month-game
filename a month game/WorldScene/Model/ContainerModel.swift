@@ -18,6 +18,7 @@ class ContainerModel {
         return self.goMOToGO.keys
     }
 
+    // MARK: - subscript
     subscript(goMO: GameObjectMO) -> GameObject? {
         get { return self.goMOToGO[goMO] }
         set(newGO) {
@@ -54,6 +55,7 @@ class ContainerModel {
         }
     }
 
+    // MARK: - remove
     func remove(_ goMO: GameObjectMO) -> GameObject? {
         if let go = self.goMOToGO[goMO] {
             self.goMOToGO[goMO] = nil

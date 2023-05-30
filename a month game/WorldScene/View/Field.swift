@@ -43,7 +43,7 @@ class Field: SpriteNode {
     }
 
     override func touchMoved(_ touch: UITouch) {
-        guard let fieldTouch = self.touchManager.first(of: FieldTouch.self) as! FieldTouch? else {
+        guard let fieldTouch = self.touchManager.first(from: touch) as! FieldTouch? else {
             return
         }
 
@@ -59,7 +59,7 @@ class Field: SpriteNode {
     }
 
     override func touchEnded(_ touch: UITouch) {
-        guard self.touchManager.first(of: FieldTouch.self) != nil else {
+        guard self.touchManager.first(from: touch) != nil else {
             return
         }
 
@@ -67,7 +67,6 @@ class Field: SpriteNode {
         self.resetTouch(touch)
     }
 
-    // MARK: - set velocity
     func setVelocityVector() {
         let fieldTouch = self.touchManager.first(of: FieldTouch.self) as! FieldTouch
 
@@ -81,12 +80,8 @@ class Field: SpriteNode {
         self.worldScene.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
     }
 
-
     override func touchCancelled(_ touch: UITouch) {
-        guard self.touchManager.first(of: FieldTouch.self) != nil else {
-            return
-        }
-
+        guard self.touchManager.first(from: touch) != nil else { return }
         self.resetTouch(touch)
     }
 
@@ -97,9 +92,9 @@ class Field: SpriteNode {
 }
 
 // MARK: - extension
-extension Field: ContainerNode {
+extension Field: Container {
 
-    func isVaid(_ coord: Coordinate<Int>) -> Bool {
+    func isValid(_ coord: Coordinate<Int>) -> Bool {
         return 0 <= coord.x && coord.x < Constant.gridSize
         && 0 <= coord.y && coord.y < Constant.gridSize
     }

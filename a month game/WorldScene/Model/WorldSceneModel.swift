@@ -16,6 +16,8 @@ final class WorldSceneModel {
 
     var tileMapModel: TileMapModel!
 
+    var didChanged: Bool
+
     // MARK: - init
     init(worldScene: WorldScene, worldName: String) {
         self.worldScene = worldScene
@@ -26,6 +28,8 @@ final class WorldSceneModel {
 
         let tileMapData = self.diskController.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
+
+        self.didChanged = false
     }
 
     func loadGOMOs() -> [GameObjectMO] {
@@ -46,18 +50,28 @@ final class WorldSceneModel {
     }
 
     /// Call contextSave() manually
-    func newGOMO(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) -> GameObjectMO {
+    func newGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectMO {
         let newGOMO = self.diskController.newGOMO()
         newGOMO.set(gameObjectType: goType, goCoord: goCoord)
+        self.didChanged = true
         return newGOMO
+    }
+
+    func setGOMO(_ goMO: GameObjectMO, to goCoord: GameObjectCoordinate) {
+        goMO.set(to: goCoord)
+        self.didChanged = true
     }
 
     func remove(_ goMO: GameObjectMO) {
         self.diskController.delete(goMO)
+        self.didChanged = true
     }
 
     func contextSave() {
-        self.diskController.contextSave()
+        if self.didChanged {
+            self.diskController.contextSave()
+        }
+        self.didChanged = false
     }
 
 }

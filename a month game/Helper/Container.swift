@@ -8,10 +8,12 @@
 import Foundation
 import SpriteKit
 
-protocol ContainerNode: SKNode, Sequence<GameObject> {
+protocol Container: SKNode, Sequence<GameObject> {
 
+    /// Called to check whether GOMO.goCoord is valid
+    /// The goCoord generated inside of app is considered always valid
     /// - Returns whether the coordinate is valid or not. Don't consider whether preceding GO exist or not
-    func isVaid(_ coord: Coordinate<Int>) -> Bool
+    func isValid(_ coord: Coordinate<Int>) -> Bool
 
     func addGO(_ go: GameObject, to coord: Coordinate<Int>)
 

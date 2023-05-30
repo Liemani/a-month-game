@@ -75,9 +75,9 @@ class InventoryPane: SKSpriteNode {
 
 }
 
-extension InventoryPane: ContainerNode {
+extension InventoryPane: Container {
 
-    func isVaid(_ coord: Coordinate<Int>) -> Bool {
+    func isValid(_ coord: Coordinate<Int>) -> Bool {
         guard 0 <= coord.x && coord.x < self.cellCount else {
             return false
         }

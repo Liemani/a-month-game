@@ -121,11 +121,10 @@ class CraftPane: SKSpriteNode {
     }
 
     func refill(_ go: GameObject) {
-        let cell = go.parent!
-        cell.addChild(GameObject.new(from: 0)!)
+        let cell = go.parent as! CraftCell
+        cell.addNoneGO()
         let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-        self.worldScene.thirdHand.moveGO(go, to: goCoord.coord)
-        self.worldScene.addGOMO(from: go, goCoord: goCoord)
+        self.worldScene.addGOMO(from: go, to: goCoord)
         self.consumeIngredient(of: go.type)
     }
 

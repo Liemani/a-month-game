@@ -21,20 +21,17 @@ class GameObject: SpriteNode, BelongEquatableType {
     var isPickable: Bool { self.type.isPickable }
 
     // MARK: - new
-    static func new(from typeID: Int32) -> GameObject? {
-        guard let type = GameObjectType(rawValue: Int(typeID)) else {
-            return nil
-        }
-
-        let go = GameObject(texture: type.texture)
-        go._type = type
+    static func new(of goType: GameObjectType) -> GameObject {
+        let go = GameObject(texture: goType.texture)
+        go._type = goType
         go.zPosition = Constant.ZPosition.gameObject
 
         return go
     }
 
     static func new(from goMO: GameObjectMO) -> GameObject? {
-        return self.new(from: goMO.typeID)
+        guard let goType = goMO.gameObjectType else { return nil }
+        return self.new(of: goType)
     }
 
     // MARK: - set type
@@ -109,11 +106,11 @@ class GameObject: SpriteNode, BelongEquatableType {
 
         switch self.parent {
         case is Field:
-            self.interact()
             self.resetTouch(touch)
+            self.interact()
         case is InventoryCell:
-            self.interact()
             self.resetTouch(touch)
+            self.interact()
         case is ThirdHand:
             if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
                 if touchedCell.isEmpty {
@@ -130,9 +127,8 @@ class GameObject: SpriteNode, BelongEquatableType {
             if touchedTC.isAdjacent(to: characterTC) {
                 let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
                 if goAtLocationOfTouch == nil {
-                    self.worldScene.field.moveGOMO(from: self, to: touchedTC.coord)
-                    self.worldScene.interactionZone.add(self)
-                    self.worldScene.craftPane.reserveUpdate()
+                    let goCoord = GameObjectCoordinate(containerType: .field, coordinate: touchedTC.coord)
+                    self.worldScene.moveGOMO(from: self, to: goCoord)
                     self.resetTouch(touch)
                 } else {
                     self.touchCancelled(touch)
@@ -173,7 +169,11 @@ class GameObject: SpriteNode, BelongEquatableType {
             let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
             let newGOMOCoord = goMO.coord + coordToAdd
             let newGOMOGOCoord = GameObjectCoordinate(containerType: .field, coordinate: newGOMOCoord)
-            self.worldScene.addGOMO(gameObjectType: .branch, goCoord: newGOMOGOCoord)
+            self.worldScene.addGOMO(of: .branch, to: newGOMOGOCoord)
+        case .woodWall:
+            guard self.parent is Field else { return }
+            guard Double.random(in: 0.0...1.0) <= 0.25 else { return }
+            self.worldScene.removeGOMO(from: self)
         default: break
         }
     }

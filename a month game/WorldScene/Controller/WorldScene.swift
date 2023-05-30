@@ -22,7 +22,7 @@ class WorldScene: SKScene {
     var character: CharacterModel!
 
     // MARK: view
-    var containers: [(any ContainerNode)?]!
+    var containers: [(any Container)?]!
 
     var field: Field { self.containers[ContainerType.field] as! Field }
 
@@ -50,7 +50,7 @@ class WorldScene: SKScene {
         self.viewController = viewController
         self.goMOGO = GOMOGO()
         self.touchManager = WorldSceneTouchManager()
-        self.containers = [(any ContainerNode)?](repeating: nil, count: ContainerType.caseCount)
+        self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
 
         self.setUpSceneLayer()
         self.setUpModel(worldName: worldName)
@@ -238,7 +238,9 @@ class WorldScene: SKScene {
 
     func setUpGOMOs() {
         let goMOs = self.worldSceneModel.loadGOMOs()
-        self.addGOs(goMOs)
+        for goMO in goMOs {
+            self.addGO(from: goMO)
+        }
     }
 
     func setUpCharacter() {
@@ -252,6 +254,7 @@ class WorldScene: SKScene {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
         self.character.update(timeInterval)
+        self.worldSceneModel.contextSave()
         self.interactionZone.update()
         self.craftPane.update()
 
@@ -265,57 +268,63 @@ class WorldScene: SKScene {
     }
 
     // MARK: - game object
-    /// Must called at controller
-    func addGO(from goMO: GameObjectMO) -> GameObject? {
-        guard let containerType = goMO.containerType else {
-            return nil
-        }
+    private func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObject {
+        let container = self.containers[goCoord.containerType]!
+        let go = GameObject.new(of: goType)
+        container.addGO(go, to: goCoord.coord)
+        self.interactionZone.reserveUpdate()
+        self.craftPane.reserveUpdate()
+        return go
+    }
+
+    /// Called when loading GOMO from disk
+    private func addGO(from goMO: GameObjectMO) {
+        guard let containerType = goMO.containerType else { return }
 
         let container = self.containers[containerType]!
         let goMOCoord = goMO.coord
 
-        if container.isVaid(goMOCoord), let go = GameObject.new(from: goMO.typeID) {
+        if container.isValid(goMOCoord)
+            , let go = GameObject.new(from: goMO) {
             container.addGO(go, to: goMOCoord)
-            return go
+            self.interactionZone.reserveUpdate()
+            self.craftPane.reserveUpdate()
+            self.goMOGO[goMO] = go
         }
-        return nil
-
     }
 
     // MARK: - game object managed object
-    func addGOMO(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
-        let goMO = self.worldSceneModel.newGOMO(gameObjectType: goType, goCoord: goCoord)
-        if let go = self.addGO(from: goMO) {
-            self.goMOGO[goMO] = go
-        }
-        self.worldSceneModel.contextSave()
-        self.interactionZone.reserveUpdate()
-    }
-
-    func addGOMO(from go: GameObject, goCoord: GameObjectCoordinate) {
-        let goMO = self.worldSceneModel.newGOMO(gameObjectType: go.type, goCoord: goCoord)
+    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
+        let go = self.addGO(of: goType, to: goCoord)
+        let goMO = self.worldSceneModel.newGOMO(of: goType, to: goCoord)
         self.goMOGO[goMO] = go
     }
 
-    func addGOs(_ goMOs: [GameObjectMO]) {
-        for goMO in goMOs {
-            if let go = self.addGO(from: goMO) {
-                self.goMOGO[goMO] = go
-            }
-        }
-        self.interactionZone.reserveUpdate()
+    /// Add GOMO and move GO
+    /// Called when craft, so don't need to update
+    func addGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
+        self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
+        let goMO = self.worldSceneModel.newGOMO(of: go.type, to: goCoord)
+        self.goMOGO[goMO] = go
     }
 
-    // MARK: move
     func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
         let goMO = self.goMOGO[go]!
-        goMO.set(goCoord: goCoord)
-        self.worldSceneModel.contextSave()
-
+        self.worldSceneModel.setGOMO(goMO, to: goCoord)
         self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
+        self.interactionZone.reserveUpdate()
+        self.craftPane.reserveUpdate()
     }
 
-    // MARK: remove
+    func removeGOMO(from go: GameObject) {
+        let goMO = self.goMOGO.remove(go)!
+        self.worldSceneModel.remove(goMO)
+        go.removeFromParent()
+        self.interactionZone.reserveUpdate()
+        self.craftPane.reserveUpdate()
+    }
+
+    // TODO: check this method, other edit is perfect
     func removeGOMO(from gos: any Sequence<GameObject>) {
         for go in gos {
             let go = go as! GameObject
@@ -323,8 +332,8 @@ class WorldScene: SKScene {
             self.worldSceneModel.remove(goMO)
             go.removeFromParent()
         }
-        self.worldSceneModel.contextSave()
         self.interactionZone.reserveUpdate()
+        self.craftPane.reserveUpdate()
     }
 
     // MARK: - segue

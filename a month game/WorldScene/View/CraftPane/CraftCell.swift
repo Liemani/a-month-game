@@ -16,12 +16,12 @@ class CraftCell: SKSpriteNode {
         self.zPosition = Constant.ZPosition.craftCell
         self.alpha = 0.2
 
-        self.addGO(parent: self)
+        self.addNoneGO()
     }
 
-    func addGO(parent: SKNode) {
-        let go = GameObject.new(from: 0)!
-        parent.addChild(go)
+    func addNoneGO() {
+        let go = GameObject.new(of: .none)
+        self.addChild(go)
     }
 
 }
