@@ -12,8 +12,9 @@ class PortalScene: SKScene {
     weak var viewController: ViewController!
 
     var uiLayer: SKNode!
-    var enterButton: SKSpriteNode!
-    var resetButton: SKSpriteNode!
+    var enterButton: Button!
+    var resetButton: Button!
+    var resetPane: ResetPane!
 
     func setUp(viewController: ViewController) {
         self.viewController = viewController
@@ -24,22 +25,30 @@ class PortalScene: SKScene {
 
     // MARK: - ui
     override func didMove(to view: SKView) {
-        initBackground()
-        initUI()
+        addBackground()
+        addUI()
     }
 
-    func initBackground() {
+    func addBackground() {
         let backgroundNode = SKSpriteNode(imageNamed: Constant.ResourceName.bgPortal)
 
         backgroundNode.position = Constant.screenUpRight
-        backgroundNode.zPosition = -1.0
+        backgroundNode.zPosition = Constant.ZPosition.background
 
         self.addChild(backgroundNode)
     }
 
-    func initUI() {
+    func addUI() {
         let uiLayer = SKNode()
 
+        addButton(uiLayer)
+        addResetPane(uiLayer)
+
+        self.addChild(uiLayer)
+        self.uiLayer = uiLayer
+    }
+
+    func addButton(_ parent: SKNode) {
         let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
 
         let enterButton = Button(texture: buttonTexture)
@@ -47,7 +56,7 @@ class PortalScene: SKScene {
         enterButton.set(frame: Constant.Frame.enterButton)
         enterButton.set(text: "Enter World")
         enterButton.delegate = self
-        uiLayer.addChild(enterButton)
+        parent.addChild(enterButton)
         self.enterButton = enterButton
 
         let resetButton = Button(texture: buttonTexture)
@@ -55,11 +64,17 @@ class PortalScene: SKScene {
         resetButton.set(frame: Constant.Frame.resetButton)
         resetButton.set(text: "Reset")
         resetButton.delegate = self
-        uiLayer.addChild(resetButton)
+        parent.addChild(resetButton)
         self.resetButton = resetButton
+    }
 
-        self.addChild(uiLayer)
-        self.uiLayer = uiLayer
+    func addResetPane(_ parent: SKNode) {
+        let resetPane = ResetPane()
+        resetPane.setUp()
+
+        parent.addChild(resetPane)
+        self.resetPane = resetPane
+
     }
 
 }
@@ -72,7 +87,7 @@ extension PortalScene: ButtonDelegate {
         if button == self.enterButton {
             self.viewController.setWorldScene()
         } else if button == self.resetButton {
-            DiskController.default.removeWorldDirectory(ofName: Constant.defaultWorldName)
+            self.resetPane.reveal()
         }
     }
 

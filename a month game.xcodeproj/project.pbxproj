@@ -17,6 +17,7 @@
 		031AA8072A24F20E0017EFCD /* SpriteNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA8062A24F20E0017EFCD /* SpriteNode.swift */; };
 		031AA80C2A25CF630017EFCD /* MenuPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA80B2A25CF630017EFCD /* MenuPane.swift */; };
 		031AA80E2A25CFB70017EFCD /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA80D2A25CFB70017EFCD /* Button.swift */; };
+		031AA8102A26155C0017EFCD /* ResetPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031AA80F2A26155C0017EFCD /* ResetPane.swift */; };
 		031D57522A06298F007EF383 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57512A06298F007EF383 /* Constant.swift */; };
 		031D57562A076DC8007EF383 /* CharacterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D57552A076DC8007EF383 /* CharacterModel.swift */; };
 		031D575C2A07C24C007EF383 /* WorldSceneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031D575B2A07C24C007EF383 /* WorldSceneModel.swift */; };
@@ -61,6 +62,7 @@
 		031AA8062A24F20E0017EFCD /* SpriteNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteNode.swift; sourceTree = "<group>"; };
 		031AA80B2A25CF630017EFCD /* MenuPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuPane.swift; sourceTree = "<group>"; };
 		031AA80D2A25CFB70017EFCD /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		031AA80F2A26155C0017EFCD /* ResetPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPane.swift; sourceTree = "<group>"; };
 		031D57512A06298F007EF383 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		031D57552A076DC8007EF383 /* CharacterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterModel.swift; sourceTree = "<group>"; };
 		031D575B2A07C24C007EF383 /* WorldSceneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneModel.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 		030ABFAE2A0BCDF900BAB9B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				031AA80F2A26155C0017EFCD /* ResetPane.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,6 +369,7 @@
 				03311DD22A1A3E3F0020ADB5 /* InventoryPane.swift in Sources */,
 				030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */,
 				038330A82A02850A008DEA10 /* WorldScene.swift in Sources */,
+				031AA8102A26155C0017EFCD /* ResetPane.swift in Sources */,
 				039EEFCB2A243F6C00CB93C6 /* WorldSceneTouchManager.swift in Sources */,
 				03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,

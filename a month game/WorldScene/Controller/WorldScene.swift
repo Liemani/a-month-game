@@ -66,10 +66,6 @@ class WorldScene: SKScene {
             print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
         }
     }
-
-    deinit {
-        print("worldScene deinit()")
-    }
 #endif
 
     func setUpSceneLayer() {

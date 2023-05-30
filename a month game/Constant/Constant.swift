@@ -56,6 +56,9 @@ struct Constant {
 
     // MARK: - z position
     struct ZPosition {
+        static let background = -500.0
+        static let resetPane = 500.0
+
         static let movingLayer = -500.0
         static let tileMap = -100.0
         static let gameObjectLayer = 0.0
@@ -78,6 +81,8 @@ struct Constant {
         static let enterButton = CGRect(origin: Constant.enterButtonPosition, size: Constant.enterButtonSize)
         static let resetButton = CGRect(origin: Constant.resetButtonPosition, size: Constant.resetButtonSize)
         static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonSize)
+        static let yesButton = CGRect(origin: Constant.Frame.enterButton.origin, size: Constant.Frame.resetButton.size)
+        static let noButton = Constant.Frame.resetButton
     }
 
     // MARK: - data
