@@ -105,20 +105,11 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
-swap with inventory go
-craft cell touch not work
-셀은 터치하면 필드 터치가 안되고 오브젝트는 터치하면 필드 터치가 되는데 혹시 오브젝트 크기가 0인가? 출력해보자
-change the direction of craft display bottom to top
-if i can consume third hand item, i want to possible to craft
-sequenceiterator
-the go in third hand must have 0.5 alpha
+굳이 복잡한 이터레이터를 보내야 하나?
+    그냥 시그널만 전달하고 나중에 일괄 처리가 단순하다
+move all touch event out of scene
 move interact to game object
 make character class
-move controller to scene
-move files according to hierarchy
-game object
-    activate
-    deactivate
 button class
 menu button class
 menu window class
@@ -144,6 +135,8 @@ InventoryNode -> InventoryPane
 change portal button texture
 set app icon
 limit multi touch up to two
+swap with inventory go
+바닥에 아이템을 주웠을 때 크래프트 페인이 변경되지 않으나, 손에 아이템이 있으면 제작이 실패하기 때문에 섭틀한 부분이 있다
 
 fix flick to persist direction
 fix moving game object to out of world border
@@ -325,6 +318,17 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+game object
+    activate
+    deactivate
+move files according to hierarchy
+move controller to scene
+the go in third hand must have 0.5 alpha
+sequenceiterator
+if i can consume third hand item, i want to possible to craft
+change the direction of craft display bottom to top
+셀은 터치하면 필드 터치가 안되고 오브젝트는 터치하면 필드 터치가 되는데 혹시 오브젝트 크기가 0인가? 출력해보자
+craft cell touch not work
 clean merged world scene
 base type to none
 set none texture to nil

@@ -32,7 +32,7 @@ final class PersistentContainer: NSPersistentContainer {
     }
 
     // MARK: - edit
-    func fetchGOMOArray() -> [GameObjectMO] {
+    func fetchGOMOs() -> [GameObjectMO] {
         let request = GameObjectMO.fetchRequest()
         let goMOs = try! self.viewContext.fetch(request)
 

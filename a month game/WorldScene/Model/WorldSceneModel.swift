@@ -10,9 +10,9 @@ import Foundation
 /// Control world scene model and DiskController
 final class WorldSceneModel {
 
-    var diskController: DiskController!
+    weak var worldScene: WorldScene!
 
-    weak var worldSceneController: WorldScene!
+    var diskController: DiskController!
 
     var tileMapModel: TileMapModel!
     var characterModel: CharacterModel!
@@ -23,16 +23,16 @@ final class WorldSceneModel {
         diskController.setToWorld(ofName: worldName)
         self.diskController = diskController
 
-        self.worldSceneController = worldSceneController
+        self.worldScene = worldSceneController
 
         let tileMapData = self.diskController.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
 
-        self.characterModel = CharacterModel()
+        self.characterModel = CharacterModel(worldScene: self.worldScene)
     }
 
-    func loadGOs() -> [GameObjectMO] {
-        return self.diskController.loadGOMOArray()
+    func loadGOMOs() -> [GameObjectMO] {
+        return self.diskController.loadGOMOs()
     }
 
     deinit {

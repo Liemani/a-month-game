@@ -12,6 +12,8 @@ class CraftPane: SKSpriteNode {
 
     var cellCount: Int { Constant.craftPaneCellCount }
 
+    private var shouldUpdate: Bool = true
+
     func setUp() {
         self.isUserInteractionEnabled = false
         self.anchorPoint = CGPoint()
@@ -46,7 +48,11 @@ class CraftPane: SKSpriteNode {
     }
 
     // MARK: - update
+    func reserveUpdate() { self.shouldUpdate = true }
+
     func update() {
+        guard self.shouldUpdate else { return }
+
         let sequences: [any Sequence<GameObject>] = [
             self.interactionZone.gos,
             self.worldScene.inventory,
@@ -70,6 +76,8 @@ class CraftPane: SKSpriteNode {
             }
             craftObjectIndex += 1
         }
+
+        self.shouldUpdate = false
     }
 
     private func reset() {
@@ -124,11 +132,11 @@ class CraftPane: SKSpriteNode {
     func consumeIngredient(of goType: GameObjectType) {
         let recipes = Constant.recipes
         let recipe = recipes[goType]!
-        let gosToRemove = MaterialInRecipeIteratorSequence(recipe: recipe, materials: self.resources())
+        let gosToRemove = MaterialInRecipeSequence(recipe: recipe, materials: self.resources())
         self.worldScene.removeGOMO(from: gosToRemove)
     }
 
-    func resources() -> some Sequence<GameObject> {
+    private func resources() -> some Sequence<GameObject> {
         let resourceSequences: [any Sequence<GameObject>] = [
             self.interactionZone.gos,
             self.worldScene.inventory,

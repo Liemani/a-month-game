@@ -19,6 +19,8 @@ class WorldScene: SKScene {
 
     var touchManager: WorldSceneTouchManager = WorldSceneTouchManager()
 
+    var character: CharacterModel!
+
     // MARK: view
     var containers: [any ContainerNode] = [any ContainerNode](repeating: ThirdHand(), count: ContainerType.caseCount)
 
@@ -45,11 +47,6 @@ class WorldScene: SKScene {
     var exitWorldButton: SKNode!
 
     var isMenuOpen: Bool { return !menuWindow.isHidden }
-
-    var characterPosition: CGPoint {
-        get { -self.movingLayer.position }
-        set { self.movingLayer.position = -newValue }
-    }
 
     // MARK: - set up
     func setUp(viewController: ViewController, worldName: String) {
@@ -255,13 +252,12 @@ class WorldScene: SKScene {
     }
 
     func setUpGOMOs() {
-        let goMOs = self.worldSceneModel.loadGOs()
+        let goMOs = self.worldSceneModel.loadGOMOs()
         self.addGOs(goMOs)
     }
 
     func setUpCharacter() {
-        let characterPosition = self.worldSceneModel.characterModel.position
-        self.characterPosition = characterPosition
+        self.character = CharacterModel(worldScene: self)
     }
 
     // MARK: - touch
@@ -362,7 +358,7 @@ class WorldScene: SKScene {
         let previousLocation = fieldTouch.uiTouch.previousLocation(in: self)
         let timeInterval = fieldTouch.previousTimestamp - fieldTouch.previousPreviousTimestamp
 
-        self.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
+        self.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
     }
 
     // MARK: - menu window touch
@@ -411,61 +407,17 @@ class WorldScene: SKScene {
         for touch in touches { self.touchCancelled(touch) }
     }
 
-    // MARK: - update scene
-    var velocityVector = CGVector(dx: 0.0, dy: 0.0)
+    // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
-    var lastPosition: CGPoint = CGPoint()
 
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
-        self.characterPosition += self.velocityVector * timeInterval
-
-        self.updateVelocity(timeInterval: timeInterval)
-
-        if self.isTileChanged() {
-            self.interactionZone.update()
-        }
-
-        self.resolveWorldBorderCollision()
-        self.resolveCollision()
+        self.character.update(timeInterval)
+        self.interactionZone.update()
+        self.craftPane.update()
 
         self.lastUpdateTime = currentTime
-        self.lastPosition = self.characterPosition
-    }
-
-    func updateVelocity(timeInterval: TimeInterval) {
-        let velocity = self.velocityVector.magnitude
-        self.velocityVector =
-            velocity <= Constant.velocityDamping
-            ? CGVectorMake(0.0, 0.0)
-            : self.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-    }
-
-    // MARK: - resolve collision
-    func resolveWorldBorderCollision() {
-        self.characterPosition.x = self.characterPosition.x < Constant.moveableArea.minX
-            ? Constant.moveableArea.minX
-            : self.characterPosition.x
-        self.characterPosition.x = self.characterPosition.x > Constant.moveableArea.maxX
-            ? Constant.moveableArea.maxX
-            : self.characterPosition.x
-        self.characterPosition.y = self.characterPosition.y < Constant.moveableArea.minY
-            ? Constant.moveableArea.minY
-            : self.characterPosition.y
-        self.characterPosition.y = self.characterPosition.y > Constant.moveableArea.maxY
-            ? Constant.moveableArea.maxY
-            : self.characterPosition.y
-    }
-
-    func resolveCollision() {
-        for go in self.interactionZone.gos {
-            guard !go.isWalkable else { continue }
-
-            if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
-                go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
-            }
-        }
     }
 
     // MARK: - edit model
@@ -482,25 +434,24 @@ class WorldScene: SKScene {
         }
 
         let container = self.containers[containerType]
+        let goMOCoord = goMO.coord
 
-        guard container.isVaid(goMO.coordinate),
-              let go = GameObject.new(from: goMO.typeID) else {
-            return nil
+        if container.isVaid(goMOCoord), let go = GameObject.new(from: goMO.typeID) {
+            container.addGO(go, to: goMOCoord)
+            return go
         }
+        return nil
 
-        container.addGO(go, to: goMO.coordinate)
-
-        return go
     }
 
     // MARK: - game object managed object
-    /// Save the context manually
-    /// Apply scene gos change manually
     func addGOMO(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
         let goMO = self.worldSceneModel.newGOMO(gameObjectType: goType, goCoord: goCoord)
         if let go = self.addGO(from: goMO) {
             self.goMOGO[goMO] = go
         }
+        self.worldSceneModel.contextSave()
+        self.interactionZone.reserveUpdate()
     }
 
     func addGOMO(from go: GameObject, goCoord: GameObjectCoordinate) {
@@ -514,7 +465,7 @@ class WorldScene: SKScene {
                 self.goMOGO[goMO] = go
             }
         }
-        self.interactionZone.update()
+        self.interactionZone.reserveUpdate()
     }
 
     // MARK: move
@@ -535,79 +486,7 @@ class WorldScene: SKScene {
             go.removeFromParent()
         }
         self.worldSceneModel.contextSave()
-        self.interactionZone.update()
-    }
-
-    // MARK: - etc
-    func isTileChanged() -> Bool {
-        let currentPosition = self.characterPosition
-
-        let lastTile = TileCoordinate(from: self.lastPosition)
-        let currentTile = TileCoordinate(from: currentPosition)
-
-        return currentTile != lastTile
-    }
-
-    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
-    func spareDirections(_ lhGOMO: GameObjectMO) -> [Coordinate<Int>] {
-        var occupySpaceBitFlags: UInt8 = 0
-
-        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
-
-        let lhGOMOCoord = lhGOMO.coordinate
-        for rhGOMO in self.goMOGO.goMOsInField {
-            let rhGOMOCoord = rhGOMO.coordinate
-            if lhGOMOCoord.isAdjacent(to: rhGOMOCoord) {
-                let differenceX = rhGOMOCoord.x - lhGOMOCoord.x
-                let differenceY = rhGOMOCoord.y - lhGOMOCoord.y
-                let tableIndex = (differenceY - 1) * -3 + (differenceX + 1)
-                occupySpaceBitFlags |= 0x1 << spaceShiftTable[tableIndex]
-            }
-        }
-
-        let coordVectorTable = Constant.coordVectorTable
-
-        var spareSpaces: [Coordinate<Int>] = []
-
-        for index in 0..<8 {
-            if (occupySpaceBitFlags >> index) & 0x1 == 0x0 {
-                spareSpaces.append(coordVectorTable[index])
-            }
-        }
-
-        return spareSpaces
-    }
-
-    // MARK: - interact
-    func interact(_ go: GameObject) {
-        guard go.parent is Field else {
-            return
-        }
-
-        switch go.type {
-        case .pineTree:
-            guard Double.random(in: 0.0...1.0) <= 0.33 else {
-                return
-            }
-
-            let goMO = self.goMOGO.field[go]!
-            let spareDirections = self.spareDirections(goMO)
-
-            guard !spareDirections.isEmpty else {
-                return
-            }
-
-            let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
-            let newGOMOCoord = goMO.coordinate + coordToAdd
-
-            let goType = GameObjectType.branch
-            let goCoord = GameObjectCoordinate(containerType: .field, x: newGOMOCoord.x, y: newGOMOCoord.y)
-
-            self.addGOMO(gameObjectType: goType, goCoord: goCoord)
-            self.worldSceneModel.contextSave()
-            self.interactionZone.update()
-        default: break
-        }
+        self.interactionZone.reserveUpdate()
     }
 
 }

@@ -49,7 +49,7 @@ extension GameObjectMO {
         return ContainerType(rawValue: Int(self.containerID))
     }
 
-    var coordinate: Coordinate<Int> {
+    var coord: Coordinate<Int> {
         let x = Int(self.x)
         let y = Int(self.y)
 
@@ -69,6 +69,37 @@ extension GameObjectMO {
         let y = Int(self.y)
 
         return GameObjectCoordinate(containerType: cType, x: x, y: y)
+    }
+
+    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
+    func spareDirections(goMOs: any Sequence<GameObjectMO>) -> [Coordinate<Int>] {
+        var filledSpaceFlags: UInt8 = 0
+
+        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
+
+        let coord = self.coord
+        for goMO in goMOs {
+            let goMO = goMO as! GameObjectMO
+            let goMOCoord = goMO.coord
+            if coord.isAdjacent(to: goMOCoord) {
+                let differenceX = goMOCoord.x - coord.x
+                let differenceY = goMOCoord.y - coord.y
+                let tableIndex = (differenceY - 1) * -3 + (differenceX + 1)
+                filledSpaceFlags |= 0x1 << spaceShiftTable[tableIndex]
+            }
+        }
+
+        let coordVectorTable = Constant.coordVectorTable
+
+        var spareSpaces: [Coordinate<Int>] = []
+
+        for index in 0..<8 {
+            if (filledSpaceFlags >> index) & 0x1 == 0x0 {
+                spareSpaces.append(coordVectorTable[index])
+            }
+        }
+
+        return spareSpaces
     }
 
 }

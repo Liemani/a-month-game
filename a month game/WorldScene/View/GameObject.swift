@@ -105,10 +105,10 @@ class GameObject: SpriteNode, BelongEquatableType {
 
         switch self.parent {
         case is Field:
-            self.worldScene.interact(self)
+            self.interact()
             self.resetTouch(touch)
         case is InventoryCell:
-            self.worldScene.interact(self)
+            self.interact()
             self.resetTouch(touch)
         case is ThirdHand:
             if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
@@ -121,14 +121,14 @@ class GameObject: SpriteNode, BelongEquatableType {
                     return
                 }
             }
-            let characterTC = TileCoordinate(from: self.worldScene.characterPosition)
+            let characterTC = self.worldScene.character.tileCoord
             let touchedTC = TileCoordinate(from: touch.location(in: self.worldScene.field))
             if touchedTC.isAdjacent(to: characterTC) {
                 let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
                 if goAtLocationOfTouch == nil {
                     self.worldScene.field.moveGOMO(from: self, to: touchedTC.coord)
                     self.worldScene.interactionZone.add(self)
-                    self.worldScene.interactionZone.applyUpdate()
+                    self.worldScene.craftPane.reserveUpdate()
                     self.resetTouch(touch)
                 } else {
                     self.touchCancelled(touch)
@@ -155,6 +155,23 @@ class GameObject: SpriteNode, BelongEquatableType {
     override func resetTouch(_ touch: UITouch) {
         self.deactivate()
         self.touchManager.removeFirst(from: touch)
+    }
+
+    // MARK: - interact
+    func interact() {
+        switch self.type {
+        case .pineTree:
+            guard self.parent is Field else { return }
+            guard Double.random(in: 0.0...1.0) <= 0.33 else { return }
+            let goMO = self.worldScene.goMOGO.field[self]!
+            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.goMOGO.goMOs)
+            guard !spareDirections.isEmpty else { return }
+            let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
+            let newGOMOCoord = goMO.coord + coordToAdd
+            let newGOMOGOCoord = GameObjectCoordinate(containerType: .field, coordinate: newGOMOCoord)
+            self.worldScene.addGOMO(gameObjectType: .branch, goCoord: newGOMOGOCoord)
+        default: break
+        }
     }
 
     // MARK: - etc

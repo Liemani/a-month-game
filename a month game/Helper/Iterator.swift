@@ -38,7 +38,7 @@ struct CombineSequence<Element>: Sequence, IteratorProtocol {
 
 }
 
-struct MaterialInRecipeIteratorSequence<Element>: Sequence, IteratorProtocol where Element: BelongEquatableType {
+struct MaterialInRecipeSequence<Element>: Sequence, IteratorProtocol where Element: BelongEquatableType {
 
     typealias ElementType = Element.TypeObject
 

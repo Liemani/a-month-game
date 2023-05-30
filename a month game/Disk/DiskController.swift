@@ -61,8 +61,8 @@ final class DiskController {
     }
 
     // MARK: - CoreData
-    func loadGOMOArray() -> [GameObjectMO] {
-        return self.persistentContainer.fetchGOMOArray()
+    func loadGOMOs() -> [GameObjectMO] {
+        return self.persistentContainer.fetchGOMOs()
     }
 
     func newGOMO() -> GameObjectMO {

@@ -14,6 +14,8 @@ class InteractionZone: SKSpriteNode {
 
     var gos: [GameObject] = []
 
+    private var shouldUpdate: Bool = true
+
     func setUp() {
         self.position = Constant.sceneCenter
         self.size = Constant.defaultNodeSize * 2.0
@@ -47,7 +49,7 @@ class InteractionZone: SKSpriteNode {
     func add(_ gos: [GameObject]) {
         self.gos += gos
         self.activate()
-        self.applyUpdate()
+        self.worldScene.craftPane.reserveUpdate()
     }
 
     func remove(_ go: GameObject) {
@@ -76,7 +78,11 @@ class InteractionZone: SKSpriteNode {
     }
 
     // MARK: - update
+    func reserveUpdate() { self.shouldUpdate = true }
+
     func update() {
+        guard self.shouldUpdate else { return }
+
         let newInteractableGOs = self.field.interactableGOs()
 
         if newInteractableGOs.count == 0 && self.gos.isEmpty {
@@ -86,17 +92,15 @@ class InteractionZone: SKSpriteNode {
         self.reset()
 
         self.add(newInteractableGOs)
+
+        self.shouldUpdate = false
     }
 
-    func reset() {
+    private func reset() {
         for go in self.gos {
             self.deactivate(go)
         }
         self.gos.removeAll()
-    }
-
-    func applyUpdate() {
-        self.worldScene.craftPane.update()
     }
 
 }
