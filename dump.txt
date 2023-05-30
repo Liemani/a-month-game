@@ -105,8 +105,11 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+a bug that can't move from touch of out of world bound
 굳이 복잡한 이터레이터를 보내야 하나?
     그냥 시그널만 전달하고 나중에 일괄 처리가 단순하다
+    context save also same
+check update flow of zone and pane
 move all touch event out of scene
 move interact to game object
 make character class

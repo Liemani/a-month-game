@@ -15,14 +15,14 @@ class WorldScene: SKScene {
     // MARK: model
     var worldSceneModel: WorldSceneModel!
 
-    var goMOGO: GOMOGO = GOMOGO()
+    var goMOGO: GOMOGO!
 
-    var touchManager: WorldSceneTouchManager = WorldSceneTouchManager()
+    var touchManager: WorldSceneTouchManager!
 
     var character: CharacterModel!
 
     // MARK: view
-    var containers: [any ContainerNode] = [any ContainerNode](repeating: ThirdHand(), count: ContainerType.caseCount)
+    var containers: [(any ContainerNode)?]!
 
     var field: Field { self.containers[ContainerType.field] as! Field }
 
@@ -39,18 +39,18 @@ class WorldScene: SKScene {
     var tileMap: SKTileMapNode!
 
     var ui: SKNode!
-    var menuButton: SKNode!
     var interactionZone: InteractionZone!
     var craftPane: CraftPane!
 
-    var menuWindow: SKNode!
+    var menuPane: MenuPane!
     var exitWorldButton: SKNode!
-
-    var isMenuOpen: Bool { return !menuWindow.isHidden }
 
     // MARK: - set up
     func setUp(viewController: ViewController, worldName: String) {
         self.viewController = viewController
+        self.goMOGO = GOMOGO()
+        self.touchManager = WorldSceneTouchManager()
+        self.containers = [(any ContainerNode)?](repeating: nil, count: ContainerType.caseCount)
 
         self.setUpSceneLayer()
         self.setUpModel(worldName: worldName)
@@ -65,6 +65,10 @@ class WorldScene: SKScene {
         for goMO in self.goMOGO.goMOs {
             print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
         }
+    }
+
+    deinit {
+        print("worldScene deinit()")
     }
 #endif
 
@@ -99,7 +103,7 @@ class WorldScene: SKScene {
         self.worldLayer = worldLayer
 
         self.addTileMap(to: worldLayer)
-        self.field(to: worldLayer)
+        self.addField(to: worldLayer)
     }
 
     func addTileMap(to parent: SKNode) {
@@ -115,7 +119,7 @@ class WorldScene: SKScene {
         self.tileMap = tileMap
     }
 
-    func field(to parent: SKNode) {
+    func addField(to parent: SKNode) {
         let field = Field()
         field.setUp()
 
@@ -132,7 +136,7 @@ class WorldScene: SKScene {
         parent.addChild(fixedLayer)
 
         self.addUI(to: fixedLayer)
-        self.addMenuWindow(to: fixedLayer)
+        self.addMenuPane(to: fixedLayer)
     }
 
     func addUI(to parent: SKNode) {
@@ -146,19 +150,18 @@ class WorldScene: SKScene {
         self.addMenuButton(to: ui)
         self.addCharacter(to: ui)
         self.addInteractionZone(to: ui)
-        self.addCharacterInventory(to: ui)
+        self.addInventory(to: ui)
         self.addThirdHand(to: ui)
         self.addCraftPane(to: ui)
     }
 
     func addMenuButton(to parent: SKNode) {
-        let menuButton: SKSpriteNode = SKSpriteNode(imageNamed: Constant.ResourceName.menuButton)
-
-        menuButton.position = Constant.Frame.menuButton.origin
-        menuButton.size = Constant.Frame.menuButton.size
+        let menuButton: Button = Button(imageNamed: Constant.ResourceName.menuButton)
+        menuButton.setUp()
+        menuButton.set(frame: Constant.Frame.menuButton)
+        menuButton.delegate = self
 
         parent.addChild(menuButton)
-        self.menuButton = menuButton
     }
 
     func addCharacter(to parent: SKNode) {
@@ -185,7 +188,7 @@ class WorldScene: SKScene {
         self.interactionZone = interactionZone
     }
 
-    func addCharacterInventory(to parent: SKNode) {
+    func addInventory(to parent: SKNode) {
         let inventoryPane = InventoryPane()
         inventoryPane.setUp()
 
@@ -210,31 +213,17 @@ class WorldScene: SKScene {
         self.craftPane = craftPane
     }
 
-    func addMenuWindow(to parent: SKNode) {
-        let menuWindow = SKNode()
+    func addMenuPane(to parent: SKNode) {
+        let menuPane = MenuPane()
+        menuPane.setUp()
 
-        menuWindow.zPosition = Constant.ZPosition.menuWindow
-        menuWindow.isHidden = true
-
-        parent.addChild(menuWindow)
-        self.menuWindow = menuWindow
-
-        let background = SKSpriteNode(color: .black, size: Constant.sceneSize)
-
-        background.position = Constant.sceneCenter
-        background.zPosition = -1.0
-        background.alpha = 0.5
-
-        menuWindow.addChild(background)
-
-        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
-        let exitWorldButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.exitWorldButton, labelText: "Exit World", andAddTo: menuWindow)
-        self.exitWorldButton = exitWorldButton
+        parent.addChild(menuPane)
+        self.menuPane = menuPane
     }
 
     // MARK: set up model
     func setUpModel(worldName: String) {
-        self.worldSceneModel = WorldSceneModel(worldSceneController: self, worldName: worldName)
+        self.worldSceneModel = WorldSceneModel(worldScene: self, worldName: worldName)
 
         self.setUpTile()
         self.setUpGOMOs()
@@ -258,153 +247,6 @@ class WorldScene: SKScene {
 
     func setUpCharacter() {
         self.character = CharacterModel(worldScene: self)
-    }
-
-    // MARK: - touch
-    func touchBegan(_ touch: UITouch) {
-        if self.isMenuOpen {
-            self.menuWindowTouchBegan(touch)
-            return
-        }
-
-        if self.isMenuButtonTouched(touch) {
-            self.menuButtonTouchBegan(touch)
-            return
-        }
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        if self.isMenuOpen {
-            self.menuWindowTouchMoved(touch)
-            return
-        }
-
-        switch touch {
-        case self.menuButtonTouch:
-            self.menuButtonTouchMoved(touch)
-        default: break
-        }
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        if self.isMenuOpen {
-            self.menuWindowTouchEnded(touch)
-            return
-        }
-
-        switch touch {
-        case self.menuButtonTouch:
-            self.menuButtonTouchEnded(touch)
-        default: break
-        }
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        if self.isMenuOpen {
-            self.menuWindowTouchCancelled(touch)
-            return
-        }
-
-        switch touch {
-        case self.menuButtonTouch:
-            self.menuButtonTouchCancelled(touch)
-        default: break
-        }
-    }
-
-    // MARK: - touch structure
-    // MARK: - button touch
-    var menuButtonTouch: UITouch? = nil
-
-    func isMenuButtonTouched(_ touch: UITouch) -> Bool {
-        return self.menuButton.isAtLocation(of: touch)
-    }
-
-    func menuButtonTouchBegan(_ touch: UITouch) {
-        self.menuButton.alpha = 0.5
-        self.menuButtonTouch = touch
-    }
-
-    func menuButtonTouchMoved(_ touch: UITouch) {
-        self.menuButton.alpha = self.menuButton.isAtLocation(of: touch) ? 0.5 : 1.0
-    }
-
-    func menuButtonTouchEnded(_ touch: UITouch) {
-        if self.menuButton.isAtLocation(of: touch) {
-            self.menuWindow.isHidden = false
-            self.touchManager.cancelAll(of: FieldTouch.self)
-            self.touchManager.cancelAll(of: GameObjectTouch.self)
-        }
-        self.resetMenuButtonTouch(touch)
-    }
-
-    func menuButtonTouchCancelled(_ touch: UITouch) {
-        self.resetMenuButtonTouch(touch)
-    }
-
-    func resetMenuButtonTouch(_ touch: UITouch) {
-        self.menuButton.alpha = 1.0
-        self.menuButtonTouch = nil
-    }
-
-    // MARK: - set velocity
-    func setVelocityVector() {
-        let fieldTouch = self.touchManager.first(of: FieldTouch.self) as! FieldTouch
-
-        guard let previousPreviousLocation = fieldTouch.previousPreviousLocation else {
-            return
-        }
-
-        let previousLocation = fieldTouch.uiTouch.previousLocation(in: self)
-        let timeInterval = fieldTouch.previousTimestamp - fieldTouch.previousPreviousTimestamp
-
-        self.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
-    }
-
-    // MARK: - menu window touch
-    func menuWindowTouchBegan(_ touch: UITouch) {
-    }
-
-    func menuWindowTouchMoved(_ touch: UITouch) {
-    }
-
-    func menuWindowTouchEnded(_ touch: UITouch) {
-        let currentLocation = touch.location(in: self)
-        if self.exitWorldButton.contains(currentLocation) {
-            performSegueToPortalScene()
-        } else {
-            self.menuWindow.isHidden = true
-        }
-
-        self.resetMenuWindowTouch(touch)
-    }
-
-    func menuWindowTouchCancelled(_ touch: UITouch) {
-        self.resetMenuWindowTouch(touch)
-    }
-
-    func resetMenuWindowTouch(_ touch: UITouch) {
-    }
-
-    func performSegueToPortalScene() {
-        self.viewController.setPortalScene()
-    }
-
-    // MARK: - ovverride
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchBegan(touch) }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchMoved(touch) }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchEnded(touch) }
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchCancelled(touch) }
     }
 
     // MARK: - update
@@ -433,7 +275,7 @@ class WorldScene: SKScene {
             return nil
         }
 
-        let container = self.containers[containerType]
+        let container = self.containers[containerType]!
         let goMOCoord = goMO.coord
 
         if container.isVaid(goMOCoord), let go = GameObject.new(from: goMO.typeID) {
@@ -474,7 +316,7 @@ class WorldScene: SKScene {
         goMO.set(goCoord: goCoord)
         self.worldSceneModel.contextSave()
 
-        self.containers[goCoord.containerType].moveGO(go, to: goCoord.coord)
+        self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
     }
 
     // MARK: remove
@@ -487,6 +329,19 @@ class WorldScene: SKScene {
         }
         self.worldSceneModel.contextSave()
         self.interactionZone.reserveUpdate()
+    }
+
+    // MARK: - segue
+    func performSegueToPortalScene() {
+        self.viewController.setPortalScene()
+    }
+
+}
+
+extension WorldScene: ButtonDelegate {
+
+    func buttonTapped(sender: Any?) {
+        self.menuPane.reveal()
     }
 
 }

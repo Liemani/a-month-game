@@ -70,4 +70,12 @@ class WorldSceneTouchManager {
         }
     }
 
+    func cancelAll() {
+        if let touch = touches[0] {
+            touch.sender.touchCancelled(touch.uiTouch)
+        } else if let touch = touches[1] {
+            touch.sender.touchCancelled(touch.uiTouch)
+        }
+    }
+
 }

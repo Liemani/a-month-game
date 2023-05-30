@@ -15,20 +15,17 @@ final class WorldSceneModel {
     var diskController: DiskController!
 
     var tileMapModel: TileMapModel!
-    var characterModel: CharacterModel!
 
     // MARK: - init
-    init(worldSceneController: WorldScene, worldName: String) {
+    init(worldScene: WorldScene, worldName: String) {
+        self.worldScene = worldScene
+
         let diskController = DiskController.default
         diskController.setToWorld(ofName: worldName)
         self.diskController = diskController
 
-        self.worldScene = worldSceneController
-
         let tileMapData = self.diskController.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
-
-        self.characterModel = CharacterModel(worldScene: self.worldScene)
     }
 
     func loadGOMOs() -> [GameObjectMO] {

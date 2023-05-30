@@ -32,7 +32,6 @@ class Field: SpriteNode {
     }
 
     // MARK: - touch
-
     override func touchBegan(_ touch: UITouch) {
         guard self.touchManager.first(of: FieldTouch.self) == nil else {
             return
@@ -64,9 +63,24 @@ class Field: SpriteNode {
             return
         }
 
-        self.worldScene.setVelocityVector()
+        self.setVelocityVector()
         self.resetTouch(touch)
     }
+
+    // MARK: - set velocity
+    func setVelocityVector() {
+        let fieldTouch = self.touchManager.first(of: FieldTouch.self) as! FieldTouch
+
+        guard let previousPreviousLocation = fieldTouch.previousPreviousLocation else {
+            return
+        }
+
+        let previousLocation = fieldTouch.uiTouch.previousLocation(in: self.worldScene)
+        let timeInterval = fieldTouch.previousTimestamp - fieldTouch.previousPreviousTimestamp
+
+        self.worldScene.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
+    }
+
 
     override func touchCancelled(_ touch: UITouch) {
         guard self.touchManager.first(of: FieldTouch.self) != nil else {
@@ -78,23 +92,6 @@ class Field: SpriteNode {
 
     override func resetTouch(_ touch: UITouch) {
         self.touchManager.removeFirst(from: touch)
-    }
-
-    // MARK: - override
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchBegan(touch) }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchMoved(touch) }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchEnded(touch) }
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchCancelled(touch) }
     }
 
 }

@@ -64,7 +64,7 @@ struct Constant {
         static let fixedLayer = 0.0
         static let ui = 0.0
         static let thirdHand = 100.0
-        static let menuWindow = 500.0
+        static let menuPane = 500.0
 
         static let inventoryCell = 1.0
         static let inventoryCellHand = 2.0

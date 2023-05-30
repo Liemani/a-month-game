@@ -42,42 +42,38 @@ class PortalScene: SKScene {
 
         let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
 
-        self.enterButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.enterButton, labelText: "Enter World", andAddTo: uiLayer)
-        self.resetButton = Helper.createLabeledSpriteNode(texture: buttonTexture, in: Constant.Frame.resetButton, labelText: "Reset", andAddTo: uiLayer)
+        let enterButton = Button(texture: buttonTexture)
+        enterButton.setUp()
+        enterButton.set(frame: Constant.Frame.enterButton)
+        enterButton.set(text: "Enter World")
+        enterButton.delegate = self
+        uiLayer.addChild(enterButton)
+        self.enterButton = enterButton
+
+        let resetButton = Button(texture: buttonTexture)
+        resetButton.setUp()
+        resetButton.set(frame: Constant.Frame.resetButton)
+        resetButton.set(text: "Reset")
+        resetButton.delegate = self
+        uiLayer.addChild(resetButton)
+        self.resetButton = resetButton
 
         self.addChild(uiLayer)
         self.uiLayer = uiLayer
     }
 
-    func touchUp(touch: UITouch) {
-        let touchPoint = touch.location(in: self.uiLayer)
-        if self.enterButton.contains(touchPoint) {
-            self.viewController.setWorldScene()
-        }
+}
 
-        if self.resetButton.contains(touchPoint) {
+extension PortalScene: ButtonDelegate {
+
+    func buttonTapped(sender: Any?) {
+        guard let button = sender as? Button else { return }
+
+        if button == self.enterButton {
+            self.viewController.setWorldScene()
+        } else if button == self.resetButton {
             DiskController.default.removeWorldDirectory(ofName: Constant.defaultWorldName)
         }
-    }
-
-    // MARK: - touch
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for touch in touches { self.touchDown(touch: touch) }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for touch in touches { self.touchMoved(touch: touch) }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchUp(touch: touch) }
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for touch in touches { self.touchUp(touch: touch) }
-    }
-
-    override func update(_ currentTime: TimeInterval) {
     }
 
 }
