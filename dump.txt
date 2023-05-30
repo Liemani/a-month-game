@@ -105,6 +105,7 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+swap with inventory go
 craft cell touch not work
 셀은 터치하면 필드 터치가 안되고 오브젝트는 터치하면 필드 터치가 되는데 혹시 오브젝트 크기가 0인가? 출력해보자
 change the direction of craft display bottom to top

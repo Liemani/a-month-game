@@ -58,9 +58,9 @@ class WorldScene: SKScene {
         self.setUpSceneLayer()
         self.setUpModel(worldName: worldName)
 
-        #if DEBUG
+#if DEBUG
         self.debugCode()
-        #endif
+#endif
     }
 
 #if DEBUG
