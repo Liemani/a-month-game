@@ -93,7 +93,11 @@ class GameObject: SpriteNode, BelongEquatableType {
             let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
             self.worldScene.moveGOMO(from: self, to: goCoord)
         case is CraftCell:
-            self.craftPane.refill(self)
+            if self.type == .none {
+                self.touchCancelled(touch)
+            } else {
+                self.craftPane.refill(self)
+            }
         default: break
         }
     }
