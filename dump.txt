@@ -105,6 +105,8 @@ update 안에서 lastTime 을 0.0 이 아닌 경우에 실행하도록 하는데
     2023-05-31 마감
 
 # issue
+make cancel touch when craft reset
+make reset pane and menu pane as button
 Add interaction
     wood wall with axe
     pine cone

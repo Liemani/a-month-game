@@ -82,9 +82,8 @@ class GameObject: SpriteNode, BelongEquatableType {
             if !self.isPickable {
                 self.touchCancelled(touch)
             } else {
-                let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-                self.worldScene.interactionZone.remove(self)
-                self.worldScene.moveGOMO(from: self, to: goCoord)
+                let coord = Coordinate<Int>(0, 0)
+                self.worldScene.thirdHand.moveGOMO(from: self, to: coord)
             }
         case is InventoryCell:
             let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
@@ -122,6 +121,7 @@ class GameObject: SpriteNode, BelongEquatableType {
                     return
                 }
             }
+
             let characterTC = self.worldScene.character.tileCoord
             let touchedTC = TileCoordinate(from: touch.location(in: self.worldScene.field))
             if touchedTC.isAdjacent(to: characterTC) {

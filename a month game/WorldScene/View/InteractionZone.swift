@@ -41,22 +41,9 @@ class InteractionZone: SKSpriteNode {
     }
 
     // MARK: - edit
-    func add(_ go: GameObject) {
-        self.gos.append(go)
-        self.activate(go)
-    }
-
     func add(_ gos: [GameObject]) {
         self.gos += gos
         self.activate()
-        self.worldScene.craftPane.reserveUpdate()
-    }
-
-    func remove(_ go: GameObject) {
-        if let index = self.gos.firstIndex(of: go) {
-            self.gos.remove(at: index)
-            self.deactivate(go)
-        }
     }
 
     // MARK: - activate
@@ -74,7 +61,9 @@ class InteractionZone: SKSpriteNode {
 
     func deactivate(_ go: GameObject) {
         go.colorBlendFactor = 0.0
-        go.isUserInteractionEnabled = false
+        if go.parent != self.worldScene.thirdHand {
+            go.isUserInteractionEnabled = false
+        }
     }
 
     // MARK: - update
@@ -83,16 +72,10 @@ class InteractionZone: SKSpriteNode {
     func update() {
         guard self.shouldUpdate else { return }
 
-        let newInteractableGOs = self.field.interactableGOs()
-
-        if newInteractableGOs.count == 0 && self.gos.isEmpty {
-            return
-        }
-
         self.reset()
+        self.add(self.field.interactableGOs())
 
-        self.add(newInteractableGOs)
-
+        self.worldScene.craftPane.reserveUpdate()
         self.shouldUpdate = false
     }
 

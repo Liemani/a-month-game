@@ -273,7 +273,6 @@ class WorldScene: SKScene {
         let go = GameObject.new(of: goType)
         container.addGO(go, to: goCoord.coord)
         self.interactionZone.reserveUpdate()
-        self.craftPane.reserveUpdate()
         return go
     }
 
@@ -288,7 +287,6 @@ class WorldScene: SKScene {
             , let go = GameObject.new(from: goMO) {
             container.addGO(go, to: goMOCoord)
             self.interactionZone.reserveUpdate()
-            self.craftPane.reserveUpdate()
             self.goMOGO[goMO] = go
         }
     }
@@ -313,7 +311,6 @@ class WorldScene: SKScene {
         self.worldSceneModel.setGOMO(goMO, to: goCoord)
         self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
         self.interactionZone.reserveUpdate()
-        self.craftPane.reserveUpdate()
     }
 
     func removeGOMO(from go: GameObject) {
@@ -321,7 +318,6 @@ class WorldScene: SKScene {
         self.worldSceneModel.remove(goMO)
         go.removeFromParent()
         self.interactionZone.reserveUpdate()
-        self.craftPane.reserveUpdate()
     }
 
     // TODO: check this method, other edit is perfect
@@ -333,7 +329,6 @@ class WorldScene: SKScene {
             go.removeFromParent()
         }
         self.interactionZone.reserveUpdate()
-        self.craftPane.reserveUpdate()
     }
 
     // MARK: - segue

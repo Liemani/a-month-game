@@ -15,7 +15,6 @@ class CraftPane: SKSpriteNode {
     private var shouldUpdate: Bool = true
 
     func setUp() {
-        self.isUserInteractionEnabled = false
         self.anchorPoint = CGPoint()
 
         self.position = Constant.craftPanePosition

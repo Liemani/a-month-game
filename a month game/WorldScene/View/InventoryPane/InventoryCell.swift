@@ -26,7 +26,6 @@ class InventoryCell: SpriteNode {
     func moveGO(_ go: GameObject) {
         go.move(toParent: self)
         go.position = CGPoint()
-        go.isUserInteractionEnabled = true
     }
 
     func moveGOMO(_ go: GameObject) {
