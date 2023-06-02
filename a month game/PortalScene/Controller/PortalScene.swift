@@ -84,10 +84,12 @@ extension PortalScene: ButtonDelegate {
     func buttonTapped(sender: Any?) {
         guard let button = sender as? Button else { return }
 
-        if button == self.enterButton {
+        switch button {
+        case self.enterButton:
             self.viewController.setWorldScene()
-        } else if button == self.resetButton {
+        case self.resetButton:
             self.resetPane.reveal()
+        default: break
         }
     }
 
