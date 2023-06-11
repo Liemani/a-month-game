@@ -12,6 +12,9 @@ struct Constant {
 
     static let defaultSize = 250.0
     static let tileSide = defaultSize
+//    static let tileSide = 32.0
+    static let tileSize = defaultNodeSize
+//    static let tileSize = CGSize(width: Constant.tileSide, height: Constant.tileSide)
     static let margin = defaultSize / 5.0
 
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)

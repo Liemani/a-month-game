@@ -106,7 +106,7 @@ class WorldScene: SKScene {
         let tileGroups = TileType.tileGroups
         let tileSet = SKTileSet(tileGroups: tileGroups)
 
-        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.defaultNodeSize)
+        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.tileSize)
 
         tileMap.position = Constant.tileMapPosition
         tileMap.zPosition = Constant.ZPosition.tileMap
