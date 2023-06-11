@@ -8,6 +8,11 @@
 import Foundation
 import SpriteKit
 
+extension Notification.Name {
+    static let requestPresentPortalViewController = Notification.Name("RequestPortalViewController")
+    static let requestPresentWorldViewController = Notification.Name("RequestWorldViewController")
+}
+
 // MARK: - Array
 extension Array {
 

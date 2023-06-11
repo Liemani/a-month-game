@@ -54,7 +54,7 @@ class MenuPane: SpriteNode {
 extension MenuPane: ButtonDelegate {
 
     func buttonTapped(sender: Any?) {
-        self.worldScene.performSegueToPortalScene()
+        NotificationCenter.default.post(name: .requestPresentPortalViewController, object: nil)
     }
 
 }

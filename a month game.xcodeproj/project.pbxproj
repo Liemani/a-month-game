@@ -33,7 +33,7 @@
 		037E3F462A1CDFEC008A50CA /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F452A1CDFEC008A50CA /* TileType.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
 		038330A82A02850A008DEA10 /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A72A02850A008DEA10 /* WorldScene.swift */; };
-		038330AA2A02850A008DEA10 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A92A02850A008DEA10 /* ViewController.swift */; };
+		038330AA2A02850A008DEA10 /* PortalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A92A02850A008DEA10 /* PortalViewController.swift */; };
 		038330AD2A02850A008DEA10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 038330AB2A02850A008DEA10 /* Main.storyboard */; };
 		038330AF2A02850B008DEA10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 038330AE2A02850B008DEA10 /* Assets.xcassets */; };
 		038330B22A02850B008DEA10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 038330B02A02850B008DEA10 /* LaunchScreen.storyboard */; };
@@ -46,6 +46,7 @@
 		039EEFCB2A243F6C00CB93C6 /* WorldSceneTouchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFCA2A243F6C00CB93C6 /* WorldSceneTouchManager.swift */; };
 		03D6F8682A20AB26005628F5 /* GOMOGO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D6F8672A20AB26005628F5 /* GOMOGO.swift */; };
 		03D6F86A2A20F343005628F5 /* ContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D6F8692A20F343005628F5 /* ContainerModel.swift */; };
+		03DBB1222A3611EF00DA4E73 /* WorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* TileCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */; };
 		03E755902A1F2E8900BF5C0F /* CraftPane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */; };
@@ -79,7 +80,7 @@
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		038330A12A02850A008DEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		038330A72A02850A008DEA10 /* WorldScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldScene.swift; sourceTree = "<group>"; };
-		038330A92A02850A008DEA10 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		038330A92A02850A008DEA10 /* PortalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalViewController.swift; sourceTree = "<group>"; };
 		038330AC2A02850A008DEA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		038330AE2A02850B008DEA10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		038330B12A02850B008DEA10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -92,6 +93,7 @@
 		039EEFCA2A243F6C00CB93C6 /* WorldSceneTouchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneTouchManager.swift; sourceTree = "<group>"; };
 		03D6F8672A20AB26005628F5 /* GOMOGO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOMOGO.swift; sourceTree = "<group>"; };
 		03D6F8692A20F343005628F5 /* ContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerModel.swift; sourceTree = "<group>"; };
+		03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldViewController.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* TileCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileCoordinate.swift; sourceTree = "<group>"; };
 		03E7558F2A1F2E8900BF5C0F /* CraftPane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftPane.swift; sourceTree = "<group>"; };
@@ -232,7 +234,8 @@
 				030ABFCE2A10C6FF00BAB9B8 /* Disk */,
 				039037C72A14FCC20014A571 /* Helper */,
 				038330A12A02850A008DEA10 /* AppDelegate.swift */,
-				038330A92A02850A008DEA10 /* ViewController.swift */,
+				038330A92A02850A008DEA10 /* PortalViewController.swift */,
+				03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */,
 				030ABFAC2A0BCC4C00BAB9B8 /* PortalScene */,
 				030ABFAB2A0BCC3A00BAB9B8 /* WorldScene */,
 				038330AE2A02850B008DEA10 /* Assets.xcassets */,
@@ -367,6 +370,7 @@
 				039037C22A137B110014A571 /* IDGenerator.swift in Sources */,
 				031D575E2A07C311007EF383 /* TileMapModel.swift in Sources */,
 				03311DD22A1A3E3F0020ADB5 /* InventoryPane.swift in Sources */,
+				03DBB1222A3611EF00DA4E73 /* WorldViewController.swift in Sources */,
 				030ABFB62A0C93AA00BAB9B8 /* TileMapFileController.swift in Sources */,
 				038330A82A02850A008DEA10 /* WorldScene.swift in Sources */,
 				031AA8102A26155C0017EFCD /* ResetPane.swift in Sources */,
@@ -380,7 +384,7 @@
 				030ABFC32A0E290E00BAB9B8 /* DataModel.xcdatamodeld in Sources */,
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
-				038330AA2A02850A008DEA10 /* ViewController.swift in Sources */,
+				038330AA2A02850A008DEA10 /* PortalViewController.swift in Sources */,
 				031AA8042A24A5D20017EFCD /* Iterator.swift in Sources */,
 				039037C02A1376BB0014A571 /* UserDefaultsController.swift in Sources */,
 				034637802A233A1400370C71 /* InventoryCell.swift in Sources */,

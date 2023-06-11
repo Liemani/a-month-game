@@ -10,8 +10,6 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    weak var viewController: ViewController!
-
     // MARK: model
     var worldSceneModel: WorldSceneModel!
 
@@ -46,8 +44,7 @@ class WorldScene: SKScene {
     var exitWorldButton: SKNode!
 
     // MARK: - set up
-    func setUp(viewController: ViewController, worldName: String) {
-        self.viewController = viewController
+    func setUp(worldName: String) {
         self.goMOGO = GOMOGO()
         self.touchManager = WorldSceneTouchManager()
         self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
@@ -329,11 +326,6 @@ class WorldScene: SKScene {
             go.removeFromParent()
         }
         self.interactionZone.reserveUpdate()
-    }
-
-    // MARK: - segue
-    func performSegueToPortalScene() {
-        self.viewController.setPortalScene()
     }
 
 }

@@ -9,16 +9,12 @@ import SpriteKit
 
 class PortalScene: SKScene {
 
-    weak var viewController: ViewController!
-
     var uiLayer: SKNode!
     var enterButton: Button!
     var resetButton: Button!
     var resetPane: ResetPane!
 
-    func setUp(viewController: ViewController) {
-        self.viewController = viewController
-
+    func setUp() {
         self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
     }
@@ -86,7 +82,7 @@ extension PortalScene: ButtonDelegate {
 
         switch button {
         case self.enterButton:
-            self.viewController.setWorldScene()
+            NotificationCenter.default.post(name: .requestPresentWorldViewController, object: nil)
         case self.resetButton:
             self.resetPane.reveal()
         default: break

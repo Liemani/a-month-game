@@ -1,21 +1,23 @@
 //
-//  ViewController.swift
+//  WorldViewController.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/05/03.
+//  Created by 박정훈 on 2023/06/11.
 //
 
 import UIKit
 import SpriteKit
 import GameplayKit
 
-class ViewController: UIViewController, UIGestureRecognizerDelegate {
+class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setView()
-        setPortalScene()
+        self.setView()
+        self.setScene()
+
+        NotificationCenter.default.addObserver(self, selector: #selector(requestPresentPortalViewController), name: .requestPresentPortalViewController, object: nil)
     }
 
     func setView() {
@@ -27,17 +29,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 #endif
     }
 
-    func setPortalScene() {
-        let portalScene = PortalScene()
-        portalScene.setUp(viewController: self)
-
-        let view = self.view as! SKView
-        view.presentScene(portalScene.scene)
-    }
-
-    func setWorldScene() {
+    func setScene() {
         let worldScene = WorldScene()
-        worldScene.setUp(viewController: self, worldName: Constant.defaultWorldName)
+        worldScene.setUp(worldName: Constant.defaultWorldName)
 
         let view = self.view as! SKView
         view.presentScene(worldScene)
@@ -53,6 +47,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+
+    @objc
+    func requestPresentPortalViewController() {
+        let portalViewController = storyboard?.instantiateViewController(identifier: "PortalViewController") as! PortalViewController
+        self.navigationController?.setViewControllers([portalViewController], animated: false)
     }
 
 }
