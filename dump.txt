@@ -395,6 +395,13 @@ dump log: 사용한 dump 내용을 쌓아둔다
         firing
 
 # issue
+잔디 좀 더 연두색으로
+손 크기 줄이기
+버튼 글씨는 버튼 비율로
+model 을 인자로 다른 controller 에게 전달하도록 하기
+controller 에 따라 파일 hierarchy 수정
+craft cell 이 제작에 소모될 아이템 리스트를 갖도록 하자
+마스터리 작성
 button 은 무조건 부모가 처리하도록 해보자
 resolve portrait warning
 캐릭터의 테두리 색을 검은색으로?

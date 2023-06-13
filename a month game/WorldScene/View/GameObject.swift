@@ -24,6 +24,7 @@ class GameObject: SpriteNode, BelongEquatableType {
     static func new(of goType: GameObjectType) -> GameObject {
         let go = GameObject(texture: goType.texture)
         go._type = goType
+        go.size = Constant.defaultNodeSize
         go.zPosition = Constant.ZPosition.gameObject
 
         return go

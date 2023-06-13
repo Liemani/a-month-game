@@ -22,7 +22,7 @@ enum GameObjectType: Int, CaseIterable {
         (true, true, "game_object_none"),
         (true, true, "game_object_pine_cone"),
         (false, false, "game_object_pine_tree"),
-        (false, false, "game_object_wood_wall"),
+        (false, false, "wood_wall"),
         (true, true, "game_object_branch"),
         (true, true, "game_object_stone"),
         (true, true, "game_object_axe"),
@@ -32,7 +32,9 @@ enum GameObjectType: Int, CaseIterable {
         var textures: [SKTexture] = [SKTexture](repeating: SKTexture(), count: GameObjectType.caseCount)
 
         for (index, resource) in resources.enumerated() {
-            textures[index] = SKTexture(imageNamed: resource.resourceName)
+            let texture = SKTexture(imageNamed: resource.resourceName)
+            texture.filteringMode = .nearest
+            textures[index] = texture
         }
 
         return textures

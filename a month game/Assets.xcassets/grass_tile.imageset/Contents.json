@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tile_wall_wood.png",
+      "filename" : "grass_tile.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

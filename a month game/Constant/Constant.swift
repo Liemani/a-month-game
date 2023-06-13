@@ -10,23 +10,24 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultSize = 250.0
-    static let tileSide = defaultSize
-//    static let tileSide = 32.0
-    static let tileSize = defaultNodeSize
-//    static let tileSize = CGSize(width: Constant.tileSide, height: Constant.tileSide)
+    static let defaultSize = tileSide
+    static let tileTextureSide = 16.0
+    static let tileTextureSize = CGSize(width: tileTextureSide, height: tileTextureSide)
+    static let tileScale = 6.0
+    static let tileSide = tileTextureSide * tileScale
+    static let tileSize = CGSize(width: tileSide, height: tileSide)
     static let margin = defaultSize / 5.0
 
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
-    static let sceneSize = iPhone5sResolution * 2.0
+    static let sceneSize = iPhone5sResolution
 
-    static let sceneCenter = iPhone5sResolution.toCGPoint()
+    static let sceneCenter = sceneSize.toCGPoint() / 2.0
 
-    static let screenDownLeft = CGPoint(x: -sceneSize.width / 2, y: -sceneSize.height / 2)
-    static let screenUpRight = CGPoint(x: sceneSize.width / 2, y: sceneSize.height / 2)
+    static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
+    static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
 
     // MARK: portal scene
     static let enterButtonPosition = screenUpRight
@@ -105,13 +106,12 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let gridSize: Int = 100
+    static let gridSize: Int = 256
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
 
     struct ResourceName {
-        static let character = "character"
         static let menuButton = "menu button"
         static let inventoryCell = "inventory_cell"
         static let craftCell = "craft_cell"

@@ -251,6 +251,10 @@ extension CGPoint {
         return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
     }
 
+    static func / (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+    }
+
     // MARK: CGPoint, CGVector
     static func + (lhs: CGPoint, rhs: CGVector) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.dx, y: lhs.y + rhs.dy)
