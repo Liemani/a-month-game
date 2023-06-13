@@ -50,6 +50,7 @@ class InventoryPane: SKSpriteNode {
         let leftHandTexture = SKTexture(imageNamed: Constant.ResourceName.leftHand)
         let leftHand = SKSpriteNode(texture: leftHandTexture)
         leftHand.position = inventoryCellFirstPosition
+        leftHand.size = Constant.defaultNodeSize
         leftHand.zPosition = Constant.ZPosition.inventoryCellHand
         leftHand.alpha = 0.5
         self.addChild(leftHand)
@@ -57,6 +58,7 @@ class InventoryPane: SKSpriteNode {
         let rightHandTexture = SKTexture(imageNamed: Constant.ResourceName.rightHand)
         let rightHand = SKSpriteNode(texture: rightHandTexture)
         rightHand.position = inventoryCellLastPosition
+        rightHand.size = Constant.defaultNodeSize
         rightHand.zPosition = Constant.ZPosition.inventoryCellHand
         rightHand.alpha = 0.5
         self.addChild(rightHand)

@@ -398,7 +398,6 @@ dump log: 사용한 dump 내용을 쌓아둔다
 add tools
 잔디 좀 더 연두색으로
 손 크기 줄이기
-버튼 글씨는 버튼 비율로
 model 을 인자로 다른 controller 에게 전달하도록 하기
 controller 에 따라 파일 hierarchy 수정
 craft cell 이 제작에 소모될 아이템 리스트를 갖도록 하자
@@ -632,6 +631,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+버튼 글씨는 버튼 비율로
 license 를 알아보자
 touch wood wall break but not in inventory
 check update flow of zone and pane
