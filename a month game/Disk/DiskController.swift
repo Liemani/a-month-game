@@ -88,7 +88,7 @@ final class DiskController {
     }
 
     // MARK: - UserDefaults
-    func readUserDefaults(forKey key: String) ->Int {
+    func readUserDefaults(forKey key: String) -> Int {
         return self.userDefaultsController.read(forKey: key)
     }
 

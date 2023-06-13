@@ -19,7 +19,8 @@ class IDGenerator {
         let diskController = DiskController.default
         self.diskController = diskController
 
-        self.nextID = diskController.readUserDefaults(forKey: Constant.idGeneratorKey)
+        let nextID = diskController.readUserDefaults(forKey: Constant.idGeneratorKey)
+        self.nextID = nextID != 0 ? nextID : 2
     }
 
     static func generate() -> Int {
