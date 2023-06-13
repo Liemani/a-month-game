@@ -22,7 +22,6 @@ class Button: SpriteNode {
         self.isUserInteractionEnabled = true
 
         let label = SKLabelNode()
-        label.fontSize = self.size.height / 2.0
         label.position = CGPoint(x: 0, y: -label.fontSize / 2.0)
         label.zPosition = 1.0
         self.addChild(label)
@@ -31,6 +30,9 @@ class Button: SpriteNode {
     func set(frame: CGRect) {
         self.position = frame.origin
         self.size = frame.size
+
+        let label = self.children[0] as! SKLabelNode
+        label.fontSize = self.size.height / 2.0
     }
 
     func set(text: String) {
