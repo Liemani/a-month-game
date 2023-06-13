@@ -64,10 +64,7 @@ final class TileMapFileController {
         let tileMap = tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
-        self.set(tileMap: tileMap, tileType: 1, x: 45, y: 45)
-        self.set(tileMap: tileMap, tileType: 2, x: 48, y: 48)
-        self.set(tileMap: tileMap, tileType: 2, x: 52, y: 52)
-        self.set(tileMap: tileMap, tileType: 2, x: 52, y: 53)
+        self.set(tileMap: tileMap, tileType: 1, x: Constant.centerTileIndex, y: Constant.centerTileIndex)
 
         return tileMapData
     }

@@ -141,4 +141,7 @@ struct Constant {
         Coordinate(0, 1),
     ]
 
+    // MARK: map position
+    static let centerTileIndex = gridSize / 2
+
 }

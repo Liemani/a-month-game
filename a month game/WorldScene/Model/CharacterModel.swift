@@ -26,7 +26,7 @@ class CharacterModel {
     // MARK: init
     init(worldScene: WorldScene) {
         self.worldScene = worldScene
-        self.position = TileCoordinate(49, 49).fieldPoint
+        self.position = TileCoordinate(Constant.centerTileIndex, Constant.centerTileIndex).fieldPoint
     }
 
     // MARK: update

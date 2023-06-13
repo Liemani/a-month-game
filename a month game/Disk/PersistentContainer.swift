@@ -68,13 +68,17 @@ final class PersistentContainer: NSPersistentContainer {
     // MARK: - private
     private func generateGOMOs() -> [GameObjectMO] {
         let goMOs = [
-            self.store(typeID: 1, id: Int32(IDGenerator.generate()), containerID: 0, x: 51, y: 51),
-            self.store(typeID: 2, id: Int32(IDGenerator.generate()), containerID: 0, x: 52, y: 52),
-            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 50, y: 53),
-            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 51),
-            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 52),
-            self.store(typeID: 4, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 53),
-            self.store(typeID: 5, id: Int32(IDGenerator.generate()), containerID: 0, x: 48, y: 54),
+            self.store(typeID: 1, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex - 2), y: Int32(Constant.centerTileIndex - 3)),
+            self.store(typeID: 2, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex - 1), y: Int32(Constant.centerTileIndex - 3)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex - 1), y: Int32(Constant.centerTileIndex - 1)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex - 1), y: Int32(Constant.centerTileIndex)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex - 1), y: Int32(Constant.centerTileIndex + 1)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex), y: Int32(Constant.centerTileIndex + 1)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex + 1), y: Int32(Constant.centerTileIndex + 1)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex + 1), y: Int32(Constant.centerTileIndex)),
+            self.store(typeID: 3, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex + 1), y: Int32(Constant.centerTileIndex - 1)),
+            self.store(typeID: 4, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex), y: Int32(Constant.centerTileIndex - 3)),
+            self.store(typeID: 5, id: Int32(IDGenerator.generate()), containerID: 0, x: Int32(Constant.centerTileIndex + 1), y: Int32(Constant.centerTileIndex - 3)),
         ]
 
         try! self.viewContext.save()
