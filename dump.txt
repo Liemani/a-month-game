@@ -395,7 +395,12 @@ dump log: 사용한 dump 내용을 쌓아둔다
         firing
 
 # issue
+make disk controller no singleton
+    new it in portal view, and pass it to the world view
+    next id 를 월드 별로 따로 두는건 어떨까?
+    파일 이름을 보고 dataModelFileName 를 소문자로 바꿔도 될까?
 add quality
+update model
 add tools
 잔디 좀 더 연두색으로
 model 을 인자로 다른 controller 에게 전달하도록 하기

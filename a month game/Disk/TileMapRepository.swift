@@ -7,24 +7,21 @@
 
 import Foundation
 
-final class TileMapFileController {
+final class TileMapRepository {
 
     private let fileManager: FileManager
 
     private var filePath: String!
     private var writeFileHandle: FileHandle!
 
-    init() {
+    init(worldDirectoryURL: URL) {
         self.fileManager = FileManager.default
-    }
 
-    /// Call this function before calling load and save method
-    func setToWorld(with directoryURL: URL) {
         // TODO: URL.path is deprecated
-        let filePath = directoryURL.appending(path: Constant.tileMapFileName).path
+        let filePath = worldDirectoryURL.appending(path: Constant.tileMapFileName).path
         self.filePath = filePath
 
-        createTileDataFileIfNotExist(ofPath: filePath)
+        createTileDataFileIfNotExist()
 
         let fileHandle = FileHandle(forWritingAtPath: filePath)
         self.writeFileHandle = fileHandle
@@ -51,11 +48,11 @@ final class TileMapFileController {
     }
 
     // MARK: - private
-    private func createTileDataFileIfNotExist(ofPath filePath: String) {
-        guard !self.fileManager.fileExists(atPath: filePath) else { return }
+    private func createTileDataFileIfNotExist() {
+        guard !self.fileManager.fileExists(atPath: self.filePath) else { return }
 
         let tileMapData = self.generateInitialTileMapData()
-        self.fileManager.createFile(atPath: filePath, contents: tileMapData)
+        self.fileManager.createFile(atPath: self.filePath, contents: tileMapData)
     }
 
     private func generateInitialTileMapData() -> Data {

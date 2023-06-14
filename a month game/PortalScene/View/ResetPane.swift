@@ -73,7 +73,7 @@ extension ResetPane: ButtonDelegate {
 
         switch button {
         case self.yesButton:
-            DiskController.default.removeWorldDirectory(ofName: Constant.defaultWorldName)
+            WorldDirectoryUtility.default.remove(worldName: Constant.defaultWorldName)
             self.hide()
         case self.noButton:
             self.hide()

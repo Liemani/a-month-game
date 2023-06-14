@@ -10,34 +10,27 @@ import Foundation
 /// Control world scene model and DiskController
 final class WorldSceneModel {
 
-    weak var worldScene: WorldScene!
+    let worldDataContainer: WorldDataContainer
 
-    var diskController: DiskController!
-
+    private var nextID: Int
     var tileMapModel: TileMapModel!
 
     var didChanged: Bool
 
     // MARK: - init
-    init(worldScene: WorldScene, worldName: String) {
-        self.worldScene = worldScene
+    init(worldDataContainer: WorldDataContainer) {
+        self.worldDataContainer = worldDataContainer
 
-        let diskController = DiskController.default
-        diskController.setToWorld(ofName: worldName)
-        self.diskController = diskController
+        self.nextID = self.worldDataContainer.readNextID()
 
-        let tileMapData = self.diskController.loadTileData()
+        let tileMapData = self.worldDataContainer.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
 
         self.didChanged = false
     }
 
     func loadGOMOs() -> [GameObjectMO] {
-        return self.diskController.loadGOMOs()
-    }
-
-    deinit {
-        self.diskController.close()
+        return self.worldDataContainer.loadGOMOs()
     }
 
     // MARK: - edit
@@ -46,13 +39,13 @@ final class WorldSceneModel {
 
         var value = tileType
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        self.diskController.save(tileData: tileData, toX: x, y: y)
+        self.worldDataContainer.save(tileData: tileData, toX: x, y: y)
     }
 
     /// Call contextSave() manually
     func newGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectMO {
-        let newGOMO = self.diskController.newGOMO()
-        newGOMO.set(gameObjectType: goType, goCoord: goCoord)
+        let newGOMO = self.worldDataContainer.newGOMO()
+        newGOMO.set(id: self.generateID(), gameObjectType: goType, goCoord: goCoord)
         self.didChanged = true
         return newGOMO
     }
@@ -63,15 +56,23 @@ final class WorldSceneModel {
     }
 
     func remove(_ goMO: GameObjectMO) {
-        self.diskController.delete(goMO)
+        self.worldDataContainer.delete(goMO)
         self.didChanged = true
     }
 
     func contextSave() {
         if self.didChanged {
-            self.diskController.contextSave()
+            self.worldDataContainer.contextSave()
         }
         self.didChanged = false
+    }
+
+    func generateID() -> Int {
+        let id = self.nextID
+        self.nextID += 1
+        self.worldDataContainer.updateNextID(nextID: self.nextID)
+
+        return id
     }
 
 }

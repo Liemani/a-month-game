@@ -44,13 +44,13 @@ class WorldScene: SKScene {
     var exitWorldButton: SKNode!
 
     // MARK: - set up
-    func setUp(worldName: String) {
+    func setUp(worldDataContainer: WorldDataContainer) {
         self.goMOGO = GOMOGO()
         self.touchManager = WorldSceneTouchManager()
         self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
 
         self.setUpSceneLayer()
-        self.setUpModel(worldName: worldName)
+        self.setUpModel(worldDataContainer: worldDataContainer)
 
 #if DEBUG
         self.debugCode()
@@ -217,8 +217,8 @@ class WorldScene: SKScene {
     }
 
     // MARK: set up model
-    func setUpModel(worldName: String) {
-        self.worldSceneModel = WorldSceneModel(worldScene: self, worldName: worldName)
+    func setUpModel(worldDataContainer: WorldDataContainer) {
+        self.worldSceneModel = WorldSceneModel(worldDataContainer: worldDataContainer)
 
         self.setUpTile()
         self.setUpGOMOs()

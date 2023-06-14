@@ -30,8 +30,8 @@ extension Array {
 // MARK: - GameObjectMO
 extension GameObjectMO {
 
-    func set(gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
-        self.id = Int32(IDGenerator.generate())
+    func set(id: Int, gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
+        self.id = Int32(id)
         self.typeID = Int32(goType.rawValue)
         self.set(to: goCoord)
     }

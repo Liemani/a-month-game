@@ -94,6 +94,7 @@ struct Constant {
     static let tileMapFileName = "tileMap.dat"
     static let dataModelFileName = "DataModel.sqlite"
     static let worldDataModelName = "DataModel"
+    static let worldDataFileName = "worldData.dat"
     static let gameObjectDataEntityName = "GameObjectMO"
 
     // MARK: - recipe
@@ -120,6 +121,8 @@ struct Constant {
         static let leftHand = "left_hand"
         static let rightHand = "right_hand"
     }
+
+    static let initialNextID = 2
 
     static let accessableGOColorBlendFactor = 0.5
 

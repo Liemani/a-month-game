@@ -15,7 +15,6 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
 
         self.setView()
-        self.setScene()
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentPortalViewController), name: .requestPresentPortalViewController, object: nil)
     }
@@ -29,9 +28,9 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 #endif
     }
 
-    func setScene() {
+    func setUp(worldDataContainer: WorldDataContainer) {
         let worldScene = WorldScene()
-        worldScene.setUp(worldName: Constant.defaultWorldName)
+        worldScene.setUp(worldDataContainer: worldDataContainer)
 
         let view = self.view as! SKView
         view.presentScene(worldScene)

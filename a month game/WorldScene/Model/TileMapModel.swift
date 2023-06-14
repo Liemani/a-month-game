@@ -43,7 +43,7 @@ final class TileMapModel {
     // MARK: - set tile map data
     private func set(tileMapData data: Data) {
         self.tileMapData = data
-        tileMap = self.tileMapData.withUnsafeMutableBytes {
+        self.tileMap = self.tileMapData.withUnsafeMutableBytes {
             $0.bindMemory(to: Int.self)
         }
     }
