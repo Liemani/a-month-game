@@ -37,8 +37,6 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 #if DEBUG
         view.showsFPS = true
         view.showsNodeCount = true
-
-        self.debugCode()
 #endif
     }
 
@@ -58,6 +56,10 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
         worldScene.setUp()
         self.setUpModel(worldDataContainer: worldDataContainer)
+
+#if DEBUG
+        self.debugCode()
+#endif
     }
 
     // MARK: set up model

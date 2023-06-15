@@ -89,12 +89,14 @@ struct Constant {
         static let noButton = Constant.Frame.resetButton
     }
 
-    // MARK: - data
+    // MARK: - file name
     static let defaultWorldName = "world000"
     static let tileMapFileName = "tileMap.dat"
-    static let dataModelFileName = "DataModel.sqlite"
-    static let worldDataModelName = "DataModel"
+    static let dataModelFileName = "dataModel.sqlite"
     static let worldDataFileName = "worldData.dat"
+
+    // MARK: data model name
+    static let worldDataModelName = "DataModel"
     static let gameObjectDataEntityName = "GameObjectMO"
 
     // MARK: - recipe
