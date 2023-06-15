@@ -43,7 +43,7 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 #if DEBUG
     func debugCode() {
         for goMO in self.goMOGO.goMOs {
-            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
+            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.chunkX), \(goMO.chunkY), \(goMO.chunkLocation))")
         }
     }
 #endif

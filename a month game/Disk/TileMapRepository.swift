@@ -49,7 +49,9 @@ final class TileMapRepository {
 
     // MARK: - private
     private func createTileDataFileIfNotExist() {
-        guard !self.fileManager.fileExists(atPath: self.filePath) else { return }
+        guard !self.fileManager.fileExists(atPath: self.filePath) else {
+            return
+        }
 
         let tileMapData = self.generateInitialTileMapData()
         self.fileManager.createFile(atPath: self.filePath, contents: tileMapData)

@@ -12,7 +12,7 @@ final class WorldSceneModel {
 
     let worldDataContainer: WorldDataContainer
 
-    private var nextID: Int
+    private var idGenerator: IDGenerator
     var tileMapModel: TileMapModel!
 
     var needContextSave: Bool
@@ -21,7 +21,7 @@ final class WorldSceneModel {
     init(worldDataContainer: WorldDataContainer) {
         self.worldDataContainer = worldDataContainer
 
-        self.nextID = self.worldDataContainer.readNextID()
+        self.idGenerator = IDGenerator(worldDataRepository: worldDataContainer.worldDataRepository)
 
         let tileMapData = self.worldDataContainer.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
@@ -45,7 +45,7 @@ final class WorldSceneModel {
     /// Call contextSave() manually
     func newGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectMO {
         let newGOMO = self.worldDataContainer.newGOMO()
-        newGOMO.set(id: self.generateID(), gameObjectType: goType, goCoord: goCoord)
+        newGOMO.set(id: self.idGenerator.generate(), gameObjectType: goType, goCoord: goCoord)
         self.needContextSave = true
         return newGOMO
     }
@@ -65,14 +65,6 @@ final class WorldSceneModel {
 
         self.worldDataContainer.contextSave()
         self.needContextSave = false
-    }
-
-    func generateID() -> Int {
-        let id = self.nextID
-        self.nextID += 1
-        self.worldDataContainer.updateNextID(nextID: self.nextID)
-
-        return id
     }
 
 }

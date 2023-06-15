@@ -21,14 +21,20 @@ class WorldDirectoryUtility {
         return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: name)
     }
 
-    /// - Returns: true if create or false
-    func createIfNotExist(worldName: String) -> Bool {
+    func isExist(worldName: String) -> Bool {
         let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
-        if !self.fileManager.fileExists(atPath: worldDirectoryURL.path) {
-            try! self.fileManager.createDirectory(at: worldDirectoryURL, withIntermediateDirectories: true)
-            return true
+        return self.fileManager.fileExists(atPath: worldDirectoryURL.path)
+    }
+
+    /// - Returns: true if create or false
+    func createIfNotExist(worldName: String) {
+        guard !self.isExist(worldName: worldName) else {
+            return
         }
-        return false
+
+        let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
+
+        try! self.fileManager.createDirectory(at: worldDirectoryURL, withIntermediateDirectories: true)
     }
 
     func remove(worldName: String) {

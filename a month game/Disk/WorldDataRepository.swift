@@ -20,7 +20,7 @@ class WorldDataRepository {
         // TODO: URL.path is deprecated
         self.filePath = worldDirectoryURL.appending(path: Constant.worldDataFileName).path
 
-        self.createWorldDataFileIfNotExist()
+        self.createIfNotExist()
 
         self.updateFileHandle = FileHandle(forUpdatingAtPath: filePath)
     }
@@ -37,7 +37,7 @@ class WorldDataRepository {
     }
 
     // MARK: - private
-    private func createWorldDataFileIfNotExist() {
+    private func createIfNotExist() {
         guard !self.fileManager.fileExists(atPath: self.filePath) else {
             return
         }
@@ -47,18 +47,9 @@ class WorldDataRepository {
     }
 
     private func generateInitialWorldData() -> Data {
-        var worldData = Data(count: MemoryLayout<Int>.size)
-
-        let worldDataPointer = worldData.withUnsafeMutableBytes {
-            $0.bindMemory(to: Int.self)
-        }
-        self.set(worldData: worldDataPointer, nextID: Constant.initialNextID)
-
-        return worldData
-    }
-
-    private func set(worldData: UnsafeMutableBufferPointer<Int>, nextID: Int) {
-        worldData[0] = nextID
+        var nextID = Constant.initialNextID
+        return Data(bytes: &nextID,
+                             count: MemoryLayout.size(ofValue: nextID))
     }
 
 }

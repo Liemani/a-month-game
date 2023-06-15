@@ -38,8 +38,10 @@ extension GameObjectMO {
 
     func set(to goCoord: GameObjectCoordinate) {
         self.containerID = Int32(goCoord.containerType.rawValue)
-        self.x = Int32(goCoord.x)
-        self.y = Int32(goCoord.y)
+        let chunkCoord = ChunkCoordinate(coord: goCoord.coord)
+        self.chunkX = Int32(chunkCoord.chunkX)
+        self.chunkY = Int32(chunkCoord.chunkY)
+        self.chunkLocation = chunkCoord.chunkLocation
     }
 
     var containerTypeRawValue: Int? {
@@ -59,14 +61,15 @@ extension GameObjectMO {
     }
 
     var coord: Coordinate<Int> {
-        let x = Int(self.x)
-        let y = Int(self.y)
+        return self.chunkCoord.coord
+    }
 
-        return Coordinate(x, y)
+    var chunkCoord: ChunkCoordinate {
+        return ChunkCoordinate(goMO: self)
     }
 
     var tileCoordinate: TileCoordinate {
-        return TileCoordinate(Int(self.x), Int(self.y))
+        return TileCoordinate(self.chunkCoord.coord)
     }
 
     var gameObjectCoordinate: GameObjectCoordinate? {
@@ -74,10 +77,7 @@ extension GameObjectMO {
             return nil
         }
 
-        let x = Int(self.x)
-        let y = Int(self.y)
-
-        return GameObjectCoordinate(containerType: cType, x: x, y: y)
+        return GameObjectCoordinate(containerType: cType, coordinate: self.chunkCoord.coord)
     }
 
     /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.

@@ -51,9 +51,14 @@ class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
 
     @objc
     func requestPresentWorldViewController() {
+        let worldName = Constant.defaultWorldName
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController
 
-        let worldDataContainer = WorldDataContainer(worldName: Constant.defaultWorldName)
+        let isWorldExist = WorldDirectoryUtility.default.isExist(worldName: worldName)
+        let worldDataContainer = WorldDataContainer(worldName: worldName)
+        if !isWorldExist {
+            WorldGenerator.generate(worldDataContainer: worldDataContainer)
+        }
         worldViewController.setUp(worldDataContainer: worldDataContainer)
 
         self.navigationController?.setViewControllers([worldViewController], animated: false)
