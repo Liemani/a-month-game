@@ -15,7 +15,7 @@ final class WorldSceneModel {
     private var nextID: Int
     var tileMapModel: TileMapModel!
 
-    var didChanged: Bool
+    var needContextSave: Bool
 
     // MARK: - init
     init(worldDataContainer: WorldDataContainer) {
@@ -26,7 +26,7 @@ final class WorldSceneModel {
         let tileMapData = self.worldDataContainer.loadTileData()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
 
-        self.didChanged = false
+        self.needContextSave = false
     }
 
     func loadGOMOs() -> [GameObjectMO] {
@@ -46,25 +46,25 @@ final class WorldSceneModel {
     func newGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectMO {
         let newGOMO = self.worldDataContainer.newGOMO()
         newGOMO.set(id: self.generateID(), gameObjectType: goType, goCoord: goCoord)
-        self.didChanged = true
+        self.needContextSave = true
         return newGOMO
     }
 
     func setGOMO(_ goMO: GameObjectMO, to goCoord: GameObjectCoordinate) {
         goMO.set(to: goCoord)
-        self.didChanged = true
+        self.needContextSave = true
     }
 
     func remove(_ goMO: GameObjectMO) {
         self.worldDataContainer.delete(goMO)
-        self.didChanged = true
+        self.needContextSave = true
     }
 
-    func contextSave() {
-        if self.didChanged {
-            self.worldDataContainer.contextSave()
-        }
-        self.didChanged = false
+    func contextSaveIfNeed() {
+        guard self.needContextSave else { return }
+
+        self.worldDataContainer.contextSave()
+        self.needContextSave = false
     }
 
     func generateID() -> Int {

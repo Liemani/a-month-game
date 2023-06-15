@@ -10,14 +10,13 @@ import GameplayKit
 
 class WorldScene: SKScene {
 
-    // MARK: model
-    var worldSceneModel: WorldSceneModel!
-
-    var goMOGO: GOMOGO!
-
-    var touchManager: WorldSceneTouchManager!
+    var worldViewController: WorldViewController {
+        return self.view!.next! as! WorldViewController
+    }
 
     var character: CharacterModel!
+
+    var touchManager: WorldSceneTouchManager!
 
     // MARK: view
     var containers: [(any Container)?]!
@@ -44,26 +43,14 @@ class WorldScene: SKScene {
     var exitWorldButton: SKNode!
 
     // MARK: - set up
-    func setUp(worldDataContainer: WorldDataContainer) {
-        self.goMOGO = GOMOGO()
+    func setUp() {
         self.touchManager = WorldSceneTouchManager()
         self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
 
         self.setUpSceneLayer()
-        self.setUpModel(worldDataContainer: worldDataContainer)
 
-#if DEBUG
-        self.debugCode()
-#endif
+        self.setUpCharacter()
     }
-
-#if DEBUG
-    func debugCode() {
-        for goMO in self.goMOGO.goMOs {
-            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.x), \(goMO.y))")
-        }
-    }
-#endif
 
     func setUpSceneLayer() {
         self.containers.reserveCapacity(ContainerType.caseCount)
@@ -216,34 +203,19 @@ class WorldScene: SKScene {
         self.menuPane = menuPane
     }
 
-    // MARK: set up model
-    func setUpModel(worldDataContainer: WorldDataContainer) {
-        self.worldSceneModel = WorldSceneModel(worldDataContainer: worldDataContainer)
-
-        self.setUpTile()
-        self.setUpGOMOs()
-        self.setUpCharacter()
-    }
-
-    func setUpTile() {
-        let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
-        for x in 0..<Constant.gridSize {
-            for y in 0..<Constant.gridSize {
-                let tileType = tileModel.tileType(atX: x, y: y)
-                self.set(tileType: tileType, toX: x, y: y)
-            }
-        }
-    }
-
-    func setUpGOMOs() {
-        let goMOs = self.worldSceneModel.loadGOMOs()
-        for goMO in goMOs {
-            self.addGO(from: goMO)
-        }
-    }
-
+    // MARK: - set up character
     func setUpCharacter() {
         self.character = CharacterModel(worldScene: self)
+    }
+
+    // MARK: - edit model
+
+    func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObject {
+        let container = self.containers[goCoord.containerType]!
+        let go = GameObject.new(of: goType)
+        container.addGO(go, to: goCoord.coord)
+        self.interactionZone.reserveUpdate()
+        return go
     }
 
     // MARK: - update
@@ -253,81 +225,32 @@ class WorldScene: SKScene {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
         self.character.update(timeInterval)
-        self.worldSceneModel.contextSave()
+        self.worldViewController.worldSceneModel.contextSaveIfNeed()
         self.interactionZone.update()
         self.craftPane.update()
 
         self.lastUpdateTime = currentTime
     }
 
-    // MARK: - edit model
-    // MARK: - tile
-    func set(tileType: TileType, toX x: Int, y: Int) {
-        self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
-    }
-
-    // MARK: - game object
-    private func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObject {
-        let container = self.containers[goCoord.containerType]!
-        let go = GameObject.new(of: goType)
-        container.addGO(go, to: goCoord.coord)
-        self.interactionZone.reserveUpdate()
-        return go
-    }
-
-    /// Called when loading GOMO from disk
-    private func addGO(from goMO: GameObjectMO) {
-        guard let containerType = goMO.containerType else { return }
-
-        let container = self.containers[containerType]!
-        let goMOCoord = goMO.coord
-
-        if container.isValid(goMOCoord)
-            , let go = GameObject.new(from: goMO) {
-            container.addGO(go, to: goMOCoord)
-            self.interactionZone.reserveUpdate()
-            self.goMOGO[goMO] = go
-        }
-    }
-
-    // MARK: - game object managed object
-    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
-        let go = self.addGO(of: goType, to: goCoord)
-        let goMO = self.worldSceneModel.newGOMO(of: goType, to: goCoord)
-        self.goMOGO[goMO] = go
-    }
-
-    /// Add GOMO and move GO
-    /// Called when craft, so don't need to update
+    // MARK: - delegate
     func addGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
-        self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
-        let goMO = self.worldSceneModel.newGOMO(of: go.type, to: goCoord)
-        self.goMOGO[goMO] = go
+        self.worldViewController.addGOMO(from: go, to: goCoord)
+    }
+
+    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
+        self.worldViewController.addGOMO(of: goType, to: goCoord)
     }
 
     func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
-        let goMO = self.goMOGO[go]!
-        self.worldSceneModel.setGOMO(goMO, to: goCoord)
-        self.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
-        self.interactionZone.reserveUpdate()
+        self.worldViewController.moveGOMO(from: go, to: goCoord)
+    }
+
+    func removeGOMO(from gos: any Sequence<GameObject>) {
+        self.worldViewController.removeGOMO(from: gos)
     }
 
     func removeGOMO(from go: GameObject) {
-        let goMO = self.goMOGO.remove(go)!
-        self.worldSceneModel.remove(goMO)
-        go.removeFromParent()
-        self.interactionZone.reserveUpdate()
-    }
-
-    // TODO: check this method, other edit is perfect
-    func removeGOMO(from gos: any Sequence<GameObject>) {
-        for go in gos {
-            let go = go as! GameObject
-            let goMO = self.goMOGO.remove(go)!
-            self.worldSceneModel.remove(goMO)
-            go.removeFromParent()
-        }
-        self.interactionZone.reserveUpdate()
+        self.worldViewController.removeGOMO(from: go)
     }
 
 }

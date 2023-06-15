@@ -164,8 +164,9 @@ class GameObject: SpriteNode, BelongEquatableType {
         case .pineTree:
             guard self.parent is Field else { return }
             guard Double.random(in: 0.0...1.0) <= 0.33 else { return }
-            let goMO = self.worldScene.goMOGO.field[self]!
-            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.goMOGO.goMOs)
+
+            let goMO = self.worldScene.worldViewController.goMOGO.field[self]!
+            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.worldViewController.goMOGO.goMOs)
             guard !spareDirections.isEmpty else { return }
             let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
             let newGOMOCoord = goMO.coord + coordToAdd
