@@ -12,6 +12,16 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
+만약 모델이 타일에 따라 바뀐다고 한다면
+컨트롤러가 모델 변화에 따라 씬을 수정해줘야 할 것이다
+메니지드 오브젝트는 어떤가?
+매니지드 오브젝트는 필요에 따라 패치를 호출한다
+그럼 컨트롤러도 필요에 따라 모델을 로드해 뷰를 그린다면?
+만약 청크가 변한다면 그 때 뷰와 모델을 다 바꾸면 된다
+굳이 서로 대화를 할 필요가 없다
+하지만 이를 컨트롤러에서 처리한다면 부담이 크다
+그럼 청크 변화를 처리하는 컨트롤러를 따로 둔다면?
+
 # 일정 및 진행 작업 기록
 1주 2023-05-03 ~ 2023-05-09
 계획 및 기초 개발
@@ -395,6 +405,8 @@ dump log: 사용한 dump 내용을 쌓아둔다
         firing
 
 # issue
+world data service 를 만들었다
+동적 로딩 구현하기
 load gomo for need
     필요한 만큼만 저장하고 동적으로 관리하기
     16*16 을 한 청크
@@ -423,7 +435,7 @@ load gomo for need
     왜 같 id 가 여러 번 출력되지?
     tile 도 generator 로 옮겨오기
     game object 가 올바른 위치에 생성되지 않는 문제
-GameObjectRepository 에서 newMO 말고 store 를 사용하는건 어떨까?
+NextIDService 도 필요할까?
 캐릭터가 0,0 에서 시작한다고 하면 각 사분면? 으로 청크를 하나씩 두기
     청크의 크기는 256 * 256 이니 총 맵의 크기는 512 * 512 가 된다
     타일도 청크 단위로 동적 로딩하자
@@ -666,6 +678,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+GameObjectRepository 에서 newMO 말고 store 를 사용하는건 어떨까?
 make disk controller no singleton
     new it in portal view, and pass it to the world view
     next id 를 월드 별로 따로 두는건 어떨까?

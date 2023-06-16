@@ -18,25 +18,26 @@ final class TileRepository {
         self.fileManager = FileManager.default
 
         // TODO: URL.path is deprecated
-        let filePath = worldDirectoryURL.appending(path: Constant.tileMapFileName).path
-        self.filePath = filePath
+        self.filePath = worldDirectoryURL.appending(path: Constant.tileMapFileName).path
 
-        self.createTileDataFileIfNotExist()
+        self.createFileIfNotExist()
 
         self.updateFileHandle = FileHandle(forUpdatingAtPath: filePath)
     }
 
-    func loadTileMap() -> Data {
+    func readTileMap() -> Data {
         try! self.updateFileHandle.seek(toOffset: 0)
-        return try! self.updateFileHandle.readToEnd()!
+        let tileMapData = try! self.updateFileHandle.readToEnd()!
+        return tileMapData
     }
 
-    func load(at index: Int) -> Data {
+    func read(at index: Int) -> Data {
         try! self.updateFileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * index))
-        return try! self.updateFileHandle.read(upToCount: MemoryLayout<Int>.size)!
+        let tileData = try! self.updateFileHandle.read(upToCount: MemoryLayout<Int>.size)!
+        return tileData
     }
 
-    func update(tileData: Data, toIndex index: Int) {
+    func update(tileData: Data, to index: Int) {
         try! self.updateFileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * index))
         try! self.updateFileHandle.write(contentsOf: tileData)
     }
@@ -46,7 +47,7 @@ final class TileRepository {
 // MARK: - private
 extension TileRepository {
 
-    private func createTileDataFileIfNotExist() {
+    private func createFileIfNotExist() {
         guard !self.fileManager.fileExists(atPath: self.filePath) else {
             return
         }

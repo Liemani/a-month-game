@@ -38,14 +38,9 @@ final class GameObjectRepository {
         let context = self.persistentContainer.viewContext
 
         let request = NSFetchRequest<GameObjectMO>(entityName: Constant.gameObjectDataEntityName)
-        request.predicate = NSPredicate(format: "chunkX = %@ AND chunkY = %@ AND chunkLocation == %@", argumentArray: [chunkCoord.chunkX, chunkCoord.chunkY, chunkCoord.chunkLocation])
+        request.predicate = NSPredicate(format: "chunkX == %@ AND chunkY == %@ AND chunkLocation & 0xff00 == %@", argumentArray: [chunkCoord.chunkX, chunkCoord.chunkY, UInt16(bitPattern: chunkCoord.chunkLocation) & 0xff00])
 
         return try! context.fetch(request)
-    }
-
-    func store(_ goMO: GameObjectMO) {
-        let context = self.persistentContainer.viewContext
-        context.insert(goMO)
     }
 
     func newMO() -> GameObjectMO {

@@ -7,13 +7,13 @@
 
 import Foundation
 
-class IDGenerator {
+final class IDGenerator {
 
-    var worldDataRepository: WorldDataRepository
-    var nextID: Int
+    private var worldDataService: WorldDataService
+    private var nextID: Int
 
-    init(worldDataRepository: WorldDataRepository) {
-        self.worldDataRepository = worldDataRepository
+    init(worldDataService: WorldDataService) {
+        self.worldDataService = worldDataService
         self.nextID = 0
 
         self.nextID = self.readNextID()
@@ -27,15 +27,17 @@ class IDGenerator {
         return id
     }
 
-    // MARK: - WorldDataRepository
+}
+
+// MARK: - private
+extension IDGenerator {
+
     private func readNextID() -> Int {
-        let nextIDData = self.worldDataRepository.read(index: 0)
-        return nextIDData.withUnsafeBytes { $0.load(as: Int.self) }
+        return self.worldDataService.load(at: .nextID)
     }
 
     private func updateNextID(nextID: Int) {
-        var nextID = nextID
-        let data = Data(bytes: &nextID, count: MemoryLayout<Int>.size)
-        self.worldDataRepository.update(data: data, index: 0)
+        self.worldDataService.update(value: nextID, to: .nextID)
     }
+
 }

@@ -16,12 +16,12 @@ final class TileService {
     }
 
     func loadTileMap() -> Data {
-        return self.tileRepository.loadTileMap()
+        return self.tileRepository.readTileMap()
     }
 
     func load(_ x: Int, _ y: Int) -> TileType? {
         let index = Constant.gridSize * x + y
-        let tileData = self.tileRepository.load(at: index)
+        let tileData = self.tileRepository.read(at: index)
         let tileRawValue = tileData.withUnsafeBytes { $0.load(as: Int.self) }
         return TileType(rawValue: tileRawValue)
     }
@@ -30,7 +30,7 @@ final class TileService {
         var value = tileType.rawValue
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
         let index = Constant.gridSize * x + y
-        self.tileRepository.update(tileData: tileData, toIndex: index)
+        self.tileRepository.update(tileData: tileData, to: index)
     }
 
 }

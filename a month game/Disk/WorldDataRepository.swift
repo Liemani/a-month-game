@@ -20,24 +20,28 @@ class WorldDataRepository {
         // TODO: URL.path is deprecated
         self.filePath = worldDirectoryURL.appending(path: Constant.worldDataFileName).path
 
-        self.createIfNotExist()
+        self.createFileIfNotExist()
 
         self.updateFileHandle = FileHandle(forUpdatingAtPath: filePath)
     }
 
-    func read(index: UInt64) -> Data {
-        try! self.updateFileHandle.seek(toOffset: 0)
+    func read(at index: Int) -> Data {
+        try! self.updateFileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * index))
         let nextIDData = try! self.updateFileHandle.read(upToCount: MemoryLayout<Int>.size)!
         return nextIDData
     }
 
-    func update(data: Data, index: UInt64) {
-        try! self.updateFileHandle.seek(toOffset: index)
+    func update(data: Data, to index: Int) {
+        try! self.updateFileHandle.seek(toOffset: UInt64(MemoryLayout<Int>.size * index))
         try! self.updateFileHandle.write(contentsOf: data)
     }
 
-    // MARK: - private
-    private func createIfNotExist() {
+}
+
+// MARK: - private
+extension WorldDataRepository {
+
+    private func createFileIfNotExist() {
         guard !self.fileManager.fileExists(atPath: self.filePath) else {
             return
         }

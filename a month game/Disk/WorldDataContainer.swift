@@ -13,7 +13,7 @@ final class WorldDataContainer {
 
     let gameObjectService: GameObjectService
     let tileService: TileService
-    let worldDataRepository: WorldDataRepository
+    let worldDataService: WorldDataService
 
     init(worldName: String) {
         let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
@@ -27,7 +27,7 @@ final class WorldDataContainer {
 
         self.gameObjectService = GameObjectService(worldDirectoryURL: worldDirectoryURL)
         self.tileService = TileService(worldDirectoryURL: worldDirectoryURL)
-        self.worldDataRepository = WorldDataRepository(worldDirectoryURL: worldDirectoryURL)
+        self.worldDataService = WorldDataService(worldDirectoryURL: worldDirectoryURL)
     }
 
     // MARK: - delegate

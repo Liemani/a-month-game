@@ -17,14 +17,14 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     // MARK: model
-    var worldSceneModel: WorldSceneModel!
+    var worldSceneModel: WorldViewModel!
 
     var goMOGO: GOMOGO!
 
     override func viewDidLoad() {
-        self.goMOGO = GOMOGO()
-
         super.viewDidLoad()
+
+        self.goMOGO = GOMOGO()
 
         self.setView()
 
@@ -64,7 +64,7 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     // MARK: set up model
     func setUpModel(worldDataContainer: WorldDataContainer) {
-        self.worldSceneModel = WorldSceneModel(worldDataContainer: worldDataContainer)
+        self.worldSceneModel = WorldViewModel(worldDataContainer: worldDataContainer)
 
         self.setUpTile()
         self.setUpGOMOs()

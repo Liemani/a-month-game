@@ -8,7 +8,7 @@
 import Foundation
 
 /// Control world scene model and DiskController
-final class WorldSceneModel {
+final class WorldViewModel {
 
     let worldDataContainer: WorldDataContainer
 
@@ -21,7 +21,7 @@ final class WorldSceneModel {
     init(worldDataContainer: WorldDataContainer) {
         self.worldDataContainer = worldDataContainer
 
-        self.idGenerator = IDGenerator(worldDataRepository: worldDataContainer.worldDataRepository)
+        self.idGenerator = IDGenerator(worldDataService: worldDataContainer.worldDataService)
 
         let tileMapData = self.worldDataContainer.tileService.loadTileMap()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)

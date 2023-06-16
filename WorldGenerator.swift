@@ -20,7 +20,7 @@ final class WorldGenerator {
 
     private init(worldDataContainer: WorldDataContainer) {
         self.worldDataContainer = worldDataContainer
-        self.idGenerator = IDGenerator(worldDataRepository: worldDataContainer.worldDataRepository)
+        self.idGenerator = IDGenerator(worldDataService: worldDataContainer.worldDataService)
     }
 
     private func generateGOMOs() {
