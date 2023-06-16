@@ -11,46 +11,41 @@ final class WorldDataContainer {
 
     let worldDirectoryURL: URL
 
-    let gameObjectRepository: GameObjectRepository
-    let tileMapRepository: TileMapRepository
+    let gameObjectService: GameObjectService
+    let tileService: TileService
     let worldDataRepository: WorldDataRepository
 
     init(worldName: String) {
         let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
         self.worldDirectoryURL = worldDirectoryURL
 
+#if DEBUG
+        print(worldDirectoryURL)
+#endif
+
         WorldDirectoryUtility.default.createIfNotExist(worldName: worldName)
 
-        self.gameObjectRepository = GameObjectRepository(worldDirectoryURL: worldDirectoryURL)
-        self.tileMapRepository = TileMapRepository(worldDirectoryURL: worldDirectoryURL)
+        self.gameObjectService = GameObjectService(worldDirectoryURL: worldDirectoryURL)
+        self.tileService = TileService(worldDirectoryURL: worldDirectoryURL)
         self.worldDataRepository = WorldDataRepository(worldDirectoryURL: worldDirectoryURL)
     }
 
-    // MARK: - CoreData
+    // MARK: - delegate
+    // MARK: GameObjectService
     func newGOMO() -> GameObjectMO {
-        return self.gameObjectRepository.newGOMO()
+        return self.gameObjectService.newGOMO()
     }
 
     func loadGOMOs() -> [GameObjectMO] {
-        return self.gameObjectRepository.fetchGOMOs()
+        return self.gameObjectService.load()
     }
 
     func contextSave() {
-        self.gameObjectRepository.contextSave()
+        self.gameObjectService.contextSave()
     }
 
     func delete(_ goMO: GameObjectMO) {
-        self.gameObjectRepository.delete(goMO)
-    }
-
-    // MARK: - FileManager
-    func loadTileData() -> Data {
-        return self.tileMapRepository.loadTileMapData()
-    }
-
-    func save(tileData: Data, toX x: Int, y: Int) {
-        let index = Constant.gridSize * x + y
-        self.tileMapRepository.save(tileData: tileData, toIndex: index)
+        self.gameObjectService.delete(goMO)
     }
 
 }

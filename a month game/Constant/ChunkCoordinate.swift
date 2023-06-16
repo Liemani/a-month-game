@@ -10,12 +10,12 @@ import Foundation
 
 struct ChunkCoordinate {
 
-    let chunkX: Int
-    let chunkY: Int
+    let chunkX: Int32
+    let chunkY: Int32
     let cityLocation: UInt8
     let streetLocation: UInt8
 
-    init(chunkX: Int, chunkY: Int, chunkLocation: UInt16) {
+    init(chunkX: Int32, chunkY: Int32, chunkLocation: UInt16) {
         let mask:UInt16 = 0xff
 
         self.chunkX = chunkX
@@ -25,12 +25,12 @@ struct ChunkCoordinate {
     }
 
     init(goMO: GameObjectMO) {
-        self.init(chunkX: Int(goMO.chunkX), chunkY: Int(goMO.chunkY), chunkLocation: UInt16(bitPattern: goMO.chunkLocation))
+        self.init(chunkX: Int32(goMO.chunkX), chunkY: Int32(goMO.chunkY), chunkLocation: UInt16(bitPattern: goMO.chunkLocation))
     }
 
     init(_ x: Int, _ y: Int) {
-        self.chunkX = x >> 8
-        self.chunkY = y >> 8
+        self.chunkX = Int32(x >> 8)
+        self.chunkY = Int32(y >> 8)
 
         let mask = 0xf
 
@@ -56,10 +56,10 @@ struct ChunkCoordinate {
         let cityLocation = Int(self.cityLocation)
         let streetLocation = Int(self.streetLocation)
 
-        let x = self.chunkX << 8
+        let x = Int(self.chunkX) << 8
             + (((cityLocation >> 4) & mask) << 4)
             + ((streetLocation >> 4) & mask)
-        let y = self.chunkY << 8
+        let y = Int(self.chunkY) << 8
             + ((cityLocation & mask) << 4)
             + (streetLocation & mask)
         return Coordinate<Int>(x, y)

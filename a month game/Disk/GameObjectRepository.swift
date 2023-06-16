@@ -28,36 +28,40 @@ final class GameObjectRepository {
     }
 
     // MARK: - edit
-    func fetchGOMOs() -> [GameObjectMO] {
+    func load() -> [GameObjectMO] {
         let request = GameObjectMO.fetchRequest()
         let goMOs = try! self.persistentContainer.viewContext.fetch(request)
         return goMOs
     }
 
+    func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {
+        let context = self.persistentContainer.viewContext
+
+        let request = NSFetchRequest<GameObjectMO>(entityName: Constant.gameObjectDataEntityName)
+        request.predicate = NSPredicate(format: "chunkX = %@ AND chunkY = %@ AND chunkLocation == %@", argumentArray: [chunkCoord.chunkX, chunkCoord.chunkY, chunkCoord.chunkLocation])
+
+        return try! context.fetch(request)
+    }
+
     func store(_ goMO: GameObjectMO) {
         let context = self.persistentContainer.viewContext
         context.insert(goMO)
-        try! context.save()
     }
 
-    func newGOMO() -> GameObjectMO {
+    func newMO() -> GameObjectMO {
         let context = self.persistentContainer.viewContext
         let entityName = Constant.gameObjectDataEntityName
         let goMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context) as! GameObjectMO
         return goMO
     }
 
-    func contextSave() {
-        let context = self.persistentContainer.viewContext
-
-        try! context.save()
-    }
-
     func delete(_ goMO: GameObjectMO) {
         let context = self.persistentContainer.viewContext
-
         context.delete(goMO)
+    }
 
+    func contextSave() {
+        let context = self.persistentContainer.viewContext
         try! context.save()
     }
 

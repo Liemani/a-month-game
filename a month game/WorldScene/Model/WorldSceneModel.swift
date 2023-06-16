@@ -23,7 +23,7 @@ final class WorldSceneModel {
 
         self.idGenerator = IDGenerator(worldDataRepository: worldDataContainer.worldDataRepository)
 
-        let tileMapData = self.worldDataContainer.loadTileData()
+        let tileMapData = self.worldDataContainer.tileService.loadTileMap()
         self.tileMapModel = TileMapModel(tileMapData: tileMapData)
 
         self.needContextSave = false
@@ -34,14 +34,6 @@ final class WorldSceneModel {
     }
 
     // MARK: - edit
-    func update(tileType: Int, toX x: Int, y: Int) {
-        self.tileMapModel.set(tileType: tileType, toX: x, y: y)
-
-        var value = tileType
-        let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        self.worldDataContainer.save(tileData: tileData, toX: x, y: y)
-    }
-
     /// Call contextSave() manually
     func newGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectMO {
         let newGOMO = self.worldDataContainer.newGOMO()

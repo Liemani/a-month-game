@@ -418,9 +418,16 @@ load gomo for need
     그럼 청크 단위로 데이터 로드하는 함수가 필요하다
     GameObjectRepository::load(chunkLocation: Int16)
     chunkLocation 이 일치하는 MO 만 가져오는거 어떯게 하더라?
+        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
+        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
     왜 같 id 가 여러 번 출력되지?
     tile 도 generator 로 옮겨오기
     game object 가 올바른 위치에 생성되지 않는 문제
+GameObjectRepository 에서 newMO 말고 store 를 사용하는건 어떨까?
+캐릭터가 0,0 에서 시작한다고 하면 각 사분면? 으로 청크를 하나씩 두기
+    청크의 크기는 256 * 256 이니 총 맵의 크기는 512 * 512 가 된다
+    타일도 청크 단위로 동적 로딩하자
+    만약 데이터가 있으면 그 데이터, 데이터가 없으면 기본은 잔디인걸로
 worldSceneModel -< worldViewModel
 add quality
 update model
