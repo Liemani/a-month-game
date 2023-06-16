@@ -12,6 +12,22 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
+view controller 의 instance 를 만들 때
+나는 storyboard 에 해당 view controller 의 view 를 SKView 로 설정했기 때문에
+알아서 새로운 SKView 의 instance 가 생성되고 present 되는 것은 아닐까?
+만약 그렇다면 viewDidLoad 가 호출될까?
+그럴 확률이 높다
+portal view controller 에서도 알아서 viewDidLoad() 가 호출되는 것을 확인할 수 있다
+그런데 그 안에서 또 새로운 view 를 생성해서 present 하고 있는데, 그럼 이것은 무한루프 하는 것 아닌가?
+그럼 viewDidLoad() 의 호출 조건이 presentScene() 의 호출이 아니라는 얘기인가?
+
+viewDidLoad() 는 storyboard 에 있는 view 가 load 된 후 호출되는 것 같다
+그렇다면 내가 추가로 present(scene) 를 호출해도 viewDidLoad() 가 호출되지 않는다
+단, 이미 present 중인 view 를 SKView 로
+아
+이거 SKScene 이 아니라 SKView 구나?
+그래서 view 는 이미 있고, 나는 view 에 scene 만 present 하고 있었던 거구나?
+
 만약 모델이 타일에 따라 바뀐다고 한다면
 컨트롤러가 모델 변화에 따라 씬을 수정해줘야 할 것이다
 메니지드 오브젝트는 어떤가?
@@ -21,6 +37,39 @@ dump log: 사용한 dump 내용을 쌓아둔다
 굳이 서로 대화를 할 필요가 없다
 하지만 이를 컨트롤러에서 처리한다면 부담이 크다
 그럼 청크 변화를 처리하는 컨트롤러를 따로 둔다면?
+캐릭터의 위치나 저장 로드 만들어보자
+
+지금은 캐릭터의 위치가 뷰와 상당히 coupling 되어 있다
+캐릭터 모델은 데이터만 가지고 있다고 생각하면
+위치가 바뀐 경우 컨트롤러가 위치가 바뀌었음을 알리자
+컨트롤러는 스스로 캐릭터의 위치를 가지고 있지는 않지만
+화면을 드래그하면 무빙 레이어는 계속 움직인다
+따라서 간접적으로만 캐릭터의 위치를 트래킹하며
+실제 캐릭터의 위치 데이터는 캐릭터 모델이 가지고 있다
+하지만 화면 드래깅에 따른 무빙 레이어 이동은 캡슐화하면 좋긴 하다
+그래서 전에 이것들을 캐릭터 모델에 넣어둔 것 같다
+이 경우 새로운 클래스를 만들면 좋을 것 같다
+아니면 움직이는 레이어가 이 일을 맡아도 될 것 같은데?
+그럼 캐릭터의 타일이 변한걸 알리는 것은 누가 책임지지?
+움직이는 레이어가 책임지나?
+아니면 씬이 책임지나?
+
+## view layer
+world scene
+    moving layer
+        world layer
+            tile map
+            field
+    fixed layer
+        ui
+            menu button
+            character
+            interaction zone
+            inventory pane
+            third hand
+            craft pane
+        menu pane
+
 
 # 일정 및 진행 작업 기록
 1주 2023-05-03 ~ 2023-05-09
@@ -405,7 +454,38 @@ dump log: 사용한 dump 내용을 쌓아둔다
         firing
 
 # issue
-world data service 를 만들었다
+캐릭터를 field 위로 옮기고 움직이게 하기
+타일을 sql 로 저장하기...
+world view model 은 service 에 직접 접근하지 않아야 한다
+move character to field
+    field 는 터치를 moving layer 에게 넘긴다
+
+## after view layer
+world scene
+    moving layer: process drag move
+        tile map
+            (floor map) * 9: 어떤 녀석이 어디에 있는 녀석인지 계속 알아야겠네?
+            (water map) * 9
+        field: field inventory
+            (character)
+            (game objects)
+    (fixed layer)
+        (ui)
+            (menu button)
+            inventory pane: character inventory
+            craft pane
+        menu pane
+
+button 이 따로 deligate 를 설정해줘야 하는 것이 아니라 그냥 부모가 반드시 딜리게이트 클래스인 것으로 호출하기
+rename container to inventory
+remove interaction zone
+    그럼 zone 이 하던 일은 어디에 넣어야 하나?
+    update accessable gos
+    field?
+    field 가 accessable 을 따로 관리하도록 하자
+    이게 맞나? 일단 그렇게 해보지 뭐
+remove third hand
+clean view controller init(), viewDidLoad(), setUp()
 동적 로딩 구현하기
 load gomo for need
     필요한 만큼만 저장하고 동적으로 관리하기
@@ -418,7 +498,6 @@ load gomo for need
     근대 청크로 하면 캐릭터의 위치를 xyz로 하는게 좌표 체계가 일치하지 않아서 불편하지 않을까?
     아하 데이터 관리는 청크 기반으로 하고, 메모리 데이터 상으로는 xy 좌표 체계로 정리하는거지
     하긴 그러면 디스크로부터 새로운 데이터를 가져오는 경우 fetch 에 시간이 감소하는 대신 쓸 수 있는 상태로 변형하는데 연산이 조금 더 필요
-    새로운 chunk 좌표 시스템 만들기
     이를 go model 에 적용하기
     0,0 을 시작 지점으로 하자
     그럼 -256 ~ 255 사이즈로 만들어 보자
@@ -428,14 +507,7 @@ load gomo for need
     캐릭터 위치가 바뀔 때마다 청크가 움직였는지 판단하기
     움직인 경우 필요한 청크 데이터 로드하기
     그럼 청크 단위로 데이터 로드하는 함수가 필요하다
-    GameObjectRepository::load(chunkLocation: Int16)
-    chunkLocation 이 일치하는 MO 만 가져오는거 어떯게 하더라?
-        let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
-        request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
     왜 같 id 가 여러 번 출력되지?
-    tile 도 generator 로 옮겨오기
-    game object 가 올바른 위치에 생성되지 않는 문제
-NextIDService 도 필요할까?
 캐릭터가 0,0 에서 시작한다고 하면 각 사분면? 으로 청크를 하나씩 두기
     청크의 크기는 256 * 256 이니 총 맵의 크기는 512 * 512 가 된다
     타일도 청크 단위로 동적 로딩하자
@@ -507,6 +579,8 @@ save character position
 PortalScene touch
 add fade effect
 add sound
+
+portrait and upsidedown
 
 터치 간의 상관 관계
     메뉴 버튼 터치 -> 드래그 중단
@@ -678,6 +752,14 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+tile 도 generator 로 옮겨오기
+game object 가 올바른 위치에 생성되지 않는 문제
+새로운 chunk 좌표 시스템 만들기
+NextIDService 도 필요할까?
+GameObjectRepository::load(chunkLocation: Int16)
+chunkLocation 이 일치하는 MO 만 가져오는거 어떯게 하더라?
+    let request = NSFetchRequest<GameObjectManagedObject>(entityName: Constant.gameObjectDataEntityName)
+    request.predicate = NSPredicate(format: "id == %@", argumentArray: [gameObject.id])
 GameObjectRepository 에서 newMO 말고 store 를 사용하는건 어떨까?
 make disk controller no singleton
     new it in portal view, and pass it to the world view

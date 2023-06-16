@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InventoryPane: SKSpriteNode {
+class InventoryPane: LMISpriteNode {
 
     var cellCount: Int { Constant.inventoryCellCount }
 

@@ -10,42 +10,34 @@ import CoreData
 
 final class TileMapModel {
 
-    var tileMapData: Data!
-    var tileMap: UnsafeMutableBufferPointer<Int>!
+    private let service: TileService
 
     // MARK: - init
-    init(tileMapData: Data) {
-        set(tileMapData: tileMapData)
+    init(tileService: TileService) {
+        self.service = tileService
     }
 
-    // MARK: - get set
-    func tileType(atX x: Int, y: Int) -> TileType {
-        let index = Constant.gridSize * x + y
-        return TileType(rawValue: self.tileMap[index]) ?? .grass
+    // MARK: - edit
+    func tile(_ x: Int, _ y: Int) -> TileType {
+        let tileType = self.service.load(x, y)
+        return tileType ?? TileType(rawValue: 0)!
     }
 
-    func tileType(at tileCoordinate: TileCoordinate) -> TileType {
-        let coordinate = tileCoordinate.coord
-        return self.tileType(atX: coordinate.x, y: coordinate.y)
+    func tile(at tileCoord: TileCoordinate) -> TileType {
+        return self.tile(tileCoord.x, tileCoord.y)
     }
 
-    func set(tileType: Int, toX x: Int, y: Int) {
-        let index = Constant.gridSize * x + y
-        self.tileMap[index] = tileType
+    func update(type: TileType, toX x: Int, y: Int) {
+        self.service.update(type: type, toX: x, y: y)
     }
 
-    func set(tileType: Int, at tileCoordinate: TileCoordinate) {
-        let coordinate = tileCoordinate.coord
-        let index = Constant.gridSize * coordinate.x + coordinate.y
-        self.tileMap[index] = tileType
+    func update(type: TileType, to tileCoord: TileCoordinate) {
+        self.update(type: type, toX: tileCoord.x, y: tileCoord.y)
     }
 
-    // MARK: - set tile map data
-    private func set(tileMapData data: Data) {
-        self.tileMapData = data
-        self.tileMap = self.tileMapData.withUnsafeMutableBytes {
-            $0.bindMemory(to: Int.self)
-        }
+    // TODO: remove
+    func tilesMap() -> Data {
+        return self.service.loadTileMap()
     }
 
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class ResetPane: SpriteNode {
+class ResetPane: LMISpriteNode {
 
     var portalScene: PortalScene { self.scene as! PortalScene }
 

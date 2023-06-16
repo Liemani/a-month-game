@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class CraftPane: SKSpriteNode {
+class CraftPane: LMISpriteNode {
 
     var cellCount: Int { Constant.craftPaneCellCount }
 

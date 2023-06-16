@@ -17,71 +17,65 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     // MARK: model
-    var worldSceneModel: WorldViewModel!
+    var gameObjectsModel: GameObjectsModel!
+    var characterModel: CharacterModel!
+    var tileMapModel: TileMapModel!
 
-    var goMOGO: GOMOGO!
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.goMOGO = GOMOGO()
-
-        self.setView()
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentPortalViewController), name: .requestPresentPortalViewController, object: nil)
     }
 
-    func setView() {
-        let view = self.view as! SKView
-        view.ignoresSiblingOrder = true
-#if DEBUG
-        view.showsFPS = true
-        view.showsNodeCount = true
-#endif
-    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
+        let skView = self.view as! SKView
+        skView.ignoresSiblingOrder = true
 #if DEBUG
-    func debugCode() {
-        for goMO in self.goMOGO.goMOs {
-            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.chunkX), \(goMO.chunkY), \(UInt16(bitPattern: goMO.chunkLocation))")
-        }
-    }
+        skView.showsFPS = true
+        skView.showsNodeCount = true
 #endif
 
-    func setUp(worldDataContainer: WorldDataContainer) {
-        let worldScene = WorldScene()
+        let worldScene = WorldScene(size: Constant.sceneSize)
+        skView.presentScene(worldScene)
+    }
 
-        let view = self.view as! SKView
-        view.presentScene(worldScene)
-
-        worldScene.setUp()
-        self.setUpModel(worldDataContainer: worldDataContainer)
+    func setUp(serviceContainer: WorldServiceContainer) {
+        self.setUpModel(serviceContainer: serviceContainer)
+        self.setUpScene()
 
 #if DEBUG
         self.debugCode()
 #endif
     }
 
-    // MARK: set up model
-    func setUpModel(worldDataContainer: WorldDataContainer) {
-        self.worldSceneModel = WorldViewModel(worldDataContainer: worldDataContainer)
+    func setUpModel(serviceContainer: WorldServiceContainer) {
+        self.gameObjectsModel = GameObjectsModel(serviceContainer: serviceContainer)
+        self.characterModel = CharacterModel(service: serviceContainer.worldDataService)
+        self.tileMapModel = TileMapModel(tileService: serviceContainer.tileService)
+    }
 
+    func setUpScene() {
+        self.worldScene.setUp(characterPosition: self.characterModel.position)
         self.setUpTile()
         self.setUpGOMOs()
     }
 
     func setUpTile() {
-        let tileModel: TileMapModel = self.worldSceneModel.tileMapModel
+        let tileMapData = self.tileMapModel.tilesMap()
+        let tileMap = tileMapData.withUnsafeBytes { $0.bindMemory(to: Int.self) }
         for x in 0..<Constant.gridSize {
             for y in 0..<Constant.gridSize {
-                let tileType = tileModel.tileType(atX: x, y: y)
+                let rawValue = tileMap[x + y * Constant.gridSize]
+                let tileType = TileType(rawValue: rawValue) ?? TileType(rawValue: 0)!
                 self.set(tileType: tileType, toX: x, y: y)
             }
         }
     }
 
     func setUpGOMOs() {
-        let goMOs = self.worldSceneModel.loadGOMOs()
+        let goMOs = self.gameObjectsModel.loadGOMOs()
         for goMO in goMOs {
             self.addGO(from: goMO)
         }
@@ -100,11 +94,6 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     // MARK: - edit model
-    // MARK: - tile
-    func set(tileType: TileType, toX x: Int, y: Int) {
-        self.worldScene.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
-    }
-
     // MARK: - game object
     /// Called when loading GOMO from disk
     private func addGO(from goMO: GameObjectMO) {
@@ -117,7 +106,7 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
             , let go = GameObject.new(from: goMO) {
             container.addGO(go, to: goMOCoord)
             self.worldScene.interactionZone.reserveUpdate()
-            self.goMOGO[goMO] = go
+            self.gameObjectsModel.goMOGO[goMO] = go
         }
     }
 
@@ -138,28 +127,28 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - game object managed object
     func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
         let go = self.worldScene.addGO(of: goType, to: goCoord)
-        let goMO = self.worldSceneModel.newGOMO(of: goType, to: goCoord)
-        self.goMOGO[goMO] = go
+        let goMO = self.gameObjectsModel.newGOMO(of: goType, to: goCoord)
+        self.gameObjectsModel.goMOGO[goMO] = go
     }
 
     /// Add GOMO and move GO
     /// Called when craft, so don't need to update
     func addGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
         self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
-        let goMO = self.worldSceneModel.newGOMO(of: go.type, to: goCoord)
-        self.goMOGO[goMO] = go
+        let goMO = self.gameObjectsModel.newGOMO(of: go.type, to: goCoord)
+        self.gameObjectsModel.goMOGO[goMO] = go
     }
 
     func moveGOMO(from go: GameObject, to goCoord: GameObjectCoordinate) {
-        let goMO = self.goMOGO[go]!
-        self.worldSceneModel.setGOMO(goMO, to: goCoord)
+        let goMO = self.gameObjectsModel.goMOGO[go]!
+        self.gameObjectsModel.setGOMO(goMO, to: goCoord)
         self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
         self.worldScene.interactionZone.reserveUpdate()
     }
 
     func removeGOMO(from go: GameObject) {
-        let goMO = self.goMOGO.remove(go)!
-        self.worldSceneModel.remove(goMO)
+        let goMO = self.gameObjectsModel.goMOGO.remove(go)!
+        self.gameObjectsModel.remove(goMO)
         go.removeFromParent()
         self.worldScene.interactionZone.reserveUpdate()
     }
@@ -168,17 +157,35 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     func removeGOMO(from gos: any Sequence<GameObject>) {
         for go in gos {
             let go = go as! GameObject
-            let goMO = self.goMOGO.remove(go)!
-            self.worldSceneModel.remove(goMO)
+            let goMO = self.gameObjectsModel.goMOGO.remove(go)!
+            self.gameObjectsModel.remove(goMO)
             go.removeFromParent()
         }
         self.worldScene.interactionZone.reserveUpdate()
     }
 
+    // MARK: - tile
+    func set(tileType: TileType, toX x: Int, y: Int) {
+        self.worldScene.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
+    }
+
+    // MARK: - transition
     @objc
     func requestPresentPortalViewController() {
         let portalViewController = storyboard?.instantiateViewController(identifier: "PortalViewController") as! PortalViewController
         self.navigationController?.setViewControllers([portalViewController], animated: false)
     }
+
+    func update() {
+        self.gameObjectsModel.contextSaveIfNeed()
+    }
+
+#if DEBUG
+    private func debugCode() {
+        for goMO in self.gameObjectsModel.goMOGO.goMOs {
+            print("id: \(goMO.id), typeID: \(goMO.typeID), containerID: \(goMO.containerID), coordinate: (\(goMO.chunkX), \(goMO.chunkY), \(UInt16(bitPattern: goMO.chunkLocation)))")
+        }
+    }
+#endif
 
 }

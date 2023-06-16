@@ -7,9 +7,7 @@
 
 import Foundation
 
-final class WorldDataContainer {
-
-    let worldDirectoryURL: URL
+final class WorldServiceContainer {
 
     let gameObjectService: GameObjectService
     let tileService: TileService
@@ -17,35 +15,16 @@ final class WorldDataContainer {
 
     init(worldName: String) {
         let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
-        self.worldDirectoryURL = worldDirectoryURL
-
-#if DEBUG
-        print(worldDirectoryURL)
-#endif
 
         WorldDirectoryUtility.default.createIfNotExist(worldName: worldName)
 
         self.gameObjectService = GameObjectService(worldDirectoryURL: worldDirectoryURL)
         self.tileService = TileService(worldDirectoryURL: worldDirectoryURL)
         self.worldDataService = WorldDataService(worldDirectoryURL: worldDirectoryURL)
-    }
 
-    // MARK: - delegate
-    // MARK: GameObjectService
-    func newGOMO() -> GameObjectMO {
-        return self.gameObjectService.newGOMO()
-    }
-
-    func loadGOMOs() -> [GameObjectMO] {
-        return self.gameObjectService.load()
-    }
-
-    func contextSave() {
-        self.gameObjectService.contextSave()
-    }
-
-    func delete(_ goMO: GameObjectMO) {
-        self.gameObjectService.delete(goMO)
+#if DEBUG
+        print(worldDirectoryURL)
+#endif
     }
 
 }

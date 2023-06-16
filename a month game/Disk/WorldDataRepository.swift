@@ -46,14 +46,8 @@ extension WorldDataRepository {
             return
         }
 
-        let worldData = self.generateInitialWorldData()
+        let worldData = Data(count: MemoryLayout<Int>.size * WorldDataIndex.allCases.count)
         self.fileManager.createFile(atPath: self.filePath, contents: worldData)
-    }
-
-    private func generateInitialWorldData() -> Data {
-        var nextID = Constant.initialNextID
-        return Data(bytes: &nextID,
-                             count: MemoryLayout.size(ofValue: nextID))
     }
 
 }

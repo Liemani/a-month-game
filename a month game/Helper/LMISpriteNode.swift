@@ -8,7 +8,11 @@
 import Foundation
 import SpriteKit
 
-class SpriteNode: SKSpriteNode {
+class LMISpriteNode: SKSpriteNode, LMITouchable {
+
+    var worldScene: WorldScene { self.scene as! WorldScene }
+    var touchManager: WorldSceneTouchManager { self.worldScene.touchManager }
+    var interactionZone: InteractionZone { self.worldScene.interactionZone }
 
     func touchBegan(_ touch: UITouch) {}
     func touchMoved(_ touch: UITouch) {}

@@ -14,7 +14,7 @@ protocol ButtonDelegate: AnyObject {
 
 }
 
-class Button: SpriteNode {
+class Button: LMISpriteNode {
 
     weak var delegate: ButtonDelegate?
 

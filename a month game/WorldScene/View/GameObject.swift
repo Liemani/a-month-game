@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObject
-class GameObject: SpriteNode, BelongEquatableType {
+class GameObject: LMISpriteNode, BelongEquatableType {
 
     var craftPane: CraftPane { self.parent?.parent as! CraftPane }
 
@@ -123,7 +123,7 @@ class GameObject: SpriteNode, BelongEquatableType {
                 }
             }
 
-            let characterTC = self.worldScene.character.tileCoord
+            let characterTC = self.worldScene.worldViewController.characterModel.tileCoord
             let touchedTC = TileCoordinate(from: touch.location(in: self.worldScene.field))
             if touchedTC.isAdjacent(to: characterTC) {
                 let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
@@ -165,8 +165,8 @@ class GameObject: SpriteNode, BelongEquatableType {
             guard self.parent is Field else { return }
             guard Double.random(in: 0.0...1.0) <= 0.33 else { return }
 
-            let goMO = self.worldScene.worldViewController.goMOGO.field[self]!
-            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.worldViewController.goMOGO.goMOs)
+            let goMO = self.worldScene.worldViewController.gameObjectsModel.goMOGO.field[self]!
+            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.worldViewController.gameObjectsModel.goMOGO.goMOs)
             guard !spareDirections.isEmpty else { return }
             let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
             let newGOMOCoord = goMO.coord + coordToAdd

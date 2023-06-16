@@ -26,8 +26,8 @@ final class TileService {
         return TileType(rawValue: tileRawValue)
     }
 
-    func update(tileType: TileType, toX x: Int, y: Int) {
-        var value = tileType.rawValue
+    func update(type: TileType, toX x: Int, y: Int) {
+        var value = type.rawValue
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
         let index = Constant.gridSize * x + y
         self.tileRepository.update(tileData: tileData, to: index)

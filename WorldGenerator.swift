@@ -9,21 +9,29 @@ import Foundation
 
 final class WorldGenerator {
 
-    private let worldDataContainer: WorldDataContainer
+    private let serviceContainer: WorldServiceContainer
     private let idGenerator: IDGenerator
 
-    static func generate(worldDataContainer: WorldDataContainer) {
+    static func generate(worldDataContainer: WorldServiceContainer) {
         let worldGenerator = WorldGenerator(worldDataContainer: worldDataContainer)
+        worldGenerator.generateWorldData()
         worldGenerator.generateGOMOs()
         worldGenerator.generateTileMapData()
     }
 
-    private init(worldDataContainer: WorldDataContainer) {
-        self.worldDataContainer = worldDataContainer
+    private init(worldDataContainer: WorldServiceContainer) {
+        self.serviceContainer = worldDataContainer
         self.idGenerator = IDGenerator(worldDataService: worldDataContainer.worldDataService)
     }
 
+    private func generateWorldData() {
+        self.serviceContainer.worldDataService.update(value: Constant.initialNextID, to: .nextID)
+        self.serviceContainer.worldDataService.update(value: 0, to: .characterX)
+        self.serviceContainer.worldDataService.update(value: 0, to: .characterY)
+    }
+
     private func generateGOMOs() {
+        self.newGOMO(type: .pineCone, container: .field, x: 0, y: 0)
         self.newGOMO(type: .pineCone, container: .field, x: Constant.centerTileIndex - 2, y: Constant.centerTileIndex - 3)
         self.newGOMO(type: .pineTree, container: .field, x: Constant.centerTileIndex - 1, y: Constant.centerTileIndex - 3)
         self.newGOMO(type: .woodWall, container: .field, x: Constant.centerTileIndex - 1, y: Constant.centerTileIndex - 1)
@@ -36,15 +44,15 @@ final class WorldGenerator {
         self.newGOMO(type: .branch, container: .field, x: Constant.centerTileIndex, y: Constant.centerTileIndex - 3)
         self.newGOMO(type: .stone, container: .field, x: Constant.centerTileIndex + 1, y: Constant.centerTileIndex - 3)
 
-        self.worldDataContainer.contextSave()
+        self.serviceContainer.gameObjectService.contextSave()
     }
 
     private func generateTileMapData() {
-        self.worldDataContainer.tileService.update(tileType: .woodFloor, toX: Constant.centerTileIndex, y: Constant.centerTileIndex)
+        self.serviceContainer.tileService.update(type: .woodFloor, toX: Constant.centerTileIndex, y: Constant.centerTileIndex)
     }
 
     private func newGOMO(type: GameObjectType, container: ContainerType, x: Int, y: Int) {
-        self.worldDataContainer.gameObjectService.newGOMO(id: self.idGenerator.generate(), type: type, container: container, x: x, y: y)
+        self.serviceContainer.gameObjectService.newGOMO(id: self.idGenerator.generate(), type: type, container: container, x: x, y: y)
     }
 
 }

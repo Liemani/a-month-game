@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class MenuPane: SpriteNode {
+class MenuPane: LMISpriteNode {
 
     func setUp() {
         self.isUserInteractionEnabled = true

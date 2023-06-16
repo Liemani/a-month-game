@@ -14,8 +14,6 @@ class WorldScene: SKScene {
         return self.view!.next! as! WorldViewController
     }
 
-    var character: CharacterModel!
-
     var touchManager: WorldSceneTouchManager!
 
     // MARK: view
@@ -31,8 +29,7 @@ class WorldScene: SKScene {
     var thirdHandGO: GameObject? { self.thirdHand.gameObject }
 
     // MARK: layer
-    var movingLayer: SKNode!
-    var worldLayer: SKNode!
+    var movingLayer: MovingLayer!
     var tileMap: SKTileMapNode!
 
     var ui: SKNode!
@@ -42,20 +39,27 @@ class WorldScene: SKScene {
     var menuPane: MenuPane!
     var exitWorldButton: SKNode!
 
-    // MARK: - set up
-    func setUp() {
+    override init(size: CGSize) {
+        super.init(size: size)
+
         self.touchManager = WorldSceneTouchManager()
         self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
 
         self.setUpSceneLayer()
+    }
 
-        self.setUpCharacter()
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - set up
+    func setUp(characterPosition: CGPoint) {
+        self.movingLayer.setUp(characterPosition: characterPosition)
     }
 
     func setUpSceneLayer() {
         self.containers.reserveCapacity(ContainerType.caseCount)
 
-        self.size = Constant.sceneSize
         self.scaleMode = .aspectFit
 
         self.addMovingLayer(to: self)
@@ -64,26 +68,13 @@ class WorldScene: SKScene {
 
     // MARK: add moving layer
     func addMovingLayer(to parent: SKNode) {
-        let movingLayer = SKNode()
-
-        movingLayer.zPosition = Constant.ZPosition.movingLayer
+        let movingLayer = MovingLayer()
 
         parent.addChild(movingLayer)
         self.movingLayer = movingLayer
 
-        self.addWorldLayer(to: movingLayer)
-    }
-
-    func addWorldLayer(to parent: SKNode) {
-        let worldLayer = SKNode()
-
-        worldLayer.position = Constant.sceneCenter
-
-        parent.addChild(worldLayer)
-        self.worldLayer = worldLayer
-
-        self.addTileMap(to: worldLayer)
-        self.addField(to: worldLayer)
+        self.addTileMap(to: movingLayer)
+        self.addField(to: movingLayer)
     }
 
     func addTileMap(to parent: SKNode) {
@@ -203,11 +194,6 @@ class WorldScene: SKScene {
         self.menuPane = menuPane
     }
 
-    // MARK: - set up character
-    func setUpCharacter() {
-        self.character = CharacterModel(worldScene: self)
-    }
-
     // MARK: - edit model
 
     func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObject {
@@ -224,12 +210,13 @@ class WorldScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
-        self.character.update(timeInterval)
-        self.worldViewController.worldSceneModel.contextSaveIfNeed()
+        self.movingLayer.update(timeInterval)
+        self.worldViewController.update()
         self.interactionZone.update()
         self.craftPane.update()
 
         self.lastUpdateTime = currentTime
+
     }
 
     // MARK: - delegate

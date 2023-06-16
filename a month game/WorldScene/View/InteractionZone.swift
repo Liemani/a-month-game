@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InteractionZone: SKSpriteNode {
+class InteractionZone: LMISpriteNode {
 
     var field: Field { self.worldScene.field }
 
