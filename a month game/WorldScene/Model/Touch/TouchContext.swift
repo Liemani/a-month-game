@@ -8,25 +8,25 @@
 import Foundation
 import SpriteKit
 
-class TouchModel {
+class TouchContext {
 
     let uiTouch: UITouch
-    let sender: LMITouchable
+    let sender: LMITouchResponder
 
-    init(touch: UITouch, sender: LMITouchable) {
+    init(touch: UITouch, sender: LMITouchResponder) {
         self.uiTouch = touch
         self.sender = sender
     }
 
 }
 
-extension TouchModel: Equatable {
+extension TouchContext: Equatable {
 
-    static func == (lhs: TouchModel, rhs: TouchModel) -> Bool {
+    static func == (lhs: TouchContext, rhs: TouchContext) -> Bool {
         return lhs.uiTouch == rhs.uiTouch
     }
 
-    public static func != (lhs: TouchModel, rhs: TouchModel) -> Bool {
+    public static func != (lhs: TouchContext, rhs: TouchContext) -> Bool {
         return !(lhs == rhs)
     }
 

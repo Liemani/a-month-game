@@ -8,12 +8,15 @@
 import Foundation
 import SpriteKit
 
-class Field: LMISpriteNode {
+class Field: LMINode {
 
-    func setUp() {
-        self.size = CGSize(width: Constant.tileMapSide, height: Constant.tileMapSide)
-        self.position = (Constant.defaultNodeSize * 256.0).toCGPoint()
+    override init() {
+        super.init()
         self.zPosition = Constant.ZPosition.gameObjectLayer
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     /// - Returns: child GOs that intersects with node
@@ -21,7 +24,9 @@ class Field: LMISpriteNode {
         var interactableGOs = [GameObject]()
 
         for child in self.children {
-            let child = child as! GameObject
+            guard let child = child as? GameObject else {
+                continue
+            }
             if child.intersects(interactionZone) {
                 interactableGOs.append(child)
             }

@@ -21,12 +21,14 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     var characterModel: CharacterModel!
     var tileMapModel: TileMapModel!
 
+    /// initialize task without relation to view
     required init?(coder: NSCoder) {
         super.init(coder: coder)
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentPortalViewController), name: .requestPresentPortalViewController, object: nil)
     }
 
+    /// SKView is loaded
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -37,10 +39,11 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
         skView.showsNodeCount = true
 #endif
 
-        let worldScene = WorldScene(size: Constant.sceneSize)
-        skView.presentScene(worldScene)
+        let scene = WorldScene(size: Constant.sceneSize)
+        skView.presentScene(scene)
     }
 
+    /// set up from disk
     func setUp(serviceContainer: WorldServiceContainer) {
         self.setUpModel(serviceContainer: serviceContainer)
         self.setUpScene()

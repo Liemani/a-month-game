@@ -52,7 +52,7 @@ class GameObject: LMISpriteNode, BelongEquatableType {
 
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
-        let result = self.touchManager.add(GameObjectTouch(touch: touch, sender: self))
+        let result = self.touchContextManager.add(GameObjectTouch(touch: touch, sender: self))
 
         if result == true {
             self.activate()
@@ -60,7 +60,7 @@ class GameObject: LMISpriteNode, BelongEquatableType {
     }
 
     override func touchMoved(_ touch: UITouch) {
-        guard self.touchManager.contains(from: touch) else {
+        guard self.touchContextManager.contains(from: touch) else {
             return
         }
 
@@ -100,7 +100,7 @@ class GameObject: LMISpriteNode, BelongEquatableType {
     }
 
     override func touchEnded(_ touch: UITouch) {
-        guard self.touchManager.contains(from: touch) else {
+        guard self.touchContextManager.contains(from: touch) else {
             return
         }
 
@@ -144,7 +144,7 @@ class GameObject: LMISpriteNode, BelongEquatableType {
     }
 
     override func touchCancelled(_ touch: UITouch) {
-        guard self.touchManager.contains(from: touch) else {
+        guard self.touchContextManager.contains(from: touch) else {
             return
         }
         self.resetTouch(touch)
@@ -155,7 +155,7 @@ class GameObject: LMISpriteNode, BelongEquatableType {
 
     override func resetTouch(_ touch: UITouch) {
         self.deactivate()
-        self.touchManager.removeFirst(from: touch)
+        self.touchContextManager.removeFirst(from: touch)
     }
 
     // MARK: - interact
@@ -187,6 +187,6 @@ class GameObject: LMISpriteNode, BelongEquatableType {
 
 }
 
-class GameObjectTouch: TouchModel {
+class GameObjectTouch: TouchContext {
 
 }

@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol LMITouchable {
+protocol LMITouchResponder {
 
     func touchBegan(_ touch: UITouch)
     func touchMoved(_ touch: UITouch)

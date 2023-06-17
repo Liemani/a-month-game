@@ -8,10 +8,10 @@
 import Foundation
 import SpriteKit
 
-class LMISpriteNode: SKSpriteNode, LMITouchable {
+class LMISpriteNode: SKSpriteNode, LMITouchResponder {
 
     var worldScene: WorldScene { self.scene as! WorldScene }
-    var touchManager: WorldSceneTouchManager { self.worldScene.touchManager }
+    var touchContextManager: WorldSceneTouchContextManager { self.worldScene.touchContextManager }
     var interactionZone: InteractionZone { self.worldScene.interactionZone }
 
     func touchBegan(_ touch: UITouch) {}

@@ -8,13 +8,15 @@
 import SpriteKit
 import GameplayKit
 
-class WorldScene: SKScene {
+class WorldScene: SKScene, LMITouchResponder {
 
     var worldViewController: WorldViewController {
         return self.view!.next! as! WorldViewController
     }
 
-    var touchManager: WorldSceneTouchManager!
+    // MARK: manager
+    var touchContextManager: WorldSceneTouchContextManager!
+    var characterNodeMoveManager: CharacterNodeMoveManager!
 
     // MARK: view
     var containers: [(any Container)?]!
@@ -42,22 +44,19 @@ class WorldScene: SKScene {
     override init(size: CGSize) {
         super.init(size: size)
 
-        self.touchManager = WorldSceneTouchManager()
+        self.touchContextManager = WorldSceneTouchContextManager()
         self.containers = [(any Container)?](repeating: nil, count: ContainerType.caseCount)
 
-        self.setUpSceneLayer()
+        self.initSceneLayer()
+        self.initCharacterNodeMoveManager(scene: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - set up
-    func setUp(characterPosition: CGPoint) {
-        self.movingLayer.setUp(characterPosition: characterPosition)
-    }
-
-    func setUpSceneLayer() {
+    // MARK: - init scene layer
+    func initSceneLayer() {
         self.containers.reserveCapacity(ContainerType.caseCount)
 
         self.scaleMode = .aspectFit
@@ -73,31 +72,8 @@ class WorldScene: SKScene {
         parent.addChild(movingLayer)
         self.movingLayer = movingLayer
 
-        self.addTileMap(to: movingLayer)
-        self.addField(to: movingLayer)
-    }
-
-    func addTileMap(to parent: SKNode) {
-        let tileGroups = TileType.tileGroups
-        let tileSet = SKTileSet(tileGroups: tileGroups)
-
-        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.tileTextureSize)
-        tileMap.xScale = Constant.tileScale
-        tileMap.yScale = Constant.tileScale
-
-        tileMap.position = Constant.tileMapPosition
-        tileMap.zPosition = Constant.ZPosition.tileMap
-
-        parent.addChild(tileMap)
-        self.tileMap = tileMap
-    }
-
-    func addField(to parent: SKNode) {
-        let field = Field()
-        field.setUp()
-
-        parent.addChild(field)
-        self.containers[ContainerType.field] = field
+        self.containers[ContainerType.field] = movingLayer.field
+        self.tileMap = movingLayer.tileMap
     }
 
     // MARK: add fixed layer
@@ -121,7 +97,6 @@ class WorldScene: SKScene {
         self.ui = ui
 
         self.addMenuButton(to: ui)
-        self.addCharacter(to: ui)
         self.addInteractionZone(to: ui)
         self.addInventory(to: ui)
         self.addThirdHand(to: ui)
@@ -135,22 +110,6 @@ class WorldScene: SKScene {
         menuButton.delegate = self
 
         parent.addChild(menuButton)
-    }
-
-    func addCharacter(to parent: SKNode) {
-        let path = CGMutablePath()
-        path.addArc(center: CGPoint.zero,
-                    radius: Constant.characterRadius,
-                    startAngle: 0,
-                    endAngle: CGFloat.pi * 2,
-                    clockwise: true)
-        let character = SKShapeNode(path: path)
-        character.fillColor = .white
-        character.strokeColor = .brown
-        character.lineWidth = 10.0
-        character.position = Constant.Frame.character.origin
-
-        parent.addChild(character)
     }
 
     func addInteractionZone(to parent: SKNode) {
@@ -194,6 +153,17 @@ class WorldScene: SKScene {
         self.menuPane = menuPane
     }
 
+    // MARK: - init
+    func initCharacterNodeMoveManager(scene: SKScene) {
+        let moveManager = CharacterNodeMoveManager()
+
+        moveManager.scene = self
+        moveManager.character = self.movingLayer.character
+        moveManager.movingLayer = self.movingLayer
+
+        self.characterNodeMoveManager = moveManager
+    }
+
     // MARK: - edit model
 
     func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObject {
@@ -204,13 +174,18 @@ class WorldScene: SKScene {
         return go
     }
 
+    // MARK: - set up
+    func setUp(characterPosition: CGPoint) {
+        self.characterNodeMoveManager.characterPosition = characterPosition
+    }
+
     // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
 
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
-        self.movingLayer.update(timeInterval)
+        self.characterNodeMoveManager.update(timeInterval)
         self.worldViewController.update()
         self.interactionZone.update()
         self.craftPane.update()
@@ -238,6 +213,44 @@ class WorldScene: SKScene {
 
     func removeGOMO(from go: GameObject) {
         self.worldViewController.removeGOMO(from: go)
+    }
+
+    // MARK: - touch
+    func touchBegan(_ touch: UITouch) {
+        self.characterNodeMoveManager.touchBegan(touch)
+    }
+
+    func touchMoved(_ touch: UITouch) {
+        self.characterNodeMoveManager.touchMoved(touch)
+    }
+
+    func touchEnded(_ touch: UITouch) {
+        self.characterNodeMoveManager.touchEnded(touch)
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+        self.characterNodeMoveManager.touchCancelled(touch)
+    }
+
+    func resetTouch(_ touch: UITouch) {
+        self.characterNodeMoveManager.resetTouch(touch)
+    }
+
+    // MARK: - override
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchBegan(touch) }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchMoved(touch) }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchEnded(touch) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchCancelled(touch) }
     }
 
 }

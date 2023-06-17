@@ -12,22 +12,6 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
-view controller 의 instance 를 만들 때
-나는 storyboard 에 해당 view controller 의 view 를 SKView 로 설정했기 때문에
-알아서 새로운 SKView 의 instance 가 생성되고 present 되는 것은 아닐까?
-만약 그렇다면 viewDidLoad 가 호출될까?
-그럴 확률이 높다
-portal view controller 에서도 알아서 viewDidLoad() 가 호출되는 것을 확인할 수 있다
-그런데 그 안에서 또 새로운 view 를 생성해서 present 하고 있는데, 그럼 이것은 무한루프 하는 것 아닌가?
-그럼 viewDidLoad() 의 호출 조건이 presentScene() 의 호출이 아니라는 얘기인가?
-
-viewDidLoad() 는 storyboard 에 있는 view 가 load 된 후 호출되는 것 같다
-그렇다면 내가 추가로 present(scene) 를 호출해도 viewDidLoad() 가 호출되지 않는다
-단, 이미 present 중인 view 를 SKView 로
-아
-이거 SKScene 이 아니라 SKView 구나?
-그래서 view 는 이미 있고, 나는 view 에 scene 만 present 하고 있었던 거구나?
-
 만약 모델이 타일에 따라 바뀐다고 한다면
 컨트롤러가 모델 변화에 따라 씬을 수정해줘야 할 것이다
 메니지드 오브젝트는 어떤가?
@@ -38,21 +22,6 @@ viewDidLoad() 는 storyboard 에 있는 view 가 load 된 후 호출되는 것 �
 하지만 이를 컨트롤러에서 처리한다면 부담이 크다
 그럼 청크 변화를 처리하는 컨트롤러를 따로 둔다면?
 캐릭터의 위치나 저장 로드 만들어보자
-
-지금은 캐릭터의 위치가 뷰와 상당히 coupling 되어 있다
-캐릭터 모델은 데이터만 가지고 있다고 생각하면
-위치가 바뀐 경우 컨트롤러가 위치가 바뀌었음을 알리자
-컨트롤러는 스스로 캐릭터의 위치를 가지고 있지는 않지만
-화면을 드래그하면 무빙 레이어는 계속 움직인다
-따라서 간접적으로만 캐릭터의 위치를 트래킹하며
-실제 캐릭터의 위치 데이터는 캐릭터 모델이 가지고 있다
-하지만 화면 드래깅에 따른 무빙 레이어 이동은 캡슐화하면 좋긴 하다
-그래서 전에 이것들을 캐릭터 모델에 넣어둔 것 같다
-이 경우 새로운 클래스를 만들면 좋을 것 같다
-아니면 움직이는 레이어가 이 일을 맡아도 될 것 같은데?
-그럼 캐릭터의 타일이 변한걸 알리는 것은 누가 책임지지?
-움직이는 레이어가 책임지나?
-아니면 씬이 책임지나?
 
 ## view layer
 world scene
@@ -454,11 +423,9 @@ world scene
         firing
 
 # issue
-캐릭터를 field 위로 옮기고 움직이게 하기
+recompose zposition
 타일을 sql 로 저장하기...
 world view model 은 service 에 직접 접근하지 않아야 한다
-move character to field
-    field 는 터치를 moving layer 에게 넘긴다
 
 ## after view layer
 world scene
@@ -752,6 +719,9 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+move character to field
+    field 는 터치를 moving layer 에게 넘긴다
+캐릭터를 field 위로 옮기고 움직이게 하기
 tile 도 generator 로 옮겨오기
 game object 가 올바른 위치에 생성되지 않는 문제
 새로운 chunk 좌표 시스템 만들기
@@ -929,6 +899,60 @@ tilemap 사용하여 자연스러운 배경 묘사
     일정 거리 서로 밀어내도록
 
 # dump log
+2023-06-17
+지금은 캐릭터의 위치가 뷰와 상당히 coupling 되어 있다
+캐릭터 모델은 데이터만 가지고 있다고 생각하면
+위치가 바뀐 경우 컨트롤러가 위치가 바뀌었음을 알리자
+컨트롤러는 스스로 캐릭터의 위치를 가지고 있지는 않지만
+화면을 드래그하면 무빙 레이어는 계속 움직인다
+따라서 간접적으로만 캐릭터의 위치를 트래킹하며
+실제 캐릭터의 위치 데이터는 캐릭터 모델이 가지고 있다
+하지만 화면 드래깅에 따른 무빙 레이어 이동은 캡슐화하면 좋긴 하다
+그래서 전에 이것들을 캐릭터 모델에 넣어둔 것 같다
+이 경우 새로운 클래스를 만들면 좋을 것 같다
+아니면 움직이는 레이어가 이 일을 맡아도 될 것 같은데?
+그럼 캐릭터의 타일이 변한걸 알리는 것은 누가 책임지지?
+움직이는 레이어가 책임지나?
+아니면 씬이 책임지나?
+
+view controller 의 instance 를 만들 때
+나는 storyboard 에 해당 view controller 의 view 를 SKView 로 설정했기 때문에
+알아서 새로운 SKView 의 instance 가 생성되고 present 되는 것은 아닐까?
+만약 그렇다면 viewDidLoad 가 호출될까?
+그럴 확률이 높다
+portal view controller 에서도 알아서 viewDidLoad() 가 호출되는 것을 확인할 수 있다
+그런데 그 안에서 또 새로운 view 를 생성해서 present 하고 있는데, 그럼 이것은 무한루프 하는 것 아닌가?
+그럼 viewDidLoad() 의 호출 조건이 presentScene() 의 호출이 아니라는 얘기인가?
+
+viewDidLoad() 는 storyboard 에 있는 view 가 load 된 후 호출되는 것 같다
+그렇다면 내가 추가로 present(scene) 를 호출해도 viewDidLoad() 가 호출되지 않는다
+단, 이미 present 중인 view 를 SKView 로
+아
+이거 SKScene 이 아니라 SKView 구나?
+그래서 view 는 이미 있고, 나는 view 에 scene 만 present 하고 있었던 거구나?
+
+character 는 실제 field 에 존재한다
+하지만 캐릭터가 움직이는 동시에 무빙 레이어가 움직여줘야 한다
+movingLayer
+    field
+        character
+    tileMap
+이동 터치는 movingLayer 가 인식하고 처리한다
+드래그 이벤트가 발생한 경우 movingLayer 는 스스로의 위치를 조정한다
+그러면서 character 의 위치도 수정해줘야 한다
+movingLayer 가 field 에게 캐릭터를 움직이라는 메세지를 보내야할까?
+movingLayer 가 캐릭터를 직접 가지고 움직여야 맞는거 아닐까?
+그럼 character 는 누가 만들어야 할까?
+movingLayer 가 character 를 만들고 field 에 넣어주면 될 거 같다
+character node 를 class 로 만들어서 처리해도 괜찮지? 않을 것 같다
+근대 이거 생각해보니 결국 드래그 터치는 moving layer 에 있을게 아니라 scene 에 있어야겠는데?
+1. character move controller 를 view controller 에서 만들고 그걸 view controller 가 각 위치에 넣어주는 방법
+2. 각 만들어진 것들을 가져와서 character move controller 의 값을 설정하는 방법
+아니 이거 또 생각해보니 view controller 가 아니라 scene 에 넣어야 하는구만?
+
+모든 터치는 터치 가지고 있다
+LMITouch 에는 해당 터치를 위한 다양한 유용한 정보가 들어간다
+
 2023-06-06
 음식
 보리처럼 앞 뒤 이미지로 깊이감 있게
