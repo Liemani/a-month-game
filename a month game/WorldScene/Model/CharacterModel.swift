@@ -9,18 +9,23 @@ import Foundation
 
 class CharacterModel {
 
-    private let service: WorldDataService
+    private let worldDataRepository: WorldDataRepository
 
-    var tileCoord: TileCoordinate
-    var position: CGPoint { self.tileCoord.fieldPoint }
+    var coord: Coordinate<Int>
+    var position: CGPoint { TileCoordinate(self.coord).fieldPoint }
 
     // MARK: init
-    init(service: WorldDataService) {
-        self.service = service
+    init(worldDataRepository: WorldDataRepository) {
+        self.worldDataRepository = worldDataRepository
 
-        let x = service.load(at: .characterX)
-        let y = service.load(at: .characterY)
-        self.tileCoord = TileCoordinate(x, y)
+        let x = worldDataRepository.load(at: .characterPositionX)
+        let y = worldDataRepository.load(at: .characterPositionY)
+        self.coord = Coordinate<Int>(x, y)
+    }
+
+    func set(coord: Coordinate<Int>) {
+        self.worldDataRepository.update(value: coord.x, to: .characterPositionX)
+        self.worldDataRepository.update(value: coord.y, to: .characterPositionY)
     }
 
 }

@@ -19,7 +19,9 @@ struct TileCoordinate {
         self.coord = Coordinate<Int>()
     }
 
-    init(_ x: Int, _ y: Int) {
+    init(from point: CGPoint) {
+        let x = Int(point.x) / Int(Constant.tileSide)
+        let y = Int(point.y) / Int(Constant.tileSide)
         self.coord = Coordinate(x, y)
     }
 
@@ -27,9 +29,7 @@ struct TileCoordinate {
         self.coord = coord
     }
 
-    init(from point: CGPoint) {
-        let x = Int(point.x) / Int(Constant.tileSide)
-        let y = Int(point.y) / Int(Constant.tileSide)
+    init(_ x: Int, _ y: Int) {
         self.coord = Coordinate(x, y)
     }
 
@@ -39,6 +39,10 @@ struct TileCoordinate {
 
     func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {
         self.coord.isAdjacent(to: tileCoordinate.coord)
+    }
+
+    static func + (lhs: TileCoordinate, rhs: Coordinate<Int>) -> TileCoordinate {
+        return TileCoordinate(lhs.coord + rhs)
     }
 
 }

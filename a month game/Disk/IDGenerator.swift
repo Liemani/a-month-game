@@ -9,11 +9,11 @@ import Foundation
 
 final class IDGenerator {
 
-    private var service: WorldDataService
+    private var worldDataRepository: WorldDataRepository
     private var nextID: Int
 
-    init(worldDataService: WorldDataService) {
-        self.service = worldDataService
+    init(worldDataRepository: WorldDataRepository) {
+        self.worldDataRepository = worldDataRepository
         self.nextID = 0
 
         self.nextID = self.readNextID()
@@ -33,11 +33,11 @@ final class IDGenerator {
 extension IDGenerator {
 
     private func readNextID() -> Int {
-        return self.service.load(at: .nextID)
+        return self.worldDataRepository.load(at: .nextID)
     }
 
     private func updateNextID(nextID: Int) {
-        self.service.update(value: nextID, to: .nextID)
+        self.worldDataRepository.update(value: nextID, to: .nextID)
     }
 
 }

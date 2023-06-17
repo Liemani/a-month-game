@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Field: LMINode {
+class FieldNode: LMINode {
 
     override init() {
         super.init()
@@ -20,11 +20,11 @@ class Field: LMINode {
     }
 
     /// - Returns: child GOs that intersects with node
-    func interactableGOs() -> [GameObject] {
-        var interactableGOs = [GameObject]()
+    func interactableGOs() -> [GameObjectNode] {
+        var interactableGOs = [GameObjectNode]()
 
         for child in self.children {
-            guard let child = child as? GameObject else {
+            guard let child = child as? GameObjectNode else {
                 continue
             }
             if child.intersects(interactionZone) {
@@ -37,33 +37,28 @@ class Field: LMINode {
 }
 
 // MARK: - extension
-extension Field: Container {
+extension FieldNode: InventoryNode {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
         return 0 <= coord.x && coord.x < Constant.gridSize
         && 0 <= coord.y && coord.y < Constant.gridSize
     }
 
-    func addGO(_ go: GameObject, to coord: Coordinate<Int>) {
+    func addGO(_ go: GameObjectNode, to coord: Coordinate<Int>) {
         self.addChild(go)
         go.position = TileCoordinate(coord).fieldPoint
     }
 
-    func moveGO(_ go: GameObject, to coord: Coordinate<Int>) {
+    func moveGO(_ go: GameObjectNode, to coord: Coordinate<Int>) {
         go.move(toParent: self)
         go.position = TileCoordinate(coord).fieldPoint
     }
 
-    func moveGOMO(from go: GameObject, to coord: Coordinate<Int>) {
-        let goCoord = GameObjectCoordinate(containerType: .field, coordinate: coord)
-        self.worldScene.moveGOMO(from: go, to: goCoord)
+    func gameObjectAtLocation(of touch: UITouch) -> GameObjectNode? {
+        return self.child(at: touch) as! GameObjectNode?
     }
 
-    func gameObjectAtLocation(of touch: UITouch) -> GameObject? {
-        return self.child(at: touch) as! GameObject?
-    }
-
-    func contains(_ go: GameObject) -> Bool {
+    func contains(_ go: GameObjectNode) -> Bool {
         for child in self.children {
             if child == go {
                 return true
@@ -72,8 +67,8 @@ extension Field: Container {
         return false
     }
 
-    func makeIterator() -> some IteratorProtocol<GameObject> {
-        let goChildren = self.children as! [GameObject]
+    func makeIterator() -> some IteratorProtocol<GameObjectNode> {
+        let goChildren = self.children as! [GameObjectNode]
         return goChildren.makeIterator()
     }
 

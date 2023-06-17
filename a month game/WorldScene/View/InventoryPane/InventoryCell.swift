@@ -17,22 +17,22 @@ class InventoryCell: LMISpriteNode {
         self.size = Constant.defaultNodeSize
     }
 
-    func addGO(_ go: GameObject) {
+    func addGO(_ go: GameObjectNode) {
         self.addChild(go)
         go.position = CGPoint()
         go.isUserInteractionEnabled = true
     }
 
-    func moveGO(_ go: GameObject) {
+    func moveGO(_ go: GameObjectNode) {
         go.move(toParent: self)
         go.position = CGPoint()
     }
 
-    func moveGOMO(_ go: GameObject) {
-        let inventory = self.parent as! InventoryPane
-        let cellIndex = inventory.cells.firstIndex(of: self)!
-        let coord = Coordinate<Int>(cellIndex, 0)
-        inventory.moveGOMO(from: go, to: coord)
-    }
+//    func moveGOMO(_ go: GameObjectNode) {
+//        let inventory = self.parent as! InventoryPane
+//        let cellIndex = inventory.cells.firstIndex(of: self)!
+//        let coord = Coordinate<Int>(cellIndex, 0)
+//        inventory.moveGOMO(from: go, to: coord)
+//    }
 
 }

@@ -20,8 +20,9 @@ class CraftCell: SKSpriteNode {
     }
 
     func addNoneGO() {
-        let go = GameObject.new(of: .none)
-        self.addChild(go)
+        let texture = GameObjectType.none.texture
+        let goNode = GameObjectNode(texture: texture)
+        self.addChild(goNode)
     }
 
 }

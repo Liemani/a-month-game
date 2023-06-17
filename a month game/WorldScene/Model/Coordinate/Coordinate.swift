@@ -51,4 +51,12 @@ extension Coordinate<Int> {
         && (-1 <= differenceY && differenceY <= 1)
     }
 
+    static func - (lhs: Coordinate<Int>, rhs: Coordinate<Int>) -> Coordinate<Int> {
+        return Coordinate(lhs.x - rhs.x, lhs.y - rhs.y)
+    }
+
+    static func >> (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x >> rhs, lhs.y >> rhs)
+    }
+
 }

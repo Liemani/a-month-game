@@ -10,24 +10,27 @@ import SpriteKit
 
 class MovingLayer: LMINode {
 
-    var field: Field!
+    var field: FieldNode!
     var tileMap: SKTileMapNode!
     var character: SKShapeNode!
 
     override init() {
         super.init()
 
-        let originNode = GameObject.new(of: .pineCone)
-        self.addChild(originNode)
-
         self.zPosition = Constant.ZPosition.movingLayer
 
+        self.addOrigin(to: self)
         self.addField(to: self)
         self.addTileMap(to: self)
     }
 
+    func addOrigin(to parent: SKNode) {
+        let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
+        parent.addChild(origin)
+    }
+
     func addField(to parent: SKNode) {
-        let field = Field()
+        let field = FieldNode()
 
         parent.addChild(field)
         self.field = field

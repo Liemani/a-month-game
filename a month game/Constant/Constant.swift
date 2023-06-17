@@ -89,15 +89,20 @@ struct Constant {
         static let noButton = Constant.Frame.resetButton
     }
 
-    // MARK: - file name
-    static let defaultWorldName = "world000"
-    static let tileMapFileName = "tileMap.dat"
-    static let dataModelFileName = "dataModel.sqlite"
-    static let worldDataFileName = "worldData.dat"
+    struct Name {
+        static let defaultWorld = "world000"
 
-    // MARK: data model name
-    static let worldDataModelName = "DataModel"
-    static let gameObjectDataEntityName = "GameObjectMO"
+        // MARK: file name
+        static let tileMapFile = "tileMap.dat"
+        static let worldDataModelFile = "worldDataModel.sqlite"
+        static let worldDataFile = "worldData.dat"
+
+        // MARK: data model name
+        static let worldDataModel = "WorldDataModel"
+        static let gameObjectEntity = "GameObjectMO"
+        static let chunkCoordinateEntity = "ChunkCoordinateMO"
+        static let invCoordinateEntity = "InventoryCoordinateMO"
+    }
 
     // MARK: - recipe
     static let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = [
@@ -124,7 +129,7 @@ struct Constant {
         static let rightHand = "right_hand"
     }
 
-    static let initialNextID = 2
+    static let initialNextID = 1
 
     static let accessableGOColorBlendFactor = 0.5
 

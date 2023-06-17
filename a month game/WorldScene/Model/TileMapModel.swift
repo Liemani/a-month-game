@@ -10,34 +10,38 @@ import CoreData
 
 final class TileMapModel {
 
-    private let service: TileService
+    private let tileRepository: TileRepository
+
+    private var tileMapData: Data
 
     // MARK: - init
-    init(tileService: TileService) {
-        self.service = tileService
+    init(tileRepository: TileRepository) {
+        self.tileRepository = tileRepository
+        self.tileMapData = tileRepository.loadTileMap()
     }
 
     // MARK: - edit
+    #warning("not good")
     func tile(_ x: Int, _ y: Int) -> TileType {
-        let tileType = self.service.load(x, y)
+        let tileType = self.tileRepository.load(x, y)
         return tileType ?? TileType(rawValue: 0)!
     }
 
-    func tile(at tileCoord: TileCoordinate) -> TileType {
-        return self.tile(tileCoord.x, tileCoord.y)
+    func tile(at coord: Coordinate<Int>) -> TileType {
+        return self.tile(coord.x, coord.y)
     }
 
     func update(type: TileType, toX x: Int, y: Int) {
-        self.service.update(type: type, toX: x, y: y)
+        self.tileRepository.update(type: type, toX: x, y: y)
     }
 
-    func update(type: TileType, to tileCoord: TileCoordinate) {
-        self.update(type: type, toX: tileCoord.x, y: tileCoord.y)
+    func update(type: TileType, to coord: Coordinate<Int>) {
+        self.update(type: type, toX: coord.x, y: coord.y)
     }
 
-    // TODO: remove
-    func tilesMap() -> Data {
-        return self.service.loadTileMap()
+    var tilesMapDataPointer: UnsafeBufferPointer<Int> {
+        let tileMapBufferPointer = self.tileMapData.withUnsafeBytes { $0.bindMemory(to: Int.self) }
+        return tileMapBufferPointer
     }
 
 }

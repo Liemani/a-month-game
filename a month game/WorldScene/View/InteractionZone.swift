@@ -10,9 +10,9 @@ import SpriteKit
 
 class InteractionZone: LMISpriteNode {
 
-    var field: Field { self.worldScene.field }
+    var field: FieldNode { self.worldScene.field }
 
-    var gos: [GameObject] = []
+    var gos: [GameObjectNode] = []
 
     private var shouldUpdate: Bool = true
 
@@ -22,7 +22,7 @@ class InteractionZone: LMISpriteNode {
         self.isHidden = true
     }
 
-    func contains(_ go: GameObject) -> Bool {
+    func contains(_ go: GameObjectNode) -> Bool {
         for interactableGo in gos {
             if interactableGo == go {
                 return true
@@ -31,7 +31,7 @@ class InteractionZone: LMISpriteNode {
         return false
     }
 
-    func gameObjectAtLocation(of touch: UITouch) -> GameObject? {
+    func gameObjectAtLocation(of touch: UITouch) -> GameObjectNode? {
         for go in self.gos {
             if go.isAtLocation(of: touch) {
                 return go
@@ -41,13 +41,13 @@ class InteractionZone: LMISpriteNode {
     }
 
     // MARK: - edit
-    func add(_ gos: [GameObject]) {
+    func add(_ gos: [GameObjectNode]) {
         self.gos += gos
         self.activate()
     }
 
     // MARK: - activate
-    func activate(_ go: GameObject) {
+    func activate(_ go: GameObjectNode) {
         go.color = .green.withAlphaComponent(0.9)
         go.colorBlendFactor = Constant.accessableGOColorBlendFactor
         go.isUserInteractionEnabled = true
@@ -59,11 +59,11 @@ class InteractionZone: LMISpriteNode {
         }
     }
 
-    func deactivate(_ go: GameObject) {
+    func deactivate(_ go: GameObjectNode) {
         go.colorBlendFactor = 0.0
-        if go.parent != self.worldScene.thirdHand {
+//        if go.parent != self.worldScene.thirdHand {
             go.isUserInteractionEnabled = false
-        }
+//        }
     }
 
     // MARK: - update

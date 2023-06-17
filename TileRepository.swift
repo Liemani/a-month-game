@@ -7,21 +7,21 @@
 
 import Foundation
 
-final class TileService {
+final class TileRepository {
 
-    private let tileRepository: TileRepository
+    private let tileDataSource: TileDataSource
 
     init(worldDirectoryURL: URL) {
-        self.tileRepository = TileRepository(worldDirectoryURL: worldDirectoryURL)
+        self.tileDataSource = TileDataSource(worldDirectoryURL: worldDirectoryURL)
     }
 
     func loadTileMap() -> Data {
-        return self.tileRepository.readTileMap()
+        return self.tileDataSource.readTileMap()
     }
 
     func load(_ x: Int, _ y: Int) -> TileType? {
         let index = Constant.gridSize * x + y
-        let tileData = self.tileRepository.read(at: index)
+        let tileData = self.tileDataSource.read(at: index)
         let tileRawValue = tileData.withUnsafeBytes { $0.load(as: Int.self) }
         return TileType(rawValue: tileRawValue)
     }
@@ -30,7 +30,7 @@ final class TileService {
         var value = type.rawValue
         let tileData = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
         let index = Constant.gridSize * x + y
-        self.tileRepository.update(tileData: tileData, to: index)
+        self.tileDataSource.update(tileData: tileData, to: index)
     }
 
 }

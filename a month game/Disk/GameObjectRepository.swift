@@ -1,63 +1,110 @@
 //
-//  PersistentContainer.swift
+//  GameObjectRepository.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/05/13.
+//  Created by 박정훈 on 2023/06/16.
 //
 
 import Foundation
 import CoreData
 
-final class GameObjectRepository {
+class GameObjectRepository {
 
-    private let persistentContainer: NSPersistentContainer
+    private var goDataSource: GameObjectDataSource
+    private var chunkCoordDataSource: ChunkCoordinateDataSource
+    private var invCoordDataSource: InventoryCoordinateDataSource
 
-    init(worldDirectoryURL: URL) {
-        self.persistentContainer = NSPersistentContainer(name: Constant.worldDataModelName)
-        self.loadPersistentStore(worldDirectoryURL: worldDirectoryURL)
-    }
+    private var moContext: NSManagedObjectContext
 
-    private func loadPersistentStore(worldDirectoryURL: URL) {
-        let worldDataModelURL = worldDirectoryURL.appending(path: Constant.dataModelFileName)
-        self.persistentContainer.persistentStoreDescriptions[0].url = worldDataModelURL
-        self.persistentContainer.loadPersistentStores { description, error in
-            if let error = error {
-                fatalError("Unable to load persistent stores: \(error)")
-            }
-        }
+    private var shouldContextSave: Bool
+
+    init(persistentContainer: LMIPersistentContainer) {
+        self.goDataSource = GameObjectDataSource(persistentContainer)
+        self.chunkCoordDataSource = ChunkCoordinateDataSource(persistentContainer)
+        self.invCoordDataSource = InventoryCoordinateDataSource(persistentContainer)
+
+        self.moContext = persistentContainer.viewContext
+
+        self.shouldContextSave = false
     }
 
     // MARK: - edit
-    func load() -> [GameObjectMO] {
-        let request = GameObjectMO.fetchRequest()
-        let goMOs = try! self.persistentContainer.viewContext.fetch(request)
-        return goMOs
-    }
+    func new(id: Int, type: GameObjectType, coord: Coordinate<Int>) -> GameObjectMO {
+        let goMO = self.goDataSource.new()
 
-    func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {
-        let context = self.persistentContainer.viewContext
+        goMO.id = Int32(id)
+        goMO.typeID = Int32(type.rawValue)
 
-        let request = NSFetchRequest<GameObjectMO>(entityName: Constant.gameObjectDataEntityName)
-        request.predicate = NSPredicate(format: "chunkX == %@ AND chunkY == %@ AND chunkLocation & 0xff00 == %@", argumentArray: [chunkCoord.chunkX, chunkCoord.chunkY, UInt16(bitPattern: chunkCoord.chunkLocation) & 0xff00])
+        let chunkCoordMO = self.chunkCoordDataSource.new()
+        let chunkCoord = ChunkCoordinate(from: coord)
+        chunkCoordMO.update(chunkCoord)
+        chunkCoordMO.gameObjectMO = goMO
+        goMO.chunkCoord = chunkCoordMO
 
-        return try! context.fetch(request)
-    }
+        self.shouldContextSave = true
 
-    func newMO() -> GameObjectMO {
-        let context = self.persistentContainer.viewContext
-        let entityName = Constant.gameObjectDataEntityName
-        let goMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: context) as! GameObjectMO
         return goMO
     }
 
+    func new(id: Int, type: GameObjectType, invCoord: InventoryCoordinate) -> GameObjectMO {
+        let goMO = self.goDataSource.new()
+
+        goMO.id = Int32(id)
+        goMO.typeID = Int32(type.rawValue)
+
+        let invCoordMO = self.invCoordDataSource.new()
+        invCoordMO.update(invCoord)
+        invCoordMO.gameObjectMO = goMO
+        goMO.invCoord = invCoordMO
+
+        self.shouldContextSave = true
+
+        return goMO
+    }
+
+    func update(_ goMO: GameObjectMO, coord: Coordinate<Int>) {
+        let chunkCoord = ChunkCoordinate(from: coord)
+        if let chunkCoordMO = goMO.chunkCoord {
+            chunkCoordMO.update(chunkCoord)
+        } else {
+            let chunkCoordMO = self.chunkCoordDataSource.new()
+            chunkCoordMO.update(chunkCoord)
+            chunkCoordMO.gameObjectMO = goMO
+            goMO.chunkCoord = chunkCoordMO
+            goMO.invCoord = nil
+        }
+
+        self.shouldContextSave = true
+    }
+
+    func update(_ goMO: GameObjectMO, invCoord: InventoryCoordinate) {
+        if let invCoordMO = goMO.invCoord {
+            invCoordMO.update(invCoord)
+        } else {
+            let invCoordMO = self.invCoordDataSource.new()
+            invCoordMO.update(invCoord)
+            invCoordMO.gameObjectMO = goMO
+            goMO.invCoord = invCoordMO
+            goMO.chunkCoord = nil
+        }
+
+        self.shouldContextSave = true
+    }
+
     func delete(_ goMO: GameObjectMO) {
-        let context = self.persistentContainer.viewContext
-        context.delete(goMO)
+        self.moContext.delete(goMO)
+
+        self.shouldContextSave = true
     }
 
     func contextSave() {
-        let context = self.persistentContainer.viewContext
-        try! context.save()
+        try! self.moContext.save()
+    }
+
+    // MARK: - update
+    func update() {
+        guard self.shouldContextSave else { return }
+        self.contextSave()
     }
 
 }

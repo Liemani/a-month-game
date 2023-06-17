@@ -27,91 +27,46 @@ extension Array {
 
 }
 
-// MARK: - GameObjectMO
-extension GameObjectMO {
-
-    func set(id: Int, gameObjectType goType: GameObjectType, goCoord: GameObjectCoordinate) {
-        self.id = Int32(id)
-        self.typeID = Int32(goType.rawValue)
-        self.set(to: goCoord)
-    }
-
-    func set(to goCoord: GameObjectCoordinate) {
-        self.containerID = Int32(goCoord.containerType.rawValue)
-        let chunkCoord = ChunkCoordinate(coord: goCoord.coord)
-        self.chunkX = Int32(chunkCoord.chunkX)
-        self.chunkY = Int32(chunkCoord.chunkY)
-        self.chunkLocation = chunkCoord.chunkLocation
-    }
-
-    var containerTypeRawValue: Int? {
-        let containerTypeRawValue = Int(self.containerID)
-
-        return 0 <= containerTypeRawValue && containerTypeRawValue < ContainerType.caseCount
-            ? containerTypeRawValue
-            : nil
-    }
-
-    var containerType: ContainerType? {
-        return ContainerType(rawValue: Int(self.containerID))
-    }
-
-    var gameObjectType: GameObjectType? {
-        return GameObjectType(rawValue: Int(self.typeID))
-    }
-
-    var coord: Coordinate<Int> {
-        return self.chunkCoord.coord
-    }
-
-    var chunkCoord: ChunkCoordinate {
-        return ChunkCoordinate(goMO: self)
-    }
-
-    var tileCoordinate: TileCoordinate {
-        return TileCoordinate(self.chunkCoord.coord)
-    }
-
-    var gameObjectCoordinate: GameObjectCoordinate? {
-        guard let cType = self.containerType else {
-            return nil
-        }
-
-        return GameObjectCoordinate(containerType: cType, coordinate: self.chunkCoord.coord)
-    }
-
-    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
-    func spareDirections(goMOs: any Sequence<GameObjectMO>) -> [Coordinate<Int>] {
-        var filledSpaceFlags: UInt8 = 0
-
-        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
-
-        let coord = self.coord
-        for goMO in goMOs {
-            let goMO = goMO as! GameObjectMO
-            let goMOCoord = goMO.coord
-            if coord.isAdjacent(to: goMOCoord) {
-                let differenceX = goMOCoord.x - coord.x
-                let differenceY = goMOCoord.y - coord.y
-                let tableIndex = (differenceY - 1) * -3 + (differenceX + 1)
-                filledSpaceFlags |= 0x1 << spaceShiftTable[tableIndex]
-            }
-        }
-
-        let coordVectorTable = Constant.coordVectorTable
-
-        var spareSpaces: [Coordinate<Int>] = []
-
-        for index in 0..<8 {
-            if (filledSpaceFlags >> index) & 0x1 == 0x0 {
-                spareSpaces.append(coordVectorTable[index])
-            }
-        }
-
-        return spareSpaces
-    }
-
-}
+#warning("move to GameObject")
+//// MARK: - GameObjectMO
+//extension GameObjectMO {
+//
+//    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
+//    func spareDirections(goMOs: any Sequence<GameObjectMO>) -> [Coordinate<Int>] {
+//        var filledSpaceFlags: UInt8 = 0
+//
+//        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
+//
+//        let coord = self.coord
+//
+//        for goMO in goMOs {
+//            let goMO = goMO as! GameObjectMO
+//            let goMOCoord = goMO.coord
+//            if coord.isAdjacent(to: goMOCoord) {
+//                let differenceX = goMOCoord.x - coord.x
+//                let differenceY = goMOCoord.y - coord.y
+//                let differenceCoord = Coordinate(differenceX, differenceY)
+//                guard let direction = Direction9(coord: differenceCoord) else {
+//                    continue
+//                }
+//                filledSpaceFlags |= 0x1 << direction.rawValue
+//            }
+//        }
+//
+//        let coordVectorTable = Constant.coordVectorTable
+//
+//        var spareSpaces: [Coordinate<Int>] = []
+//
+//        for index in 0..<8 {
+//            if (filledSpaceFlags >> index) & 0x1 == 0x0 {
+//                spareSpaces.append(coordVectorTable[index])
+//            }
+//        }
+//
+//        return spareSpaces
+//    }
+//
+//}
 
 // MARK: - SKNode
 extension SKNode {

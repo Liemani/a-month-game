@@ -14,8 +14,8 @@ class InventoryPane: LMISpriteNode {
 
     var cells: [InventoryCell]!
 
-    var leftHandGO: GameObject? { self.cells[0].children.first as! GameObject? }
-    var rightHandGO: GameObject? { self.cells[self.cellCount - 1].children.first as! GameObject? }
+    var leftHandGO: GameObjectNode? { self.cells[0].children.first as! GameObjectNode? }
+    var rightHandGO: GameObjectNode? { self.cells[self.cellCount - 1].children.first as! GameObjectNode? }
 
     // TODO: 50 clean
     func setUp() {
@@ -77,7 +77,7 @@ class InventoryPane: LMISpriteNode {
 
 }
 
-extension InventoryPane: Container {
+extension InventoryPane: InventoryNode {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
         guard 0 <= coord.x && coord.x < self.cellCount else {
@@ -86,22 +86,17 @@ extension InventoryPane: Container {
         return true
     }
 
-    func addGO(_ go: GameObject, to coord: Coordinate<Int>) {
+    func addGO(_ go: GameObjectNode, to coord: Coordinate<Int>) {
         self.cells[coord.x].addGO(go)
     }
 
-    func moveGO(_ go: GameObject, to coord: Coordinate<Int>) {
+    func moveGO(_ go: GameObjectNode, to coord: Coordinate<Int>) {
         self.cells[coord.x].moveGO(go)
     }
 
-    func moveGOMO(from go: GameObject, to coord: Coordinate<Int>) {
-        let goCoord = GameObjectCoordinate(containerType: .inventory, coordinate: coord)
-        self.worldScene.moveGOMO(from: go, to: goCoord)
-    }
-
-    func gameObjectAtLocation(of touch: UITouch) -> GameObject? {
+    func gameObjectAtLocation(of touch: UITouch) -> GameObjectNode? {
         for cell in self.cells {
-            if let go = cell.children.first as! GameObject?
+            if let go = cell.children.first as! GameObjectNode?
                 , go.isAtLocation(of: touch) {
                 return go
             }
@@ -109,20 +104,20 @@ extension InventoryPane: Container {
         return nil
     }
 
-    func contains(_ go: GameObject) -> Bool {
+    func contains(_ go: GameObjectNode) -> Bool {
         if let cell = go.parent, let container = cell.parent {
             return container == self
         }
         return false
     }
 
-    func makeIterator() -> some IteratorProtocol<GameObject> {
-        return InventoryIterator(self)
+    func makeIterator() -> some IteratorProtocol<GameObjectNode> {
+        return CharacterInventoryIterator(self)
     }
 
 }
 
-struct InventoryIterator: IteratorProtocol {
+struct CharacterInventoryIterator: IteratorProtocol {
 
     let inventoryPane: InventoryPane
     var startIndex: Int = 0
@@ -131,10 +126,10 @@ struct InventoryIterator: IteratorProtocol {
         self.inventoryPane = inventoryPane
     }
 
-    mutating func next() -> GameObject? {
+    mutating func next() -> GameObjectNode? {
         for index in self.startIndex..<self.inventoryPane.cellCount {
             let cell = self.inventoryPane.children[index]
-            if let go = cell.children.first as! GameObject? {
+            if let go = cell.children.first as! GameObjectNode? {
                 self.startIndex = index + 1
                 return go
             }

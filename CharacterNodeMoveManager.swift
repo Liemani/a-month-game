@@ -15,8 +15,8 @@ class CharacterNodeMoveManager {
     // TODO: remove the concep of interaction zone
     private var interactionZone: InteractionZone { self.scene.interactionZone }
 
-    var character: SKShapeNode!
-    var movingLayer: MovingLayer!
+    private let character: SKShapeNode
+    private let movingLayer: MovingLayer!
 
     private var velocityVector: CGVector
 
@@ -30,7 +30,11 @@ class CharacterNodeMoveManager {
         }
     }
 
-    init() {
+    init(worldScene: WorldScene) {
+        self.scene = worldScene
+        self.movingLayer = worldScene.movingLayer
+        self.character = worldScene.movingLayer.character
+
         self.velocityVector = CGVector(dx: 0, dy: 0)
         self.lastCharacterPosition = CGPoint()
     }
@@ -47,6 +51,7 @@ class CharacterMoveTouch: TouchContext {
 }
 
 extension CharacterNodeMoveManager: LMITouchResponder {
+
     func touchBegan(_ touch: UITouch) {
         guard self.touchContextManager.first(of: CharacterMoveTouch.self) == nil else {
             return
@@ -153,7 +158,7 @@ extension CharacterNodeMoveManager {
 
     private func resolveCollisionOfNonWalkable() {
         for go in self.interactionZone.gos {
-            guard !go.isWalkable else { continue }
+            guard !go.type.isWalkable else { continue }
 
             if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
                 go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)

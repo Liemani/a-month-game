@@ -11,15 +11,15 @@ import Foundation
 ///  Concentrate data input output without limit
 class ContainerModel {
 
-    private var goMOToGO: [GameObjectMO: GameObject] = [:]
-    private var goToGOMO: [GameObject: GameObjectMO] = [:]
+    private var goMOToGO: [GameObjectMO: GameObjectNode] = [:]
+    private var goToGOMO: [GameObjectNode: GameObjectMO] = [:]
 
-    var goMOs: Dictionary<GameObjectMO, GameObject>.Keys {
+    var goMOs: Dictionary<GameObjectMO, GameObjectNode>.Keys {
         return self.goMOToGO.keys
     }
 
     // MARK: - subscript
-    subscript(goMO: GameObjectMO) -> GameObject? {
+    subscript(goMO: GameObjectMO) -> GameObjectNode? {
         get { return self.goMOToGO[goMO] }
         set(newGO) {
             if let oldGO = self.goMOToGO[goMO] {
@@ -37,7 +37,7 @@ class ContainerModel {
         }
     }
 
-    subscript(go: GameObject) -> GameObjectMO? {
+    subscript(go: GameObjectNode) -> GameObjectMO? {
         get { return self.goToGOMO[go] }
         set(newGOMO) {
             if let oldGOMO = self.goToGOMO[go] {
@@ -56,7 +56,7 @@ class ContainerModel {
     }
 
     // MARK: - remove
-    func remove(_ goMO: GameObjectMO) -> GameObject? {
+    func remove(_ goMO: GameObjectMO) -> GameObjectNode? {
         if let go = self.goMOToGO[goMO] {
             self.goMOToGO[goMO] = nil
             self.goToGOMO[go] = nil
@@ -65,7 +65,7 @@ class ContainerModel {
         return nil
     }
 
-    func remove(_ go: GameObject) -> GameObjectMO? {
+    func remove(_ go: GameObjectNode) -> GameObjectMO? {
         if let goMO = self.goToGOMO[go] {
             self.goMOToGO[goMO] = nil
             self.goToGOMO[go] = nil
@@ -74,11 +74,11 @@ class ContainerModel {
         return nil
     }
 
-    var goMOKeys: Dictionary<GameObjectMO, GameObject>.Keys {
+    var goMOKeys: Dictionary<GameObjectMO, GameObjectNode>.Keys {
         return self.goMOToGO.keys
     }
 
-    var goKeys: Dictionary<GameObject, GameObjectMO>.Keys {
+    var goKeys: Dictionary<GameObjectNode, GameObjectMO>.Keys {
         return self.goToGOMO.keys
     }
 

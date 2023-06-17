@@ -19,6 +19,7 @@ enum GameObjectType: Int, CaseIterable {
     case axe
 
     private static let resources: [(isWalkable: Bool, isPickable: Bool, resourceName: String)] = [
+        // TODO: resource name first and make numbers file for data table
         (true, true, "game_object_none"),
         (true, true, "game_object_pine_cone"),
         (false, false, "game_object_pine_tree"),

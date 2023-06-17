@@ -12,6 +12,46 @@ bonus: 추가적으로 적용할 수도 있는 구현
 dump log: 사용한 dump 내용을 쌓아둔다
 
 # dump
+2023-06-19
+scene
+    WorldScene
+view controller
+    WorldSceneViewController
+view model
+    WorldSceneViewModel
+model
+    WorldSceneModel
+        SceneModel 이라는 단어가 ViewModel 로 해석될 여지가 있다
+
+2023-06-18
+service 는 비지니스 로직이 들어가는게 맞다면 내 model 이 service 가 되고
+지금의 service 는 service 와 repository 의 중간 단계가 되야 할 것 같다
+
+persistentContainer
+    service
+    repository
+portalView
+    PortalViewController
+    view
+        PortalScene
+    viewModel
+    model
+worldView
+    WorldViewController
+    view
+        WorldScene
+    viewModel
+    model
+
+view model 을 view 와 model 사이에 둘 것인가?
+view model 의 역할은 무엇인가?
+두는게 좋겠는데?
+지금 view 그리는데 막 로직들이 다 node 에 들어가서 불편하긴 했다
+node 는 responder 의 역할만 하고
+데이터는 view model 로 빼는게 좋겠다
+view model 은 아하! field view model 이 field 를 가지고 있으면 되겠구나?
+
+2023-06-17
 만약 모델이 타일에 따라 바뀐다고 한다면
 컨트롤러가 모델 변화에 따라 씬을 수정해줘야 할 것이다
 메니지드 오브젝트는 어떤가?
@@ -22,23 +62,6 @@ dump log: 사용한 dump 내용을 쌓아둔다
 하지만 이를 컨트롤러에서 처리한다면 부담이 크다
 그럼 청크 변화를 처리하는 컨트롤러를 따로 둔다면?
 캐릭터의 위치나 저장 로드 만들어보자
-
-## view layer
-world scene
-    moving layer
-        world layer
-            tile map
-            field
-    fixed layer
-        ui
-            menu button
-            character
-            interaction zone
-            inventory pane
-            third hand
-            craft pane
-        menu pane
-
 
 # 일정 및 진행 작업 기록
 1주 2023-05-03 ~ 2023-05-09
@@ -423,6 +446,25 @@ world scene
         firing
 
 # issue
+tile 도 테이블에 넣고 chunk 단위로 로드하기
+chunk 가 변할 때 새로운 chunk 로드하기
+tile view 를 chunk 단위로 만들기
+    사실상 tile 을 game object 로 처리할 것이기 때문에 9 개만 있으면 된다
+craft 는 이벤트로 보내고 controller.update() 에서 처리하기
+touch drag 도 이벤트로 보내고 controller.update() 에서 처리하기
+    아닌가, 터치는 자신이 처리하고 추가적인 처리가 필요한 경우 보내야지
+main branch 는 stable 만 merge 하자
+    ff 를 하니 stable 을 알 수가 없다
+LMIEventManager
+    LMIEvent
+WorldViewModel
+    Field
+    Field Inventory
+    Character Inventory
+    Character Inventory Inventory
+    Character
+밖에서 그냥 넣어주던거 가능하면 함수를 통해서 넣어주자
+modify & to < in fetch predicate format
 recompose zposition
 타일을 sql 로 저장하기...
 world view model 은 service 에 직접 접근하지 않아야 한다
@@ -443,7 +485,6 @@ world scene
             craft pane
         menu pane
 
-button 이 따로 deligate 를 설정해줘야 하는 것이 아니라 그냥 부모가 반드시 딜리게이트 클래스인 것으로 호출하기
 rename container to inventory
 remove interaction zone
     그럼 zone 이 하던 일은 어디에 넣어야 하나?
@@ -719,6 +760,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+button 이 따로 deligate 를 설정해줘야 하는 것이 아니라 그냥 부모가 반드시 딜리게이트 클래스인 것으로 호출하기
 move character to field
     field 는 터치를 moving layer 에게 넘긴다
 캐릭터를 field 위로 옮기고 움직이게 하기
@@ -899,7 +941,80 @@ tilemap 사용하여 자연스러운 배경 묘사
     일정 거리 서로 밀어내도록
 
 # dump log
+
+2023-06-18
+OOO?    XOOO
+OOO? -> XOOO
+OOO?    XOOO
+
+678
+345
+012
+
+ O
+ O
+ O
+
+ V
+
+ X
+ O
+ O
+(O)
+
+table 에서 이게 쉬운건 1 차원이라서 queue 로 쉽게 구현이 가능하다
+2 차원에서는 어떻게 구현할까?
+chunk 데이터를 1 차원 배열에 넣고 상황에 따라 삭제, 추가로 위치에 따른 index 를 유지하도록 할까?
+
+CGPoint
+    view: 출력 목적
+TileCoordinate
+    model: 가공 목적
+Coordinate<Int>
+    온 곳: 누구나 이해하는 공통 규약
+ChunkCoordinate
+    service: 가공 목적
+ChunkCoordinateMO
+    repository: 저장 목적
+
+# xcode review
+파일을 로드하는데 너무 오래 걸린다
+깃을 옮겨다니는 것이 꺼려진다
+그 계속 바뀌는거는 자동으로 생성되는거 아닐까?
+그거는 gitignore로 안올라가도록 처리해볼까?
+그러면 깃 옮겨다니기 꺼려지는 문제가 해결된다
+새로운 파일을 만드는 것이 아니라 새로운 클래스를 생성하는 방식도 존재할 것이다!
+
+for {
+    function1()
+    function2()
+}
+
+func function1() {
+    publish()
+}
+
+func function2() {
+    subscribe()
+}
+
 2023-06-17
+## view layer
+world scene
+    moving layer
+        world layer
+            tile map
+            field
+    fixed layer
+        ui
+            menu button
+            character
+            interaction zone
+            inventory pane
+            third hand
+            craft pane
+        menu pane
+
 지금은 캐릭터의 위치가 뷰와 상당히 coupling 되어 있다
 캐릭터 모델은 데이터만 가지고 있다고 생각하면
 위치가 바뀐 경우 컨트롤러가 위치가 바뀌었음을 알리자
@@ -952,6 +1067,25 @@ character node 를 class 로 만들어서 처리해도 괜찮지? 않을 것 같
 
 모든 터치는 터치 가지고 있다
 LMITouch 에는 해당 터치를 위한 다양한 유용한 정보가 들어간다
+
+class ChunkLocationMO {
+    Int32   x;
+    Int32   y;
+    Int16   location;
+}
+
+class GameObjectMO {
+    Int32   id;
+    Int32   typeID;
+    Int32   containerID;
+    ChunkLocationMO*    chunk;
+}
+
+class TileMO {
+    Int32   id;
+    Int32   typeID;
+    ChunkLocationMO*    chunk;
+}
 
 2023-06-06
 음식

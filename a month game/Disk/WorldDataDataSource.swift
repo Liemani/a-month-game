@@ -1,13 +1,13 @@
 //
-//  WorldDataRepository.swift
+//  WorldDataDataSource.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/06/14.
+//  Created by 박정훈 on 2023/06/19.
 //
 
 import Foundation
 
-class WorldDataRepository {
+class WorldDataDataSource {
 
     private let fileManager: FileManager
 
@@ -18,7 +18,7 @@ class WorldDataRepository {
         self.fileManager = FileManager.default
 
         // TODO: URL.path is deprecated
-        self.filePath = worldDirectoryURL.appending(path: Constant.worldDataFileName).path
+        self.filePath = worldDirectoryURL.appending(path: Constant.Name.worldDataFile).path
 
         self.createFileIfNotExist()
 
@@ -39,7 +39,7 @@ class WorldDataRepository {
 }
 
 // MARK: - private
-extension WorldDataRepository {
+extension WorldDataDataSource {
 
     private func createFileIfNotExist() {
         guard !self.fileManager.fileExists(atPath: self.filePath) else {

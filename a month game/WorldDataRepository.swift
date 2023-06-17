@@ -10,28 +10,28 @@ import Foundation
 enum WorldDataIndex: Int, CaseIterable {
 
     case nextID
-    case characterX
-    case characterY
+    case characterPositionX
+    case characterPositionY
 
 }
 
-class WorldDataService {
+class WorldDataRepository {
 
-    private let worldDataRepository: WorldDataRepository
+    private let worldDataDataSource: WorldDataDataSource
 
     init(worldDirectoryURL: URL) {
-        self.worldDataRepository = WorldDataRepository(worldDirectoryURL: worldDirectoryURL)
+        self.worldDataDataSource = WorldDataDataSource(worldDirectoryURL: worldDirectoryURL)
     }
 
     func load(at index: WorldDataIndex) -> Int {
-        let data = self.worldDataRepository.read(at: index.rawValue)
+        let data = self.worldDataDataSource.read(at: index.rawValue)
         return data.withUnsafeBytes { $0.load(as: Int.self) }
     }
 
     func update(value: Int, to index: WorldDataIndex) {
         var value = value
         let data = Data(bytes: &value, count: MemoryLayout.size(ofValue: value))
-        self.worldDataRepository.update(data: data, to: index.rawValue)
+        self.worldDataDataSource.update(data: data, to: index.rawValue)
     }
 
 }

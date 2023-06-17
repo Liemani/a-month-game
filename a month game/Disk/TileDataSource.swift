@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class TileRepository {
+final class TileDataSource {
 
     private let fileManager: FileManager
 
@@ -18,7 +18,7 @@ final class TileRepository {
         self.fileManager = FileManager.default
 
         // TODO: URL.path is deprecated
-        self.filePath = worldDirectoryURL.appending(path: Constant.tileMapFileName).path
+        self.filePath = worldDirectoryURL.appending(path: Constant.Name.tileMapFile).path
 
         self.createFileIfNotExist()
 
@@ -45,7 +45,7 @@ final class TileRepository {
 }
 
 // MARK: - private
-extension TileRepository {
+extension TileDataSource {
 
     private func createFileIfNotExist() {
         guard !self.fileManager.fileExists(atPath: self.filePath) else {
