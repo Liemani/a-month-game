@@ -55,8 +55,20 @@ extension Coordinate<Int> {
         return Coordinate(lhs.x - rhs.x, lhs.y - rhs.y)
     }
 
+    static func << (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x << rhs, lhs.y << rhs)
+    }
+
     static func >> (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
         return Coordinate<Int>(lhs.x >> rhs, lhs.y >> rhs)
+    }
+
+}
+
+extension Coordinate<Int>: CustomDebugStringConvertible {
+
+    var debugDescription: String {
+        return "(\(self.x), \(self.y))"
     }
 
 }

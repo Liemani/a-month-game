@@ -40,8 +40,9 @@ class FieldNode: LMINode {
 extension FieldNode: InventoryNode {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
-        return 0 <= coord.x && coord.x < Constant.gridSize
-        && 0 <= coord.y && coord.y < Constant.gridSize
+        return true
+//        return 0 <= coord.x && coord.x < Constant.gridSize
+//        && 0 <= coord.y && coord.y < Constant.gridSize
     }
 
     func addGO(_ go: GameObjectNode, to coord: Coordinate<Int>) {

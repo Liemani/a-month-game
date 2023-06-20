@@ -11,7 +11,6 @@ import SpriteKit
 enum TileType: Int, CaseIterable {
 
     case grass
-    case woodFloor
 
     static var caseCount: Int {
         return self.allCases.count
@@ -20,7 +19,6 @@ enum TileType: Int, CaseIterable {
     private static let resource: [TileType: (tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = ({
         let rawResources = [
             "grass_tile",
-            "wood_floor",
         ]
 
         var dictionary: [TileType: (tileGroup: SKTileGroup, tileDefinition: SKTileDefinition)] = [:]

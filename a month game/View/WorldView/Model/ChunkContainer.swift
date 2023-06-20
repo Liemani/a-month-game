@@ -24,17 +24,13 @@ class ChunkContainer {
     }
 
     var fieldGOs: [GameObject] {
-        print("chunks count: \(self.chunks.count)")
-        for chunk in self.chunks {
-            print("    chunk count: \(chunk.gos.count)")
-        }
         return self.chunks.flatMap { $0.gos }
     }
 
     // MARK: - chunk
     func setUp(coord: Coordinate<Int>) {
         for direction in Direction9.allCases {
-            let targetCoord = coord + direction.coord
+            let targetCoord = coord + direction.coord << 4
 
             let chunk = Chunk(chunkRepository: self.chunkRepository, goRepository: self.goRepository, coord: targetCoord)
             self.chunks[direction] = chunk
@@ -46,7 +42,7 @@ class ChunkContainer {
         self.shift(direction: direction.opposite)
 
         for direction in direction.direction8 {
-            let targetTileCoord = coord + direction.coord
+            let targetTileCoord = coord + direction.coord << 4
             let chunk = Chunk(chunkRepository: self.chunkRepository, goRepository: self.goRepository, coord: targetTileCoord)
             self.chunks[direction] = chunk
         }

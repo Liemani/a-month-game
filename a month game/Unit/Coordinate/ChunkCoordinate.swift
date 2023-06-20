@@ -16,7 +16,7 @@ struct ChunkCoordinate {
 
     // MARK: - init
     init(from chunkCoordMO: ChunkCoordinateMO) {
-        self.init(x: chunkCoordMO.x, y: chunkCoordMO.y, location: UInt16(bitPattern: chunkCoordMO.location))
+        self.init(x: chunkCoordMO.x, y: chunkCoordMO.y, location: UInt16(bitPattern: Int16(truncatingIfNeeded: chunkCoordMO.location)))
     }
 
     init(from coord: Coordinate<Int>) {
@@ -48,8 +48,8 @@ struct ChunkCoordinate {
     }
 
     // MARK: -
-    var location: Int16 {
-        return (Int16(self.street) << 8) | Int16(self.building)
+    var location: Int32 {
+        return (Int32(self.street) << 8) | Int32(self.building)
     }
 
     var coord: Coordinate<Int> {
