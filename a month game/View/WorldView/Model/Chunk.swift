@@ -11,9 +11,11 @@ class Chunk {
 
     private var chunkRepository: ChunkRepository!
     private var goRepository: GameObjectRepository!
-    private let dict: NSMutableDictionary
 
+    private let dict: NSMutableDictionary
     var gos: [GameObject] { self.dict.allValues as! [GameObject] }
+
+    var chunkCoord: ChunkCoordinate!
 
     init(chunkRepository: ChunkRepository, goRepository: GameObjectRepository) {
         self.chunkRepository = chunkRepository
@@ -34,6 +36,8 @@ class Chunk {
         }
 
         self.dict = dict
+
+        let chunkCoord = ChunkCoordinate(from: coord)
     }
 
     subscript(key: Int) -> GameObject? {

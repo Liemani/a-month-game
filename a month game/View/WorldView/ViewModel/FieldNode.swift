@@ -10,8 +10,13 @@ import SpriteKit
 
 class FieldNode: LMINode {
 
+    var chunkNodes: [ChunkNode]
+
     override init() {
+        self.chunkNodes = [ChunkNode](repeating: ChunkNode(), count: 9)
+        
         super.init()
+
         self.zPosition = Constant.ZPosition.gameObjectLayer
     }
 
@@ -36,7 +41,7 @@ class FieldNode: LMINode {
 
 }
 
-// MARK: - extension
+// MARK: - InventoryNode
 extension FieldNode: InventoryNode {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {

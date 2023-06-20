@@ -60,7 +60,6 @@ class WorldScene: SKScene, LMITouchResponder {
         let movingLayer = MovingLayer()
         self.addChild(movingLayer)
         self.movingLayer = movingLayer
-
         self.field = movingLayer.field
 
         // MARK: fixed layer

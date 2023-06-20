@@ -5,8 +5,23 @@
 //  Created by 박정훈 on 2023/05/29.
 //
 
-//import Foundation
-//
+import Foundation
+
+func combineIterators<T>(iterators: [AnyIterator<T>]) -> AnyIterator<T> {
+    var iteratorIndex = 0
+
+    return AnyIterator {
+        while iteratorIndex < iterators.count {
+            if let nextElement = iterators[iteratorIndex].next() {
+                return nextElement
+            } else {
+                iteratorIndex += 1
+            }
+        }
+        return nil
+    }
+}
+
 //struct CombineSequence<Element>: Sequence, IteratorProtocol {
 //
 //    private var sequences: [(any IteratorProtocol<Element>)?]
