@@ -12,11 +12,11 @@ final class WorldGenerator {
     private let serviceContainer: WorldRepositoryContainer
     private let idGenerator: IDGenerator
 
+    #warning("what about create file here?")
     static func generate(worldDataContainer: WorldRepositoryContainer) {
         let worldGenerator = WorldGenerator(worldDataContainer: worldDataContainer)
         worldGenerator.generateWorldData()
         worldGenerator.generateGOMOs()
-        worldGenerator.generateTileMapData()
     }
 
     private init(worldDataContainer: WorldRepositoryContainer) {
@@ -31,14 +31,16 @@ final class WorldGenerator {
     }
 
     private func generateGOMOs() {
+        self.new(type: .woodFloor, x: 0, y: 0)
+        self.new(type: .woodWall, x: -1, y: -1)
+        self.new(type: .woodWall, x: -1, y: 0)
+        self.new(type: .woodWall, x: -1, y: 1)
+        self.new(type: .woodWall, x: 0, y: 1)
+        self.new(type: .woodWall, x: 1, y: 1)
+        self.new(type: .woodWall, x: 1, y: 0)
+        self.new(type: .woodWall, x: 1, y: -1)
+
         self.new(type: .pineCone, x: 0, y: 0)
-        self.new(type: .woodWall, x: 2, y: 2)
-        self.new(type: .woodWall, x: 2, y: 3)
-        self.new(type: .woodWall, x: 2, y: 4)
-        self.new(type: .woodWall, x: 3, y: 4)
-        self.new(type: .woodWall, x: 4, y: 4)
-        self.new(type: .woodWall, x: 4, y: 3)
-        self.new(type: .woodWall, x: 4, y: 2)
         self.new(type: .pineCone, x: Constant.centerTileIndex - 2, y: Constant.centerTileIndex - 3)
         self.new(type: .pineTree, x: Constant.centerTileIndex - 1, y: Constant.centerTileIndex - 3)
         self.new(type: .woodWall, x: Constant.centerTileIndex - 1, y: Constant.centerTileIndex - 1)
@@ -48,14 +50,10 @@ final class WorldGenerator {
         self.new(type: .woodWall, x: Constant.centerTileIndex + 1, y: Constant.centerTileIndex + 1)
         self.new(type: .woodWall, x: Constant.centerTileIndex + 1, y: Constant.centerTileIndex)
         self.new(type: .woodWall, x: Constant.centerTileIndex + 1, y: Constant.centerTileIndex - 1)
-        self.new(type: .branch, x: Constant.centerTileIndex, y: Constant.centerTileIndex - 3)
+        self.new(type: .woodStick, x: Constant.centerTileIndex, y: Constant.centerTileIndex - 3)
         self.new(type: .stone, x: Constant.centerTileIndex + 1, y: Constant.centerTileIndex - 3)
 
         self.serviceContainer.goRepository.contextSave()
-    }
-
-    private func generateTileMapData() {
-        self.serviceContainer.tileRepository.update(type: .woodFloor, toX: Constant.centerTileIndex, y: Constant.centerTileIndex)
     }
 
     private func new(type: GameObjectType, x: Int, y: Int) {

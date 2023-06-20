@@ -10,23 +10,36 @@ import SpriteKit
 
 enum GameObjectType: Int, CaseIterable {
 
+    typealias ResourceType = (
+        resourceName: String,
+        isWalkable: Bool,
+        isPickable: Bool,
+        isInteractable: Bool,
+        isTile: Bool
+    )
+
     case none
+    case woodFloor
     case pineCone
     case pineTree
     case woodWall
-    case branch
+    case woodStick
     case stone
     case axe
 
-    private static let resources: [(isWalkable: Bool, isPickable: Bool, resourceName: String)] = [
-        // TODO: resource name first and make numbers file for data table
-        (true, true, "game_object_none"),
-        (true, true, "game_object_pine_cone"),
-        (false, false, "game_object_pine_tree"),
-        (false, false, "wood_wall"),
-        (true, true, "game_object_branch"),
-        (true, true, "game_object_stone"),
-        (true, true, "game_object_axe"),
+    #warning("todo")
+    // set isTile
+    // remove tile thing
+
+    private static let resources: [ResourceType] = [
+        ("game_object_none", false, false, false, false),
+        ("game_object_wood_floor", true, false, false, true),
+        ("game_object_pine_cone", true, true, true, false),
+        ("game_object_pine_tree", false, false, true, false),
+        ("game_object_wood_wall", false, false, true, false),
+        ("game_object_wood_stick", true, true, true, false),
+        ("game_object_stone", true, true, true, false),
+        ("game_object_axe", true, true, true, false),
     ]
 
     private static let textures: [SKTexture] = ({
@@ -44,9 +57,12 @@ enum GameObjectType: Int, CaseIterable {
     static var caseCount: Int { GameObjectType.allCases.count }
 
     var typeID: Int32 { Int32(self.rawValue) }
-    var resources: [(isWalkable: Bool, isPickable: Bool, resourceName: String)] { GameObjectType.resources }
+    var resources: [ResourceType] { GameObjectType.resources }
     var texture: SKTexture { GameObjectType.textures[self.rawValue] }
+
     var isWalkable: Bool { self.resources[self.rawValue].isWalkable }
     var isPickable: Bool { self.resources[self.rawValue].isPickable }
+    var isInteractable: Bool { self.resources[self.rawValue].isInteractable }
+    var isTile: Bool { self.resources[self.rawValue].isTile }
 
 }

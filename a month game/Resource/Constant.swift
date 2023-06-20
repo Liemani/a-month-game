@@ -66,7 +66,8 @@ struct Constant {
         static let movingLayer = -500.0
         static let tileMap = -100.0
         static let gameObjectLayer = 0.0
-        static let gameObject = 10.0
+        static let gameObjectNode = 10.0
+        static let tileNode = 0.0
 
         static let fixedLayer = 0.0
         static let ui = 0.0
@@ -106,8 +107,8 @@ struct Constant {
 
     // MARK: - recipe
     static let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = [
-        .woodWall: [(.branch, 4)],
-        .axe: [(.stone, 1), (.branch, 1)],
+        .woodWall: [(.woodStick, 4)],
+        .axe: [(.stone, 1), (.woodStick, 1)],
     ]
 
     // MARK: - UserDefaults key

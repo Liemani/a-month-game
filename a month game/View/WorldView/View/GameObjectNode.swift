@@ -32,7 +32,9 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
 
         self._type = go.type
 
-        self.zPosition = Constant.ZPosition.gameObject
+        self.zPosition = !self.type.isTile
+            ? Constant.ZPosition.gameObjectNode
+            : Constant.ZPosition.tileNode
     }
 
     required init?(coder aDecoder: NSCoder) {

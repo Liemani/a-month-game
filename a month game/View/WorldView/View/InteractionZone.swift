@@ -47,10 +47,10 @@ class InteractionZone: LMISpriteNode {
     }
 
     // MARK: - activate
-    func activate(_ go: GameObjectNode) {
-        go.color = .green.withAlphaComponent(0.9)
-        go.colorBlendFactor = Constant.accessableGOColorBlendFactor
-        go.isUserInteractionEnabled = true
+    func activate(_ goNode: GameObjectNode) {
+        goNode.color = .green.withAlphaComponent(0.9)
+        goNode.colorBlendFactor = Constant.accessableGOColorBlendFactor
+        goNode.isUserInteractionEnabled = goNode.type.isInteractable
     }
 
     func activate() {

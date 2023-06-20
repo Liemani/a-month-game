@@ -26,6 +26,7 @@ class MovingLayer: LMINode {
 
     func addOrigin(to parent: SKNode) {
         let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
+        origin.zPosition = Double.infinity
         parent.addChild(origin)
     }
 

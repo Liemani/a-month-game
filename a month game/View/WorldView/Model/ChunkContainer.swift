@@ -24,6 +24,10 @@ class ChunkContainer {
     }
 
     var fieldGOs: [GameObject] {
+        print("chunks count: \(self.chunks.count)")
+        for chunk in self.chunks {
+            print("    chunk count: \(chunk.gos.count)")
+        }
         return self.chunks.flatMap { $0.gos }
     }
 

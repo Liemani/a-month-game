@@ -156,7 +156,9 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
 
 #if DEBUG
     private func debugCode() {
-        for go in self.model.fieldGOs {
+        let gos = self.model.fieldGOs
+        print(gos.count)
+        for go in gos {
             guard let goCoord = go.coord else { continue }
 
             print("id: \(go.id), typeID: \(go.type), coordinate: (\(goCoord))")
