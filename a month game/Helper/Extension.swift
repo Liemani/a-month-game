@@ -9,8 +9,8 @@ import Foundation
 import SpriteKit
 
 extension Notification.Name {
-    static let requestPresentPortalViewController = Notification.Name("RequestPortalViewController")
-    static let requestPresentWorldViewController = Notification.Name("RequestWorldViewController")
+    static let requestPresentPortalSceneViewController = Notification.Name("RequestPortalSceneViewController")
+    static let requestPresentWorldSceneViewController = Notification.Name("RequestWorldSceneViewController")
 }
 
 // MARK: - Array
