@@ -447,6 +447,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 tile 도 테이블에 넣고 chunk 단위로 로드하기
+아종 데이터
 chunk 가 변할 때 새로운 chunk 로드하기
 tile view 를 chunk 단위로 만들기
     사실상 tile 을 game object 로 처리할 것이기 때문에 9 개만 있으면 된다
