@@ -11,7 +11,6 @@ import SpriteKit
 class MovingLayer: LMINode {
 
     var field: FieldNode!
-    var tileMap: SKTileMapNode!
     var character: SKShapeNode!
 
     override init() {
@@ -58,18 +57,27 @@ class MovingLayer: LMINode {
     }
 
     func addTileMap(to parent: SKNode) {
-        let tileGroups = TileType.tileGroups
-        let tileSet = SKTileSet(tileGroups: tileGroups)
+        let resourceName = "tile_default"
+        let tileTexture = SKTexture(imageNamed: resourceName)
+        let tileDefinition = SKTileDefinition(texture: tileTexture)
+        let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
+        let tileSet = SKTileSet(tileGroups: [tileGroup])
 
-        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.tileTextureSize)
-        tileMap.xScale = Constant.tileScale
-        tileMap.yScale = Constant.tileScale
+        let tileMapSide = Constant.tileMapSide
+        let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: tileMapSide, rows: tileMapSide, tileSize: Constant.tileTextureSize)
 
-        tileMap.position = Constant.tileMapPosition
-        tileMap.zPosition = Constant.ZPosition.tileMap
+        tileMapNode.xScale = Constant.tileScale
+        tileMapNode.yScale = Constant.tileScale
+        tileMapNode.zPosition = Constant.ZPosition.tileMap
 
-        parent.addChild(tileMap)
-        self.tileMap = tileMap
+        for x in 0..<tileMapSide {
+            for y in 0..<tileMapSide {
+                tileMapNode.setTileGroup(tileGroup, andTileDefinition: tileDefinition, forColumn: x, row: y)
+            }
+        }
+
+        parent.addChild(tileMapNode)
+        tileMapNode.position = Constant.defaultNodeSize.toCGPoint() * Double(Constant.chunkSide / 2)
     }
 
     required init?(coder aDecoder: NSCoder) {

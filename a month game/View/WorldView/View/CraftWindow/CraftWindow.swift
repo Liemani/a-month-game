@@ -52,11 +52,12 @@ class CraftWindow: LMISpriteNode {
     func update() {
         guard self.shouldUpdate else { return }
 
-        let sequences: [any Sequence<GameObjectNode>] = [
-            self.interactionZone.gos,
-            self.worldScene.characterInv,
-        ]
-        let gos = CombineSequence(sequences: sequences)
+//        let sequences: [any Sequence<GameObjectNode>] = [
+//            self.interactionZone.gos,
+//            self.worldScene.characterInv,
+//        ]
+//        let gos = CombineSequence(sequences: sequences)
+        let gos: [GameObjectNode] = []
 
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
 
@@ -81,10 +82,10 @@ class CraftWindow: LMISpriteNode {
 
     private func reset() {
         for cell in self.children {
-            let go = cell.children[0] as! GameObjectNode
+            let goNode = cell.children[0] as! GameObjectNode
 
-            go.setType(.none)
-            go.isUserInteractionEnabled = false
+            goNode.type = .none
+            goNode.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }
@@ -113,9 +114,9 @@ class CraftWindow: LMISpriteNode {
 
     func set(index gameObjectIndex: Int, type goType: GameObjectType) {
         let cell = self.children[gameObjectIndex]
-        let go = cell.children[0] as! GameObjectNode
-        go.setType(goType)
-        go.isUserInteractionEnabled = true
+        let goNode = cell.children[0] as! GameObjectNode
+        goNode.type = goType
+        goNode.isUserInteractionEnabled = true
         cell.alpha = 1.0
     }
 
@@ -127,20 +128,20 @@ class CraftWindow: LMISpriteNode {
 //        self.consumeIngredient(of: go.type)
 //    }
 
-    func consumeIngredient(of goType: GameObjectType) {
-        let recipes = Constant.recipes
-        let recipe = recipes[goType]!
-        let gosToRemove = MaterialInRecipeSequence(recipe: recipe, materials: self.resources())
-        self.worldScene.remove(from: gosToRemove)
-    }
-
-    private func resources() -> some Sequence<GameObjectNode> {
-        let resourceSequences: [any Sequence<GameObjectNode>] = [
-            self.interactionZone.gos,
-            self.worldScene.characterInv,
-        ]
-        return CombineSequence(sequences: resourceSequences)
-    }
+//    func consumeIngredient(of goType: GameObjectType) {
+//        let recipes = Constant.recipes
+//        let recipe = recipes[goType]!
+//        let gosToRemove = MaterialInRecipeSequence(recipe: recipe, materials: self.resources())
+//        self.worldScene.remove(from: gosToRemove)
+//    }
+//
+//    private func resources() -> some Sequence<GameObjectNode> {
+//        let resourceSequences: [any Sequence<GameObjectNode>] = [
+//            self.interactionZone.gos,
+//            self.worldScene.characterInv,
+//        ]
+//        return CombineSequence(sequences: resourceSequences)
+//    }
 
     func isCellActivated(_ cell: SKNode) -> Bool {
         return cell.alpha == 1.0

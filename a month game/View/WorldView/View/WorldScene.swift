@@ -29,7 +29,6 @@ class WorldScene: SKScene, LMITouchResponder {
 
     // MARK: layer
     var movingLayer: MovingLayer!
-    var tileMap: SKTileMapNode!
 
     var ui: SKNode!
     var interactionZone: InteractionZone!
@@ -63,7 +62,6 @@ class WorldScene: SKScene, LMITouchResponder {
         self.movingLayer = movingLayer
 
         self.field = movingLayer.field
-        self.tileMap = movingLayer.tileMap
 
         // MARK: fixed layer
         let fixedLayer = SKNode()

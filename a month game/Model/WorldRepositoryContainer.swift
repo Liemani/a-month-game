@@ -11,7 +11,6 @@ final class WorldRepositoryContainer {
 
     let goRepository: GameObjectRepository
     let chunkRepository: ChunkRepository
-    let tileRepository: TileRepository
     let worldDataRepository: WorldDataRepository
 
     init(worldName: String) {
@@ -26,7 +25,6 @@ final class WorldRepositoryContainer {
 
         self.goRepository = GameObjectRepository(persistentContainer: persistentContainer)
         self.chunkRepository = ChunkRepository(persistentContainer: persistentContainer)
-        self.tileRepository = TileRepository(worldDirectoryURL: worldDirectoryURL)
         self.worldDataRepository = WorldDataRepository(worldDirectoryURL: worldDirectoryURL)
 
         if !isWorldExist {

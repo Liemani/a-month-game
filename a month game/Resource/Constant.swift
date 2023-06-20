@@ -35,10 +35,6 @@ struct Constant {
     static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
     static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
-    // MARK: tile map
-    static let tileMapSide = tileSide * Double(gridSize)
-    static let tileMapPosition = CGPoint() + (tileMapSide / 2.0)
-
     // MARK: misc
     static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toCGPoint()
     static let characterRadius = defaultSize / 3.0
@@ -55,7 +51,8 @@ struct Constant {
     static let craftWindowCellCount = 5
 
     // MARK: world box
-    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: tileMapSide, height: tileMapSide))
+    static let worldSize = tileSize * 512
+    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: worldSize.width, height: worldSize.height))
     static let moveableArea = CGRect(origin: CGPoint() + characterRadius, size: worldBorder.size - (characterRadius * 2.0))
 
     // MARK: - z position
@@ -115,7 +112,8 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let gridSize: Int = 256
+    static let chunkSide: Int = 16
+    static let tileMapSide: Int = chunkSide * 3
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
@@ -151,8 +149,5 @@ struct Constant {
         Coordinate(-1, 1),
         Coordinate(0, 1),
     ]
-
-    // MARK: map position
-    static let centerTileIndex = gridSize / 2
 
 }

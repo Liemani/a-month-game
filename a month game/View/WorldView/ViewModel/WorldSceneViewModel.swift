@@ -16,13 +16,10 @@ class WorldSceneViewModel {
 //    var fieldInv: (any InventoryNode)?
 //    var characterInvInv: (any InventoryNode)?
 
-    let tileMap: SKTileMapNode
-
     let characterNodeMoveManager: CharacterNodeMoveManager
 
     init(worldScene: WorldScene) {
         self.fieldNode = worldScene.field
-        self.tileMap = worldScene.tileMap
         self.characterNodeMoveManager = worldScene.characterNodeMoveManager
     }
 
@@ -38,22 +35,8 @@ class WorldSceneViewModel {
         }
     }
 
-    func setUpTileMap(tileMapBufferPointer: UnsafeBufferPointer<Int>) {
-        for x in 0..<Constant.gridSize {
-            for y in 0..<Constant.gridSize {
-                let rawValue = tileMapBufferPointer[x + y * Constant.gridSize]
-                let tileType = TileType(rawValue: rawValue) ?? TileType(rawValue: 0)!
-                self.set(tileType: tileType, toX: x, y: y)
-            }
-        }
-    }
-
     func setUpCharacterPosition(characterPosition: CGPoint) {
         self.characterNodeMoveManager.characterPosition = characterPosition
-    }
-
-    private func set(tileType: TileType, toX x: Int, y: Int) {
-        self.tileMap.setTileGroup(tileType.tileGroup, andTileDefinition: tileType.tileDefinition, forColumn: y, row: x)
     }
 
 }

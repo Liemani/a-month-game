@@ -16,7 +16,6 @@ class WorldSceneModel {
 //    var goModels: [Int: [Int: GameObject]]
 
     private var character: Character!
-    private var tileMap: TileMap!
 
     init(worldRepositoryContainer: WorldRepositoryContainer) {
         self.goRepository = worldRepositoryContainer.goRepository
@@ -26,7 +25,6 @@ class WorldSceneModel {
         self.chunkContainer = chunkContainer
 
         self.character = Character(worldDataRepository: worldRepositoryContainer.worldDataRepository)
-        self.tileMap = TileMap(tileRepository: worldRepositoryContainer.tileRepository)
     }
 
     // MARK: - edit
@@ -36,11 +34,6 @@ class WorldSceneModel {
 
     func set(coord: Coordinate<Int>) {
         self.character.set(coord: coord)
-    }
-
-    // MARK: tile map
-    var tileMapBufferPointer: UnsafeBufferPointer<Int> {
-        self.tileMap.tilesMapDataPointer
     }
 
     // MARK: chunk

@@ -193,7 +193,6 @@
 				030261212A3C49160050E697 /* WorldDataRepository.swift */,
 				0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */,
 				033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */,
-				0392E9332A3C1ABD001C22C4 /* TileRepository.swift */,
 				03CE3AF02A3DFEA700D95152 /* LMIPersistentContainer.swift */,
 				033D68FF2A413B14005D3CB0 /* DataSource */,
 			);
@@ -208,7 +207,6 @@
 				033D68EF2A3EE5DD005D3CB0 /* Chunk.swift */,
 				031D57552A076DC8007EF383 /* Character.swift */,
 				03CE3AF42A3E26FC00D95152 /* GameObject.swift */,
-				033D690A2A4146BA005D3CB0 /* TileMap.swift */,
 				039EEFCE2A245AB400CB93C6 /* Touch */,
 			);
 			path = Model;
@@ -264,7 +262,6 @@
 				030ABFCA2A0F2E0800BAB9B8 /* GameObjectDataSource.swift */,
 				03CE3AEE2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift */,
 				03CE3AF22A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift */,
-				030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */,
 				033D68F72A4021DE005D3CB0 /* WorldDataDataSource.swift */,
 			);
 			path = DataSource;
@@ -317,7 +314,6 @@
 			isa = PBXGroup;
 			children = (
 				033D68E92A3EC088005D3CB0 /* Direction.swift */,
-				037E3F452A1CDFEC008A50CA /* TileType.swift */,
 				03E755872A1D255400BF5C0F /* GameObjectType.swift */,
 			);
 			path = Enum;
@@ -337,6 +333,10 @@
 		033D69092A41447C005D3CB0 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */,
+				0392E9332A3C1ABD001C22C4 /* TileRepository.swift */,
+				037E3F452A1CDFEC008A50CA /* TileType.swift */,
+				033D690A2A4146BA005D3CB0 /* TileMap.swift */,
 				031AA8032A24A5D20017EFCD /* Iterator.swift */,
 			);
 			path = Deprecated;
@@ -345,8 +345,8 @@
 		038330952A02850A008DEA10 = {
 			isa = PBXGroup;
 			children = (
-				033D69092A41447C005D3CB0 /* Deprecated */,
 				038330A02A02850A008DEA10 /* a month game */,
+				033D69092A41447C005D3CB0 /* Deprecated */,
 				0383309F2A02850A008DEA10 /* Products */,
 			);
 			sourceTree = "<group>";

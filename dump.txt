@@ -446,6 +446,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+Implement ChunkViewModel
+movingLayer.setPosition(by: characterPosition)
+dragMove.hasChunkMoved -> chunk moded event
+이럴꺼면 오픈월드로 하지..?
 tile 도 테이블에 넣고 chunk 단위로 로드하기
 아종 데이터
 chunk 가 변할 때 새로운 chunk 로드하기

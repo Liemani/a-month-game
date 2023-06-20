@@ -12,21 +12,21 @@ class CharacterNodeMoveManager {
 
     weak var scene: WorldScene!
     private var touchContextManager: WorldSceneTouchContextManager { self.scene.touchContextManager }
-    // TODO: remove the concep of interaction zone
+    #warning("remove the concep of interaction zone")
     private var interactionZone: InteractionZone { self.scene.interactionZone }
 
+    private let movingLayer: MovingLayer
     private let character: SKShapeNode
-    private let movingLayer: MovingLayer!
 
     private var velocityVector: CGVector
 
     private var lastCharacterPosition: CGPoint
     var characterPosition: CGPoint {
         get { -self.movingLayer.position + (Constant.sceneCenter - CGPoint()) }
-        set {
-            self.character.position = newValue
+        set(characterPosition) {
+            self.movingLayer.position = -characterPosition + (Constant.sceneCenter - CGPoint())
+            self.character.position = characterPosition
             self.lastCharacterPosition = self.character.position
-            self.movingLayer.position = -newValue + (Constant.sceneCenter - CGPoint())
         }
     }
 

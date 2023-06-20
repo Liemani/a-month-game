@@ -49,8 +49,6 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         self.viewModel = WorldSceneViewModel(worldScene: scene)
         let gos = worldSceneModel.fieldGOs
         self.viewModel.setUpFieldNode(gos: gos)
-        let tileMapBufferPointer = worldSceneModel.tileMapBufferPointer
-        self.viewModel.setUpTileMap(tileMapBufferPointer: tileMapBufferPointer)
         let characterPosition = worldSceneModel.characterPosition
         self.viewModel.setUpCharacterPosition(characterPosition: characterPosition)
 

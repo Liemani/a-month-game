@@ -20,8 +20,9 @@ struct TileCoordinate {
     }
 
     init(from point: CGPoint) {
-        let x = Int(point.x) / Int(Constant.tileSide)
-        let y = Int(point.y) / Int(Constant.tileSide)
+        let tileSide = Int(Constant.tileSide)
+        let x = (Int(floor(point.x)) - (point.x < 0.0 ? (tileSide - 1) : 0)) / tileSide
+        let y = (Int(floor(point.y)) - (point.y < 0.0 ? (tileSide - 1) : 0)) / tileSide
         self.coord = Coordinate(x, y)
     }
 

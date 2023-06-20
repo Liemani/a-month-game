@@ -9,28 +9,36 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObjectNode: LMISpriteNode, BelongEquatableType {
+class GameObjectNode: LMISpriteNode {
 
     var craftWindow: CraftWindow { self.parent?.parent as! CraftWindow }
 
-    #warning("check BelongEquatableType")
-    private var _type: GameObjectType!
+    var go: GameObject?
+
+    private var _type: GameObjectType
     var type: GameObjectType {
         get { self._type }
-        set { self._type = newValue }
+        set {
+            self._type = newValue
+            self.texture = newValue.texture
+        }
     }
 
     // MARK: - init
-    override init(texture: SKTexture?, color: UIColor, size: CGSize) {
+    private override init(texture: SKTexture?, color: UIColor, size: CGSize) {
+        self.go = nil
+        self._type = .none
+
         super.init(texture: texture, color: color, size: size)
     }
 
-    convenience init(from go: GameObject) {
+    init(from go: GameObject) {
+        self.go = go
+        self._type = go.type
+
         let texture = go.type.texture
         let size = Constant.defaultNodeSize
-        self.init(texture: texture, color: .black, size: size)
-
-        self._type = go.type
+        super.init(texture: texture, color: .black, size: size)
 
         self.zPosition = !self.type.isTile
             ? Constant.ZPosition.gameObjectNode
@@ -39,12 +47,6 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - set type
-    func setType(_ goType: GameObjectType) {
-        self.type = goType
-        self.texture = goType.texture
     }
 
     // MARK: - activate
