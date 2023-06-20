@@ -9,13 +9,20 @@ import Foundation
 
 enum Direction4: Int, CaseIterable {
 
-    case East
-    case South
-    case West
-    case North
+    case east
+    case south
+    case west
+    case north
 
     init?(coord: Coordinate<Int>) {
-        let rawValue = (coord.y == 0) ? (-coord.x + 1) : (coord.y + 2)
+        var rawValue = 0
+        switch (coord.x, coord.y) {
+        case (1, 0): rawValue = 0
+        case (0, -1): rawValue = 1
+        case (-1, 0): rawValue = 2
+        case (0, 1): rawValue = 3
+        default: return nil
+        }
         self.init(rawValue: rawValue)
     }
 
@@ -32,19 +39,19 @@ enum Direction4: Int, CaseIterable {
 
     var opposite: Direction4 {
         switch self {
-        case .East: return .West
-        case .South: return .North
-        case .West: return .East
-        case .North: return .South
+        case .east: return .west
+        case .south: return .north
+        case .west: return .east
+        case .north: return .south
         }
     }
 
     var direction8: [Direction8] {
         switch self {
-        case .East: return [.SouthEast, .East, .NorthEast]
-        case .South: return [.SouthWest, .South, .SouthEast]
-        case .West: return [.SouthWest, .West, .NorthWest]
-        case .North: return [.NorthWest, .North, .NorthEast]
+        case .east: return [.southeast, .east, .northeast]
+        case .south: return [.southwest, .south, .southeast]
+        case .west: return [.southwest, .west, .northwest]
+        case .north: return [.northwest, .north, .northeast]
         }
     }
 
@@ -52,16 +59,21 @@ enum Direction4: Int, CaseIterable {
 
 enum Direction8: Int, CaseIterable {
 
-    case SouthWest
-    case South
-    case SouthEast
-    case West
-    case East
-    case NorthWest
-    case North
-    case NorthEast
+    case southwest
+    case south
+    case southeast
+    case west
+    case east
+    case northwest
+    case north
+    case northeast
 
     init?(coord: Coordinate<Int>) {
+        guard -1 <= coord.x && coord.x <= 1
+                && -1 <= coord.y && coord.y <= 1 else {
+            return nil
+        }
+
         let tableIndex = (coord.y - 1) * -3 + (coord.x + 1)
         let rawValue = Direction8.rawValueTable[tableIndex]
         self.init(rawValue: rawValue)
@@ -92,17 +104,22 @@ enum Direction8: Int, CaseIterable {
 
 enum Direction9: Int, CaseIterable {
 
-    case SouthWest
-    case South
-    case SouthEast
-    case West
-    case Origin
-    case East
-    case NorthWest
-    case North
-    case NorthEast
+    case southwest
+    case south
+    case southeast
+    case west
+    case origin
+    case east
+    case northwest
+    case north
+    case northeast
 
     init?(coord: Coordinate<Int>) {
+        guard -1 <= coord.x && coord.x <= 1
+                && -1 <= coord.y && coord.y <= 1 else {
+            return nil
+        }
+
         let rawValue = (coord.y + 1) * 3 + (coord.x + 1)
         self.init(rawValue: rawValue)
     }
