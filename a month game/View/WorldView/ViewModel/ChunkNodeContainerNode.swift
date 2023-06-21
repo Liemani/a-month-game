@@ -33,7 +33,7 @@ class ChunkNodeContainerNode: LMINode {
             self.addChild(chunkNode)
         }
 
-        self.zPosition = Constant.ZPosition.gameObjectLayer
+        self.zPosition = Constant.ZPosition.chunkNodeContainer
         self.updateChunkNodesPosition()
     }
 

@@ -28,8 +28,6 @@ class WorldSceneViewModel {
         self.chunkNodeContainerNode = worldScene.movingLayer.chunkNodeContainerNode
         self.characterNodeMoveManager = worldScene.characterNodeMoveManager
 
-        let characterPosition = self.characterNodeMoveManager.characterPosition
-        self.characterNodeMoveManager.characterPosition = characterPosition
         let characterChunkCoord = self.characterNodeMoveManager.characterChunkCoord
         self.chunkNodeContainerNode.setUp(chunkCoord: characterChunkCoord)
     }

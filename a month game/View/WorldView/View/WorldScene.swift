@@ -64,6 +64,23 @@ class WorldScene: SKScene, LMITouchResponder {
         fixedLayer.zPosition = Constant.ZPosition.fixedLayer
         self.addChild(fixedLayer)
 
+        // MARK: character
+        let path = CGMutablePath()
+        path.addArc(center: CGPoint.zero,
+                    radius: Constant.characterRadius,
+                    startAngle: 0,
+                    endAngle: CGFloat.pi * 2,
+                    clockwise: true)
+        let character = SKShapeNode(path: path)
+        character.fillColor = .white
+        character.strokeColor = .brown
+        character.lineWidth = 5.0
+        character.position = Constant.sceneCenter
+        character.zPosition = Constant.ZPosition.character
+
+        fixedLayer.addChild(character)
+
+        // MARK: ui
         let ui = SKNode()
         ui.zPosition = Constant.ZPosition.ui
         fixedLayer.addChild(ui)

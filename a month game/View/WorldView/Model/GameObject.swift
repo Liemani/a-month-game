@@ -43,7 +43,7 @@ class GameObject {
     init?(from goMO: GameObjectMO) {
         self.mo = goMO
 
-        guard let type = GameObjectType(from: goMO) else {
+        guard GameObjectType(from: goMO) != nil else {
             return nil
         }
 

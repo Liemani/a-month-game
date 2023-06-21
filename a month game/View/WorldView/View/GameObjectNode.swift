@@ -19,9 +19,7 @@ extension GameObjectNode {
 
                      from prevChunkCoord: ChunkCoordinate?,
                      to currChunkCoord: ChunkCoordinate) {
-        if let prevChunkCoord = prevChunkCoord {
-            let prevChunkDirection = midChunkCoord.chunkDirection(to: prevChunkCoord)!
-            let prevChunkNode = chunks[prevChunkDirection]
+        if prevChunkCoord != nil {
             goNode.removeFromParent()
         }
 
@@ -68,8 +66,8 @@ class GameObjectNode: LMISpriteNode {
         }
 
         self.zPosition = !self.type.isTile
-            ? Constant.ZPosition.gameObjectNode
-            : Constant.ZPosition.tileNode
+            ? Constant.ZPosition.gameObject
+            : Constant.ZPosition.tile
     }
 
     convenience init(goType: GameObjectType) {

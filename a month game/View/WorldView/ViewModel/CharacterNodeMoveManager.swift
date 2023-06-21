@@ -16,7 +16,6 @@ class CharacterNodeMoveManager {
     private var interactionZone: InteractionZone { self.scene.interactionZone }
 
     private let movingLayer: MovingLayer
-    private let characterNode: SKShapeNode
     private let character: Character
 
     var characterChunkCoord: ChunkCoordinate {
@@ -29,13 +28,12 @@ class CharacterNodeMoveManager {
 
     private var velocityVector: CGVector
 
-    private var lastCharacterPosition: CGPoint
-    var characterPosition: CGPoint {
+    private var lastCharacterPositionFromMidChunkNode: CGPoint
+    var characterPositionFromMidChunkNode: CGPoint {
         get { -self.movingLayer.position + (Constant.sceneCenter - CGPoint()) }
         set(characterPosition) {
+            self.lastCharacterPositionFromMidChunkNode = self.characterPositionFromMidChunkNode
             self.movingLayer.position = -characterPosition + (Constant.sceneCenter - CGPoint())
-            self.characterNode.position = characterPosition
-            self.lastCharacterPosition = self.characterNode.position
         }
     }
 
@@ -43,11 +41,12 @@ class CharacterNodeMoveManager {
     init(worldScene: WorldScene) {
         self.scene = worldScene
         self.movingLayer = worldScene.movingLayer
-        self.characterNode = worldScene.movingLayer.character
 
-        self.velocityVector = CGVector(dx: 0, dy: 0)
-        self.lastCharacterPosition = CGPoint()
+        self.velocityVector = CGVector()
+        self.lastCharacterPositionFromMidChunkNode = CGPoint()
         self.character = Character()
+        self.characterPositionFromMidChunkNode = self.character.buildingPosition
+        self.lastCharacterPositionFromMidChunkNode = self.characterPositionFromMidChunkNode
     }
 
 }
@@ -82,7 +81,7 @@ extension CharacterNodeMoveManager: LMITouchResponder {
         let currentPoint = touch.location(in: self.scene)
         let difference = currentPoint - previousPoint
 
-        self.characterPosition -= difference
+        self.characterPositionFromMidChunkNode -= difference
 
         movingLayerTouch.previousPreviousTimestamp = movingLayerTouch.previousTimestamp
         movingLayerTouch.previousTimestamp = touch.timestamp
@@ -135,7 +134,7 @@ extension CharacterNodeMoveManager {
 
     private func updatePosition(_ timeInterval: TimeInterval) {
         let differenceVector = self.velocityVector * timeInterval
-        self.characterPosition += differenceVector
+        self.characterPositionFromMidChunkNode += differenceVector
     }
 
     private func updateVelocity(_ timeInterval: TimeInterval) {
@@ -153,33 +152,33 @@ extension CharacterNodeMoveManager {
     }
 
     private func resolveWorldBorderCollision() {
-        self.characterPosition.x = self.characterPosition.x < Constant.moveableArea.minX
+        self.characterPositionFromMidChunkNode.x = self.characterPositionFromMidChunkNode.x < Constant.moveableArea.minX
         ? Constant.moveableArea.minX
-        : self.characterPosition.x
-        self.characterPosition.x = self.characterPosition.x > Constant.moveableArea.maxX
+        : self.characterPositionFromMidChunkNode.x
+        self.characterPositionFromMidChunkNode.x = self.characterPositionFromMidChunkNode.x > Constant.moveableArea.maxX
         ? Constant.moveableArea.maxX
-        : self.characterPosition.x
-        self.characterPosition.y = self.characterPosition.y < Constant.moveableArea.minY
+        : self.characterPositionFromMidChunkNode.x
+        self.characterPositionFromMidChunkNode.y = self.characterPositionFromMidChunkNode.y < Constant.moveableArea.minY
         ? Constant.moveableArea.minY
-        : self.characterPosition.y
-        self.characterPosition.y = self.characterPosition.y > Constant.moveableArea.maxY
+        : self.characterPositionFromMidChunkNode.y
+        self.characterPositionFromMidChunkNode.y = self.characterPositionFromMidChunkNode.y > Constant.moveableArea.maxY
         ? Constant.moveableArea.maxY
-        : self.characterPosition.y
+        : self.characterPositionFromMidChunkNode.y
     }
 
     private func resolveCollisionOfNonWalkable() {
         for go in self.interactionZone.gos {
             guard !go.type.isWalkable else { continue }
 
-            if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius) {
-                go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPosition, andRadius: Constant.characterRadius)
+            if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.characterPositionFromMidChunkNode, andRadius: Constant.characterRadius) {
+                go.resolvePointCollisionPointWithCircle(ofOrigin: &self.characterPositionFromMidChunkNode, andRadius: Constant.characterRadius)
             }
         }
     }
 
     private func tileDidMoved() {
-        let lastTile = TileCoordinate(from: self.lastCharacterPosition)
-        let currentTile = TileCoordinate(from: self.characterPosition)
+        let lastTile = TileCoordinate(from: self.lastCharacterPositionFromMidChunkNode)
+        let currentTile = TileCoordinate(from: self.characterPositionFromMidChunkNode)
 
         if currentTile != lastTile {
             self.interactionZone.reserveUpdate()
