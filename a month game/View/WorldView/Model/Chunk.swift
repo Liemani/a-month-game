@@ -11,8 +11,8 @@ class ChunkService {
 
     private var chunkRepository: ChunkRepository!
 
-    init(_ worldServiceContainer: WorldServiceContainer) {
-        self.chunkRepository = worldServiceContainer.chunkRepository
+    init(chunkRepository: ChunkRepository) {
+        self.chunkRepository = chunkRepository
     }
 
     func load(at chunkCoord: ChunkCoordinate) -> [GameObject] {

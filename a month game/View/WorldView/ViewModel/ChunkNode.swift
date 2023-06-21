@@ -44,7 +44,7 @@ class ChunkNode: LMINode {
     func update(chunkCoord: ChunkCoordinate) {
         self.removeAllChildren()
 
-        let gos = WorldServiceContainer.default.chunkService.load(at: chunkCoord)
+        let gos = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
         for go in gos {
             let goNode = GameObjectNode(from: go)
             self.addChild(goNode)

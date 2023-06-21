@@ -20,8 +20,8 @@ class WorldDataRepository {
 
     private let worldDataDataSource: WorldDataDataSource
 
-    init(_ worldServiceContainer: WorldServiceContainer) {
-        self.worldDataDataSource = worldServiceContainer.worldDataDataSource
+    init(worldDataDataSource: WorldDataDataSource) {
+        self.worldDataDataSource = worldDataDataSource
     }
 
     func load(at index: WorldDataIndex) -> Int {

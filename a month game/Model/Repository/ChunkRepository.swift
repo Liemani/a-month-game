@@ -14,10 +14,12 @@ class ChunkRepository {
     private var chunkCoordDataSource: ChunkCoordinateDataSource
     private var invCoordDataSource: InventoryCoordinateDataSource
 
-    init(_ worldServiceContainer: WorldServiceContainer) {
-        self.goDataSource = worldServiceContainer.goDataSource
-        self.chunkCoordDataSource = worldServiceContainer.chunkCoordDataSource
-        self.invCoordDataSource = worldServiceContainer.invCoordDataSource
+    init(goDataSource: GameObjectDataSource,
+         chunkCoordDataSource: ChunkCoordinateDataSource,
+         invCoordDataSource: InventoryCoordinateDataSource) {
+        self.goDataSource = goDataSource
+        self.chunkCoordDataSource = chunkCoordDataSource
+        self.invCoordDataSource = invCoordDataSource
     }
 
     func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {

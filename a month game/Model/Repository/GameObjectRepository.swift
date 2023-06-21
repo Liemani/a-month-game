@@ -14,14 +14,13 @@ class GameObjectRepository {
     private var chunkCoordDataSource: ChunkCoordinateDataSource
     private var invCoordDataSource: InventoryCoordinateDataSource
 
-    private var moContext: NSManagedObjectContext
 
-    init(_ worldServiceContainer: WorldServiceContainer) {
-        self.goDataSource = worldServiceContainer.goDataSource
-        self.chunkCoordDataSource = worldServiceContainer.chunkCoordDataSource
-        self.invCoordDataSource = worldServiceContainer.invCoordDataSource
-
-        self.moContext = worldServiceContainer.moContext
+    init(goDataSource: GameObjectDataSource,
+         chunkCoordDataSource: ChunkCoordinateDataSource,
+         invCoordDataSource: InventoryCoordinateDataSource) {
+        self.goDataSource = goDataSource
+        self.chunkCoordDataSource = chunkCoordDataSource
+        self.invCoordDataSource = invCoordDataSource
     }
 
     // MARK: - edit
@@ -45,7 +44,7 @@ extension GameObjectMO {
         if let chunkCoordMO = self.chunkCoord {
             chunkCoordMO.update(chunkCoord)
         } else {
-            let chunkCoordMO = WorldServiceContainer.default.chunkCoordDataSource.new()
+            let chunkCoordMO = WorldServiceContainer.default.chunkCoordDS.new()
             chunkCoordMO.update(chunkCoord)
             chunkCoordMO.gameObjectMO = self
             self.chunkCoord = chunkCoordMO
@@ -57,7 +56,7 @@ extension GameObjectMO {
         if let invCoordMO = self.invCoord {
             invCoordMO.update(invCoord)
         } else {
-            let invCoordMO = WorldServiceContainer.default.invCoordDataSource.new()
+            let invCoordMO = WorldServiceContainer.default.invCoordDS.new()
             invCoordMO.update(invCoord)
             invCoordMO.gameObjectMO = self
             self.invCoord = invCoordMO

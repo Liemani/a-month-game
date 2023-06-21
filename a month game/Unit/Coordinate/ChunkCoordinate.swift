@@ -51,12 +51,12 @@ struct ChunkCoordinate {
         self.building = UInt8(location & 0xff)
     }
 
-    private init(_ x: Int, _ y: Int) {
+    init(_ x: Int, _ y: Int) {
         self.x = Int32(x >> 8)
         self.y = Int32(y >> 8)
 
         let buildingX = UInt8(truncatingIfNeeded: UInt(bitPattern: x))
-        let buildingY = UInt8(truncatingIfNeeded: UInt(bitPattern: x))
+        let buildingY = UInt8(truncatingIfNeeded: UInt(bitPattern: y))
         self.street = (buildingX & 0xf0) | (buildingY >> 4)
         self.building = (buildingX << 4) | (buildingY & 0x0f)
     }

@@ -41,6 +41,7 @@
 		034637842A23947400370C71 /* CraftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637832A23947400370C71 /* CraftCell.swift */; };
 		036FE5202A41A73A007E66A5 /* ChunkNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* ChunkNode.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkNodeContainerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkNodeContainerNode.swift */; };
+		036FE52C2A43136B007E66A5 /* tiny_homeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */; };
 		037E3F462A1CDFEC008A50CA /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F452A1CDFEC008A50CA /* TileType.swift */; };
 		038330A22A02850A008DEA10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A12A02850A008DEA10 /* AppDelegate.swift */; };
 		038330A82A02850A008DEA10 /* WorldScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 038330A72A02850A008DEA10 /* WorldScene.swift */; };
@@ -69,6 +70,16 @@
 		03F7A2662A39EBCC0061E030 /* WorldDirectoryUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7A2652A39EBCC0061E030 /* WorldDirectoryUtility.swift */; };
 		03F7A26A2A3AFA8B0061E030 /* ChunkCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7A2692A3AFA8B0061E030 /* ChunkCoordinate.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		036FE52D2A43136C007E66A5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 038330962A02850A008DEA10 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0383309D2A02850A008DEA10;
+			remoteInfo = "a month game";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		030261212A3C49160050E697 /* WorldDataRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldDataRepository.swift; sourceTree = "<group>"; };
@@ -105,6 +116,8 @@
 		034637832A23947400370C71 /* CraftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCell.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* ChunkNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkNode.swift; sourceTree = "<group>"; };
 		036FE5212A429E8D007E66A5 /* ChunkNodeContainerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkNodeContainerNode.swift; sourceTree = "<group>"; };
+		036FE5292A43136B007E66A5 /* tiny_homeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tiny_homeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tiny_homeTests.swift; sourceTree = "<group>"; };
 		037E3F452A1CDFEC008A50CA /* TileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
 		0383309E2A02850A008DEA10 /* a month game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "a month game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		038330A12A02850A008DEA10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +149,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		036FE5262A43136B007E66A5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0383309B2A02850A008DEA10 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -348,11 +368,20 @@
 			path = Deprecated;
 			sourceTree = "<group>";
 		};
+		036FE52A2A43136B007E66A5 /* tiny_homeTests */ = {
+			isa = PBXGroup;
+			children = (
+				036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */,
+			);
+			path = tiny_homeTests;
+			sourceTree = "<group>";
+		};
 		038330952A02850A008DEA10 = {
 			isa = PBXGroup;
 			children = (
 				038330A02A02850A008DEA10 /* a month game */,
 				033D69092A41447C005D3CB0 /* Deprecated */,
+				036FE52A2A43136B007E66A5 /* tiny_homeTests */,
 				0383309F2A02850A008DEA10 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -361,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				0383309E2A02850A008DEA10 /* a month game.app */,
+				036FE5292A43136B007E66A5 /* tiny_homeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -417,6 +447,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		036FE5282A43136B007E66A5 /* tiny_homeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 036FE52F2A43136C007E66A5 /* Build configuration list for PBXNativeTarget "tiny_homeTests" */;
+			buildPhases = (
+				036FE5252A43136B007E66A5 /* Sources */,
+				036FE5262A43136B007E66A5 /* Frameworks */,
+				036FE5272A43136B007E66A5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				036FE52E2A43136C007E66A5 /* PBXTargetDependency */,
+			);
+			name = tiny_homeTests;
+			productName = tiny_homeTests;
+			productReference = 036FE5292A43136B007E66A5 /* tiny_homeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		0383309D2A02850A008DEA10 /* a month game */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 038330B52A02850B008DEA10 /* Build configuration list for PBXNativeTarget "a month game" */;
@@ -444,6 +492,10 @@
 				LastSwiftUpdateCheck = 1430;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					036FE5282A43136B007E66A5 = {
+						CreatedOnToolsVersion = 14.3.1;
+						TestTargetID = 0383309D2A02850A008DEA10;
+					};
 					0383309D2A02850A008DEA10 = {
 						CreatedOnToolsVersion = 14.3;
 					};
@@ -463,11 +515,19 @@
 			projectRoot = "";
 			targets = (
 				0383309D2A02850A008DEA10 /* a month game */,
+				036FE5282A43136B007E66A5 /* tiny_homeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		036FE5272A43136B007E66A5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0383309C2A02850A008DEA10 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -481,6 +541,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		036FE5252A43136B007E66A5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				036FE52C2A43136B007E66A5 /* tiny_homeTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0383309A2A02850A008DEA10 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -548,6 +616,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		036FE52E2A43136C007E66A5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0383309D2A02850A008DEA10 /* a month game */;
+			targetProxy = 036FE52D2A43136C007E66A5 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		038330AB2A02850A008DEA10 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -568,6 +644,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		036FE5302A43136C007E66A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U574U2FQ3E;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LMI.tiny-homeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/a month game.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/a month game";
+			};
+			name = Debug;
+		};
+		036FE5312A43136C007E66A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U574U2FQ3E;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "LMI.tiny-homeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/a month game.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/a month game";
+			};
+			name = Release;
+		};
 		038330B32A02850B008DEA10 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -743,6 +855,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		036FE52F2A43136C007E66A5 /* Build configuration list for PBXNativeTarget "tiny_homeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				036FE5302A43136C007E66A5 /* Debug */,
+				036FE5312A43136C007E66A5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		038330992A02850A008DEA10 /* Build configuration list for PBXProject "a month game" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -34,8 +34,8 @@ class GameObject {
 
     // MARK: - init
     init(type: GameObjectType) {
-        let id = WorldServiceContainer.default.idGeneratorService.generate()
-        self.mo = WorldServiceContainer.default.goRepository.new(id: id, type: type)
+        let id = WorldServiceContainer.default.idGeneratorServ.generate()
+        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: type)
         self._chunkCoord = nil
         self._invCoord = nil
     }

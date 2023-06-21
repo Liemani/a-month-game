@@ -12,8 +12,8 @@ final class IDGeneratorService {
     private var worldDataRepository: WorldDataRepository
     private var nextID: Int
 
-    init(_ worldServiceContainer: WorldServiceContainer) {
-        self.worldDataRepository = worldServiceContainer.worldDataRepository
+    init(worldDataRepository: WorldDataRepository) {
+        self.worldDataRepository = worldDataRepository
 
         let nextID = self.worldDataRepository.load(at: .nextID)
         self.nextID = nextID

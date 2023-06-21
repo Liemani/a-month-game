@@ -10,54 +10,87 @@ import CoreData
 
 final class WorldServiceContainer {
 
-    static var `default` = WorldServiceContainer()
+    private static var _default: WorldServiceContainer?
+    static var `default`: WorldServiceContainer { self._default! }
 
-    var idGeneratorService: IDGeneratorService!
-    var chunkService: ChunkService!
-
-    var goRepository: GameObjectRepository!
-    var chunkRepository: ChunkRepository!
-    var worldDataRepository: WorldDataRepository!
-
-    var goDataSource: GameObjectDataSource!
-    var chunkCoordDataSource: ChunkCoordinateDataSource!
-    var invCoordDataSource: InventoryCoordinateDataSource!
-    var worldDataDataSource: WorldDataDataSource!
-
-    var persistentContainer: LMIPersistentContainer!
-    var moContext: NSManagedObjectContext!
-
-    init() { }
-
-    func set(worldName: String) {
-        let worldDirURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
-
+    static func set(worldName: String) {
         let isWorldExist = WorldDirectoryUtility.default.isExist(worldName: worldName)
 
         WorldDirectoryUtility.default.createIfNotExist(worldName: worldName)
 
+        let worldServiceContainer = WorldServiceContainer(worldName: worldName)
+        self._default = worldServiceContainer
+
+        if !isWorldExist {
+            WorldGenerator.generate()
+        }
+    }
+
+    static func free() {
+        self._default = nil
+    }
+
+    var idGeneratorServ: IDGeneratorService
+    var chunkServ: ChunkService
+
+    var goRepo: GameObjectRepository
+    var chunkRepo: ChunkRepository
+    var worldDataRepo: WorldDataRepository
+
+    var goDS: GameObjectDataSource
+    var chunkCoordDS: ChunkCoordinateDataSource
+    var invCoordDS: InventoryCoordinateDataSource
+    var worldDataDS: WorldDataDataSource
+
+    var persistentContainer: LMIPersistentContainer
+    var moContext: NSManagedObjectContext
+
+    init(worldName: String) {
+        let worldDirURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
+
         let worldDataModelName = Constant.Name.worldDataModel
         let persistentContainer = LMIPersistentContainer(name: worldDataModelName)
         persistentContainer.setUp(to: worldDirURL)
-
         self.persistentContainer = persistentContainer
-        self.moContext = persistentContainer.viewContext
 
-        self.goDataSource = GameObjectDataSource(persistentContainer)
-        self.chunkCoordDataSource = ChunkCoordinateDataSource(persistentContainer)
-        self.invCoordDataSource = InventoryCoordinateDataSource(persistentContainer)
-        self.worldDataDataSource = WorldDataDataSource(worldDirURL: worldDirURL)
+        let moContext = persistentContainer.viewContext
+        self.moContext = moContext
 
-        self.goRepository = GameObjectRepository(self)
-        self.chunkRepository = ChunkRepository(self)
-        self.worldDataRepository = WorldDataRepository(self)
+        // MARK: data source
+        let goDS = GameObjectDataSource(persistentContainer)
+        self.goDS = goDS
 
-        self.idGeneratorService = IDGeneratorService(self)
-        self.chunkService = ChunkService(self)
+        let chunkCoordDS = ChunkCoordinateDataSource(persistentContainer)
+        self.chunkCoordDS = chunkCoordDS
 
-        if !isWorldExist {
-            WorldGenerator.generate(self)
-        }
+        let invCoordDS = InventoryCoordinateDataSource(persistentContainer)
+        self.invCoordDS = invCoordDS
+
+        let worldDataDS = WorldDataDataSource(worldDirURL: worldDirURL)
+        self.worldDataDS = worldDataDS
+
+        // MARK: repository
+        let goRepo = GameObjectRepository(
+            goDataSource: goDS,
+            chunkCoordDataSource: chunkCoordDS,
+            invCoordDataSource: invCoordDS)
+        self.goRepo = goRepo
+
+        let chunkRepo = ChunkRepository(
+            goDataSource: goDS,
+            chunkCoordDataSource: chunkCoordDS,
+            invCoordDataSource: invCoordDS)
+        self.chunkRepo = chunkRepo
+
+        let worldDataRepo = WorldDataRepository(worldDataDataSource: worldDataDS)
+        self.worldDataRepo = worldDataRepo
+
+        // MARK: service
+        let idGeneratorServ = IDGeneratorService(worldDataRepository: worldDataRepo)
+        self.idGeneratorServ = idGeneratorServ
+
+        let chunkServ = ChunkService(chunkRepository: chunkRepo)
+        self.chunkServ = chunkServ
 
 #if DEBUG
         print(worldDirURL)

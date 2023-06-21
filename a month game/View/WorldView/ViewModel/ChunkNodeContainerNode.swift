@@ -34,6 +34,7 @@ class ChunkNodeContainerNode: LMINode {
         }
 
         self.zPosition = Constant.ZPosition.gameObjectLayer
+        self.updateChunkNodesPosition()
     }
 
     func updateChunkNodesPosition() {

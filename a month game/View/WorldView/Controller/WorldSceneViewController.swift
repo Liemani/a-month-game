@@ -131,10 +131,11 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     func requestPresentPortalSceneViewController() {
         let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
         self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
+        WorldServiceContainer.free()
     }
 
     func update() {
-        let moContext = WorldServiceContainer.default.moContext!
+        let moContext = WorldServiceContainer.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
         }
