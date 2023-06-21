@@ -16,7 +16,16 @@ class CharacterNodeMoveManager {
     private var interactionZone: InteractionZone { self.scene.interactionZone }
 
     private let movingLayer: MovingLayer
-    private let character: SKShapeNode
+    private let characterNode: SKShapeNode
+    private let character: Character
+
+    var characterChunkCoord: ChunkCoordinate {
+        self.character.chunkCoord
+    }
+
+    var characterBuildingPosition: CGPoint {
+        self.character.buildingPosition
+    }
 
     private var velocityVector: CGVector
 
@@ -25,18 +34,20 @@ class CharacterNodeMoveManager {
         get { -self.movingLayer.position + (Constant.sceneCenter - CGPoint()) }
         set(characterPosition) {
             self.movingLayer.position = -characterPosition + (Constant.sceneCenter - CGPoint())
-            self.character.position = characterPosition
-            self.lastCharacterPosition = self.character.position
+            self.characterNode.position = characterPosition
+            self.lastCharacterPosition = self.characterNode.position
         }
     }
 
+    // MARK: - init
     init(worldScene: WorldScene) {
         self.scene = worldScene
         self.movingLayer = worldScene.movingLayer
-        self.character = worldScene.movingLayer.character
+        self.characterNode = worldScene.movingLayer.character
 
         self.velocityVector = CGVector(dx: 0, dy: 0)
         self.lastCharacterPosition = CGPoint()
+        self.character = Character()
     }
 
 }

@@ -11,9 +11,6 @@ import GameplayKit
 
 class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    private var worldRepositoryContainer: WorldRepositoryContainer!
-
-    var model: WorldSceneModel!
     var viewModel: WorldSceneViewModel!
 
     /// initialize task without relation to view
@@ -21,10 +18,6 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         super.init(coder: coder)
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentPortalSceneViewController), name: .requestPresentPortalSceneViewController, object: nil)
-    }
-
-    func set(worldRepositoryContainer: WorldRepositoryContainer) {
-        self.worldRepositoryContainer = worldRepositoryContainer
     }
 
     /// SKView is loaded
@@ -41,16 +34,8 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
 
-        let worldSceneModel = WorldSceneModel(worldRepositoryContainer: self.worldRepositoryContainer)
-        let characterCoord = worldSceneModel.characterCoord
-        worldSceneModel.setUp(coord: characterCoord)
-        self.model = worldSceneModel
-
-        self.viewModel = WorldSceneViewModel(worldScene: scene)
-        let gos = worldSceneModel.fieldGOs
-        self.viewModel.setUpFieldNode(gos: gos)
-        let characterPosition = worldSceneModel.characterPosition
-        self.viewModel.setUpCharacterPosition(characterPosition: characterPosition)
+        let viewModel = WorldSceneViewModel(worldScene: scene)
+        self.viewModel = viewModel
 
 #if DEBUG
         self.debugCode()
@@ -149,17 +134,20 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     func update() {
-        self.model.update()
+        let moContext = WorldServiceContainer.default.moContext!
+        if moContext.hasChanges {
+            try! moContext.save()
+        }
     }
 
 #if DEBUG
     private func debugCode() {
-        let gos = self.model.fieldGOs
-        print(gos.count)
-        for go in gos {
-            guard let goCoord = go.coord else { continue }
+        let goNodes = self.viewModel.fieldGONodes
+        for goNode in goNodes {
+            let go = goNode.go
+            guard let chunkCoord = go.chunkCoord else { continue }
 
-            print("id: \(go.id), typeID: \(go.type), coordinate: (\(goCoord))")
+            print("id: \(go.id), typeID: \(go.type), coordinate: (\(chunkCoord))")
         }
     }
 #endif

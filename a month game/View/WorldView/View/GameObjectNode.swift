@@ -8,41 +8,73 @@
 import Foundation
 import SpriteKit
 
+// MARK: - usage extension
+#if DEBUG
+extension GameObjectNode {
+
+    private func set(goNode: GameObjectNode,
+
+                     midChunkCoord: ChunkCoordinate,
+                     chunks: [ChunkNode],
+
+                     from prevChunkCoord: ChunkCoordinate?,
+                     to currChunkCoord: ChunkCoordinate) {
+        if let prevChunkCoord = prevChunkCoord {
+            let prevChunkDirection = midChunkCoord.chunkDirection(to: prevChunkCoord)!
+            let prevChunkNode = chunks[prevChunkDirection]
+            goNode.removeFromParent()
+        }
+
+        let currChunkDirection = midChunkCoord.chunkDirection(to: currChunkCoord)!
+        let currChunkNode = chunks[currChunkDirection]
+        currChunkNode.addChild(goNode)
+
+        goNode.set(chunkCoord: currChunkCoord)
+    }
+
+}
+#endif
+
 // MARK: - class GameObjectNode
 class GameObjectNode: LMISpriteNode {
 
     var craftWindow: CraftWindow { self.parent?.parent as! CraftWindow }
 
-    var go: GameObject?
+    var go: GameObject
+    var id: Int { self.go.id }
+    var type: GameObjectType { self.go.type }
 
-    private var _type: GameObjectType
-    var type: GameObjectType {
-        get { self._type }
-        set {
-            self._type = newValue
-            self.texture = newValue.texture
-        }
+    func set(chunkCoord: ChunkCoordinate) {
+        self.go.set(chunkCoord: chunkCoord)
+
+        let buildingLocation = chunkCoord.building
+        let x = Int(buildingLocation >> 4)
+        let y = Int(buildingLocation & 0x0f)
+        self.position = TileCoordinate(x, y).fieldPoint
     }
+
+    var buildingLocation: UInt8? { self.go.chunkCoord?.building }
 
     // MARK: - init
-    private override init(texture: SKTexture?, color: UIColor, size: CGSize) {
-        self.go = nil
-        self._type = .none
-
-        super.init(texture: texture, color: color, size: size)
-    }
-
     init(from go: GameObject) {
         self.go = go
-        self._type = go.type
 
         let texture = go.type.texture
         let size = Constant.defaultNodeSize
-        super.init(texture: texture, color: .black, size: size)
+        super.init(texture: texture, color: .white, size: size)
+
+        if let chunkCoord = go.chunkCoord {
+            self.set(chunkCoord: chunkCoord)
+        }
 
         self.zPosition = !self.type.isTile
             ? Constant.ZPosition.gameObjectNode
             : Constant.ZPosition.tileNode
+    }
+
+    convenience init(goType: GameObjectType) {
+        let go = GameObject(type: goType)
+        self.init(from: go)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -195,6 +227,4 @@ class GameObjectNode: LMISpriteNode {
 
 }
 
-class GameObjectTouch: TouchContext {
-
-}
+class GameObjectTouch: TouchContext { }

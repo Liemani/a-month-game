@@ -14,7 +14,7 @@ class FieldNode: LMINode {
 
     override init() {
         self.chunkNodes = [ChunkNode](repeating: ChunkNode(), count: 9)
-        
+
         super.init()
 
         self.zPosition = Constant.ZPosition.gameObjectLayer
@@ -42,7 +42,7 @@ class FieldNode: LMINode {
 }
 
 // MARK: - InventoryNode
-extension FieldNode: InventoryNode {
+extension FieldNode: GameObjectNodeContainer {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
         return true

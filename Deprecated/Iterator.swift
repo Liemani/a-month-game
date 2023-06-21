@@ -7,52 +7,63 @@
 
 import Foundation
 
-func combineIterators<T>(iterators: [AnyIterator<T>]) -> AnyIterator<T> {
-    var iteratorIndex = 0
+//func combineIterators(iterators: [any IteratorProtocol]) -> some IteratorProtocol {
+//    var iteratorIndex = 0
+//
+//    return AnyIterator {
+//        while iteratorIndex < iterators.count {
+//            if let nextElement = iterators[iteratorIndex].next() {
+//                return nextElement
+//            } else {
+//                iteratorIndex += 1
+//            }
+//        }
+//        return nil
+//    }
+//}
+//
+//func combineSequencesIntoIterator<T>(sequences: [AnySequence<T>]) -> AnyIterator<T> {
+//    let iterators = sequences.map { $0.makeIterator() }
+//    var iteratorIndex = 0
+//
+//    return AnyIterator {
+//        while iteratorIndex < iterators.count {
+//            if let nextElement = iterators[iteratorIndex].next() {
+//                return nextElement
+//            } else {
+//                iteratorIndex += 1
+//            }
+//        }
+//        return nil
+//    }
+//}
 
-    return AnyIterator {
-        while iteratorIndex < iterators.count {
-            if let nextElement = iterators[iteratorIndex].next() {
+struct CombineSequences<Element>: Sequence, IteratorProtocol {
+
+    private var iterators: [(any IteratorProtocol<Element>)?]
+    private var currentIndex: Int = 0
+
+    init(sequences: [any Sequence<Element>]) {
+        self.iterators = [(any IteratorProtocol<Element>)?](repeating: nil, count: sequences.count)
+        for (index, sequence) in sequences.enumerated() {
+            self.iterators[index] = sequence.makeIterator() as! (any IteratorProtocol<Element>)?
+        }
+    }
+
+    mutating func next() -> Element? {
+        while self.currentIndex < self.iterators.count {
+            if let nextElement = iterators[self.currentIndex]!.next() {
                 return nextElement
             } else {
-                iteratorIndex += 1
+                self.iterators[self.currentIndex] = nil
+                self.currentIndex += 1
             }
         }
         return nil
     }
+
 }
 
-//struct CombineSequence<Element>: Sequence, IteratorProtocol {
-//
-//    private var sequences: [(any IteratorProtocol<Element>)?]
-//    private var currentIndex: Int = 0
-//
-//    init(sequences: [any Sequence<Element>]) {
-//        self.sequences = [(any IteratorProtocol<Element>)?](repeating: nil, count: sequences.count)
-//        for (index, sequence) in sequences.enumerated() {
-//            self.sequences[index] = sequence.makeIterator() as! (any IteratorProtocol<Element>)?
-//        }
-//    }
-//
-//    mutating func next() -> Element? {
-//        while true {
-//            guard currentIndex < self.sequences.count else {
-//                return nil
-//            }
-//
-//            let currentElement = sequences[currentIndex]!.next()
-//
-//            if currentElement != nil {
-//                return currentElement
-//            }
-//
-//            self.sequences[currentIndex] = nil
-//            currentIndex += 1
-//        }
-//    }
-//
-//}
-//
 //struct MaterialInRecipeSequence<Element>: Sequence, IteratorProtocol where Element: BelongEquatableType {
 //
 //    typealias ElementType = Element.TypeObject

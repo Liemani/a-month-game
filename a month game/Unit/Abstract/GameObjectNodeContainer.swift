@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol InventoryNode: Sequence {
+protocol GameObjectNodeContainer: Sequence {
 
     /// Called to check whether GOMO.goCoord is valid
     /// The goCoord generated inside of app is considered always valid

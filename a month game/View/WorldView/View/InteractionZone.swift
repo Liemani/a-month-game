@@ -10,8 +10,6 @@ import SpriteKit
 
 class InteractionZone: LMISpriteNode {
 
-    var field: FieldNode { self.worldScene.field }
-
     var gos: [GameObjectNode] = []
 
     private var shouldUpdate: Bool = true
@@ -73,7 +71,8 @@ class InteractionZone: LMISpriteNode {
         guard self.shouldUpdate else { return }
 
         self.reset()
-        self.add(self.field.interactableGOs())
+        print("fix this")
+//        self.add(self.field.interactableGOs())
 
         self.worldScene.craftWindow.reserveUpdate()
         self.shouldUpdate = false

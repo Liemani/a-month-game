@@ -10,7 +10,8 @@ import SpriteKit
 
 class WorldSceneViewModel {
 
-    let fieldNode: FieldNode
+    var chunkNodeContainerNode: ChunkNodeContainerNode
+
 //    let characterInv: (any InventoryNode)!
 //
 //    var fieldInv: (any InventoryNode)?
@@ -18,25 +19,37 @@ class WorldSceneViewModel {
 
     let characterNodeMoveManager: CharacterNodeMoveManager
 
+    var fieldGONodes: some Sequence<GameObjectNode> {
+        self.chunkNodeContainerNode.goNodes
+    }
+
+    // MARK: - init
     init(worldScene: WorldScene) {
-        self.fieldNode = worldScene.field
+        self.chunkNodeContainerNode = worldScene.movingLayer.chunkNodeContainerNode
         self.characterNodeMoveManager = worldScene.characterNodeMoveManager
-    }
 
-    func setUpFieldNode(gos: [GameObject]) {
-        for go in gos {
-            guard let goCoord = go.coord,
-                  self.fieldNode.isValid(goCoord) else {
-                continue
-            }
-
-            let goNode = GameObjectNode(from: go)
-            self.fieldNode.addGO(goNode, to: goCoord)
-        }
-    }
-
-    func setUpCharacterPosition(characterPosition: CGPoint) {
+        let characterPosition = self.characterNodeMoveManager.characterPosition
         self.characterNodeMoveManager.characterPosition = characterPosition
+        let characterChunkCoord = self.characterNodeMoveManager.characterChunkCoord
+        self.chunkNodeContainerNode.setUp(chunkCoord: characterChunkCoord)
+    }
+
+    func updateChunkNode(chunkCoord: ChunkCoordinate, direction: Direction4) {
+        print("implement reconsider argument")
+    }
+
+    var interactableGONodes: [GameObjectNode] {
+        print("rebuild")
+        return []
+//        var interactableGOs = [GameObjectNode]()
+//
+//        for goNode in self.chunkNodeContainerNode.goNodes {
+//            let characterCoord = self.characterNodeMoveManager.
+//            if goNode.intersects(interactionZone) {
+//                interactableGOs.append(child)
+//            }
+//        }
+//        return interactableGOs
     }
 
 }

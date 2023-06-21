@@ -77,7 +77,7 @@ class InventoryWindow: LMISpriteNode {
 
 }
 
-extension InventoryWindow: InventoryNode {
+extension InventoryWindow: GameObjectNodeContainer {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
         guard 0 <= coord.x && coord.x < self.cellCount else {

@@ -84,7 +84,8 @@ class CraftWindow: LMISpriteNode {
         for cell in self.children {
             let goNode = cell.children[0] as! GameObjectNode
 
-            goNode.type = .none
+            print("craft window will not have game object node, it must has craft object")
+//            goNode.type = .none
             goNode.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
@@ -115,7 +116,8 @@ class CraftWindow: LMISpriteNode {
     func set(index gameObjectIndex: Int, type goType: GameObjectType) {
         let cell = self.children[gameObjectIndex]
         let goNode = cell.children[0] as! GameObjectNode
-        goNode.type = goType
+            print("craft window will not have game object node, it must has craft object")
+//        goNode.type = goType
         goNode.isUserInteractionEnabled = true
         cell.alpha = 1.0
     }

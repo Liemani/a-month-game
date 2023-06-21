@@ -446,6 +446,9 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+what about create file at Worldgenerator?
+ChunkContainer 처럼 InventoryContainer 도 있어야겠다
+    그래야 update(), remove() 하고 그 안에서 go.set 하지
 캐릭터의 위치도 CGPoint 는 계속 청크가 움직일 때마다 초기화시켜야겠는데?
     애초에 위치 데이터를 ChunkCoord 를 기반해야겠다
 Implement ChunkViewModel

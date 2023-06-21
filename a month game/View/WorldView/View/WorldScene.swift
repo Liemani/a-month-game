@@ -21,8 +21,6 @@ class WorldScene: SKScene, LMITouchResponder {
     var characterNodeMoveManager: CharacterNodeMoveManager!
 
     // MARK: view
-    var field: FieldNode!
-
     var characterInv: InventoryWindow!
     var leftHandGO: GameObjectNode? { self.characterInv.leftHandGO }
     var rightHandGO: GameObjectNode? { self.characterInv.rightHandGO }
@@ -60,7 +58,6 @@ class WorldScene: SKScene, LMITouchResponder {
         let movingLayer = MovingLayer()
         self.addChild(movingLayer)
         self.movingLayer = movingLayer
-        self.field = movingLayer.field
 
         // MARK: fixed layer
         let fixedLayer = SKNode()

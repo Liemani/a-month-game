@@ -14,14 +14,13 @@ class ChunkRepository {
     private var chunkCoordDataSource: ChunkCoordinateDataSource
     private var invCoordDataSource: InventoryCoordinateDataSource
 
-    init(persistentContainer: LMIPersistentContainer) {
-        self.goDataSource = GameObjectDataSource(persistentContainer)
-        self.chunkCoordDataSource = ChunkCoordinateDataSource(persistentContainer)
-        self.invCoordDataSource = InventoryCoordinateDataSource(persistentContainer)
+    init(_ worldServiceContainer: WorldServiceContainer) {
+        self.goDataSource = worldServiceContainer.goDataSource
+        self.chunkCoordDataSource = worldServiceContainer.chunkCoordDataSource
+        self.invCoordDataSource = worldServiceContainer.invCoordDataSource
     }
 
-    func load(at coord: Coordinate<Int>) -> [GameObjectMO] {
-        let chunkCoord = ChunkCoordinate(from: coord)
+    func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {
         let chunkCoordMOs = self.chunkCoordDataSource.load(at: chunkCoord)
         let goMOs = chunkCoordMOs.compactMap { chunkCoordMO -> GameObjectMO? in
             return chunkCoordMO.gameObjectMO

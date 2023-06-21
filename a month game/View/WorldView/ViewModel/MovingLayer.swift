@@ -10,35 +10,26 @@ import SpriteKit
 
 class MovingLayer: LMINode {
 
-    var field: FieldNode!
+    var chunkNodeContainerNode: ChunkNodeContainerNode!
     var character: SKShapeNode!
 
+    // MARK: - init
     override init() {
         super.init()
 
         self.zPosition = Constant.ZPosition.movingLayer
 
-        self.addOrigin(to: self)
-        self.addField(to: self)
-        self.addTileMap(to: self)
-    }
+        // MARK: chunkNodeContainerNode
+        let chunkNodeContainerNode = ChunkNodeContainerNode()
+        self.addChild(chunkNodeContainerNode)
+        self.chunkNodeContainerNode = chunkNodeContainerNode
 
-    func addOrigin(to parent: SKNode) {
+        // MARK: origin
         let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
         origin.zPosition = Double.infinity
-        parent.addChild(origin)
-    }
+        self.addChild(origin)
 
-    func addField(to parent: SKNode) {
-        let field = FieldNode()
-
-        parent.addChild(field)
-        self.field = field
-
-        self.addCharacter(to: field)
-    }
-
-    func addCharacter(to parent: SKNode) {
+        // MARK: character
         let path = CGMutablePath()
         path.addArc(center: CGPoint.zero,
                     radius: Constant.characterRadius,
@@ -51,12 +42,10 @@ class MovingLayer: LMINode {
         character.lineWidth = 5.0
         character.zPosition = 20.0
 
-        parent.addChild(character)
-
+        chunkNodeContainerNode.addChild(character)
         self.character = character
-    }
 
-    func addTileMap(to parent: SKNode) {
+        // MARK: tile
         let resourceName = "tile_default"
         let tileTexture = SKTexture(imageNamed: resourceName)
         let tileDefinition = SKTileDefinition(texture: tileTexture)
@@ -76,7 +65,7 @@ class MovingLayer: LMINode {
             }
         }
 
-        parent.addChild(tileMapNode)
+        self.addChild(tileMapNode)
         tileMapNode.position = Constant.defaultNodeSize.toCGPoint() * Double(Constant.chunkSide / 2)
     }
 
