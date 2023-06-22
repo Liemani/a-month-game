@@ -90,23 +90,26 @@ class Character: SKShapeNode {
 
     private func resolveWorldBorderCollision() {
         self.positionFromMidChunk.x = self.positionFromMidChunk.x < Constant.moveableArea.minX
-        ? Constant.moveableArea.minX
-        : self.positionFromMidChunk.x
+            ? Constant.moveableArea.minX
+            : self.positionFromMidChunk.x
         self.positionFromMidChunk.x = self.positionFromMidChunk.x > Constant.moveableArea.maxX
-        ? Constant.moveableArea.maxX
-        : self.positionFromMidChunk.x
+            ? Constant.moveableArea.maxX
+            : self.positionFromMidChunk.x
         self.positionFromMidChunk.y = self.positionFromMidChunk.y < Constant.moveableArea.minY
-        ? Constant.moveableArea.minY
-        : self.positionFromMidChunk.y
+            ? Constant.moveableArea.minY
+            : self.positionFromMidChunk.y
         self.positionFromMidChunk.y = self.positionFromMidChunk.y > Constant.moveableArea.maxY
-        ? Constant.moveableArea.maxY
-        : self.positionFromMidChunk.y
+            ? Constant.moveableArea.maxY
+            : self.positionFromMidChunk.y
     }
 
     func savePosition() {
-        let coordFromMidChunk = TileCoordinate(from: self.positionFromMidChunk).coord
-        let chunkCoord = self.chunkCoord + coordFromMidChunk
-        self.data.chunkCoord = chunkCoord
+        var midChunkCoord = self.chunkCoord
+        midChunkCoord.building = 0
+
+        let chunkCoordFromMidChunk = TileCoordinate(from: self.positionFromMidChunk).coord
+        let newChunkCoord = midChunkCoord + chunkCoordFromMidChunk
+        self.data.chunkCoord = newChunkCoord
     }
 
 //    private func resolveCollisionOfNonWalkable() {

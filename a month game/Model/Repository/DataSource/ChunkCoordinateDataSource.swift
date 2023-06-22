@@ -40,7 +40,7 @@ extension ChunkCoordinateMO {
     func update(_ chunkCoord: ChunkCoordinate) {
         self.x = chunkCoord.x
         self.y = chunkCoord.y
-        self.location = chunkCoord.location
+        self.location = Int32(chunkCoord.location)
     }
 
     func delete() {

@@ -14,11 +14,14 @@ struct ChunkCoordinate {
     var street: UInt8
     var building: UInt8
 
-    var location: Int32 { (Int32(self.street) << 8) | Int32(self.building) }
     var streetX: UInt8 { self.street >> 4 }
     var streetY: UInt8 { self.street & 0x0f }
-    var buildingX: UInt8 { (self.street & 0xf0) | (self.building >> 4) }
-    var buildingY: UInt8 { (self.street << 4) | (self.building & 0x0f) }
+    var buildingX: UInt8 { self.building >> 4 }
+    var buildingY: UInt8 { self.building & 0x0f }
+
+    var location: UInt16 { (UInt16(self.street) << 8) | UInt16(self.building) }
+    var locationX: UInt8 { (self.street & 0xf0) | (self.building >> 4) }
+    var locationY: UInt8 { (self.street << 4) | (self.building & 0x0f) }
 
     // MARK: - init
     init() {
@@ -29,7 +32,7 @@ struct ChunkCoordinate {
     }
 
     init(from chunkCoordMO: ChunkCoordinateMO) {
-        self.init(x: chunkCoordMO.x, y: chunkCoordMO.y, location: UInt16(bitPattern: Int16(truncatingIfNeeded: chunkCoordMO.location)))
+        self.init(x: chunkCoordMO.x, y: chunkCoordMO.y, location: UInt16(truncatingIfNeeded: UInt32(bitPattern: chunkCoordMO.location)))
     }
 
     init(from coord: Coordinate<Int>) {
@@ -107,12 +110,12 @@ struct ChunkCoordinate {
     static func + (lhs: ChunkCoordinate, rhs: Coordinate<Int>) -> ChunkCoordinate {
         var mutableChunkCoord = lhs
 
-        var locationX = Int(lhs.buildingX)
+        var locationX = Int(lhs.locationX)
         locationX += rhs.x
         mutableChunkCoord.x += Int32(truncatingIfNeeded: locationX >> 8)
         let buildingX = UInt8(truncatingIfNeeded: UInt(bitPattern: locationX))
 
-        var locationY = Int(lhs.buildingY)
+        var locationY = Int(lhs.locationY)
         locationY += rhs.y
         mutableChunkCoord.y += Int32(truncatingIfNeeded: locationY >> 8)
         let buildingY = UInt8(truncatingIfNeeded: UInt(bitPattern: locationY))
