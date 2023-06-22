@@ -10,44 +10,54 @@ import SpriteKit
 
 class WorldSceneViewModel {
 
-    var chunkNodeContainerNode: ChunkNodeContainerNode
+    var chunkContainer: ChunkContainer
 
-//    let characterInv: (any InventoryNode)!
-//
-//    var fieldInv: (any InventoryNode)?
-//    var characterInvInv: (any InventoryNode)?
+    let characterInv: any GameObjectContainer
 
-    let characterNodeMoveManager: CharacterNodeMoveManager
+    var fieldInv: (any GameObjectContainer)?
+    var characterInvInv: (any GameObjectContainer)?
 
-    var fieldGONodes: some Sequence<GameObjectNode> {
-        self.chunkNodeContainerNode.goNodes
+    let character: Character
+
+    var fieldGOs: some Sequence<GameObject> {
+        self.chunkContainer.gos
     }
 
     // MARK: - init
-    init(worldScene: WorldScene) {
-        self.chunkNodeContainerNode = worldScene.movingLayer.chunkNodeContainerNode
-        self.characterNodeMoveManager = worldScene.characterNodeMoveManager
+    init(chunkContainer: ChunkContainer,
+         characterInv: any GameObjectContainer,
+         fieldInv: (any GameObjectContainer)? = nil,
+         characterInvInv: (any GameObjectContainer)? = nil,
+         character: Character) {
+        self.chunkContainer = chunkContainer
+        self.characterInv = characterInv
+        self.fieldInv = fieldInv
+        self.characterInvInv = characterInvInv
+        self.character = character
 
-        let characterChunkCoord = self.characterNodeMoveManager.characterChunkCoord
-        self.chunkNodeContainerNode.setUp(chunkCoord: characterChunkCoord)
+        chunkContainer.setUp(chunkCoord: character.chunkCoord)
     }
 
-    func updateChunkNode(chunkCoord: ChunkCoordinate, direction: Direction4) {
+    func updateChunk(chunkCoord: ChunkCoordinate, direction: Direction4) {
         print("implement reconsider argument")
     }
 
-    var interactableGONodes: [GameObjectNode] {
+    var interactableGOs: [GameObject] {
         print("rebuild")
         return []
 //        var interactableGOs = [GameObjectNode]()
 //
-//        for goNode in self.chunkNodeContainerNode.goNodes {
-//            let characterCoord = self.characterNodeMoveManager.
-//            if goNode.intersects(interactionZone) {
+//        for go in self.chunkContainer.gos {
+//            let characterCoord = self.characterMoveTouchEventHandler.
+//            if go.intersects(interactionZone) {
 //                interactableGOs.append(child)
 //            }
 //        }
 //        return interactableGOs
+    }
+
+    func update() {
+        print("update world scene view model")
     }
 
 }

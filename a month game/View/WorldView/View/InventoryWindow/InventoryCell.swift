@@ -17,13 +17,13 @@ class InventoryCell: LMISpriteNode {
         self.size = Constant.defaultNodeSize
     }
 
-    func addGO(_ go: GameObjectNode) {
+    func addGO(_ go: GameObject) {
         self.addChild(go)
         go.position = CGPoint()
         go.isUserInteractionEnabled = true
     }
 
-    func moveGO(_ go: GameObjectNode) {
+    func moveGO(_ go: GameObject) {
         go.move(toParent: self)
         go.position = CGPoint()
     }

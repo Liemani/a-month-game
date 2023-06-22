@@ -10,10 +10,10 @@
 //
 //class FieldNode: LMINode {
 //
-//    var chunkNodes: [ChunkNode]
+//    var chunks: [Chunk]
 //
 //    override init() {
-//        self.chunkNodes = [ChunkNode](repeating: ChunkNode(), count: 9)
+//        self.chunks = [Chunk](repeating: Chunk(), count: 9)
 //
 //        super.init()
 //
@@ -42,7 +42,7 @@
 //}
 //
 //// MARK: - InventoryNode
-//extension FieldNode: GameObjectNodeContainer {
+//extension FieldNode: GameObjectContainer {
 //
 //    func isValid(_ coord: Coordinate<Int>) -> Bool {
 //        return true

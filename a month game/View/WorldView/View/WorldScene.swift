@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class WorldScene: SKScene, LMITouchResponder {
+class WorldScene: SKScene, TouchResponder {
 
     var worldViewController: WorldSceneViewController {
         return self.view!.next! as! WorldSceneViewController
@@ -16,20 +16,16 @@ class WorldScene: SKScene, LMITouchResponder {
 
     var viewModel: WorldSceneViewModel!
 
-    // MARK: manager
-    var touchContextManager: WorldSceneTouchContextManager!
-    var characterNodeMoveManager: CharacterNodeMoveManager!
-
     // MARK: view
     var characterInv: InventoryWindow!
-    var leftHandGO: GameObjectNode? { self.characterInv.leftHandGO }
-    var rightHandGO: GameObjectNode? { self.characterInv.rightHandGO }
+    var leftHandGO: GameObject? { self.characterInv.leftHandGO }
+    var rightHandGO: GameObject? { self.characterInv.rightHandGO }
 
     // MARK: layer
     var movingLayer: MovingLayer!
 
+    var character: Character!
     var ui: SKNode!
-    var interactionZone: InteractionZone!
     var craftWindow: CraftWindow!
 
     var munuWindow: MenuWindow!
@@ -37,15 +33,12 @@ class WorldScene: SKScene, LMITouchResponder {
 
     /// initialize with size
     override init(size: CGSize) {
+
         super.init(size: size)
 
         self.scaleMode = .aspectFit
 
-        self.touchContextManager = WorldSceneTouchContextManager()
-
         self.initSceneLayer()
-
-        self.characterNodeMoveManager = CharacterNodeMoveManager(worldScene: self)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -65,20 +58,9 @@ class WorldScene: SKScene, LMITouchResponder {
         self.addChild(fixedLayer)
 
         // MARK: character
-        let path = CGMutablePath()
-        path.addArc(center: CGPoint.zero,
-                    radius: Constant.characterRadius,
-                    startAngle: 0,
-                    endAngle: CGFloat.pi * 2,
-                    clockwise: true)
-        let character = SKShapeNode(path: path)
-        character.fillColor = .white
-        character.strokeColor = .brown
-        character.lineWidth = 5.0
-        character.position = Constant.sceneCenter
-        character.zPosition = Constant.ZPosition.character
-
+        let character = Character(movingLayer: self.movingLayer)
         fixedLayer.addChild(character)
+        self.character = character
 
         // MARK: ui
         let ui = SKNode()
@@ -91,11 +73,6 @@ class WorldScene: SKScene, LMITouchResponder {
         menuButtonNode.set(frame: Constant.Frame.menuButtonNode)
         menuButtonNode.delegate = self
         ui.addChild(menuButtonNode)
-
-        let interactionZone = InteractionZone()
-        interactionZone.setUp()
-        ui.addChild(interactionZone)
-        self.interactionZone = interactionZone
 
         let invWindow = InventoryWindow()
         invWindow.setUp()
@@ -129,15 +106,11 @@ class WorldScene: SKScene, LMITouchResponder {
     override func update(_ currentTime: TimeInterval) {
         let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
 
+        self.character.update(timeInterval)
         self.worldViewController.update()
-
-        self.characterNodeMoveManager.update(timeInterval)
-        self.worldViewController.update()
-        self.interactionZone.update()
         self.craftWindow.update()
 
         self.lastUpdateTime = currentTime
-
     }
 
     // MARK: - delegate
@@ -153,7 +126,7 @@ class WorldScene: SKScene, LMITouchResponder {
 //        self.worldViewController.moveGOMO(from: go, to: goCoord)
 //    }
 
-    func remove(from gos: any Sequence<GameObjectNode>) {
+    func remove(from gos: any Sequence<GameObject>) {
         self.worldViewController.remove(from: gos)
     }
 
@@ -163,23 +136,43 @@ class WorldScene: SKScene, LMITouchResponder {
 
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-        self.characterNodeMoveManager.touchBegan(touch)
+        EventManager.default.touchEventHandlerManager.cancelAll(of: CharacterMoveTouchEventHandler.self)
+        let touchResponder = CharacterMoveTouchEventHandler(
+            sender: self,
+            touch: touch,
+            worldScene: self,
+            character: self.character)
+        _ = EventManager.default.touchEventHandlerManager.add(touchResponder)
     }
 
     func touchMoved(_ touch: UITouch) {
-        self.characterNodeMoveManager.touchMoved(touch)
+        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) as! CharacterMoveTouchEventHandler? else {
+            return
+        }
+
+        handler.touchMoved()
     }
 
     func touchEnded(_ touch: UITouch) {
-        self.characterNodeMoveManager.touchEnded(touch)
+        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) else {
+            return
+        }
+
+        handler.touchEnded()
+        self.resetTouch(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        self.characterNodeMoveManager.touchCancelled(touch)
+        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) else {
+            return
+        }
+
+        handler.touchCancelled()
+        self.resetTouch(touch)
     }
 
     func resetTouch(_ touch: UITouch) {
-        self.characterNodeMoveManager.resetTouch(touch)
+        EventManager.default.touchEventHandlerManager.remove(from: touch)
     }
 
     // MARK: - override

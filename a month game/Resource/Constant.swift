@@ -10,12 +10,12 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultSize = tileSide
-    static let tileTextureSide = 16.0
-    static let tileTextureSize = CGSize(width: tileTextureSide, height: tileTextureSide)
+    static let defaultSize = tileWidth
+    static let tileTextureWidth = 16.0
+    static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
     static let tileScale = 6.0
-    static let tileSide = tileTextureSide * tileScale
-    static let tileSize = CGSize(width: tileSide, height: tileSide)
+    static let tileWidth = tileTextureWidth * tileScale
+    static let tileSize = CGSize(width: tileWidth, height: tileWidth)
     static let margin = defaultSize / 5.0
 
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
@@ -64,7 +64,7 @@ struct Constant {
         // MARK: world scene
         static let movingLayer = 0.0
             static let tileMap = -500.0
-            static let chunkNodeContainer = 0.0
+            static let chunkContainer = 0.0
             static let tile = -10.0
             static let gameObject = 0.0
             static let gameObjectCover = 20.0
@@ -115,8 +115,9 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let chunkSide: Int = 16
-    static let tileMapSide: Int = chunkSide * 3
+    static let tileCountInChunkSide: Int = 16
+    static let tileMapSide: Int = tileCountInChunkSide * 3
+    static let chunkWidth: Double = tileWidth * Double(tileCountInChunkSide)
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
@@ -132,6 +133,7 @@ struct Constant {
     }
 
     static let initialNextID = 1
+    static let sceneEventQueueSize = 100
 
     static let accessableGOColorBlendFactor = 0.5
 

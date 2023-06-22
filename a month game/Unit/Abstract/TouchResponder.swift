@@ -1,14 +1,14 @@
 //
-//  LMITouchable.swift
+//  TouchResponder.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/06/16.
+//  Created by 박정훈 on 2023/06/22.
 //
 
 import Foundation
 import SpriteKit
 
-protocol LMITouchResponder {
+protocol TouchResponder {
 
     func touchBegan(_ touch: UITouch)
     func touchMoved(_ touch: UITouch)

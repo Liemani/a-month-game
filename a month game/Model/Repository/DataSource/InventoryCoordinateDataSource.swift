@@ -16,7 +16,6 @@ class InventoryCoordinateDataSource {
         self.moContext = persistentContainer.viewContext
     }
 
-    // MARK: - edit
     func new() -> InventoryCoordinateMO {
         let entityName = Constant.Name.invCoordinateEntity
         let invCoordMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self.moContext) as! InventoryCoordinateMO

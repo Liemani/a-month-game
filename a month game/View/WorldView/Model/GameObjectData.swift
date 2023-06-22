@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GameObject {
+class GameObjectData {
 
     private var mo: GameObjectMO
 

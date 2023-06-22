@@ -34,7 +34,10 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
 
-        let viewModel = WorldSceneViewModel(worldScene: scene)
+        let viewModel = WorldSceneViewModel(
+            chunkContainer: scene.movingLayer.chunkContainer,
+            characterInv: scene.characterInv,
+            character: scene.character)
         self.viewModel = viewModel
 
 #if DEBUG
@@ -115,7 +118,7 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
 //    }
 
     // TODO: check this method, other edit is perfect
-    func remove(from gos: any Sequence<GameObjectNode>) {
+    func remove(from gos: any Sequence<GameObject>) {
         print("ingredient of craft should removed")
 //        for go in gos {
 //            let go = go as! GameObjectNode
@@ -131,7 +134,9 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     func requestPresentPortalSceneViewController() {
         let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
         self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
+
         WorldServiceContainer.free()
+        EventManager.free()
     }
 
     func update() {
@@ -139,16 +144,29 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         if moContext.hasChanges {
             try! moContext.save()
         }
+
+        self.handleSceneEvent()
+    }
+
+    func handleSceneEvent() {
+        while let event = EventManager.default.sceneEventQueue.dequeue() {
+            switch event {
+            case let event as ChunkMoveSceneEvent:
+                self.viewModel.updateChunk(chunkCoord: event.chunkCoord, direction: event.direction)
+            default:
+                print("unknown scene event")
+            }
+        }
     }
 
 #if DEBUG
     private func debugCode() {
-        let goNodes = self.viewModel.fieldGONodes
-        for goNode in goNodes {
-            let go = goNode.go
-            guard let chunkCoord = go.chunkCoord else { continue }
+        let gos = self.viewModel.fieldGOs
+        for go in gos {
+            let data = go.data
+            guard let chunkCoord = data.chunkCoord else { continue }
 
-            print("id: \(go.id), typeID: \(go.type), coordinate: (\(chunkCoord))")
+            print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
         }
     }
 #endif

@@ -33,7 +33,7 @@ class MenuWindow: LMISpriteNode {
     // MARK: - isHidden
     func reveal() {
         self.isHidden = false
-        self.worldScene.touchContextManager.cancelAll()
+        EventManager.default.touchEventHandlerManager.cancelAll()
     }
 
     func hide() {

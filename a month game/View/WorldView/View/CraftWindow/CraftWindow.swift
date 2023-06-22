@@ -57,7 +57,7 @@ class CraftWindow: LMISpriteNode {
 //            self.worldScene.characterInv,
 //        ]
 //        let gos = CombineSequence(sequences: sequences)
-        let gos: [GameObjectNode] = []
+        let gos: [GameObject] = []
 
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
 
@@ -82,20 +82,20 @@ class CraftWindow: LMISpriteNode {
 
     private func reset() {
         for cell in self.children {
-            let goNode = cell.children[0] as! GameObjectNode
+            let go = cell.children[0] as! GameObject
 
             print("craft window will not have game object node, it must has craft object")
-//            goNode.type = .none
-            goNode.isUserInteractionEnabled = false
+//            go.type = .none
+            go.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }
 
-    private func hasIngredient(gameObjects gos: any Sequence<GameObjectNode>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gameObjects gos: any Sequence<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
         var recipe = recipe
 
         for go in gos {
-            let go = go as! GameObjectNode
+            let go = go as! GameObject
             let goType = go.type
             for index in 0..<recipe.count {
                 if goType == recipe[index].type {
@@ -115,10 +115,10 @@ class CraftWindow: LMISpriteNode {
 
     func set(index gameObjectIndex: Int, type goType: GameObjectType) {
         let cell = self.children[gameObjectIndex]
-        let goNode = cell.children[0] as! GameObjectNode
+        let go = cell.children[0] as! GameObject
             print("craft window will not have game object node, it must has craft object")
-//        goNode.type = goType
-        goNode.isUserInteractionEnabled = true
+//        go.type = goType
+        go.isUserInteractionEnabled = true
         cell.alpha = 1.0
     }
 

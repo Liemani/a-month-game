@@ -23,7 +23,6 @@ class GameObjectRepository {
         self.invCoordDataSource = invCoordDataSource
     }
 
-    // MARK: - edit
     func new(id: Int, type: GameObjectType) -> GameObjectMO {
         let goMO = self.goDataSource.new()
 

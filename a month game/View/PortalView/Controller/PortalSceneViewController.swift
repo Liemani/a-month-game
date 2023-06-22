@@ -51,9 +51,9 @@ class PortalSceneViewController: UIViewController, UIGestureRecognizerDelegate {
 
     @objc
     func requestPresentWorldSceneViewController() {
-        let worldName = Constant.Name.defaultWorld
-        WorldServiceContainer.set(worldName: worldName)
-        
+        WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        EventManager.set()
+
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldSceneViewController
 
         self.navigationController?.setViewControllers([worldViewController], animated: false)

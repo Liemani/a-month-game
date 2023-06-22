@@ -10,7 +10,7 @@ import SpriteKit
 
 class MovingLayer: LMINode {
 
-    var chunkNodeContainerNode: ChunkNodeContainerNode!
+    var chunkContainer: ChunkContainer!
 
     // MARK: - init
     override init() {
@@ -18,10 +18,10 @@ class MovingLayer: LMINode {
 
         self.zPosition = Constant.ZPosition.movingLayer
 
-        // MARK: chunkNodeContainerNode
-        let chunkNodeContainerNode = ChunkNodeContainerNode()
-        self.addChild(chunkNodeContainerNode)
-        self.chunkNodeContainerNode = chunkNodeContainerNode
+        // MARK: chunkContainer
+        let chunkContainer = ChunkContainer()
+        self.addChild(chunkContainer)
+        self.chunkContainer = chunkContainer
 
         // MARK: origin
         let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
@@ -49,7 +49,7 @@ class MovingLayer: LMINode {
         }
 
         self.addChild(tileMapNode)
-        tileMapNode.position = Constant.defaultNodeSize.toCGPoint() * Double(Constant.chunkSide / 2)
+        tileMapNode.position = Constant.defaultNodeSize.toCGPoint() * Double(Constant.tileCountInChunkSide / 2)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -15,12 +15,12 @@ class ChunkService {
         self.chunkRepository = chunkRepository
     }
 
-    func load(at chunkCoord: ChunkCoordinate) -> [GameObject] {
+    func load(at chunkCoord: ChunkCoordinate) -> [GameObjectData] {
         let goMOs = self.chunkRepository.load(at: chunkCoord)
-        let gos = goMOs.compactMap {
-            GameObject(from: $0)
+        let goDatas = goMOs.compactMap {
+            GameObjectData(from: $0)
         }
-        return gos
+        return goDatas
     }
 
 }

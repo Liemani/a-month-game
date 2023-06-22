@@ -10,40 +10,40 @@ import SpriteKit
 
 // MARK: - usage extension
 #if DEBUG
-extension GameObjectNode {
+extension GameObject {
 
-    private func set(goNode: GameObjectNode,
+    private func set(go: GameObject,
 
                      midChunkCoord: ChunkCoordinate,
-                     chunks: [ChunkNode],
+                     chunks: [Chunk],
 
                      from prevChunkCoord: ChunkCoordinate?,
                      to currChunkCoord: ChunkCoordinate) {
         if prevChunkCoord != nil {
-            goNode.removeFromParent()
+            go.removeFromParent()
         }
 
         let currChunkDirection = midChunkCoord.chunkDirection(to: currChunkCoord)!
-        let currChunkNode = chunks[currChunkDirection]
-        currChunkNode.addChild(goNode)
+        let currChunk = chunks[currChunkDirection]
+        currChunk.addChild(go)
 
-        goNode.set(chunkCoord: currChunkCoord)
+        go.set(chunkCoord: currChunkCoord)
     }
 
 }
 #endif
 
 // MARK: - class GameObjectNode
-class GameObjectNode: LMISpriteNode {
+class GameObject: LMISpriteNode {
 
     var craftWindow: CraftWindow { self.parent?.parent as! CraftWindow }
 
-    var go: GameObject
-    var id: Int { self.go.id }
-    var type: GameObjectType { self.go.type }
+    var data: GameObjectData
+    var id: Int { self.data.id }
+    var type: GameObjectType { self.data.type }
 
     func set(chunkCoord: ChunkCoordinate) {
-        self.go.set(chunkCoord: chunkCoord)
+        self.data.set(chunkCoord: chunkCoord)
 
         let buildingLocation = chunkCoord.building
         let x = Int(buildingLocation >> 4)
@@ -51,17 +51,17 @@ class GameObjectNode: LMISpriteNode {
         self.position = TileCoordinate(x, y).fieldPoint
     }
 
-    var buildingLocation: UInt8? { self.go.chunkCoord?.building }
+    var buildingLocation: UInt8? { self.data.chunkCoord?.building }
 
     // MARK: - init
-    init(from go: GameObject) {
-        self.go = go
+    init(from goData: GameObjectData) {
+        self.data = goData
 
-        let texture = go.type.texture
+        let texture = goData.type.texture
         let size = Constant.defaultNodeSize
         super.init(texture: texture, color: .white, size: size)
 
-        if let chunkCoord = go.chunkCoord {
+        if let chunkCoord = goData.chunkCoord {
             self.set(chunkCoord: chunkCoord)
         }
 
@@ -71,8 +71,8 @@ class GameObjectNode: LMISpriteNode {
     }
 
     convenience init(goType: GameObjectType) {
-        let go = GameObject(type: goType)
-        self.init(from: go)
+        let goData = GameObjectData(type: goType)
+        self.init(from: goData)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -89,16 +89,16 @@ class GameObjectNode: LMISpriteNode {
     }
 
     // MARK: - touch
-    override func touchBegan(_ touch: UITouch) {
-        let result = self.touchContextManager.add(GameObjectTouch(touch: touch, sender: self))
-
-        if result == true {
-            self.activate()
-        }
-    }
+//    override func touchBegan(_ touch: UITouch) {
+//        let result = self.touchResponderManager.add(GameObjectTouch(touch: touch, sender: self))
+//
+//        if result == true {
+//            self.activate()
+//        }
+//    }
 
 //    override func touchMoved(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //
@@ -138,7 +138,7 @@ class GameObjectNode: LMISpriteNode {
 //    }
 //
 //    override func touchEnded(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //
@@ -182,7 +182,7 @@ class GameObjectNode: LMISpriteNode {
 //    }
 //
 //    override func touchCancelled(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //        self.resetTouch(touch)
@@ -193,7 +193,7 @@ class GameObjectNode: LMISpriteNode {
 //
 //    override func resetTouch(_ touch: UITouch) {
 //        self.deactivate()
-//        self.touchContextManager.removeFirst(from: touch)
+//        self.touchResponderManager.removeFirst(from: touch)
 //    }
 
     // MARK: - interact
@@ -224,5 +224,3 @@ class GameObjectNode: LMISpriteNode {
     }
 
 }
-
-class GameObjectTouch: TouchContext { }

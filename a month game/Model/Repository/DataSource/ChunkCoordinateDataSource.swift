@@ -16,7 +16,6 @@ class ChunkCoordinateDataSource {
         self.moContext = persistentContainer.viewContext
     }
 
-    // MARK: - edit
     func new() -> ChunkCoordinateMO {
         let entityName = Constant.Name.chunkCoordinateEntity
         let chunkCoordMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self.moContext) as! ChunkCoordinateMO

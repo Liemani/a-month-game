@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Character {
+struct CharacterData {
 
     var chunkCoord: ChunkCoordinate
     var buildingPosition: CGPoint {
