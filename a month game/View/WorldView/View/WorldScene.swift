@@ -137,12 +137,13 @@ class WorldScene: SKScene, TouchResponder {
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
         EventManager.default.touchEventHandlerManager.cancelAll(of: CharacterMoveTouchEventHandler.self)
-        let touchResponder = CharacterMoveTouchEventHandler(
-            sender: self,
+        let handler = CharacterMoveTouchEventHandler(
             touch: touch,
             worldScene: self,
             character: self.character)
-        _ = EventManager.default.touchEventHandlerManager.add(touchResponder)
+        if EventManager.default.touchEventHandlerManager.add(handler) {
+            handler.touchBegan()
+        }
     }
 
     func touchMoved(_ touch: UITouch) {

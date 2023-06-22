@@ -46,6 +46,8 @@ class Character: SKShapeNode {
         self.lineWidth = 5.0
         self.position = Constant.sceneCenter
         self.zPosition = Constant.ZPosition.character
+
+        self.positionFromMidChunk = self.data.buildingPosition
     }
 
     required init?(coder aDecoder: NSCoder) {

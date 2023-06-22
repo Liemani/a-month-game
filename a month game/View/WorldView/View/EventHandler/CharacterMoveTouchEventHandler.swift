@@ -10,29 +10,20 @@ import SpriteKit
 
 final class CharacterMoveTouchEventHandler {
 
-    private weak var scene: WorldScene!
-
-    private let sender: WorldScene
     let touch: UITouch
 
+    private var scene: WorldScene
     private let character: Character
 
     private var previousPreviousTimestamp: TimeInterval!
     private var previousTimestamp: TimeInterval!
     private var previousPreviousLocation: CGPoint?
 
-    private var lastCharacterPositionFromMidChunk: CGPoint
-    private var characterPositionFromMidChunk: CGPoint
-
     // MARK: - init
-    init(sender: WorldScene, touch: UITouch, worldScene: WorldScene, character: Character) {
-        self.sender = sender
+    init(touch: UITouch, worldScene: WorldScene, character: Character) {
         self.touch = touch
         self.scene = worldScene
         self.character = character
-        self.lastCharacterPositionFromMidChunk = CGPoint()
-        self.characterPositionFromMidChunk = self.character.buildingPosition
-        self.lastCharacterPositionFromMidChunk = self.characterPositionFromMidChunk
     }
 
 }
@@ -49,7 +40,7 @@ extension CharacterMoveTouchEventHandler: TouchEventHandler {
         let currentPoint = self.touch.location(in: self.scene)
         let difference = currentPoint - previousPoint
 
-        self.characterPositionFromMidChunk -= difference
+        self.character.positionFromMidChunk -= difference
 
         self.previousPreviousTimestamp = self.previousTimestamp
         self.previousTimestamp = self.touch.timestamp
@@ -71,8 +62,7 @@ extension CharacterMoveTouchEventHandler: TouchEventHandler {
         self.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
     }
 
-    func touchCancelled() {
-    }
+    func touchCancelled() { }
 
 }
 
