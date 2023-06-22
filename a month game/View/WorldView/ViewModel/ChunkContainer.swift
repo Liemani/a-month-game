@@ -62,6 +62,7 @@ class ChunkContainer: LMINode {
 
     func update(direction: Direction4) {
         self.shift(direction: direction.opposite)
+        self.updateChunksPosition()
 
         let newMidChunkCoord = self.midChunkCoord + direction.coord << 4
         for direction in direction.direction8 {
