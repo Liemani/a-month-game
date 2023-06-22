@@ -24,7 +24,7 @@ struct Constant {
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
     static let sceneSize = iPhone5sResolution
 
-    static let sceneCenter = sceneSize.toCGPoint() / 2.0
+    static let sceneCenter = sceneSize.toPoint() / 2.0
 
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
@@ -36,7 +36,7 @@ struct Constant {
     static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
     // MARK: misc
-    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toCGPoint()
+    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toPoint()
     static let characterRadius = defaultSize / 3.0
     static let exitWorldButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
@@ -133,6 +133,7 @@ struct Constant {
     }
 
     static let initialNextID = 1
+    static let touchEventQueueSize = 10
     static let sceneEventQueueSize = 100
 
     static let accessableGOColorBlendFactor = 0.5

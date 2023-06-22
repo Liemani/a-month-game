@@ -38,10 +38,6 @@ class WorldSceneViewModel {
         chunkContainer.setUp(chunkCoord: character.chunkCoord)
     }
 
-    func updateChunk(chunkCoord: ChunkCoordinate, direction: Direction4) {
-        print("implement reconsider argument")
-    }
-
     var interactableGOs: [GameObject] {
         print("rebuild")
         return []
@@ -54,10 +50,6 @@ class WorldSceneViewModel {
 //            }
 //        }
 //        return interactableGOs
-    }
-
-    func update() {
-        print("update world scene view model")
     }
 
 }

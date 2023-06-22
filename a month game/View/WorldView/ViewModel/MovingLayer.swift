@@ -49,7 +49,7 @@ class MovingLayer: LMINode {
         }
 
         self.addChild(tileMapNode)
-        tileMapNode.position = Constant.defaultNodeSize.toCGPoint() * Double(Constant.tileCountInChunkSide / 2)
+        tileMapNode.position = Constant.defaultNodeSize.toPoint() * Double(Constant.tileCountInChunkSide / 2)
     }
 
     required init?(coder aDecoder: NSCoder) {

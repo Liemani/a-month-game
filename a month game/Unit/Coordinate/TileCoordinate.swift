@@ -35,7 +35,7 @@ struct TileCoordinate {
     }
 
     var fieldPoint: CGPoint {
-        return (self.coord.toCGPoint() + 0.5) * Constant.tileWidth
+        return (self.coord.toPoint() + 0.5) * Constant.tileWidth
     }
 
     func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {

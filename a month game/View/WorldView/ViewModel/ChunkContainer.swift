@@ -40,7 +40,7 @@ class ChunkContainer: LMINode {
     func updateChunksPosition() {
         for direction in Direction9.allCases {
             let directionCoord = direction.coord
-            let chunkPosition = (directionCoord << 4).toCGPoint() * Constant.tileWidth
+            let chunkPosition = (directionCoord << 4).toPoint() * Constant.tileWidth
 
             let chunk = self.chunks[direction]
             chunk.position = chunkPosition
@@ -60,14 +60,15 @@ class ChunkContainer: LMINode {
         self.midChunkCoord = chunkCoord
     }
 
-    func update(chunkCoord: ChunkCoordinate, direction: Direction4) {
+    func update(direction: Direction4) {
         self.shift(direction: direction.opposite)
 
+        let newMidChunkCoord = self.midChunkCoord + direction.coord << 4
         for direction in direction.direction8 {
-            let tartgetChunkCoord = chunkCoord + direction.coord << 4
+            let tartgetChunkCoord = newMidChunkCoord + direction.coord << 4
             self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
         }
-        self.midChunkCoord = chunkCoord
+        self.midChunkCoord = newMidChunkCoord
     }
 
     // MARK: - game object

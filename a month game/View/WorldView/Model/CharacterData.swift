@@ -9,7 +9,15 @@ import Foundation
 
 struct CharacterData {
 
-    var chunkCoord: ChunkCoordinate
+    private var _chunkCoord: ChunkCoordinate
+    var chunkCoord: ChunkCoordinate {
+        get { self._chunkCoord }
+        set {
+            self._chunkCoord = newValue
+            self.update(chunkCoord: newValue)
+        }
+    }
+
     var buildingPosition: CGPoint {
         let x = Int(self.chunkCoord.buildingX)
         let y = Int(self.chunkCoord.buildingY)
@@ -26,10 +34,10 @@ struct CharacterData {
         let chunkY = worldDataRep.load(at: .characterLocationChunkY)
         let chunkLocation = worldDataRep.load(at: .characterLocationChunkLocation)
 
-        self.chunkCoord = ChunkCoordinate(x: chunkX, y: chunkY, location: chunkLocation)
+        self._chunkCoord = ChunkCoordinate(x: chunkX, y: chunkY, location: chunkLocation)
     }
 
-    func update(chunkCoord: ChunkCoordinate) {
+    private func update(chunkCoord: ChunkCoordinate) {
         let worldDataRep = WorldServiceContainer.default.worldDataRepo
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)

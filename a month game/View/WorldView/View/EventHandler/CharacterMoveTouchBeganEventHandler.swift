@@ -8,11 +8,11 @@
 import Foundation
 import SpriteKit
 
-final class CharacterMoveTouchEventHandler {
+final class CharacterMoveTouchBeganEventHandler {
 
     let touch: UITouch
 
-    private var scene: WorldScene
+    private let scene: WorldScene
     private let character: Character
 
     private var previousPreviousTimestamp: TimeInterval!
@@ -28,7 +28,7 @@ final class CharacterMoveTouchEventHandler {
 
 }
 
-extension CharacterMoveTouchEventHandler: TouchEventHandler {
+extension CharacterMoveTouchBeganEventHandler: TouchEventHandler {
 
     func touchBegan() {
         self.previousTimestamp = self.touch.timestamp
@@ -59,23 +59,9 @@ extension CharacterMoveTouchEventHandler: TouchEventHandler {
         let previousLocation = self.touch.previousLocation(in: self.scene)
         let timeInterval = self.previousTimestamp - self.previousPreviousTimestamp
 
-        self.character.velocityVector = -(previousLocation - previousPreviousLocation) / timeInterval
+        self.character.velocityVector = (-(previousLocation - previousPreviousLocation) / timeInterval).toVector()
     }
 
     func touchCancelled() { }
 
 }
-
-// MARK: - update
-//extension CharacterMoveTouchEventHandler {
-//
-//    private func tileDidMoved() {
-//        let lastTile = TileCoordinate(from: self.lastCharacterPositionFromMidChunk)
-//        let currentTile = TileCoordinate(from: self.characterPositionFromMidChunk)
-//
-//        if currentTile != lastTile {
-//            self.interactionZone.reserveUpdate()
-//        }
-//    }
-//
-//}

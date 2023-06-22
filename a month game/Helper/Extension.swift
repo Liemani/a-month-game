@@ -184,21 +184,12 @@ extension CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 
-    static func - (lhs: CGPoint, rhs: CGPoint) -> CGVector {
-        return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
+    static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
     }
 
-    // MARK: CGPoint, Double
-    static func + (lhs: CGPoint, rhs: Double) -> CGPoint {
-        return CGPoint(x: lhs.x + rhs, y: lhs.y + rhs)
-    }
-
-    static func * (lhs: CGPoint, rhs: Double) -> CGPoint {
-        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
-    }
-
-    static func / (lhs: CGPoint, rhs: Double) -> CGPoint {
-        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+    static func -= (lhs: inout CGPoint, rhs: CGPoint) {
+        lhs = lhs - rhs
     }
 
     // MARK: CGPoint, CGVector
@@ -218,6 +209,28 @@ extension CGPoint {
         lhs = lhs - rhs
     }
 
+    // MARK: CGPoint, Double
+    static func + (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x + rhs, y: lhs.y + rhs)
+    }
+
+    static func * (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
+    }
+
+    static func / (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
+    }
+
+    // MARK: Coordinate<Int>
+    static func * (lhs: CGPoint, rhs: Coordinate<Int>) -> CGPoint {
+        return CGPoint(x: lhs.x * Double(rhs.x), y: lhs.y * Double(rhs.y))
+    }
+
+    func toVector() -> CGVector {
+        return CGVector(dx: self.x, dy: self.y)
+    }
+
 }
 
 // MARK: - CGSize
@@ -231,7 +244,7 @@ extension CGSize {
         return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
     }
 
-    func toCGPoint() -> CGPoint {
+    func toPoint() -> CGPoint {
         return CGPoint(x: self.width, y: self.height)
     }
 
@@ -258,6 +271,10 @@ extension CGVector {
 
     var magnitude: CGFloat {
         return (self.dx * self.dx + self.dy * self.dy).squareRoot()
+    }
+
+    func toPoint() -> CGPoint {
+        return CGPoint(x: self.dx, y: self.dy)
     }
 
 }

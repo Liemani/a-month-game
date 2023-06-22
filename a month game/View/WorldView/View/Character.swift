@@ -10,15 +10,14 @@ import SpriteKit
 
 class Character: SKShapeNode {
 
-    private let data: CharacterData
+    private var data: CharacterData
 
     var chunkCoord: ChunkCoordinate { self.data.chunkCoord }
     var buildingPosition: CGPoint { self.data.buildingPosition }
 
-    var velocityVector: CGVector
-
     let movingLayer: MovingLayer
 
+    var lastPositionFromMidChunk: CGPoint!
     var positionFromMidChunk: CGPoint {
         get { -self.movingLayer.position + (Constant.sceneCenter - CGPoint()) }
         set(characterPosition) {
@@ -26,11 +25,13 @@ class Character: SKShapeNode {
         }
     }
 
+    var velocityVector: CGVector
+
     // MARK: - init
     init(movingLayer: MovingLayer) {
         self.data = CharacterData()
-        self.velocityVector = CGVector()
         self.movingLayer = movingLayer
+        self.velocityVector = CGVector()
 
         super.init()
 
@@ -47,7 +48,9 @@ class Character: SKShapeNode {
         self.position = Constant.sceneCenter
         self.zPosition = Constant.ZPosition.character
 
-        self.positionFromMidChunk = self.data.buildingPosition
+        let positionFromMidChunk = self.data.buildingPosition
+        self.positionFromMidChunk = positionFromMidChunk
+        self.lastPositionFromMidChunk = positionFromMidChunk
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,6 +61,12 @@ class Character: SKShapeNode {
         self.updatePosition(timeInterval)
         self.updateVelocity(timeInterval)
         self.resolveCollision()
+        if self.hasMovedToAnotherTile {
+            self.savePosition()
+            self.lastPositionFromMidChunk = self.positionFromMidChunk
+            let event = SceneEvent(type: .characterHasMovedToAnotherTile, udata: nil, sender: self)
+            EventManager.default.sceneEventQueue.enqueue(event)
+        }
     }
 
     private func updatePosition(_ timeInterval: TimeInterval) {
@@ -94,6 +103,12 @@ class Character: SKShapeNode {
         : self.positionFromMidChunk.y
     }
 
+    func savePosition() {
+        let coordFromMidChunk = TileCoordinate(from: self.positionFromMidChunk).coord
+        let chunkCoord = self.chunkCoord + coordFromMidChunk
+        self.data.chunkCoord = chunkCoord
+    }
+
 //    private func resolveCollisionOfNonWalkable() {
 //        for go in self.interactionZone.gos {
 //            guard !go.type.isWalkable else { continue }
@@ -103,5 +118,26 @@ class Character: SKShapeNode {
 //            }
 //        }
 //    }
+
+    var hasMovedToAnotherTile: Bool {
+        let lastTileCoord = TileCoordinate(from: self.lastPositionFromMidChunk)
+        let currTileCoord = TileCoordinate(from: self.positionFromMidChunk)
+
+        return lastTileCoord != currTileCoord
+    }
+
+    var currChunkDirection: Direction4? {
+        let chunkwidth = Constant.chunkWidth
+        if self.positionFromMidChunk.x > chunkwidth {
+            return .east
+        } else if self.positionFromMidChunk.y < 0.0 {
+            return .south
+        } else if self.positionFromMidChunk.x < 0.0 {
+            return .west
+        } else if self.positionFromMidChunk.y > chunkwidth {
+            return .north
+        }
+        return nil
+    }
 
 }

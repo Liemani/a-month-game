@@ -15,11 +15,15 @@ class EventManager {
     static func set() { self._default = EventManager() }
     static func free() { self._default = nil }
 
-    let touchEventHandlerManager: TouchEventHandlerManager
+    let touchBeganEventQueue: QueueObject<TouchEvent>
+    let touchBeganEventHandlerManager: TouchEventHandlerManager
+
     let sceneEventQueue: QueueObject<SceneEvent>
 
     init() {
-        self.touchEventHandlerManager = TouchEventHandlerManager()
+        self.touchBeganEventQueue = QueueObject(size: Constant.touchEventQueueSize)
+        self.touchBeganEventHandlerManager = TouchEventHandlerManager()
+
         self.sceneEventQueue = QueueObject(size: Constant.sceneEventQueueSize)
     }
 

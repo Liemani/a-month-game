@@ -60,19 +60,19 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - edit model
     // MARK: - game object
     /// Called when loading GOMO from disk
-//    private func addGO(from goMO: GameObjectMO) {
-//        guard let containerType = goMO.containerType else { return }
-//
-//        let container = self.worldScene.containers[containerType]!
-//        let goMOCoord = goMO.coord
-//
-//        if container.isValid(goMOCoord)
-//            , let go = GameObjectNode.new(from: goMO) {
-//            container.addGO(go, to: goMOCoord)
-//            self.worldScene.interactionZone.reserveUpdate()
-//            self.gameObjectModel.goMOGO[goMO] = go
-//        }
-//    }
+    //    private func addGO(from goMO: GameObjectMO) {
+    //        guard let containerType = goMO.containerType else { return }
+    //
+    //        let container = self.worldScene.containers[containerType]!
+    //        let goMOCoord = goMO.coord
+    //
+    //        if container.isValid(goMOCoord)
+    //            , let go = GameObjectNode.new(from: goMO) {
+    //            container.addGO(go, to: goMOCoord)
+    //            self.worldScene.interactionZone.reserveUpdate()
+    //            self.gameObjectModel.goMOGO[goMO] = go
+    //        }
+    //    }
 
     /* TODO: renewal gomogo model
      isValid 를 여기서 호출하야 하나?
@@ -89,44 +89,44 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
      */
 
     // MARK: - game object managed object
-//    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
-//        let go = self.worldScene.addGO(of: goType, to: goCoord)
-//        let goMO = self.gameObjectModel.newGOMO(of: goType, to: goCoord)
-//        self.gameObjectModel.goMOGO[goMO] = go
-//    }
-//
-//    /// Add GOMO and move GO
-//    /// Called when craft, so don't need to update
-//    func addGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
-//        self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
-//        let goMO = self.gameObjectModel.newGOMO(of: go.type, to: goCoord)
-//        self.gameObjectModel.goMOGO[goMO] = go
-//    }
-//
-//    func moveGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
-//        let goMO = self.gameObjectModel.goMOGO[go]!
-//        self.gameObjectModel.setGOMO(goMO, to: goCoord)
-//        self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
-//        self.worldScene.interactionZone.reserveUpdate()
-//    }
-//
-//    func removeGOMO(from go: GameObjectNode) {
-//        let goMO = self.gameObjectModel.goMOGO.remove(go)!
-//        self.gameObjectModel.remove(goMO)
-//        go.removeFromParent()
-//        self.worldScene.interactionZone.reserveUpdate()
-//    }
+    //    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
+    //        let go = self.worldScene.addGO(of: goType, to: goCoord)
+    //        let goMO = self.gameObjectModel.newGOMO(of: goType, to: goCoord)
+    //        self.gameObjectModel.goMOGO[goMO] = go
+    //    }
+    //
+    //    /// Add GOMO and move GO
+    //    /// Called when craft, so don't need to update
+    //    func addGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
+    //        self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
+    //        let goMO = self.gameObjectModel.newGOMO(of: go.type, to: goCoord)
+    //        self.gameObjectModel.goMOGO[goMO] = go
+    //    }
+    //
+    //    func moveGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
+    //        let goMO = self.gameObjectModel.goMOGO[go]!
+    //        self.gameObjectModel.setGOMO(goMO, to: goCoord)
+    //        self.worldScene.containers[goCoord.containerType]!.moveGO(go, to: goCoord.coord)
+    //        self.worldScene.interactionZone.reserveUpdate()
+    //    }
+    //
+    //    func removeGOMO(from go: GameObjectNode) {
+    //        let goMO = self.gameObjectModel.goMOGO.remove(go)!
+    //        self.gameObjectModel.remove(goMO)
+    //        go.removeFromParent()
+    //        self.worldScene.interactionZone.reserveUpdate()
+    //    }
 
     // TODO: check this method, other edit is perfect
     func remove(from gos: any Sequence<GameObject>) {
         print("ingredient of craft should removed")
-//        for go in gos {
-//            let go = go as! GameObjectNode
-//            let goMO = self.gameObjectModel.goMOGO.remove(go)!
-//            self.gameObjectModel.remove(goMO)
-//            go.removeFromParent()
-//        }
-//        self.worldScene.interactionZone.reserveUpdate()
+        //        for go in gos {
+        //            let go = go as! GameObjectNode
+        //            let goMO = self.gameObjectModel.goMOGO.remove(go)!
+        //            self.gameObjectModel.remove(goMO)
+        //            go.removeFromParent()
+        //        }
+        //        self.worldScene.interactionZone.reserveUpdate()
     }
 
     // MARK: - transition
@@ -139,27 +139,39 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         EventManager.free()
     }
 
-    func update() {
-        let moContext = WorldServiceContainer.default.moContext
-        if moContext.hasChanges {
-            try! moContext.save()
-        }
-
+    // MARK: - update
+    func update(_ timeInterval: TimeInterval) {
         self.handleSceneEvent()
+        self.updateData()
     }
 
     func handleSceneEvent() {
         while let event = EventManager.default.sceneEventQueue.dequeue() {
-            switch event {
-            case let event as ChunkMoveSceneEvent:
-                self.viewModel.updateChunk(chunkCoord: event.chunkCoord, direction: event.direction)
-            default:
-                print("unknown scene event")
+            switch event.type {
+            case .characterHasMovedToAnotherTile:
+                _ = CharacterHasMovedToAnotherTileEventHandler(character: self.viewModel.character)
+            case .characterHasMovedToAnotherChunk:
+                _ = CharacterHasMovedToAnotherChunkEventHandler(
+                    chunkContainer: self.viewModel.chunkContainer,
+                    direction: event.udata as! Direction4,
+                    character: self.viewModel.character)
             }
         }
     }
 
+    func updateData() {
+        let moContext = WorldServiceContainer.default.moContext
+        if moContext.hasChanges {
+            try! moContext.save()
+        }
+    }
+
+}
+
+// MARK: debug
 #if DEBUG
+extension WorldSceneViewController {
+
     private func debugCode() {
         let gos = self.viewModel.fieldGOs
         for go in gos {
@@ -169,6 +181,6 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
             print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
         }
     }
-#endif
 
 }
+#endif

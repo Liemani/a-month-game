@@ -14,8 +14,6 @@ class WorldScene: SKScene, TouchResponder {
         return self.view!.next! as! WorldSceneViewController
     }
 
-    var viewModel: WorldSceneViewModel!
-
     // MARK: view
     var characterInv: InventoryWindow!
     var leftHandGO: GameObject? { self.characterInv.leftHandGO }
@@ -102,15 +100,41 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
-
     override func update(_ currentTime: TimeInterval) {
-        let timeInterval: TimeInterval = currentTime - self.lastUpdateTime
+        self.handleTouchBeganEvent()
 
+        let timeInterval = currentTime - self.lastUpdateTime
+        
         self.character.update(timeInterval)
-        self.worldViewController.update()
-        self.craftWindow.update()
+
+        self.worldViewController.update(timeInterval)
 
         self.lastUpdateTime = currentTime
+    }
+
+    func handleTouchBeganEvent() {
+        let touchBeganEventQueue = EventManager.default.touchBeganEventQueue
+        let touchBeganEventHandlerManager = EventManager.default.touchBeganEventHandlerManager
+
+        while let event = touchBeganEventQueue.dequeue() {
+            switch event.type {
+            case .characterTouchBegan:
+                let handler = CharacterMoveTouchBeganEventHandler(
+                    touch: event.touch,
+                    worldScene: self,
+                    character: self.character)
+                if touchBeganEventHandlerManager.add(handler) {
+                    handler.touchBegan()
+                }
+            case .gameObjectTouchBegan:
+                let handler = GameObjectTouchEventHandler(
+                    touch: event.touch,
+                    go: event.sender as! GameObject)
+                if touchBeganEventHandlerManager.add(handler) {
+                    handler.touchBegan()
+                }
+            }
+        }
     }
 
     // MARK: - delegate
@@ -136,18 +160,17 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-        EventManager.default.touchEventHandlerManager.cancelAll(of: CharacterMoveTouchEventHandler.self)
-        let handler = CharacterMoveTouchEventHandler(
+        EventManager.default.touchBeganEventHandlerManager.cancelAll(of: CharacterMoveTouchBeganEventHandler.self)
+
+        let event = TouchEvent(
+            type: .characterTouchBegan,
             touch: touch,
-            worldScene: self,
-            character: self.character)
-        if EventManager.default.touchEventHandlerManager.add(handler) {
-            handler.touchBegan()
-        }
+            sender: self)
+        EventManager.default.touchBeganEventQueue.enqueue(event)
     }
 
     func touchMoved(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) as! CharacterMoveTouchEventHandler? else {
+        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) as! CharacterMoveTouchBeganEventHandler? else {
             return
         }
 
@@ -155,7 +178,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) else {
+        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) else {
             return
         }
 
@@ -164,7 +187,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchEventHandlerManager.handler(from: touch) else {
+        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) else {
             return
         }
 
@@ -173,7 +196,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func resetTouch(_ touch: UITouch) {
-        EventManager.default.touchEventHandlerManager.remove(from: touch)
+        EventManager.default.touchBeganEventHandlerManager.remove(from: touch)
     }
 
     // MARK: - override

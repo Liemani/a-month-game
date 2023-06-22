@@ -1,32 +1,30 @@
 //
-//  LMIEventManager.swift
+//  SceneEvent.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/06/19.
+//  Created by 박정훈 on 2023/06/22.
 //
 
 import Foundation
 
-class SceneEvent {
+enum SceneEventType {
 
-    let sender: Any
-
-    init(sender: Any) {
-        self.sender = sender
-    }
+    case characterHasMovedToAnotherTile
+    case characterHasMovedToAnotherChunk
 
 }
 
-class ChunkMoveSceneEvent: SceneEvent {
+class SceneEvent {
 
-    let chunkCoord: ChunkCoordinate
-    let direction: Direction4
+    let type: SceneEventType
+    let udata: Any?
 
-    init(sender: Any, chunkCoord: ChunkCoordinate, direction: Direction4) {
-        self.chunkCoord = chunkCoord
-        self.direction = direction
+    let sender: Any
 
-        super.init(sender: sender)
+    init(type: SceneEventType, udata: Any?, sender: Any) {
+        self.type = type
+        self.udata = udata
+        self.sender = sender
     }
 
 }
