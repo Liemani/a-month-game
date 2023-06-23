@@ -123,7 +123,7 @@ struct Constant {
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
 
-    static let sceneScale = 0.1
+    static let sceneScale = 1.0
 
     struct ResourceName {
         static let menuButtonNode = "menu button"

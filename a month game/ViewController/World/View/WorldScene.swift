@@ -110,8 +110,6 @@ class WorldScene: SKScene, TouchResponder {
 
         let timeInterval = currentTime - self.lastUpdateTime
 
-        self.character.update(timeInterval)
-
         self.worldViewController.update(timeInterval)
 
         self.lastUpdateTime = currentTime

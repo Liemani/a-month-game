@@ -57,7 +57,7 @@
 		039EEFC92A243DD900CB93C6 /* TouchContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFC82A243DD900CB93C6 /* TouchContext.swift */; };
 		039EEFCB2A243F6C00CB93C6 /* TouchEventHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFCA2A243F6C00CB93C6 /* TouchEventHandlerManager.swift */; };
 		03C65E172A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */; };
-		03C65E1A2A446FA10042BF22 /* SceneEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* SceneEvent.swift */; };
+		03C65E1A2A446FA10042BF22 /* WorldEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* WorldEvent.swift */; };
 		03C65E1E2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */; };
 		03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */; };
 		03CE3AE52A3DEBCC00D95152 /* InventoryCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */; };
@@ -145,7 +145,7 @@
 		039EEFC82A243DD900CB93C6 /* TouchContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchContext.swift; sourceTree = "<group>"; };
 		039EEFCA2A243F6C00CB93C6 /* TouchEventHandlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchEventHandlerManager.swift; sourceTree = "<group>"; };
 		03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedToAnotherTileEventHandler.swift; sourceTree = "<group>"; };
-		03C65E192A446FA10042BF22 /* SceneEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneEvent.swift; sourceTree = "<group>"; };
+		03C65E192A446FA10042BF22 /* WorldEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldEvent.swift; sourceTree = "<group>"; };
 		03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterUpdatePositionEventHandler.swift; sourceTree = "<group>"; };
 		03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedEventHandler.swift; sourceTree = "<group>"; };
 		03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinate.swift; sourceTree = "<group>"; };
@@ -359,6 +359,10 @@
 		033D69092A41447C005D3CB0 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */,
+				03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */,
+				033D68F52A4001DF005D3CB0 /* CharacterMovedToAnotherChunkEventHandler.swift */,
+				03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */,
 				034637812A238D3600370C71 /* InteractionZone.swift */,
 				03EA27AF2A43D798007BAF4F /* ChunkMoveEventHandler.swift */,
 				039EEFC82A243DD900CB93C6 /* TouchContext.swift */,
@@ -441,10 +445,6 @@
 		03C65E182A446F8D0042BF22 /* Handler */ = {
 			isa = PBXGroup;
 			children = (
-				03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */,
-				03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */,
-				03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */,
-				033D68F52A4001DF005D3CB0 /* CharacterMovedToAnotherChunkEventHandler.swift */,
 			);
 			path = Handler;
 			sourceTree = "<group>";
@@ -463,7 +463,7 @@
 			isa = PBXGroup;
 			children = (
 				03EA27B62A4413E0007BAF4F /* TouchEvent.swift */,
-				03C65E192A446FA10042BF22 /* SceneEvent.swift */,
+				03C65E192A446FA10042BF22 /* WorldEvent.swift */,
 				03C65E182A446F8D0042BF22 /* Handler */,
 			);
 			path = Event;
@@ -616,7 +616,7 @@
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				034637802A233A1400370C71 /* InventoryCell.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* GameObjectDataSource.swift in Sources */,
-				03C65E1A2A446FA10042BF22 /* SceneEvent.swift in Sources */,
+				03C65E1A2A446FA10042BF22 /* WorldEvent.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,

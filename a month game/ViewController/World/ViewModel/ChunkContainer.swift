@@ -10,7 +10,6 @@ import Foundation
 class ChunkContainer: LMINode {
 
     // MARK: - stored property
-    private var midChunkCoord: ChunkCoordinate
     private var chunks: [Chunk]
 
     // MARK: - computed property
@@ -21,7 +20,6 @@ class ChunkContainer: LMINode {
 
     // MARK: - init
     override init() {
-        self.midChunkCoord = ChunkCoordinate()
         self.chunks = []
 
         super.init()
@@ -56,36 +54,29 @@ class ChunkContainer: LMINode {
             let targetChunkCoord = chunkCoord + direction.coord << 4
             self.chunks[direction].update(chunkCoord: targetChunkCoord)
         }
-        self.midChunkCoord = chunkCoord
     }
 
-    func update(direction: Direction4) {
+    func update(streetChunkCoord: ChunkCoordinate, direction: Direction4) {
         self.shift(direction: direction.opposite)
-        self.midChunkCoord += direction.coord << 4
 
         for direction in direction.direction9 {
-            let tartgetChunkCoord = self.midChunkCoord + direction.coord << 4
+            let tartgetChunkCoord = streetChunkCoord + direction.coord << 4
             self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
         }
     }
 
     // MARK: - game object
-    func update(_ go: GameObject, from prevChunkCoord: ChunkCoordinate?, to currChunkCoord: ChunkCoordinate) {
-        if prevChunkCoord != nil {
-            go.removeFromParent()
-        }
-
-        let currChunkDirection = self.midChunkCoord.chunkDirection(to: currChunkCoord)!
-        let currChunk = self.chunks[currChunkDirection]
+    func update(_ go: GameObject, to currDirection: Direction8) {
+        go.removeFromParent()
+        let currChunk = self.chunks[currDirection]
         currChunk.addChild(go)
-
-        go.set(chunkCoord: currChunkCoord)
     }
 
     func remove(_ go: GameObject) {
         go.removeFromParent()
     }
 
+    // MARK: - private
     private func shift(direction: Direction4) {
         switch direction {
         case .east:

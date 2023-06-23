@@ -12,7 +12,12 @@ class Character: SKShapeNode {
 
     var data: CharacterData
 
-    var chunkCoord: ChunkCoordinate { self.data.chunkCoord }
+    var streetChunkCoord: ChunkCoordinate
+    func moveChunk(direction: Direction4) {
+        let directionStreetCoord = direction.coord * 16
+        self.position -= directionStreetCoord.cgPoint * Constant.tileWidth
+        self.streetChunkCoord += directionStreetCoord
+    }
 
     /// character position is always in the midle chunk
     var lastPosition: CGPoint!
@@ -27,6 +32,7 @@ class Character: SKShapeNode {
     // MARK: - init
     override init() {
         self.data = CharacterData()
+        self.streetChunkCoord = self.data.chunkCoord
         self.velocityVector = CGVector()
 
         super.init()
@@ -51,11 +57,6 @@ class Character: SKShapeNode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func update(_ timeInterval: TimeInterval) {
-        let event = SceneEvent(type: .characterUpdatePosition, udata: timeInterval, sender: self)
-        EventManager.default.sceneEventQueue.enqueue(event)
     }
 
 }

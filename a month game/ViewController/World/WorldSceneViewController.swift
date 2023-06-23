@@ -35,9 +35,9 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         skView.presentScene(scene)
 
         let viewModel = WorldSceneViewModel(
+            movingLayer: scene.movingLayer,
             chunkContainer: scene.movingLayer.chunkContainer,
             characterInv: scene.characterInv,
-            movingLayer: scene.movingLayer,
             character: scene.character)
         self.viewModel = viewModel
 
@@ -49,31 +49,9 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - update
     // TODO: there is event have to occur, one time if need, multiple time
     func update(_ timeInterval: TimeInterval) {
-        self.handleSceneEvent()
-        self.updateData()
-    }
+        self.viewModel.update(timeInterval)
 
-    func handleSceneEvent() {
-        var handler: SceneEventHandler
-        while let event = EventManager.default.sceneEventQueue.dequeue() {
-            switch event.type {
-            case .characterMoved:
-                handler = CharacterMovedEventHandler(
-                    character: self.viewModel.character,
-                    movingLayer: self.viewModel.movingLayer)
-            case .characterUpdatePosition:
-                handler = CharacterUpdatePositionEventHandler(
-                    character: self.viewModel.character,
-                    timeInterval: event.udata as! TimeInterval)
-            case .characterMovedToAnotherTile:
-                handler = CharacterMovedToAnotherTileEventHandler(character: self.viewModel.character)
-            case .characterMovedToAnotherChunk:
-                handler = CharacterMovedToAnotherChunkEventHandler(
-                    chunkContainer: self.viewModel.chunkContainer,
-                    direction: event.udata as! Direction4)
-            }
-            handler.handle()
-        }
+        self.updateData()
     }
 
     func updateData() {
