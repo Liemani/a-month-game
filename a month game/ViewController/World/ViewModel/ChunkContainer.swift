@@ -38,7 +38,7 @@ class ChunkContainer: LMINode {
 
             let direction = Direction9(rawValue: index)!
             let directionCoord = direction.coord
-            let chunkPosition = (directionCoord << 4).toPoint() * Constant.tileWidth
+            let chunkPosition = (directionCoord << 4).cgPoint * Constant.tileWidth
             chunk.position = chunkPosition
 
             self.addChild(chunk)

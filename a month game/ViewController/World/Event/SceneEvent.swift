@@ -9,8 +9,10 @@ import Foundation
 
 enum SceneEventType {
 
-    case characterHasMovedToAnotherTile
-    case characterHasMovedToAnotherChunk
+    case characterMoved
+    case characterUpdatePosition
+    case characterMovedToAnotherTile
+    case characterMovedToAnotherChunk
 
 }
 
@@ -26,5 +28,11 @@ class SceneEvent {
         self.udata = udata
         self.sender = sender
     }
+
+}
+
+protocol SceneEventHandler {
+
+    func handle()
 
 }

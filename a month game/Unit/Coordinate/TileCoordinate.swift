@@ -23,7 +23,8 @@ struct TileCoordinate {
         let tileSide = Int(Constant.tileWidth)
         let x = (Int(floor(point.x)) - (point.x < 0.0 ? (tileSide - 1) : 0)) / tileSide
         let y = (Int(floor(point.y)) - (point.y < 0.0 ? (tileSide - 1) : 0)) / tileSide
-        self.coord = Coordinate(x, y)
+        let fieldCoord = Coordinate(x, y)
+        self.coord = fieldCoord + Constant.tileCountInChunkSide / 2
     }
 
     init(_ coord: Coordinate<Int>) {
@@ -35,7 +36,8 @@ struct TileCoordinate {
     }
 
     var fieldPoint: CGPoint {
-        return (self.coord.toPoint() + 0.5) * Constant.tileWidth
+        let fieldCoord = self.coord.cgPoint + 0.5 - Double(Constant.tileCountInChunkSide / 2)
+        return fieldCoord * Constant.tileWidth
     }
 
     func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {

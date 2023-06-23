@@ -12,11 +12,12 @@ class WorldSceneViewModel {
 
     var chunkContainer: ChunkContainer
 
-    let characterInv: any GameObjectContainer
+    let characterInv: any Inventory
 
-    var fieldInv: (any GameObjectContainer)?
-    var characterInvInv: (any GameObjectContainer)?
+    var fieldInv: (any Inventory)?
+    var characterInvInv: (any Inventory)?
 
+    let movingLayer: MovingLayer
     let character: Character
 
     var fieldGOs: some Sequence<GameObject> {
@@ -25,14 +26,16 @@ class WorldSceneViewModel {
 
     // MARK: - init
     init(chunkContainer: ChunkContainer,
-         characterInv: any GameObjectContainer,
-         fieldInv: (any GameObjectContainer)? = nil,
-         characterInvInv: (any GameObjectContainer)? = nil,
+         characterInv: any Inventory,
+         fieldInv: (any Inventory)? = nil,
+         characterInvInv: (any Inventory)? = nil,
+         movingLayer: MovingLayer,
          character: Character) {
         self.chunkContainer = chunkContainer
         self.characterInv = characterInv
         self.fieldInv = fieldInv
         self.characterInvInv = characterInvInv
+        self.movingLayer = movingLayer
         self.character = character
 
         chunkContainer.setUp(chunkCoord: character.chunkCoord)

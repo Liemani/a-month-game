@@ -18,12 +18,11 @@ struct CharacterData {
         }
     }
 
-    var buildingPosition: CGPoint {
+    var buildingCoord: Coordinate<Int> {
         let x = Int(self.chunkCoord.buildingX)
         let y = Int(self.chunkCoord.buildingY)
         let coord = Coordinate(x, y)
-        let tileCoord = TileCoordinate(coord)
-        return tileCoord.fieldPoint
+        return coord
     }
 
     // MARK: - init

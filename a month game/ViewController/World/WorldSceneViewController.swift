@@ -37,12 +37,88 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         let viewModel = WorldSceneViewModel(
             chunkContainer: scene.movingLayer.chunkContainer,
             characterInv: scene.characterInv,
+            movingLayer: scene.movingLayer,
             character: scene.character)
         self.viewModel = viewModel
 
 #if DEBUG
         self.debugCode()
 #endif
+    }
+
+    // MARK: - update
+    // TODO: there is event have to occur, one time if need, multiple time
+    func update(_ timeInterval: TimeInterval) {
+        self.handleSceneEvent()
+        self.updateData()
+    }
+
+    func handleSceneEvent() {
+        var handler: SceneEventHandler
+        while let event = EventManager.default.sceneEventQueue.dequeue() {
+            switch event.type {
+            case .characterMoved:
+                handler = CharacterMovedEventHandler(
+                    character: self.viewModel.character,
+                    movingLayer: self.viewModel.movingLayer)
+            case .characterUpdatePosition:
+                handler = CharacterUpdatePositionEventHandler(
+                    character: self.viewModel.character,
+                    timeInterval: event.udata as! TimeInterval)
+            case .characterMovedToAnotherTile:
+                handler = CharacterMovedToAnotherTileEventHandler(character: self.viewModel.character)
+            case .characterMovedToAnotherChunk:
+                handler = CharacterMovedToAnotherChunkEventHandler(
+                    chunkContainer: self.viewModel.chunkContainer,
+                    direction: event.udata as! Direction4)
+            }
+            handler.handle()
+        }
+    }
+
+    func updateData() {
+        let moContext = WorldServiceContainer.default.moContext
+        if moContext.hasChanges {
+            try! moContext.save()
+        }
+    }
+
+    // TODO: check this method, other edit is perfect
+    func remove(from gos: any Sequence<GameObject>) {
+        print("ingredient of craft should removed")
+        //        for go in gos {
+        //            let go = go as! GameObjectNode
+        //            let goMO = self.gameObjectModel.goMOGO.remove(go)!
+        //            self.gameObjectModel.remove(goMO)
+        //            go.removeFromParent()
+        //        }
+        //        self.worldScene.interactionZone.reserveUpdate()
+    }
+
+    // MARK: - transition
+    @objc
+    func requestPresentPortalSceneViewController() {
+        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
+        self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
+
+        WorldServiceContainer.free()
+        EventManager.free()
+    }
+
+}
+
+// MARK: debug
+#if DEBUG
+extension WorldSceneViewController {
+
+    private func debugCode() {
+        let gos = self.viewModel.fieldGOs
+        for go in gos {
+            let data = go.data
+            guard let chunkCoord = data.chunkCoord else { continue }
+
+            print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
+        }
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -57,7 +133,10 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         return true
     }
 
-    // MARK: - edit model
+}
+#endif
+
+// MARK: - edit model
     // MARK: - game object
     /// Called when loading GOMO from disk
     //    private func addGO(from goMO: GameObjectMO) {
@@ -117,70 +196,4 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     //        self.worldScene.interactionZone.reserveUpdate()
     //    }
 
-    // TODO: check this method, other edit is perfect
-    func remove(from gos: any Sequence<GameObject>) {
-        print("ingredient of craft should removed")
-        //        for go in gos {
-        //            let go = go as! GameObjectNode
-        //            let goMO = self.gameObjectModel.goMOGO.remove(go)!
-        //            self.gameObjectModel.remove(goMO)
-        //            go.removeFromParent()
-        //        }
-        //        self.worldScene.interactionZone.reserveUpdate()
-    }
 
-    // MARK: - transition
-    @objc
-    func requestPresentPortalSceneViewController() {
-        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
-        self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
-
-        WorldServiceContainer.free()
-        EventManager.free()
-    }
-
-    // MARK: - update
-    func update(_ timeInterval: TimeInterval) {
-        self.handleSceneEvent()
-        self.updateData()
-    }
-
-    func handleSceneEvent() {
-        while let event = EventManager.default.sceneEventQueue.dequeue() {
-            switch event.type {
-            case .characterHasMovedToAnotherTile:
-                _ = CharacterHasMovedToAnotherTileEventHandler(character: self.viewModel.character)
-            case .characterHasMovedToAnotherChunk:
-                _ = CharacterHasMovedToAnotherChunkEventHandler(
-                    chunkContainer: self.viewModel.chunkContainer,
-                    direction: event.udata as! Direction4,
-                    character: self.viewModel.character)
-            }
-        }
-    }
-
-    func updateData() {
-        let moContext = WorldServiceContainer.default.moContext
-        if moContext.hasChanges {
-            try! moContext.save()
-        }
-    }
-
-}
-
-// MARK: debug
-#if DEBUG
-extension WorldSceneViewController {
-
-    private func debugCode() {
-        let gos = self.viewModel.fieldGOs
-        for go in gos {
-            let data = go.data
-            guard let chunkCoord = data.chunkCoord else { continue }
-
-            print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
-        }
-    }
-
-}
-#endif

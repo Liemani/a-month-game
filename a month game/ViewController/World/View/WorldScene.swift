@@ -15,7 +15,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     // MARK: view
-    var characterInv: InventoryWindow!
+    var characterInv: CharacterInventory!
     var leftHandGO: GameObject? { self.characterInv.leftHandGO }
     var rightHandGO: GameObject? { self.characterInv.rightHandGO }
 
@@ -56,7 +56,7 @@ class WorldScene: SKScene, TouchResponder {
         worldLayer.addChild(movingLayer)
         self.movingLayer = movingLayer
 
-        let character = Character(movingLayer: movingLayer)
+        let character = Character()
         worldLayer.addChild(character)
         self.character = character
 
@@ -77,7 +77,7 @@ class WorldScene: SKScene, TouchResponder {
         menuButtonNode.delegate = self
         ui.addChild(menuButtonNode)
 
-        let invWindow = InventoryWindow()
+        let invWindow = CharacterInventory()
         invWindow.setUp()
         ui.addChild(invWindow)
         self.characterInv = invWindow

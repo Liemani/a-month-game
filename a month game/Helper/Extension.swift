@@ -214,6 +214,10 @@ extension CGPoint {
         return CGPoint(x: lhs.x + rhs, y: lhs.y + rhs)
     }
 
+    static func - (lhs: CGPoint, rhs: Double) -> CGPoint {
+        return CGPoint(x: lhs.x - rhs, y: lhs.y - rhs)
+    }
+
     static func * (lhs: CGPoint, rhs: Double) -> CGPoint {
         return CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
     }
@@ -236,6 +240,8 @@ extension CGPoint {
 // MARK: - CGSize
 extension CGSize {
 
+    var cgPoint: CGPoint { CGPoint(x: self.width, y: self.height) }
+
     static func - (lhs: CGSize, rhs: Double) -> CGSize {
         return CGSize(width: lhs.width - rhs, height: lhs.height - rhs)
     }
@@ -244,14 +250,12 @@ extension CGSize {
         return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
     }
 
-    func toPoint() -> CGPoint {
-        return CGPoint(x: self.width, y: self.height)
-    }
-
 }
 
 // MARK: - CGVector
 extension CGVector {
+
+    var cgPoint: CGPoint { CGPoint(x: self.dx, y: self.dy) }
 
     static prefix func - (vector: CGVector) -> CGVector {
         return CGVector(dx: -vector.dx, dy: -vector.dy)
@@ -271,10 +275,6 @@ extension CGVector {
 
     var magnitude: CGFloat {
         return (self.dx * self.dx + self.dy * self.dy).squareRoot()
-    }
-
-    func toPoint() -> CGPoint {
-        return CGPoint(x: self.dx, y: self.dy)
     }
 
 }
