@@ -25,8 +25,8 @@ class MovingLayer: LMINode {
 
         // MARK: corner
         for direction in DiagonalDirection4.allCases {
-            let position = (direction.coord << 4).toPoint() * Constant.tileWidth
-            let corner = SKShapeNode(circleOfRadius: Constant.defaultSize / 3.0)
+            let position = (direction.coord.cgPoint - 0.5) * Constant.chunkWidth
+            let corner = SKShapeNode(circleOfRadius: Constant.defaultSize / 4.0)
             corner.fillColor = .white
             corner.position = position
             corner.zPosition = Double.infinity
@@ -41,20 +41,20 @@ class MovingLayer: LMINode {
         let tileSet = SKTileSet(tileGroups: [tileGroup])
 
         let tileMapSide = Constant.tileMapSide
-        let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: tileMapSide, rows: tileMapSide, tileSize: Constant.tileTextureSize)
+        let tileMap = SKTileMapNode(tileSet: tileSet, columns: tileMapSide, rows: tileMapSide, tileSize: Constant.tileTextureSize)
 
-        tileMapNode.xScale = Constant.tileScale
-        tileMapNode.yScale = Constant.tileScale
-        tileMapNode.zPosition = Constant.ZPosition.tileMap
+        tileMap.xScale = Constant.tileScale
+        tileMap.yScale = Constant.tileScale
+        tileMap.zPosition = Constant.ZPosition.tileMap
 
         for x in 0..<tileMapSide {
             for y in 0..<tileMapSide {
-                tileMapNode.setTileGroup(tileGroup, andTileDefinition: tileDefinition, forColumn: x, row: y)
+                tileMap.setTileGroup(tileGroup, andTileDefinition: tileDefinition, forColumn: x, row: y)
             }
         }
 
-        self.addChild(tileMapNode)
-        tileMapNode.position = Constant.defaultNodeSize.toPoint() * Double(Constant.tileCountInChunkSide / 2)
+        self.addChild(tileMap)
+//        tileMap.position = Constant.defaultNodeSize.cgPoint * Double(Constant.tileCountInChunkSide / 2)
     }
 
     required init?(coder aDecoder: NSCoder) {

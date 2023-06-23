@@ -24,7 +24,7 @@ struct Constant {
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
     static let sceneSize = iPhone5sResolution
 
-    static let sceneCenter = sceneSize.toPoint() / 2.0
+    static let sceneCenter = sceneSize.cgPoint / 2.0
 
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
@@ -36,7 +36,7 @@ struct Constant {
     static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
     // MARK: misc
-    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toPoint()
+    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).cgPoint
     static let characterRadius = defaultSize / 3.0
     static let exitWorldButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
@@ -123,7 +123,7 @@ struct Constant {
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
 
-    static let sceneScale = 0.1
+    static let sceneScale = 1.0
 
     struct ResourceName {
         static let menuButtonNode = "menu button"
@@ -141,22 +141,24 @@ struct Constant {
 
     static let accessableGOColorBlendFactor = 0.5
 
-    // MARK: table
-    static let spaceShiftTable: [UInt8] = [
-        6, 7, 0,
-        5, 8, 1,
-        4, 3, 2,
-    ]
+    static let accessableRange = tileWidth * 1.5
 
-    static let coordVectorTable = [
-        Coordinate(1, 1),
-        Coordinate(1, 0),
-        Coordinate(1, -1),
-        Coordinate(0, -1),
-        Coordinate(-1, -1),
-        Coordinate(-1, 0),
-        Coordinate(-1, 1),
-        Coordinate(0, 1),
-    ]
+//    // MARK: table
+//    static let spaceShiftTable: [UInt8] = [
+//        6, 7, 0,
+//        5, 8, 1,
+//        4, 3, 2,
+//    ]
+
+//    static let coordVectorTable = [
+//        Coordinate(1, 1),
+//        Coordinate(1, 0),
+//        Coordinate(1, -1),
+//        Coordinate(0, -1),
+//        Coordinate(-1, -1),
+//        Coordinate(-1, 0),
+//        Coordinate(-1, 1),
+//        Coordinate(0, 1),
+//    ]
 
 }

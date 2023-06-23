@@ -446,141 +446,65 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
-crash when exit by EventManager.default!
-chunk 로딩 문제 해결
-    chunk 의 로딩 자체는 잘 되는 것 같다
-    chunk conotainer 가 잘못된 좌표의 chunk 를 로딩하고 있는 것 같다
-캐릭터 포지션을 chunkEventHandler 에서 update 하는 로직 refactor
-character 의 위치가 이상하게 저장되는 문제
-chunk 가 이상하게 삭제되고 로드되는 문제
+-
+character update
+if character moved
+    if character moved to another tile
+        character save position
+        if character moved to another chunk
+            chunk container update
+    moving layer move with character position
+character 안에 chunkCoord 를 넣는다
+    없으니 너무 불편하다
+    그리고 chunkContainer 의 midCoord 를 없애고 매 번 입력받는 방식으로 변경한다
+
+ChunkContainer::update() 에서 go.removeFromParent() 를 부모가 없는 node 에 하면 어떻게 될까?
+    (새로운 노드를 추가하는 경우)
+한 함수에서 하는 일은 그 invoker 가 주체적인 역할을 하는 작업이다
+막 잡다하게 다른 객체가 주체인 일을 하지 말자
+
+
+crash when exit, by EventManager.default! at WorldScene.touchbegan()
 interac zone 을 deprecated 로 옮겼는데, 아주 삭제는 아니고, 개념은 있어야 하나? 생각해보기
-character move manager 를 character node 와 character move touch responder 로 분리하고 있다
-add child chunk
-what about create file at Worldgenerator?
 ChunkContainer 처럼 InventoryContainer 도 있어야겠다
     그래야 update(), remove() 하고 그 안에서 go.set 하지
-캐릭터의 위치도 CGPoint 는 계속 청크가 움직일 때마다 초기화시켜야겠는데?
-    애초에 위치 데이터를 ChunkCoord 를 기반해야겠다
-Implement ChunkViewModel
-movingLayer.setPosition(by: characterPosition)
-dragMove.hasChunkMoved -> chunk moded event
-이럴꺼면 오픈월드로 하지..?
-tile 도 테이블에 넣고 chunk 단위로 로드하기
 아종 데이터
-chunk 가 변할 때 새로운 chunk 로드하기
-tile view 를 chunk 단위로 만들기
-    사실상 tile 을 game object 로 처리할 것이기 때문에 9 개만 있으면 된다
 craft 는 이벤트로 보내고 controller.update() 에서 처리하기
-touch drag 도 이벤트로 보내고 controller.update() 에서 처리하기
-    아닌가, 터치는 자신이 처리하고 추가적인 처리가 필요한 경우 보내야지
-main branch 는 stable 만 merge 하자
-    ff 를 하니 stable 을 알 수가 없다
-LMIEventManager
-    LMIEvent
-WorldViewModel
-    Field
-    Field Inventory
-    Character Inventory
-    Character Inventory Inventory
-    Character
-밖에서 그냥 넣어주던거 가능하면 함수를 통해서 넣어주자
-modify & to < in fetch predicate format
-recompose zposition
-타일을 sql 로 저장하기...
-world view model 은 service 에 직접 접근하지 않아야 한다
 
-## after view layer
-world scene
-    moving layer: process drag move
-        tile map
-            (floor map) * 9: 어떤 녀석이 어디에 있는 녀석인지 계속 알아야겠네?
-            (water map) * 9
-        field: field inventory
-            (character)
-            (game objects)
-    (fixed layer)
-        (ui)
-            (menu button)
-            inventory pane: character inventory
-            craft pane
-        menu pane
-
-rename container to inventory
 remove interaction zone
     그럼 zone 이 하던 일은 어디에 넣어야 하나?
     update accessable gos
     field?
     field 가 accessable 을 따로 관리하도록 하자
     이게 맞나? 일단 그렇게 해보지 뭐
-remove third hand
-clean view controller init(), viewDidLoad(), setUp()
-동적 로딩 구현하기
-load gomo for need
-    필요한 만큼만 저장하고 동적으로 관리하기
-    16*16 을 한 청크
-    내가 있는 청크를 기준으로 총 9 청크만 로드해두기
-    캐릭터 위치도 중요하겠는데?
-    타일도 코어데이터로 관리해야 하려나? 이건 나중에
-    캐릭터 위치에 따른 청크가 바뀌었는지 함수
-    캐릭터 위치에 따른 타일이 바뀌었는지 함수
-    근대 청크로 하면 캐릭터의 위치를 xyz로 하는게 좌표 체계가 일치하지 않아서 불편하지 않을까?
-    아하 데이터 관리는 청크 기반으로 하고, 메모리 데이터 상으로는 xy 좌표 체계로 정리하는거지
-    하긴 그러면 디스크로부터 새로운 데이터를 가져오는 경우 fetch 에 시간이 감소하는 대신 쓸 수 있는 상태로 변형하는데 연산이 조금 더 필요
-    이를 go model 에 적용하기
-    0,0 을 시작 지점으로 하자
-    그럼 -256 ~ 255 사이즈로 만들어 보자
-    로딩은 캐릭터 위치 계속 추적하면서
-    캐릭터를 모델과 뷰로 구분한다면
-    캐릭터가 타일을 바꿀 때마다 뷰컨트롤러에게 캐릭터 위치 변경을 요청하기
-    캐릭터 위치가 바뀔 때마다 청크가 움직였는지 판단하기
-    움직인 경우 필요한 청크 데이터 로드하기
-    그럼 청크 단위로 데이터 로드하는 함수가 필요하다
-    왜 같 id 가 여러 번 출력되지?
-캐릭터가 0,0 에서 시작한다고 하면 각 사분면? 으로 청크를 하나씩 두기
-    청크의 크기는 256 * 256 이니 총 맵의 크기는 512 * 512 가 된다
-    타일도 청크 단위로 동적 로딩하자
-    만약 데이터가 있으면 그 데이터, 데이터가 없으면 기본은 잔디인걸로
-worldSceneModel -< worldViewModel
 add quality
 update model
 add tools
 잔디 좀 더 연두색으로
-model 을 인자로 다른 controller 에게 전달하도록 하기
-controller 에 따라 파일 hierarchy 수정
 craft cell 이 제작에 소모될 아이템 리스트를 갖도록 하자
 마스터리 작성
 button 은 무조건 부모가 처리하도록 해보자
 resolve portrait warning
 캐릭터의 테두리 색을 검은색으로?
-캐릭터 노드를 field 위로 이동
 인벤토리 셀을 클릭하면 셀의 알파를 변하게 하자
 알림 센터를 내리고 있는 상태에서 필드 드래그 터치가 작동하는 현상
 터치 시작 시 살짝 튕기는 글리치
 타일 크기가 딱 맞아서 검은 실선이 보이는 오류
-필요에 따라 상하좌우에 서로를 가리키는 구조 사용
-MO 를 가져오면 기존에 MO 랑 동일한 객체일까?
 캐릭터의 스탯과 인벤토리는 월드가 공유한다
 인벤토리와 제작은 아예 화면 테두리에 붙여도 될 것 같다. 피아노 건반처럼. 특히 제작은 그렇게 할 것. 그래야 스크롤이 편해진다
-도트 찍는 프로그램 알아보기
-타일맵 더 알아보기
-init() 알아보자
 처음에만 zone 을 만드는 합수가 있고 그 다음은 전부 reserve 로 작동한다
     addZone, removeZone 에서 should reserve 를 true 로 바꾼다
     마찬가지로 잔디가 퍼져야 하는지도 리스트로 관리한다
     매 update() 에서는 should update 가 true 인 경우에만 돌린다
 sense message 켜고 끄는 기능을 menu 에 넣는다
-구역을 나눠서 go 를 보관하고, 필요한 go 만 메모리로 관리하면 되겠다
-view controller 로 두 scene 을 분리해야 할지 조사하기
 캐릭터를 조금 아래로 내려서 위 영역을 터치로 사용하는 대신에 상호작용 가능한 영역을 2 거리까지 띄운다
 sense message
-세 번째 손 없애기
 터치, 드래그 -> 기본 이동
 꾹 누르고 있기 -> 설명
 제작
     아이템을 겹치면 제작 더미가 생긴다
     아이템을 충분히 넣고 제작 더미를 상호작용하면 성공하면 아이템을, 실패하면 제료를 반환한다
 search testflight
-repository 조사
 캐릭터를 조금 아래로 낮춘다
 make cancel touch when craft reset
 make reset pane and menu pane as button
@@ -588,7 +512,6 @@ Add interaction
     wood wall with axe
     pine cone
     pine tree with axe
-a bug that can't move from touch of out of world bound
 check CraftPane
     consume
     update
@@ -599,7 +522,6 @@ swap with inventory go
 when pick up item from inventory or field, reserve craft pane update
 
 fix flick to persist direction
-fix moving game object to out of world border
 
 menu window touch
 menu -> cancel all touch
@@ -612,15 +534,11 @@ portrait and upsidedown
 
 터치 간의 상관 관계
     메뉴 버튼 터치 -> 드래그 중단
-PortalScene 에 reset window 추가
 interact 구현
     씨앗 -> 나무
     나무 맨손 -> 나뭇가지 or 씨앗
 제작 구현
-도끼 구현
-WorldScene 에 exit button touch 구현
 item drag 구현
-손 이미지 추가
 sound 구현 및 추가
     background
     interact
@@ -646,34 +564,11 @@ WorldScene 에서 menu layer 추가
         위치, 스킬
     바닥 아이템
     오브젝트
-타일도 캐릭터의 위치 데이터와 마찬가지로 앱을 종료, 중단 시에 저장해도 충분할지 조사
 sense message 구현
 
-컨텐츠 추가
-    나무
-    도끼
-    나무 바닥
-    나무 벽
-    망치
-    돌맹이
 
 enterButton, resetButton 맞춤 resource 제작
 
-flow
-    touch
-data(memory, disk)
-    TileMap, GameItem
-structure
-    MVC, class reference
-```
-├│─└
-
-
-ViewController
-├─ PortalSceneController
-├─ WorldSceneController
-```
-character radius 이상의 거리를 1 프레임에 움직이면 벽을 뚫을 수 있다
 
 # mandatory: 기대 시간(h) + 요구 사항
 view
@@ -780,6 +675,138 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+model 을 인자로 다른 controller 에게 전달하도록 하기
+controller 에 따라 파일 hierarchy 수정
+캐릭터 노드를 field 위로 이동
+필요에 따라 상하좌우에 서로를 가리키는 구조 사용
+MO 를 가져오면 기존에 MO 랑 동일한 객체일까?
+도트 찍는 프로그램 알아보기
+타일맵 더 알아보기
+init() 알아보자
+구역을 나눠서 go 를 보관하고, 필요한 go 만 메모리로 관리하면 되겠다
+view controller 로 두 scene 을 분리해야 할지 조사하기
+세 번째 손 없애기
+repository 조사
+a bug that can't move from touch of out of world bound
+fix moving game object to out of world border
+PortalScene 에 reset window 추가
+도끼 구현
+WorldScene 에 exit button touch 구현
+손 이미지 추가
+타일도 캐릭터의 위치 데이터와 마찬가지로 앱을 종료, 중단 시에 저장해도 충분할지 조사
+컨텐츠 추가
+    나무
+    도끼
+    나무 바닥
+    나무 벽
+    망치
+    돌맹이
+flow
+    touch
+data(memory, disk)
+    TileMap, GameItem
+structure
+    MVC, class reference
+```
+├│─└
+
+
+ViewController
+├─ PortalSceneController
+├─ WorldSceneController
+```
+character radius 이상의 거리를 1 프레임에 움직이면 벽을 뚫을 수 있다
+캐릭터 포지션을 chunkEventHandler 에서 update 하는 로직 refactor
+position 에서 moving layer 의 위치를 바꾸지 않도록 하자
+_position 을 두고 이를 get set 하도록 한다(super 의 position 을 피하기 위해서
+    근대 아무리 그래도 이름이 position 이면 node 를 그리기 위한 데이터로 사용할 것 같다
+    그럼 어차피 psition 은 항상 0 이어야 하겠네?
+    아하, character 를 movingLayer 위에 올리면 된다
+    그러면 position 이 의미있는 값을 가져도 화면에 올바른 위치에 출력된다
+    그런가? 한번 position 으로 실행해보자
+chunk 로딩 문제 해결
+    chunk 의 로딩 자체는 잘 되는 것 같다
+    chunk conotainer 가 잘못된 좌표의 chunk 를 로딩하고 있는 것 같다
+character 의 위치가 이상하게 저장되는 문제
+chunk 가 이상하게 삭제되고 로드되는 문제
+character move manager 를 character node 와 character move touch responder 로 분리하고 있다
+add child chunk
+what about create file at Worldgenerator?
+캐릭터의 위치도 CGPoint 는 계속 청크가 움직일 때마다 초기화시켜야겠는데?
+    애초에 위치 데이터를 ChunkCoord 를 기반해야겠다
+Implement ChunkViewModel
+movingLayer.setPosition(by: characterPosition)
+dragMove.hasChunkMoved -> chunk moded event
+이럴꺼면 오픈월드로 하지..?
+tile 도 테이블에 넣고 chunk 단위로 로드하기
+chunk 가 변할 때 새로운 chunk 로드하기
+tile view 를 chunk 단위로 만들기
+    사실상 tile 을 game object 로 처리할 것이기 때문에 9 개만 있으면 된다
+touch drag 도 이벤트로 보내고 controller.update() 에서 처리하기
+    아닌가, 터치는 자신이 처리하고 추가적인 처리가 필요한 경우 보내야지
+main branch 는 stable 만 merge 하자
+    ff 를 하니 stable 을 알 수가 없다
+LMIEventManager
+    LMIEvent
+WorldViewModel
+    Field
+    Field Inventory
+    Character Inventory
+    Character Inventory Inventory
+    Character
+밖에서 그냥 넣어주던거 가능하면 함수를 통해서 넣어주자
+modify & to < in fetch predicate format
+recompose zposition
+타일을 sql 로 저장하기...
+world view model 은 service 에 직접 접근하지 않아야 한다
+
+## after view layer
+world scene
+    world layer
+        moving layer: process drag move
+            (tile map)
+                (floor map) * 9: 어떤 녀석이 어디에 있는 녀석인지 계속 알아야겠네?
+            field: field inventory
+                (game objects)
+        character
+    (fixed layer)
+        (ui)
+            (menu button)
+            inventory pane: character inventory
+            craft pane
+        menu pane
+
+rename container to inventory
+remove third hand
+clean view controller init(), viewDidLoad(), setUp()
+동적 로딩 구현하기
+load gomo for need
+    필요한 만큼만 저장하고 동적으로 관리하기
+    16*16 을 한 청크
+    내가 있는 청크를 기준으로 총 9 청크만 로드해두기
+    캐릭터 위치도 중요하겠는데?
+    타일도 코어데이터로 관리해야 하려나? 이건 나중에
+    캐릭터 위치에 따른 청크가 바뀌었는지 함수
+    캐릭터 위치에 따른 타일이 바뀌었는지 함수
+    근대 청크로 하면 캐릭터의 위치를 xyz로 하는게 좌표 체계가 일치하지 않아서 불편하지 않을까?
+    아하 데이터 관리는 청크 기반으로 하고, 메모리 데이터 상으로는 xy 좌표 체계로 정리하는거지
+    하긴 그러면 디스크로부터 새로운 데이터를 가져오는 경우 fetch 에 시간이 감소하는 대신 쓸 수 있는 상태로 변형하는데 연산이 조금 더 필요
+    이를 go model 에 적용하기
+    0,0 을 시작 지점으로 하자
+    그럼 -256 ~ 255 사이즈로 만들어 보자
+    로딩은 캐릭터 위치 계속 추적하면서
+    캐릭터를 모델과 뷰로 구분한다면
+    캐릭터가 타일을 바꿀 때마다 뷰컨트롤러에게 캐릭터 위치 변경을 요청하기
+    캐릭터 위치가 바뀔 때마다 청크가 움직였는지 판단하기
+    움직인 경우 필요한 청크 데이터 로드하기
+    그럼 청크 단위로 데이터 로드하는 함수가 필요하다
+    왜 같 id 가 여러 번 출력되지?
+캐릭터가 0,0 에서 시작한다고 하면 각 사분면? 으로 청크를 하나씩 두기
+    청크의 크기는 256 * 256 이니 총 맵의 크기는 512 * 512 가 된다
+    타일도 청크 단위로 동적 로딩하자
+    만약 데이터가 있으면 그 데이터, 데이터가 없으면 기본은 잔디인걸로
+worldSceneModel -< worldViewModel
+
 button 이 따로 deligate 를 설정해줘야 하는 것이 아니라 그냥 부모가 반드시 딜리게이트 클래스인 것으로 호출하기
 move character to field
     field 는 터치를 moving layer 에게 넘긴다

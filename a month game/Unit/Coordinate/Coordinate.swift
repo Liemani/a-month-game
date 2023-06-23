@@ -43,9 +43,7 @@ extension Coordinate<Int> {
         self.init(T(0), T(0))
     }
 
-    func toPoint() -> CGPoint {
-        return CGPoint(x: self.x, y: self.y)
-    }
+    var cgPoint: CGPoint { CGPoint(x: self.x, y: self.y) }
 
     func isAdjacent(to coordinate: Coordinate<Int>) -> Bool {
         let differenceX = self.x - coordinate.x
@@ -53,6 +51,10 @@ extension Coordinate<Int> {
 
         return (-1 <= differenceX && differenceX <= 1)
         && (-1 <= differenceY && differenceY <= 1)
+    }
+
+    static func + (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x + rhs, lhs.y + rhs)
     }
 
     static func * (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {

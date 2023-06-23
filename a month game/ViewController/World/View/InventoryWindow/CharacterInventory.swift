@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InventoryWindow: LMISpriteNode {
+class CharacterInventory: LMISpriteNode {
 
     var cellCount: Int { Constant.inventoryCellCount }
 
@@ -77,7 +77,7 @@ class InventoryWindow: LMISpriteNode {
 
 }
 
-extension InventoryWindow: GameObjectContainer {
+extension CharacterInventory: Inventory {
 
     func isValid(index: Int) -> Bool {
         guard 0 <= index && index < self.cellCount else {
@@ -119,10 +119,10 @@ extension InventoryWindow: GameObjectContainer {
 
 struct CharacterInventoryIterator: IteratorProtocol {
 
-    let invWindow: InventoryWindow
+    let invWindow: CharacterInventory
     var startIndex: Int = 0
 
-    init(_ invWindow: InventoryWindow) {
+    init(_ invWindow: CharacterInventory) {
         self.invWindow = invWindow
     }
 

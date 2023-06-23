@@ -36,19 +36,24 @@ extension GameObject {
 // MARK: - class GameObjectNode
 class GameObject: LMISpriteNode {
 
-    var craftWindow: CraftWindow { self.parent?.parent as! CraftWindow }
-
     var data: GameObjectData
+
     var id: Int { self.data.id }
     var type: GameObjectType { self.data.type }
 
+    var chunkCoord: ChunkCoordinate? { self.data.chunkCoord! }
     func set(chunkCoord: ChunkCoordinate) {
-        self.data.set(chunkCoord: chunkCoord)
-
         let buildingLocation = chunkCoord.building
         let x = Int(buildingLocation >> 4)
         let y = Int(buildingLocation & 0x0f)
         self.position = TileCoordinate(x, y).fieldPoint
+    }
+
+    override var position: CGPoint {
+        get { super.position }
+        set(newPosition) {
+            super.position = newPosition
+        }
     }
 
     var buildingLocation: UInt8? { self.data.chunkCoord?.building }
@@ -217,10 +222,5 @@ class GameObject: LMISpriteNode {
 //        default: break
 //        }
 //    }
-
-    // MARK: - etc
-    func setPositionToLocation(of touch: UITouch) {
-        self.position = touch.location(in: self.parent!)
-    }
 
 }

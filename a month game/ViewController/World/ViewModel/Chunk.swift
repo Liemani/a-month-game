@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SpriteKit
 
 // MARK: usage extension
 #if DEBUG

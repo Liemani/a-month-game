@@ -40,7 +40,7 @@ extension CharacterMoveTouchBeganEventHandler: TouchEventHandler {
         let currentPoint = self.touch.location(in: self.scene)
         let difference = currentPoint - previousPoint
 
-        self.character.positionFromMidChunk -= difference
+        self.character.position -= difference
 
         self.previousPreviousTimestamp = self.previousTimestamp
         self.previousTimestamp = self.touch.timestamp

@@ -40,22 +40,22 @@ import Foundation
 
 struct CombineSequences<Element>: Sequence, IteratorProtocol {
 
-    private var iterators: [(any IteratorProtocol<Element>)?]
+    private var iterators: [any IteratorProtocol<Element>]
     private var currentIndex: Int = 0
 
     init(sequences: [any Sequence<Element>]) {
-        self.iterators = [(any IteratorProtocol<Element>)?](repeating: nil, count: sequences.count)
-        for (index, sequence) in sequences.enumerated() {
-            self.iterators[index] = sequence.makeIterator() as! (any IteratorProtocol<Element>)?
+        self.iterators = [any IteratorProtocol<Element>]()
+        self.iterators.reserveCapacity(sequences.count)
+        for sequence in sequences {
+            self.iterators.append(sequence.makeIterator() as! any IteratorProtocol<Element>)
         }
     }
 
     mutating func next() -> Element? {
         while self.currentIndex < self.iterators.count {
-            if let nextElement = iterators[self.currentIndex]!.next() {
+            if let nextElement = iterators[self.currentIndex].next() {
                 return nextElement
             } else {
-                self.iterators[self.currentIndex] = nil
                 self.currentIndex += 1
             }
         }

@@ -7,6 +7,14 @@
 
 import Foundation
 
+struct ShouldUpdate : OptionSet {
+    let rawValue: Int
+
+    static let interaction = ShouldUpdate(rawValue: 0x1 << 0)
+    static let craftWindow = ShouldUpdate(rawValue: 0x1 << 1)
+}
+
+
 class EventManager {
 
     private static var _default: EventManager?
@@ -18,13 +26,17 @@ class EventManager {
     let touchBeganEventQueue: QueueObject<TouchEvent>
     let touchBeganEventHandlerManager: TouchEventHandlerManager
 
-    let sceneEventQueue: QueueObject<SceneEvent>
+    var shouldUpdate: ShouldUpdate
+
+//    let sceneEventQueue: QueueObject<SceneEvent>
 
     init() {
         self.touchBeganEventQueue = QueueObject(size: Constant.touchEventQueueSize)
         self.touchBeganEventHandlerManager = TouchEventHandlerManager()
 
-        self.sceneEventQueue = QueueObject(size: Constant.sceneEventQueueSize)
+        self.shouldUpdate = []
+
+//        self.sceneEventQueue = QueueObject(size: Constant.sceneEventQueueSize)
     }
 
 }
