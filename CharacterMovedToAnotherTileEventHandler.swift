@@ -16,7 +16,10 @@ class CharacterHasMovedToAnotherTileEventHandler {
             return
         }
 
-        let event = SceneEvent(type: .characterHasMovedToAnotherChunk, udata: currChunkDirection, sender: self)
+        let event = SceneEvent(
+            type: .characterHasMovedToAnotherChunk,
+            udata: currChunkDirection,
+            sender: self)
         EventManager.default.sceneEventQueue.enqueue(event)
     }
 

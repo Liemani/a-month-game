@@ -31,7 +31,6 @@ class WorldScene: SKScene, TouchResponder {
 
     /// initialize with size
     override init(size: CGSize) {
-
         super.init(size: size)
 
         self.scaleMode = .aspectFit
@@ -45,20 +44,26 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: - init scene layer
     func initSceneLayer() {
+        let worldLayer = SKNode()
+        worldLayer.xScale = Constant.sceneScale
+        worldLayer.yScale = Constant.sceneScale
+        worldLayer.position = Constant.sceneCenter
+        worldLayer.zPosition = Constant.ZPosition.worldLayer
+        self.addChild(worldLayer)
+
         // MARK: moving layer
         let movingLayer = MovingLayer()
-        self.addChild(movingLayer)
+        worldLayer.addChild(movingLayer)
         self.movingLayer = movingLayer
+
+        let character = Character(movingLayer: movingLayer)
+        worldLayer.addChild(character)
+        self.character = character
 
         // MARK: fixed layer
         let fixedLayer = SKNode()
         fixedLayer.zPosition = Constant.ZPosition.fixedLayer
         self.addChild(fixedLayer)
-
-        // MARK: character
-        let character = Character(movingLayer: self.movingLayer)
-        fixedLayer.addChild(character)
-        self.character = character
 
         // MARK: ui
         let ui = SKNode()
@@ -104,7 +109,7 @@ class WorldScene: SKScene, TouchResponder {
         self.handleTouchBeganEvent()
 
         let timeInterval = currentTime - self.lastUpdateTime
-        
+
         self.character.update(timeInterval)
 
         self.worldViewController.update(timeInterval)

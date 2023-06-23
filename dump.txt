@@ -446,9 +446,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+crash when exit by EventManager.default!
 chunk 로딩 문제 해결
-chunk 의 로딩 자체는 잘 되는 것 같다
-chunk conotainer 가 잘못된 좌표의 chunk 를 로딩하고 있는 것 같다
+    chunk 의 로딩 자체는 잘 되는 것 같다
+    chunk conotainer 가 잘못된 좌표의 chunk 를 로딩하고 있는 것 같다
 캐릭터 포지션을 chunkEventHandler 에서 update 하는 로직 refactor
 character 의 위치가 이상하게 저장되는 문제
 chunk 가 이상하게 삭제되고 로드되는 문제

@@ -19,9 +19,9 @@ class Character: SKShapeNode {
 
     var lastPositionFromMidChunk: CGPoint!
     var positionFromMidChunk: CGPoint {
-        get { -self.movingLayer.position + (Constant.sceneCenter - CGPoint()) }
+        get { -self.movingLayer.position }
         set(characterPosition) {
-            self.movingLayer.position = -characterPosition + (Constant.sceneCenter - CGPoint())
+            self.movingLayer.position = -characterPosition
         }
     }
 
@@ -45,7 +45,6 @@ class Character: SKShapeNode {
         self.fillColor = .white
         self.strokeColor = .brown
         self.lineWidth = 5.0
-        self.position = Constant.sceneCenter
         self.zPosition = Constant.ZPosition.character
 
         let positionFromMidChunk = self.data.buildingPosition

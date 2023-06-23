@@ -62,16 +62,17 @@ struct Constant {
         static let resetWindow = 500.0
 
         // MARK: world scene
-        static let movingLayer = 0.0
-            static let tileMap = -500.0
-            static let chunkContainer = 0.0
-            static let tile = -10.0
-            static let gameObject = 0.0
-            static let gameObjectCover = 20.0
+        static let worldLayer = 0.0
+            static let movingLayer = 0.0
+                static let tileMap = -500.0
+                static let chunkContainer = 0.0
+                static let tile = -10.0
+                static let gameObject = 0.0
+                static let gameObjectCover = 20.0
+            static let character = 10.0
 
         // TODO: reset value
         static let fixedLayer = 0.0
-            static let character = 10.0
             static let ui = 100.0
             static let inventoryCell = 1.0
             static let inventoryCellHand = 2.0
@@ -121,6 +122,8 @@ struct Constant {
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
+
+    static let sceneScale = 0.1
 
     struct ResourceName {
         static let menuButtonNode = "menu button"

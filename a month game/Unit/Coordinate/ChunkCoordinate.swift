@@ -103,10 +103,11 @@ struct ChunkCoordinate {
     func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
         let streetDifferenceX = Int(chunkCoord.streetX) - Int(self.streetX)
         let streetDifferenceY = Int(chunkCoord.streetY) - Int(self.streetY)
-        let chunkDirection = Direction9(coord: Coordinate(streetDifferenceX, streetDifferenceY))
+        let chunkDirection = Direction9(from: Coordinate(streetDifferenceX, streetDifferenceY))
         return chunkDirection
     }
 
+    // MARK: Coordinate<Int>
     static func + (lhs: ChunkCoordinate, rhs: Coordinate<Int>) -> ChunkCoordinate {
         var mutableChunkCoord = lhs
 
@@ -124,6 +125,11 @@ struct ChunkCoordinate {
         return mutableChunkCoord
     }
 
+    static func += (lhs: inout ChunkCoordinate, rhs: Coordinate<Int>) {
+        lhs = lhs + rhs
+    }
+
+    // MARK: Direction9
     static func + (lhs: ChunkCoordinate, rhs: Direction9) -> ChunkCoordinate {
         return lhs + rhs.coord
     }

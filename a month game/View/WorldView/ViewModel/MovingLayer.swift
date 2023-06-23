@@ -23,10 +23,15 @@ class MovingLayer: LMINode {
         self.addChild(chunkContainer)
         self.chunkContainer = chunkContainer
 
-        // MARK: origin
-        let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
-        origin.zPosition = Double.infinity
-        self.addChild(origin)
+        // MARK: corner
+        for direction in DiagonalDirection4.allCases {
+            let position = (direction.coord << 4).toPoint() * Constant.tileWidth
+            let corner = SKShapeNode(circleOfRadius: Constant.defaultSize / 3.0)
+            corner.fillColor = .white
+            corner.position = position
+            corner.zPosition = Double.infinity
+            self.addChild(corner)
+        }
 
         // MARK: tile
         let resourceName = "tile_default"
