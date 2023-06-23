@@ -10,40 +10,27 @@ import CoreData
 
 class ChunkCoordinateDataSource {
 
-    private let persistentContainer: LMIPersistentContainer
+    private var moContext: NSManagedObjectContext
 
     init(_ persistentContainer: LMIPersistentContainer) {
-        self.persistentContainer = persistentContainer
+        self.moContext = persistentContainer.viewContext
     }
 
-    private var moContext: NSManagedObjectContext {
-        return self.persistentContainer.viewContext
-    }
-
-    // MARK: - edit
     func new() -> ChunkCoordinateMO {
         let entityName = Constant.Name.chunkCoordinateEntity
         let chunkCoordMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self.moContext) as! ChunkCoordinateMO
         return chunkCoordMO
     }
 
-    func load(at coord: ChunkCoordinate) -> [ChunkCoordinateMO] {
+    func load(at chunkCoord: ChunkCoordinate) -> [ChunkCoordinateMO] {
         let request = NSFetchRequest<ChunkCoordinateMO>(entityName: Constant.Name.chunkCoordinateEntity)
-        let chunkLocation = UInt32(bitPattern: Int32(coord.location)) & 0xff00
+        let chunkLocation = UInt32(bitPattern: Int32(chunkCoord.location)) & 0xff00
         let nextChunkLocation = chunkLocation + 0x0100
-        let arguments: [Any] = [coord.x, coord.y, chunkLocation, nextChunkLocation]
+        let arguments: [Any] = [chunkCoord.x, chunkCoord.y, chunkLocation, nextChunkLocation]
         request.predicate = NSPredicate(format: "x == %@ AND y == %@ AND %@ <= location AND location < %@", argumentArray: arguments)
 
         let chunkCoordMOs = try! self.moContext.fetch(request)
         return chunkCoordMOs
-    }
-
-    func delete(_ chunkCoordMO: ChunkCoordinateMO) {
-        self.moContext.delete(chunkCoordMO)
-    }
-
-    func contextSave() {
-        try! self.moContext.save()
     }
 
 }
@@ -53,7 +40,11 @@ extension ChunkCoordinateMO {
     func update(_ chunkCoord: ChunkCoordinate) {
         self.x = chunkCoord.x
         self.y = chunkCoord.y
-        self.location = chunkCoord.location
+        self.location = Int32(chunkCoord.location)
+    }
+
+    func delete() {
+        WorldServiceContainer.default.moContext.delete(self)
     }
 
 }

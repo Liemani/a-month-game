@@ -10,8 +10,9 @@ import Foundation
 enum WorldDataIndex: Int, CaseIterable {
 
     case nextID
-    case characterPositionX
-    case characterPositionY
+    case characterLocationChunkX
+    case characterLocationChunkY
+    case characterLocationChunkLocation
 
 }
 
@@ -19,8 +20,8 @@ class WorldDataRepository {
 
     private let worldDataDataSource: WorldDataDataSource
 
-    init(worldDirectoryURL: URL) {
-        self.worldDataDataSource = WorldDataDataSource(worldDirectoryURL: worldDirectoryURL)
+    init(worldDataDataSource: WorldDataDataSource) {
+        self.worldDataDataSource = worldDataDataSource
     }
 
     func load(at index: WorldDataIndex) -> Int {

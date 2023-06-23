@@ -9,20 +9,28 @@ import Foundation
 
 enum Direction4: Int, CaseIterable {
 
-    case East
-    case South
-    case West
-    case North
+    case east
+    case south
+    case west
+    case north
 
-    init?(coord: Coordinate<Int>) {
-        let rawValue = (coord.y == 0) ? (-coord.x + 1) : (coord.y + 2)
+    init?(from coord: Coordinate<Int>) {
+        var rawValue = 0
+        switch (coord.x, coord.y) {
+        case (1, 0): rawValue = 0
+        case (0, -1): rawValue = 1
+        case (-1, 0): rawValue = 2
+        case (0, 1): rawValue = 3
+        default: return nil
+        }
         self.init(rawValue: rawValue)
     }
 
-    var coord: Coordinate<Int> {
-        Direction4.coordTable[self.rawValue]
-    }
+    var coord: Coordinate<Int> { Direction4.coordTable[self] }
+    var opposite: Direction4 { Direction4.oppositeTable[self] }
+    var direction9: [Direction9] { Direction4.direction9Table[self] }
 
+    // MARK: table
     static let coordTable = [
         Coordinate(1, 0),
         Coordinate(0, -1),
@@ -30,38 +38,56 @@ enum Direction4: Int, CaseIterable {
         Coordinate(0, 1),
     ]
 
-    var opposite: Direction4 {
-        switch self {
-        case .East: return .West
-        case .South: return .North
-        case .West: return .East
-        case .North: return .South
-        }
-    }
+    static let oppositeTable: [Direction4] = [
+        .west,
+        .north,
+        .east,
+        .south,
+    ]
 
-    var direction8: [Direction8] {
-        switch self {
-        case .East: return [.SouthEast, .East, .NorthEast]
-        case .South: return [.SouthWest, .South, .SouthEast]
-        case .West: return [.SouthWest, .West, .NorthWest]
-        case .North: return [.NorthWest, .North, .NorthEast]
-        }
-    }
+    static let direction9Table: [[Direction9]] = [
+        [.northEast, .east, .southEast],
+        [.southEast, .south, .southWest],
+        [.southWest, .west, .northWest],
+        [.northWest, .north, .northEast],
+    ]
 
+}
+
+enum DiagonalDirection4: Int, CaseIterable {
+
+    case northEast
+    case southEast
+    case southWest
+    case northWest
+
+    var coord: Coordinate<Int> { DiagonalDirection4.coordTable[self] }
+
+    static let coordTable = [
+        Coordinate(1, 1),
+        Coordinate(1, 0),
+        Coordinate(0, 0),
+        Coordinate(0, 1),
+    ]
 }
 
 enum Direction8: Int, CaseIterable {
 
-    case SouthWest
-    case South
-    case SouthEast
-    case West
-    case East
-    case NorthWest
-    case North
-    case NorthEast
+    case northEast
+    case east
+    case southEast
+    case south
+    case southWest
+    case west
+    case northWest
+    case north
 
-    init?(coord: Coordinate<Int>) {
+    init?(from coord: Coordinate<Int>) {
+        guard -1 <= coord.x && coord.x <= 1
+                && -1 <= coord.y && coord.y <= 1 else {
+            return nil
+        }
+
         let tableIndex = (coord.y - 1) * -3 + (coord.x + 1)
         let rawValue = Direction8.rawValueTable[tableIndex]
         self.init(rawValue: rawValue)
@@ -92,17 +118,22 @@ enum Direction8: Int, CaseIterable {
 
 enum Direction9: Int, CaseIterable {
 
-    case SouthWest
-    case South
-    case SouthEast
-    case West
-    case Origin
-    case East
-    case NorthWest
-    case North
-    case NorthEast
+    case southWest
+    case south
+    case southEast
+    case west
+    case origin
+    case east
+    case northWest
+    case north
+    case northEast
 
-    init?(coord: Coordinate<Int>) {
+    init?(from coord: Coordinate<Int>) {
+        guard -1 <= coord.x && coord.x <= 1
+                && -1 <= coord.y && coord.y <= 1 else {
+            return nil
+        }
+
         let rawValue = (coord.y + 1) * 3 + (coord.x + 1)
         self.init(rawValue: rawValue)
     }

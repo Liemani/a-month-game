@@ -10,66 +10,51 @@ import SpriteKit
 
 class MovingLayer: LMINode {
 
-    var field: FieldNode!
-    var tileMap: SKTileMapNode!
-    var character: SKShapeNode!
+    var chunkContainer: ChunkContainer!
 
+    // MARK: - init
     override init() {
         super.init()
 
         self.zPosition = Constant.ZPosition.movingLayer
 
-        self.addOrigin(to: self)
-        self.addField(to: self)
-        self.addTileMap(to: self)
-    }
+        // MARK: chunkContainer
+        let chunkContainer = ChunkContainer()
+        self.addChild(chunkContainer)
+        self.chunkContainer = chunkContainer
 
-    func addOrigin(to parent: SKNode) {
-        let origin = SKShapeNode(circleOfRadius: Constant.defaultSize / 2.0)
-        origin.zPosition = Double.infinity
-        parent.addChild(origin)
-    }
+        // MARK: corner
+        for direction in DiagonalDirection4.allCases {
+            let position = (direction.coord << 4).toPoint() * Constant.tileWidth
+            let corner = SKShapeNode(circleOfRadius: Constant.defaultSize / 3.0)
+            corner.fillColor = .white
+            corner.position = position
+            corner.zPosition = Double.infinity
+            self.addChild(corner)
+        }
 
-    func addField(to parent: SKNode) {
-        let field = FieldNode()
+        // MARK: tile
+        let resourceName = "tile_default"
+        let tileTexture = SKTexture(imageNamed: resourceName)
+        let tileDefinition = SKTileDefinition(texture: tileTexture)
+        let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
+        let tileSet = SKTileSet(tileGroups: [tileGroup])
 
-        parent.addChild(field)
-        self.field = field
+        let tileMapSide = Constant.tileMapSide
+        let tileMapNode = SKTileMapNode(tileSet: tileSet, columns: tileMapSide, rows: tileMapSide, tileSize: Constant.tileTextureSize)
 
-        self.addCharacter(to: field)
-    }
+        tileMapNode.xScale = Constant.tileScale
+        tileMapNode.yScale = Constant.tileScale
+        tileMapNode.zPosition = Constant.ZPosition.tileMap
 
-    func addCharacter(to parent: SKNode) {
-        let path = CGMutablePath()
-        path.addArc(center: CGPoint.zero,
-                    radius: Constant.characterRadius,
-                    startAngle: 0,
-                    endAngle: CGFloat.pi * 2,
-                    clockwise: true)
-        let character = SKShapeNode(path: path)
-        character.fillColor = .white
-        character.strokeColor = .brown
-        character.lineWidth = 5.0
-        character.zPosition = 20.0
+        for x in 0..<tileMapSide {
+            for y in 0..<tileMapSide {
+                tileMapNode.setTileGroup(tileGroup, andTileDefinition: tileDefinition, forColumn: x, row: y)
+            }
+        }
 
-        parent.addChild(character)
-
-        self.character = character
-    }
-
-    func addTileMap(to parent: SKNode) {
-        let tileGroups = TileType.tileGroups
-        let tileSet = SKTileSet(tileGroups: tileGroups)
-
-        let tileMap = SKTileMapNode(tileSet: tileSet, columns: Constant.gridSize, rows: Constant.gridSize, tileSize: Constant.tileTextureSize)
-        tileMap.xScale = Constant.tileScale
-        tileMap.yScale = Constant.tileScale
-
-        tileMap.position = Constant.tileMapPosition
-        tileMap.zPosition = Constant.ZPosition.tileMap
-
-        parent.addChild(tileMap)
-        self.tileMap = tileMap
+        self.addChild(tileMapNode)
+        tileMapNode.position = Constant.defaultNodeSize.toPoint() * Double(Constant.tileCountInChunkSide / 2)
     }
 
     required init?(coder aDecoder: NSCoder) {

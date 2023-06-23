@@ -27,9 +27,9 @@ enum GameObjectType: Int, CaseIterable {
     case stone
     case axe
 
-    #warning("todo")
-    // set isTile
-    // remove tile thing
+    init?(from goMO: GameObjectMO) {
+        self.init(rawValue: Int(goMO.typeID))
+    }
 
     private static let resources: [ResourceType] = [
         ("game_object_none", false, false, false, false),

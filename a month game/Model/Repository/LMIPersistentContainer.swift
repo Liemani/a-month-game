@@ -16,8 +16,8 @@ class LMIPersistentContainer: NSPersistentContainer {
         super.init(name: name, managedObjectModel: managedObjectModel)
     }
 
-    func setUp(to worldDirectoryURL: URL) {
-        let worldDataModelURL = worldDirectoryURL.appending(path: Constant.Name.worldDataModelFile)
+    func setUp(to worldDirURL: URL) {
+        let worldDataModelURL = worldDirURL.appending(path: Constant.Name.worldDataModelFile)
         self.persistentStoreDescriptions[0].url = worldDataModelURL
         self.loadPersistentStores { description, error in
             if let error = error {

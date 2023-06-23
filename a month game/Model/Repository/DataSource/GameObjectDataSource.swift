@@ -20,19 +20,10 @@ final class GameObjectDataSource {
         return self.persistentContainer.viewContext
     }
 
-    // MARK: - edit
     func new() -> GameObjectMO {
         let entityName = Constant.Name.gameObjectEntity
         let goMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self.moContext) as! GameObjectMO
         return goMO
-    }
-
-    func delete(_ goMO: GameObjectMO) {
-        self.moContext.delete(goMO)
-    }
-
-    func contextSave() {
-        try! self.moContext.save()
     }
 
 }

@@ -9,25 +9,18 @@ import Foundation
 
 final class WorldGenerator {
 
-    private let serviceContainer: WorldRepositoryContainer
-    private let idGenerator: IDGenerator
-
-    #warning("what about create file here?")
-    static func generate(worldDataContainer: WorldRepositoryContainer) {
-        let worldGenerator = WorldGenerator(worldDataContainer: worldDataContainer)
+    static func generate() {
+        let worldGenerator = WorldGenerator()
         worldGenerator.generateWorldData()
         worldGenerator.generateGOMOs()
     }
 
-    private init(worldDataContainer: WorldRepositoryContainer) {
-        self.serviceContainer = worldDataContainer
-        self.idGenerator = IDGenerator(worldDataRepository: worldDataContainer.worldDataRepository)
-    }
-
     private func generateWorldData() {
-        self.serviceContainer.worldDataRepository.update(value: Constant.initialNextID, to: .nextID)
-        self.serviceContainer.worldDataRepository.update(value: 0, to: .characterPositionX)
-        self.serviceContainer.worldDataRepository.update(value: 0, to: .characterPositionY)
+        let worldDataRepo = WorldServiceContainer.default.worldDataRepo
+        worldDataRepo.update(value: Constant.initialNextID, to: .nextID)
+        worldDataRepo.update(value: 0, to: .characterLocationChunkX)
+        worldDataRepo.update(value: 0, to: .characterLocationChunkY)
+        worldDataRepo.update(value: 0, to: .characterLocationChunkLocation)
     }
 
     private func generateGOMOs() {
@@ -41,12 +34,14 @@ final class WorldGenerator {
         self.new(type: .woodWall, x: 1, y: 0)
         self.new(type: .woodWall, x: 1, y: -1)
 
-        self.serviceContainer.goRepository.contextSave()
+        try! WorldServiceContainer.default.moContext.save()
     }
 
     private func new(type: GameObjectType, x: Int, y: Int) {
-        let id = self.idGenerator.generate()
-        _ = self.serviceContainer.goRepository.new(id: id, type: type, coord: Coordinate(x, y))
+        let id = WorldServiceContainer.default.idGeneratorServ.generate()
+        let goMO = WorldServiceContainer.default.goRepo.new(id: id, type: type)
+        let chunkCoord = ChunkCoordinate(from: Coordinate(x, y))
+        goMO.update(to: chunkCoord)
     }
 
 }

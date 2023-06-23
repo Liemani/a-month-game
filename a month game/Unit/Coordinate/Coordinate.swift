@@ -31,6 +31,10 @@ struct Coordinate<T> where T: Numeric {
         return Coordinate(lhs.x + rhs.x, lhs.y + rhs.y)
     }
 
+    static func - (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Coordinate<T> {
+        return Coordinate(lhs.x - rhs.x, lhs.y - rhs.y)
+    }
+
 }
 
 extension Coordinate<Int> {
@@ -39,7 +43,7 @@ extension Coordinate<Int> {
         self.init(T(0), T(0))
     }
 
-    func toCGPoint() -> CGPoint {
+    func toPoint() -> CGPoint {
         return CGPoint(x: self.x, y: self.y)
     }
 
@@ -51,8 +55,8 @@ extension Coordinate<Int> {
         && (-1 <= differenceY && differenceY <= 1)
     }
 
-    static func - (lhs: Coordinate<Int>, rhs: Coordinate<Int>) -> Coordinate<Int> {
-        return Coordinate(lhs.x - rhs.x, lhs.y - rhs.y)
+    static func * (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x * rhs, lhs.y * rhs)
     }
 
     static func << (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {

@@ -7,37 +7,24 @@
 
 import Foundation
 
-final class IDGenerator {
+final class IDGeneratorService {
 
     private var worldDataRepository: WorldDataRepository
     private var nextID: Int
 
     init(worldDataRepository: WorldDataRepository) {
         self.worldDataRepository = worldDataRepository
-        self.nextID = 0
 
-        self.nextID = self.readNextID()
+        let nextID = self.worldDataRepository.load(at: .nextID)
+        self.nextID = nextID
     }
 
     func generate() -> Int {
         let id = self.nextID
         self.nextID += 1
-        self.updateNextID(nextID: self.nextID)
+        self.worldDataRepository.update(value: nextID, to: .nextID)
 
         return id
-    }
-
-}
-
-// MARK: - private
-extension IDGenerator {
-
-    private func readNextID() -> Int {
-        return self.worldDataRepository.load(at: .nextID)
-    }
-
-    private func updateNextID(nextID: Int) {
-        self.worldDataRepository.update(value: nextID, to: .nextID)
     }
 
 }

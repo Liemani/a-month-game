@@ -8,43 +8,75 @@
 import Foundation
 import SpriteKit
 
+// MARK: - usage extension
+#if DEBUG
+extension GameObject {
+
+    private func set(go: GameObject,
+
+                     midChunkCoord: ChunkCoordinate,
+                     chunks: [Chunk],
+
+                     from prevChunkCoord: ChunkCoordinate?,
+                     to currChunkCoord: ChunkCoordinate) {
+        if prevChunkCoord != nil {
+            go.removeFromParent()
+        }
+
+        let currChunkDirection = midChunkCoord.chunkDirection(to: currChunkCoord)!
+        let currChunk = chunks[currChunkDirection]
+        currChunk.addChild(go)
+
+        go.set(chunkCoord: currChunkCoord)
+    }
+
+}
+#endif
+
 // MARK: - class GameObjectNode
-class GameObjectNode: LMISpriteNode, BelongEquatableType {
+class GameObject: LMISpriteNode {
 
     var craftWindow: CraftWindow { self.parent?.parent as! CraftWindow }
 
-    #warning("check BelongEquatableType")
-    private var _type: GameObjectType!
-    var type: GameObjectType {
-        get { self._type }
-        set { self._type = newValue }
+    var data: GameObjectData
+    var id: Int { self.data.id }
+    var type: GameObjectType { self.data.type }
+
+    func set(chunkCoord: ChunkCoordinate) {
+        self.data.set(chunkCoord: chunkCoord)
+
+        let buildingLocation = chunkCoord.building
+        let x = Int(buildingLocation >> 4)
+        let y = Int(buildingLocation & 0x0f)
+        self.position = TileCoordinate(x, y).fieldPoint
     }
+
+    var buildingLocation: UInt8? { self.data.chunkCoord?.building }
 
     // MARK: - init
-    override init(texture: SKTexture?, color: UIColor, size: CGSize) {
-        super.init(texture: texture, color: color, size: size)
-    }
+    init(from goData: GameObjectData) {
+        self.data = goData
 
-    convenience init(from go: GameObject) {
-        let texture = go.type.texture
+        let texture = goData.type.texture
         let size = Constant.defaultNodeSize
-        self.init(texture: texture, color: .black, size: size)
+        super.init(texture: texture, color: .white, size: size)
 
-        self._type = go.type
+        if let chunkCoord = goData.chunkCoord {
+            self.set(chunkCoord: chunkCoord)
+        }
 
         self.zPosition = !self.type.isTile
-            ? Constant.ZPosition.gameObjectNode
-            : Constant.ZPosition.tileNode
+            ? Constant.ZPosition.gameObject
+            : Constant.ZPosition.tile
+    }
+
+    convenience init(goType: GameObjectType) {
+        let goData = GameObjectData(type: goType)
+        self.init(from: goData)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - set type
-    func setType(_ goType: GameObjectType) {
-        self.type = goType
-        self.texture = goType.texture
     }
 
     // MARK: - activate
@@ -57,16 +89,16 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
     }
 
     // MARK: - touch
-    override func touchBegan(_ touch: UITouch) {
-        let result = self.touchContextManager.add(GameObjectTouch(touch: touch, sender: self))
-
-        if result == true {
-            self.activate()
-        }
-    }
+//    override func touchBegan(_ touch: UITouch) {
+//        let result = self.touchResponderManager.add(GameObjectTouch(touch: touch, sender: self))
+//
+//        if result == true {
+//            self.activate()
+//        }
+//    }
 
 //    override func touchMoved(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //
@@ -106,7 +138,7 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
 //    }
 //
 //    override func touchEnded(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //
@@ -150,7 +182,7 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
 //    }
 //
 //    override func touchCancelled(_ touch: UITouch) {
-//        guard self.touchContextManager.contains(from: touch) else {
+//        guard self.touchResponderManager.contains(from: touch) else {
 //            return
 //        }
 //        self.resetTouch(touch)
@@ -161,7 +193,7 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
 //
 //    override func resetTouch(_ touch: UITouch) {
 //        self.deactivate()
-//        self.touchContextManager.removeFirst(from: touch)
+//        self.touchResponderManager.removeFirst(from: touch)
 //    }
 
     // MARK: - interact
@@ -190,9 +222,5 @@ class GameObjectNode: LMISpriteNode, BelongEquatableType {
     func setPositionToLocation(of touch: UITouch) {
         self.position = touch.location(in: self.parent!)
     }
-
-}
-
-class GameObjectTouch: TouchContext {
 
 }

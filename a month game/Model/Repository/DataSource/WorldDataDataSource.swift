@@ -14,11 +14,11 @@ class WorldDataDataSource {
     private var filePath: String!
     private var updateFileHandle: FileHandle!
 
-    init(worldDirectoryURL: URL) {
+    init(worldDirURL: URL) {
         self.fileManager = FileManager.default
 
         // TODO: URL.path is deprecated
-        self.filePath = worldDirectoryURL.appending(path: Constant.Name.worldDataFile).path
+        self.filePath = worldDirURL.appending(path: Constant.Name.worldDataFile).path
 
         self.createFileIfNotExist()
 

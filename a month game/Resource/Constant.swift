@@ -10,12 +10,12 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultSize = tileSide
-    static let tileTextureSide = 16.0
-    static let tileTextureSize = CGSize(width: tileTextureSide, height: tileTextureSide)
+    static let defaultSize = tileWidth
+    static let tileTextureWidth = 16.0
+    static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
     static let tileScale = 6.0
-    static let tileSide = tileTextureSide * tileScale
-    static let tileSize = CGSize(width: tileSide, height: tileSide)
+    static let tileWidth = tileTextureWidth * tileScale
+    static let tileSize = CGSize(width: tileWidth, height: tileWidth)
     static let margin = defaultSize / 5.0
 
     static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
@@ -24,7 +24,7 @@ struct Constant {
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
     static let sceneSize = iPhone5sResolution
 
-    static let sceneCenter = sceneSize.toCGPoint() / 2.0
+    static let sceneCenter = sceneSize.toPoint() / 2.0
 
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
@@ -35,12 +35,8 @@ struct Constant {
     static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
     static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
 
-    // MARK: tile map
-    static let tileMapSide = tileSide * Double(gridSize)
-    static let tileMapPosition = CGPoint() + (tileMapSide / 2.0)
-
     // MARK: misc
-    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toCGPoint()
+    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).toPoint()
     static let characterRadius = defaultSize / 3.0
     static let exitWorldButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
 
@@ -55,28 +51,33 @@ struct Constant {
     static let craftWindowCellCount = 5
 
     // MARK: world box
-    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: tileMapSide, height: tileMapSide))
+    static let worldSize = tileSize * 512
+    static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: worldSize.width, height: worldSize.height))
     static let moveableArea = CGRect(origin: CGPoint() + characterRadius, size: worldBorder.size - (characterRadius * 2.0))
 
     // MARK: - z position
     struct ZPosition {
+        // MARK: portal scene
         static let background = -500.0
         static let resetWindow = 500.0
 
-        static let movingLayer = -500.0
-        static let tileMap = -100.0
-        static let gameObjectLayer = 0.0
-        static let gameObjectNode = 10.0
-        static let tileNode = 0.0
+        // MARK: world scene
+        static let worldLayer = 0.0
+            static let movingLayer = 0.0
+                static let tileMap = -500.0
+                static let chunkContainer = 0.0
+                static let tile = -10.0
+                static let gameObject = 0.0
+                static let gameObjectCover = 20.0
+            static let character = 10.0
 
+        // TODO: reset value
         static let fixedLayer = 0.0
-        static let ui = 0.0
-        static let thirdHand = 100.0
-        static let munuWindow = 500.0
-
-        static let inventoryCell = 1.0
-        static let inventoryCellHand = 2.0
-        static let craftCell = 1.0
+            static let ui = 100.0
+            static let inventoryCell = 1.0
+            static let inventoryCellHand = 2.0
+            static let craftCell = 1.0
+            static let munuWindow = 500.0
     }
 
     // MARK: - frame
@@ -115,10 +116,14 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let gridSize: Int = 256
+    static let tileCountInChunkSide: Int = 16
+    static let tileMapSide: Int = tileCountInChunkSide * 3
+    static let chunkWidth: Double = tileWidth * Double(tileCountInChunkSide)
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
+
+    static let sceneScale = 0.1
 
     struct ResourceName {
         static let menuButtonNode = "menu button"
@@ -131,6 +136,8 @@ struct Constant {
     }
 
     static let initialNextID = 1
+    static let touchEventQueueSize = 10
+    static let sceneEventQueueSize = 100
 
     static let accessableGOColorBlendFactor = 0.5
 
@@ -151,8 +158,5 @@ struct Constant {
         Coordinate(-1, 1),
         Coordinate(0, 1),
     ]
-
-    // MARK: map position
-    static let centerTileIndex = gridSize / 2
 
 }
