@@ -21,7 +21,7 @@ class WorldSceneViewModel {
 
     let character: Character
 
-    var interactableGOs: [Int: GameObject]
+    var interactableGOTracker: InteractableGOTracker
 
     // MARK: - computed property
     var fieldGOs: some Sequence<GameObject> { self.chunkContainer.gos }
@@ -54,23 +54,19 @@ class WorldSceneViewModel {
 
         chunkContainer.setUp(chunkCoord: character.data.chunkCoord)
 
-        self.interactableGOs = [:]
-//        self.setUpinteractableGOs()
+        self.interactableGOTracker = InteractableGOTracker()
+        EventManager.default.shouldUpdate.update(with: .interaction)
     }
-
-//    func setUpinteractableGOs() {
-//        for go in self.chunkContainer.gos {
-//            if  {
-//                self.interactableGOs[go.id] = go
-//            }
-//        }
-//    }
 
     // MARK: - update
     func update(_ timeInterval: TimeInterval) {
 //        self.handleSceneEvent()
 
         self.updateCharacter(timeInterval)
+        if EventManager.default.shouldUpdate.contains(.interaction) {
+            self.interactableGOTracker.updateWhole(character: self.character,
+                                                 gos: self.fieldGOs)
+        }
     }
 
 //    func handleSceneEvent() {
@@ -88,7 +84,7 @@ class WorldSceneViewModel {
         self.resolveCharacterCollision()
 
         if self.hasMovedToAnotherTile {
-            print("update accessable gos")
+            EventManager.default.shouldUpdate.update(with: .interaction)
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)

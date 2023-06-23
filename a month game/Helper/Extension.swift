@@ -71,6 +71,15 @@ extension Array {
 // MARK: - SKNode
 extension SKNode {
 
+    func intersectsSqure(node: SKNode, range: Double) -> Bool {
+        let center = node.convert(CGPoint(), to: self.parent!)
+        let distanceX = self.position.x - center.x
+        let distanceY = self.position.y - center.y
+
+        return -range <= distanceX && distanceX <= range
+            && -range <= distanceY && distanceY <= range
+    }
+
     func child(at touch: UITouch) -> SKNode? {
         let touchLocation = touch.location(in: self)
         for child in self.children {

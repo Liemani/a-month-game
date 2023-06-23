@@ -36,7 +36,7 @@
 		033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */; };
 		033D690B2A4146BA005D3CB0 /* TileMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D690A2A4146BA005D3CB0 /* TileMap.swift */; };
 		034637802A233A1400370C71 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346377F2A233A1400370C71 /* InventoryCell.swift */; };
-		034637822A238D3600370C71 /* InteractionZone.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637812A238D3600370C71 /* InteractionZone.swift */; };
+		034637822A238D3600370C71 /* InteractableGOTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637812A238D3600370C71 /* InteractableGOTracker.swift */; };
 		034637842A23947400370C71 /* CraftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637832A23947400370C71 /* CraftCell.swift */; };
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkContainer.swift */; };
@@ -122,7 +122,7 @@
 		033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkRepository.swift; sourceTree = "<group>"; };
 		033D690A2A4146BA005D3CB0 /* TileMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMap.swift; sourceTree = "<group>"; };
 		0346377F2A233A1400370C71 /* InventoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
-		034637812A238D3600370C71 /* InteractionZone.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionZone.swift; sourceTree = "<group>"; };
+		034637812A238D3600370C71 /* InteractableGOTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableGOTracker.swift; sourceTree = "<group>"; };
 		034637832A23947400370C71 /* CraftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCell.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		036FE5212A429E8D007E66A5 /* ChunkContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainer.swift; sourceTree = "<group>"; };
@@ -257,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				033D68F32A3FF932005D3CB0 /* WorldSceneViewModel.swift */,
+				034637812A238D3600370C71 /* InteractableGOTracker.swift */,
 				036FE5212A429E8D007E66A5 /* ChunkContainer.swift */,
 				030261232A3C56E40050E697 /* MovingLayer.swift */,
 				036FE51F2A41A73A007E66A5 /* Chunk.swift */,
@@ -363,7 +364,6 @@
 				03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */,
 				033D68F52A4001DF005D3CB0 /* CharacterMovedToAnotherChunkEventHandler.swift */,
 				03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */,
-				034637812A238D3600370C71 /* InteractionZone.swift */,
 				03EA27AF2A43D798007BAF4F /* ChunkMoveEventHandler.swift */,
 				039EEFC82A243DD900CB93C6 /* TouchContext.swift */,
 				033C9E622A1C2DCA000E1D50 /* FieldNode.swift */,
@@ -623,7 +623,7 @@
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
 				039037CB2A15FBCD0014A571 /* Extension.swift in Sources */,
 				03CE3AF32A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift in Sources */,
-				034637822A238D3600370C71 /* InteractionZone.swift in Sources */,
+				034637822A238D3600370C71 /* InteractableGOTracker.swift in Sources */,
 				030261282A3C72550050E697 /* TouchEventHandler.swift in Sources */,
 				030261262A3C71FC0050E697 /* LMINode.swift in Sources */,
 				033C9E612A1C2D83000E1D50 /* Inventory.swift in Sources */,

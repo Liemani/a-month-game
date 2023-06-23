@@ -223,9 +223,4 @@ class GameObject: LMISpriteNode {
 //        }
 //    }
 
-    // MARK: - etc
-    func setPositionToLocation(of touch: UITouch) {
-        self.position = touch.location(in: self.parent!)
-    }
-
 }
