@@ -12,6 +12,7 @@ enum TouchEventType {
 
     case characterTouchBegan
     case gameObjectTouchBegan
+    case gameObjectMoveTouchBegan
 
 }
 

@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InteractableGOTracker {
+class AccessableGOTracker {
 
     private var dict: [Int: GameObject]
     var gos: some Sequence<GameObject> { self.dict.values }

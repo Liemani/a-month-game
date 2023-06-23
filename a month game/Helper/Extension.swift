@@ -80,6 +80,11 @@ extension SKNode {
             && -range <= distanceY && distanceY <= range
     }
 
+    func setPositionToLocation(of touch: UITouch) {
+        let touchPoint = touch.location(in: self.parent!)
+        self.position = touchPoint
+    }
+
     func child(at touch: UITouch) -> SKNode? {
         let touchLocation = touch.location(in: self)
         for child in self.children {

@@ -24,19 +24,28 @@ class GameObjectTouchEventHandler {
 extension GameObjectTouchEventHandler: TouchEventHandler {
     
     func touchBegan() {
-        print("game object touch began")
+        self.go.activate()
     }
 
     func touchMoved() {
-        print("game object touch moved")
+        if self.go.isAtLocation(of: touch) {
+            return
+        }
+
+        EventManager.default.touchEventHandlerManager.remove(from: self.touch)
+        let event = TouchEvent(type: .gameObjectMoveTouchBegan,
+                               touch: touch,
+                               sender: self.go)
+        EventManager.default.touchBeganEventQueue.enqueue(event)
+        self.touchCancelled()
     }
 
     func touchEnded() {
-        print("game object touch ended")
+        self.go.deactivate()
     }
 
     func touchCancelled() {
-        print("game object touch cancelled")
+        self.go.deactivate()
     }
 
 }

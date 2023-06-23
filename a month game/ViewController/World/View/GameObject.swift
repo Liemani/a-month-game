@@ -27,7 +27,7 @@ extension GameObject {
         let currChunk = chunks[currChunkDirection]
         currChunk.addChild(go)
 
-        go.set(chunkCoord: currChunkCoord)
+        go.setUpPosition()
     }
 
 }
@@ -42,18 +42,12 @@ class GameObject: LMISpriteNode {
     var type: GameObjectType { self.data.type }
 
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord! }
-    func set(chunkCoord: ChunkCoordinate) {
-        let buildingLocation = chunkCoord.building
+
+    func setUpPosition() {
+        let buildingLocation = self.chunkCoord!.building
         let x = Int(buildingLocation >> 4)
         let y = Int(buildingLocation & 0x0f)
         self.position = TileCoordinate(x, y).fieldPoint
-    }
-
-    override var position: CGPoint {
-        get { super.position }
-        set(newPosition) {
-            super.position = newPosition
-        }
     }
 
     var buildingLocation: UInt8? { self.data.chunkCoord?.building }
@@ -67,7 +61,7 @@ class GameObject: LMISpriteNode {
         super.init(texture: texture, color: .white, size: size)
 
         if let chunkCoord = goData.chunkCoord {
-            self.set(chunkCoord: chunkCoord)
+            self.setUpPosition()
         }
 
         self.zPosition = !self.type.isTile
@@ -94,114 +88,60 @@ class GameObject: LMISpriteNode {
     }
 
     // MARK: - touch
-//    override func touchBegan(_ touch: UITouch) {
-//        let result = self.touchResponderManager.add(GameObjectTouch(touch: touch, sender: self))
-//
-//        if result == true {
-//            self.activate()
-//        }
-//    }
+    override func touchBegan(_ touch: UITouch) {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
 
-//    override func touchMoved(_ touch: UITouch) {
-//        guard self.touchResponderManager.contains(from: touch) else {
-//            return
-//        }
-//
-//        if self.parent is ThirdHand {
-//            self.setPositionToLocation(of: touch)
-//            return
-//        }
-//
-//        if self.isAtLocation(of: touch) {
-//            return
-//        }
-//
-////        if !self.worldScene.thirdHand.isEmpty {
-////            self.touchCancelled(touch)
-////            return
-////        }
-//
-//        switch self.parent {
-//        case is FieldNode:
-//            if !self.isPickable {
-//                self.touchCancelled(touch)
-//            } else {
-//                let coord = Coordinate<Int>(0, 0)
-//                self.worldScene.thirdHand.moveGOMO(from: self, to: coord)
-//            }
-//        case is InventoryCell:
-//            let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-//            self.worldScene.moveGOMO(from: self, to: goCoord)
-//        case is CraftCell:
-//            if self.type == .none {
-//                self.touchCancelled(touch)
-//            } else {
-//                self.craftWindow.refill(self)
-//            }
-//        default: break
-//        }
-//    }
-//
-//    override func touchEnded(_ touch: UITouch) {
-//        guard self.touchResponderManager.contains(from: touch) else {
-//            return
-//        }
-//
-//        switch self.parent {
-//        case is FieldNode:
-//            self.resetTouch(touch)
-//            self.interact()
-//        case is InventoryCell:
-//            self.resetTouch(touch)
-//            self.interact()
-//        case is ThirdHand:
-//            if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
-//                if touchedCell.isEmpty {
-//                    touchedCell.moveGOMO(self)
-//                    self.resetTouch(touch)
-//                    return
-//                } else {
-//                    self.touchCancelled(touch)
-//                    return
-//                }
-//            }
-//
-//            let characterTC = self.worldScene.worldViewController.character.tileCoord
-//            let touchedTC = Coordinate<Int>(from: touch.location(in: self.worldScene.field))
-//            if touchedTC.isAdjacent(to: characterTC) {
-//                let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
-//                if goAtLocationOfTouch == nil {
-//                    let goCoord = GameObjectCoordinate(containerType: .field, coordinate: touchedTC.coord)
-//                    self.worldScene.moveGOMO(from: self, to: goCoord)
-//                    self.resetTouch(touch)
-//                } else {
-//                    self.touchCancelled(touch)
-//                }
-//            } else {
-//                self.touchCancelled(touch)
-//            }
-//        case is CraftCell:
-//            self.touchCancelled(touch)
-//        default: break
-//        }
-//    }
-//
-//    override func touchCancelled(_ touch: UITouch) {
-//        guard self.touchResponderManager.contains(from: touch) else {
-//            return
-//        }
-//        self.resetTouch(touch)
-//        if self.parent == self.worldScene.thirdHand {
-//            self.activate()
-//        }
-//    }
-//
-//    override func resetTouch(_ touch: UITouch) {
-//        self.deactivate()
-//        self.touchResponderManager.removeFirst(from: touch)
-//    }
+        guard eventHandlerManager.handler(of: GameObjectTouchEventHandler.self) == nil else {
+            return
+        }
 
-    // MARK: - interact
+        guard eventHandlerManager.handler(of: GameObjectMoveTouchEventHandler.self) == nil else {
+            return
+        }
+
+        let event = TouchEvent(type: .gameObjectTouchBegan,
+                               touch: touch,
+                               sender: self)
+        EventManager.default.touchBeganEventQueue.enqueue(event)
+    }
+
+    override func touchMoved(_ touch: UITouch) {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
+            return
+        }
+
+        handler.touchMoved()
+    }
+
+    override func touchEnded(_ touch: UITouch) {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
+            return
+        }
+
+        handler.touchEnded()
+        self.resetTouch(touch)
+    }
+
+    override func touchCancelled(_ touch: UITouch) {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
+            return
+        }
+
+        handler.touchEnded()
+        self.resetTouch(touch)
+    }
+
+    override func resetTouch(_ touch: UITouch) {
+        EventManager.default.touchEventHandlerManager.remove(from: touch)
+    }
+
+//     MARK: - interact
 //    func interact() {
 //        switch self.type {
 //        case .pineTree:

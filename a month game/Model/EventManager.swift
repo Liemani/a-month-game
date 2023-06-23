@@ -24,7 +24,7 @@ class EventManager {
     static func free() { self._default = nil }
 
     let touchBeganEventQueue: QueueObject<TouchEvent>
-    let touchBeganEventHandlerManager: TouchEventHandlerManager
+    let touchEventHandlerManager: TouchEventHandlerManager
 
     var shouldUpdate: ShouldUpdate
 
@@ -32,7 +32,7 @@ class EventManager {
 
     init() {
         self.touchBeganEventQueue = QueueObject(size: Constant.touchEventQueueSize)
-        self.touchBeganEventHandlerManager = TouchEventHandlerManager()
+        self.touchEventHandlerManager = TouchEventHandlerManager()
 
         self.shouldUpdate = []
 

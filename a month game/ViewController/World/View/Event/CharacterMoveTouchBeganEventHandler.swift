@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-final class CharacterMoveTouchBeganEventHandler {
+final class CharacterMoveTouchEventHandler {
 
     let touch: UITouch
 
@@ -28,7 +28,7 @@ final class CharacterMoveTouchBeganEventHandler {
 
 }
 
-extension CharacterMoveTouchBeganEventHandler: TouchEventHandler {
+extension CharacterMoveTouchEventHandler: TouchEventHandler {
 
     func touchBegan() {
         self.previousTimestamp = self.touch.timestamp

@@ -15,6 +15,7 @@ struct TileCoordinate {
     var x: Int { get { return self.coord.x } }
     var y: Int { get { return self.coord.y } }
 
+    // MARK: - init
     init() {
         self.coord = Coordinate<Int>()
     }

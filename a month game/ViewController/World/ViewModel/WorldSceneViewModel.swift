@@ -21,7 +21,7 @@ class WorldSceneViewModel {
 
     let character: Character
 
-    var interactableGOTracker: InteractableGOTracker
+    var interactableGOTracker: AccessableGOTracker
 
     // MARK: - computed property
     var fieldGOs: some Sequence<GameObject> { self.chunkContainer.gos }
@@ -54,7 +54,7 @@ class WorldSceneViewModel {
 
         chunkContainer.setUp(chunkCoord: character.data.chunkCoord)
 
-        self.interactableGOTracker = InteractableGOTracker()
+        self.interactableGOTracker = AccessableGOTracker()
         EventManager.default.shouldUpdate.update(with: .interaction)
     }
 

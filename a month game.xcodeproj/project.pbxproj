@@ -12,7 +12,7 @@
 		030261262A3C71FC0050E697 /* LMINode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030261252A3C71FC0050E697 /* LMINode.swift */; };
 		030261282A3C72550050E697 /* TouchEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030261272A3C72550050E697 /* TouchEventHandler.swift */; };
 		0302612A2A3C7B590050E697 /* WorldSceneModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030261292A3C7B590050E697 /* WorldSceneModel.swift */; };
-		0302612C2A3DBA530050E697 /* CharacterMoveTouchBeganEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0302612B2A3DBA530050E697 /* CharacterMoveTouchBeganEventHandler.swift */; };
+		0302612C2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0302612B2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
 		030ABFB62A0C93AA00BAB9B8 /* TileDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */; };
 		030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */; };
@@ -36,7 +36,7 @@
 		033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */; };
 		033D690B2A4146BA005D3CB0 /* TileMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D690A2A4146BA005D3CB0 /* TileMap.swift */; };
 		034637802A233A1400370C71 /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346377F2A233A1400370C71 /* InventoryCell.swift */; };
-		034637822A238D3600370C71 /* InteractableGOTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637812A238D3600370C71 /* InteractableGOTracker.swift */; };
+		034637822A238D3600370C71 /* AccessableGOTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637812A238D3600370C71 /* AccessableGOTracker.swift */; };
 		034637842A23947400370C71 /* CraftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637832A23947400370C71 /* CraftCell.swift */; };
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkContainer.swift */; };
@@ -60,6 +60,7 @@
 		03C65E1A2A446FA10042BF22 /* WorldEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* WorldEvent.swift */; };
 		03C65E1E2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */; };
 		03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */; };
+		03C65E222A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */; };
 		03CE3AE52A3DEBCC00D95152 /* InventoryCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */; };
 		03CE3AEF2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AEE2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift */; };
 		03CE3AF12A3DFEA700D95152 /* LMIPersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AF02A3DFEA700D95152 /* LMIPersistentContainer.swift */; };
@@ -98,7 +99,7 @@
 		030261252A3C71FC0050E697 /* LMINode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMINode.swift; sourceTree = "<group>"; };
 		030261272A3C72550050E697 /* TouchEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchEventHandler.swift; sourceTree = "<group>"; };
 		030261292A3C7B590050E697 /* WorldSceneModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldSceneModel.swift; sourceTree = "<group>"; };
-		0302612B2A3DBA530050E697 /* CharacterMoveTouchBeganEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMoveTouchBeganEventHandler.swift; sourceTree = "<group>"; };
+		0302612B2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMoveTouchEventHandler.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
 		030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileDataSource.swift; sourceTree = "<group>"; };
 		030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
@@ -122,7 +123,7 @@
 		033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkRepository.swift; sourceTree = "<group>"; };
 		033D690A2A4146BA005D3CB0 /* TileMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileMap.swift; sourceTree = "<group>"; };
 		0346377F2A233A1400370C71 /* InventoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
-		034637812A238D3600370C71 /* InteractableGOTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractableGOTracker.swift; sourceTree = "<group>"; };
+		034637812A238D3600370C71 /* AccessableGOTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessableGOTracker.swift; sourceTree = "<group>"; };
 		034637832A23947400370C71 /* CraftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCell.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		036FE5212A429E8D007E66A5 /* ChunkContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainer.swift; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 		03C65E192A446FA10042BF22 /* WorldEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldEvent.swift; sourceTree = "<group>"; };
 		03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterUpdatePositionEventHandler.swift; sourceTree = "<group>"; };
 		03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedEventHandler.swift; sourceTree = "<group>"; };
+		03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectMoveTouchEventHandler.swift; sourceTree = "<group>"; };
 		03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinate.swift; sourceTree = "<group>"; };
 		03CE3AEE2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkCoordinateDataSource.swift; sourceTree = "<group>"; };
 		03CE3AF02A3DFEA700D95152 /* LMIPersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMIPersistentContainer.swift; sourceTree = "<group>"; };
@@ -192,7 +194,6 @@
 			isa = PBXGroup;
 			children = (
 				03DBB1212A3611EF00DA4E73 /* WorldSceneViewController.swift */,
-				03EA27BA2A4417FB007BAF4F /* Event */,
 				031D57602A07C849007EF383 /* View */,
 				033D68FD2A41397D005D3CB0 /* ViewModel */,
 				031D575A2A07C232007EF383 /* Model */,
@@ -248,7 +249,7 @@
 				03EA27B32A43F9AA007BAF4F /* Character.swift */,
 				039EEFCC2A24584F00CB93C6 /* InventoryWindow */,
 				039EEFCD2A24586C00CB93C6 /* CraftWindow */,
-				03EA27B52A4409C4007BAF4F /* EventHandler */,
+				03EA27B52A4409C4007BAF4F /* Event */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -256,8 +257,9 @@
 		033D68FD2A41397D005D3CB0 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				03EA27BA2A4417FB007BAF4F /* Event */,
 				033D68F32A3FF932005D3CB0 /* WorldSceneViewModel.swift */,
-				034637812A238D3600370C71 /* InteractableGOTracker.swift */,
+				034637812A238D3600370C71 /* AccessableGOTracker.swift */,
 				036FE5212A429E8D007E66A5 /* ChunkContainer.swift */,
 				030261232A3C56E40050E697 /* MovingLayer.swift */,
 				036FE51F2A41A73A007E66A5 /* Chunk.swift */,
@@ -442,29 +444,22 @@
 			path = CraftWindow;
 			sourceTree = "<group>";
 		};
-		03C65E182A446F8D0042BF22 /* Handler */ = {
+		03EA27B52A4409C4007BAF4F /* Event */ = {
 			isa = PBXGroup;
 			children = (
-			);
-			path = Handler;
-			sourceTree = "<group>";
-		};
-		03EA27B52A4409C4007BAF4F /* EventHandler */ = {
-			isa = PBXGroup;
-			children = (
+				03EA27B62A4413E0007BAF4F /* TouchEvent.swift */,
 				039EEFCA2A243F6C00CB93C6 /* TouchEventHandlerManager.swift */,
-				0302612B2A3DBA530050E697 /* CharacterMoveTouchBeganEventHandler.swift */,
+				0302612B2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift */,
 				03EA27C12A4438C3007BAF4F /* GameObjectTouchEventHandler.swift */,
+				03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */,
 			);
-			path = EventHandler;
+			path = Event;
 			sourceTree = "<group>";
 		};
 		03EA27BA2A4417FB007BAF4F /* Event */ = {
 			isa = PBXGroup;
 			children = (
-				03EA27B62A4413E0007BAF4F /* TouchEvent.swift */,
 				03C65E192A446FA10042BF22 /* WorldEvent.swift */,
-				03C65E182A446F8D0042BF22 /* Handler */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -581,6 +576,7 @@
 				033D68F42A3FF932005D3CB0 /* WorldSceneViewModel.swift in Sources */,
 				03C65E1E2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift in Sources */,
 				03CE3AEF2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift in Sources */,
+				03C65E222A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift in Sources */,
 				03311DD22A1A3E3F0020ADB5 /* CharacterInventory.swift in Sources */,
 				03DBB1222A3611EF00DA4E73 /* WorldSceneViewController.swift in Sources */,
 				03F7A26A2A3AFA8B0061E030 /* ChunkCoordinate.swift in Sources */,
@@ -597,7 +593,7 @@
 				0302612A2A3C7B590050E697 /* WorldSceneModel.swift in Sources */,
 				03EA27C22A4438C3007BAF4F /* GameObjectTouchEventHandler.swift in Sources */,
 				03F7A2622A39E6420061E030 /* WorldServiceContainer.swift in Sources */,
-				0302612C2A3DBA530050E697 /* CharacterMoveTouchBeganEventHandler.swift in Sources */,
+				0302612C2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift in Sources */,
 				030261242A3C56E40050E697 /* MovingLayer.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,
 				03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */,
@@ -623,7 +619,7 @@
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
 				039037CB2A15FBCD0014A571 /* Extension.swift in Sources */,
 				03CE3AF32A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift in Sources */,
-				034637822A238D3600370C71 /* InteractableGOTracker.swift in Sources */,
+				034637822A238D3600370C71 /* AccessableGOTracker.swift in Sources */,
 				030261282A3C72550050E697 /* TouchEventHandler.swift in Sources */,
 				030261262A3C71FC0050E697 /* LMINode.swift in Sources */,
 				033C9E612A1C2D83000E1D50 /* Inventory.swift in Sources */,

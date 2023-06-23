@@ -116,24 +116,31 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func handleTouchBeganEvent() {
-        let touchBeganEventQueue = EventManager.default.touchBeganEventQueue
-        let touchBeganEventHandlerManager = EventManager.default.touchBeganEventHandlerManager
+        let eventQueue = EventManager.default.touchBeganEventQueue
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
 
-        while let event = touchBeganEventQueue.dequeue() {
+        while let event = eventQueue.dequeue() {
             switch event.type {
             case .characterTouchBegan:
-                let handler = CharacterMoveTouchBeganEventHandler(
+                let handler = CharacterMoveTouchEventHandler(
                     touch: event.touch,
                     worldScene: self,
                     character: self.character)
-                if touchBeganEventHandlerManager.add(handler) {
+                if eventHandlerManager.add(handler) {
                     handler.touchBegan()
                 }
             case .gameObjectTouchBegan:
                 let handler = GameObjectTouchEventHandler(
                     touch: event.touch,
                     go: event.sender as! GameObject)
-                if touchBeganEventHandlerManager.add(handler) {
+                if eventHandlerManager.add(handler) {
+                    handler.touchBegan()
+                }
+            case .gameObjectMoveTouchBegan:
+                let handler = GameObjectMoveTouchEventHandler(
+                    touch: event.touch,
+                    go: event.sender as! GameObject)
+                if eventHandlerManager.add(handler) {
                     handler.touchBegan()
                 }
             }
@@ -163,17 +170,18 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-        EventManager.default.touchBeganEventHandlerManager.cancelAll(of: CharacterMoveTouchBeganEventHandler.self)
+        EventManager.default.touchEventHandlerManager.cancelAll(of: CharacterMoveTouchEventHandler.self)
 
-        let event = TouchEvent(
-            type: .characterTouchBegan,
-            touch: touch,
-            sender: self)
+        let event = TouchEvent(type: .characterTouchBegan,
+                               touch: touch,
+                               sender: self)
         EventManager.default.touchBeganEventQueue.enqueue(event)
     }
 
     func touchMoved(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) as! CharacterMoveTouchBeganEventHandler? else {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
             return
         }
 
@@ -181,7 +189,9 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) else {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
             return
         }
 
@@ -190,7 +200,9 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        guard let handler = EventManager.default.touchBeganEventHandlerManager.handler(from: touch) else {
+        let eventHandlerManager = EventManager.default.touchEventHandlerManager
+
+        guard let handler = eventHandlerManager.handler(from: touch) else {
             return
         }
 
@@ -199,7 +211,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func resetTouch(_ touch: UITouch) {
-        EventManager.default.touchBeganEventHandlerManager.remove(from: touch)
+        EventManager.default.touchEventHandlerManager.remove(from: touch)
     }
 
     // MARK: - override

@@ -463,6 +463,11 @@ ChunkContainer::update() 에서 go.removeFromParent() 를 부모가 없는 node 
 한 함수에서 하는 일은 그 invoker 가 주체적인 역할을 하는 작업이다
 막 잡다하게 다른 객체가 주체인 일을 하지 말자
 
+CharacterMoveTouchEventHandler
+GameObjectTouchEventHandler
+GameObjectMoveTouchEventHandler
+CraftObjectTouchEventHandler
+CraftObjectMoveTouchEventHandler
 
 crash when exit, by EventManager.default! at WorldScene.touchbegan()
 interac zone 을 deprecated 로 옮겼는데, 아주 삭제는 아니고, 개념은 있어야 하나? 생각해보기
