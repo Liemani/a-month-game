@@ -458,16 +458,29 @@ character 안에 chunkCoord 를 넣는다
     없으니 너무 불편하다
     그리고 chunkContainer 의 midCoord 를 없애고 매 번 입력받는 방식으로 변경한다
 
-ChunkContainer::update() 에서 go.removeFromParent() 를 부모가 없는 node 에 하면 어떻게 될까?
-    (새로운 노드를 추가하는 경우)
+업데이트 리스트를 둘까?
+업데이트 리스트를 둔다고 하더라도 매 번 리스트 입출력 이벤트를 호출해야 한다
+매번 드나들 때마다 액티브를 변경하는 것이 아니라 마지막에 몰아서 하는게 맞다
+근대 옮기고 있는 오브젝트는 어떻게 제외하지?
+캐릭터 위로 옮겨두는게 가장 무난하다
+그리고 필요하면 다시 원래 chunk 로 돌려놓는다
+
+세상의 끝을 설정하긴 해야 한다
+
 한 함수에서 하는 일은 그 invoker 가 주체적인 역할을 하는 작업이다
 막 잡다하게 다른 객체가 주체인 일을 하지 말자
 
-CharacterMoveTouchEventHandler
-GameObjectTouchEventHandler
-GameObjectMoveTouchEventHandler
-CraftObjectTouchEventHandler
-CraftObjectMoveTouchEventHandler
+데이터를 분산적으로 갖지 않는다
+    캐릭터의 위치를 여러 객체가 갖지 않는다
+
+touch event handler
+    CharacterMoveTouchEventHandler
+    GameObjectTouchEventHandler
+    GameObjectMoveTouchEventHandler
+    CraftObjectTouchEventHandler
+    CraftObjectMoveTouchEventHandler
+
+implement inventory
 
 crash when exit, by EventManager.default! at WorldScene.touchbegan()
 interac zone 을 deprecated 로 옮겼는데, 아주 삭제는 아니고, 개념은 있어야 하나? 생각해보기
@@ -680,6 +693,9 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+ChunkContainer::update() 에서 go.removeFromParent() 를 부모가 없는 node 에 하면 어떻게 될까?
+    (새로운 노드를 추가하는 경우)
+    아무 일도 없다
 model 을 인자로 다른 controller 에게 전달하도록 하기
 controller 에 따라 파일 hierarchy 수정
 캐릭터 노드를 field 위로 이동

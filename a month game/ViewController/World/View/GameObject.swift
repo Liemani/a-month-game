@@ -60,7 +60,7 @@ class GameObject: LMISpriteNode {
         let size = Constant.defaultNodeSize
         super.init(texture: texture, color: .white, size: size)
 
-        if let chunkCoord = goData.chunkCoord {
+        if goData.chunkCoord != nil {
             self.setUpPosition()
         }
 
@@ -89,26 +89,22 @@ class GameObject: LMISpriteNode {
 
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard eventHandlerManager.handler(of: GameObjectTouchEventHandler.self) == nil else {
+        guard TouchEventHandlerManager.default.handler(of: GameObjectTouchEventHandler.self) == nil else {
             return
         }
 
-        guard eventHandlerManager.handler(of: GameObjectMoveTouchEventHandler.self) == nil else {
+        guard TouchEventHandlerManager.default.handler(of: GameObjectMoveTouchEventHandler.self) == nil else {
             return
         }
 
-        let event = TouchEvent(type: .gameObjectTouchBegan,
-                               touch: touch,
-                               sender: self)
-        EventManager.default.touchBeganEventQueue.enqueue(event)
+        let event = TouchBeganEvent(type: .gameObject,
+                                    touch: touch,
+                                    sender: self)
+        TouchBeganEventManager.default.enqueue(event)
     }
 
     override func touchMoved(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -116,9 +112,7 @@ class GameObject: LMISpriteNode {
     }
 
     override func touchEnded(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -127,9 +121,7 @@ class GameObject: LMISpriteNode {
     }
 
     override func touchCancelled(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -138,7 +130,7 @@ class GameObject: LMISpriteNode {
     }
 
     override func resetTouch(_ touch: UITouch) {
-        EventManager.default.touchEventHandlerManager.remove(from: touch)
+        TouchEventHandlerManager.default.remove(from: touch)
     }
 
 //     MARK: - interact

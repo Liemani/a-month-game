@@ -21,12 +21,18 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 
     func touchBegan() {
         guard self.go.type.isPickable else {
-            EventManager.default.touchEventHandlerManager.remove(from: touch)
+            TouchEventHandlerManager.default.remove(from: touch)
             return
         }
 
         self.go.activate()
+
         self.touchMoved()
+
+        let event = WorldEvent(type: .accessableGOTrackerRemove,
+                               udata: self.touch,
+                               sender: self.go)
+        WorldEventManager.default.enqueue(event)
     }
 
     func touchMoved() {
@@ -55,7 +61,12 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 
     func touchEnded() {
         self.go.deactivate()
-        print("if touch is puttable put else cancel")
+
+        TouchEventHandlerManager.default.remove(from: self.touch)
+        let event = WorldEvent(type: .gameObjectMoveTouchEnded,
+                udata: self.touch,
+                sender: self.go)
+        WorldEventManager.default.enqueue(event)
 
 //        guard self.touchResponderManager.contains(from: touch) else {
 //            return
@@ -83,7 +94,7 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 //            let characterTC = self.worldScene.worldViewController.character.tileCoord
 //            let touchedTC = Coordinate<Int>(from: touch.location(in: self.worldScene.field))
 //            if touchedTC.isAdjacent(to: characterTC) {
-//                let goAtLocationOfTouch = self.worldScene.interactionZone.gameObjectAtLocation(of: touch)
+//                let goAtLocationOfTouch = self.worldScene.interactionZone.goAtLocation(of: touch)
 //                if goAtLocationOfTouch == nil {
 //                    let goCoord = GameObjectCoordinate(containerType: .field, coordinate: touchedTC.coord)
 //                    self.worldScene.moveGOMO(from: self, to: goCoord)
@@ -101,9 +112,11 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
     }
 
     func touchCancelled() {
-        self.go.deactivate()
         self.go.setUpPosition()
-        print("move go to it's original position if fail drop")
+
+        print("move go to it's original position if fail drop current tile")
+
+        self.go.deactivate()
     }
 
 }

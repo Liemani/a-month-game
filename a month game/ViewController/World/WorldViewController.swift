@@ -9,9 +9,9 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
+class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    var viewModel: WorldSceneViewModel!
+    var viewModel: WorldViewModel!
 
     /// initialize task without relation to view
     required init?(coder: NSCoder) {
@@ -34,7 +34,7 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
 
-        let viewModel = WorldSceneViewModel(
+        let viewModel = WorldViewModel(
             movingLayer: scene.movingLayer,
             chunkContainer: scene.movingLayer.chunkContainer,
             characterInv: scene.characterInv,
@@ -76,18 +76,21 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - transition
     @objc
     func requestPresentPortalSceneViewController() {
-        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
+        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
         self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
 
         WorldServiceContainer.free()
-        EventManager.free()
+        TouchBeganEventManager.free()
+        TouchEventHandlerManager.free()
+        WorldEventManager.free()
+        WorldUpdateManager.free()
     }
 
 }
 
 // MARK: debug
 #if DEBUG
-extension WorldSceneViewController {
+extension WorldViewController {
 
     private func debugCode() {
         let gos = self.viewModel.fieldGOs

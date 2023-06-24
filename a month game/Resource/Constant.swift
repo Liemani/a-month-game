@@ -116,9 +116,9 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let tileCountInChunkSide: Int = 16
-    static let tileMapSide: Int = tileCountInChunkSide * 3
-    static let chunkWidth: Double = tileWidth * Double(tileCountInChunkSide)
+    static let tileCountOfChunkSide: Int = 16
+    static let tileMapSide: Int = tileCountOfChunkSide * 3
+    static let chunkWidth: Double = tileWidth * Double(tileCountOfChunkSide)
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
@@ -136,8 +136,8 @@ struct Constant {
     }
 
     static let initialNextID = 1
-    static let touchEventQueueSize = 10
-    static let sceneEventQueueSize = 100
+    static let touchBeganEventQueueSize = 10
+    static let worldEventQueueSize = 100
 
     static let accessableGOColorBlendFactor = 0.5
 

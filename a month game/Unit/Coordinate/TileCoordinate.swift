@@ -25,7 +25,7 @@ struct TileCoordinate {
         let x = (Int(floor(point.x)) - (point.x < 0.0 ? (tileSide - 1) : 0)) / tileSide
         let y = (Int(floor(point.y)) - (point.y < 0.0 ? (tileSide - 1) : 0)) / tileSide
         let fieldCoord = Coordinate(x, y)
-        self.coord = fieldCoord + Constant.tileCountInChunkSide / 2
+        self.coord = fieldCoord + Constant.tileCountOfChunkSide / 2
     }
 
     init(_ coord: Coordinate<Int>) {
@@ -37,7 +37,7 @@ struct TileCoordinate {
     }
 
     var fieldPoint: CGPoint {
-        let fieldCoord = self.coord.cgPoint + 0.5 - Double(Constant.tileCountInChunkSide / 2)
+        let fieldCoord = self.coord.cgPoint + 0.5 - Double(Constant.tileCountOfChunkSide / 2)
         return fieldCoord * Constant.tileWidth
     }
 

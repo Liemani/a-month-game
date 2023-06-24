@@ -27,7 +27,7 @@ extension Array {
 
 }
 
-#warning("move to GameObject")
+// TODO: move to GameObject
 //// MARK: - GameObjectMO
 //extension GameObjectMO {
 //
@@ -85,14 +85,13 @@ extension SKNode {
         self.position = touchPoint
     }
 
-    func child(at touch: UITouch) -> SKNode? {
-        let touchLocation = touch.location(in: self)
+    func childAtLocation(of touch: UITouch) -> SKNode? {
+        let touchPoint = touch.location(in: self)
         for child in self.children {
-            if child.contains(touchLocation) {
+            if child.contains(touchPoint) {
                 return child
             }
         }
-
         return nil
     }
 

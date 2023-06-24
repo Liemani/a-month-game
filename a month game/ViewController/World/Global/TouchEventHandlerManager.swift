@@ -1,14 +1,31 @@
 //
-//  TouchManager.swift
+//  TouchEventHandlerManager.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/05/29.
+//  Created by 박정훈 on 2023/06/24.
 //
 
 import Foundation
 import SpriteKit
 
+protocol TouchEventHandler {
+
+    var touch: UITouch { get }
+
+    func touchBegan()
+    func touchMoved()
+    func touchEnded()
+    func touchCancelled()
+
+}
+
 class TouchEventHandlerManager {
+
+    private static var _default: TouchEventHandlerManager?
+    static var `default`: TouchEventHandlerManager { self._default! }
+
+    static func set() { self._default = TouchEventHandlerManager() }
+    static func free() { self._default = nil }
 
     private var handlers: [TouchEventHandler?]
 
@@ -65,15 +82,15 @@ class TouchEventHandlerManager {
 
     func cancelAll(of handlerType: TouchEventHandler.Type) {
         if let handler = self.handlers[0],
-           type(of: handler) == handlerType {
-            handler.touchCancelled()
-            self.handlers[0] = nil
-        }
+            type(of: handler) == handlerType {
+                handler.touchCancelled()
+                    self.handlers[0] = nil
+            }
         if let handler = self.handlers[1],
-           type(of: handler) == handlerType {
-            handler.touchCancelled()
-            self.handlers[1] = nil
-        }
+            type(of: handler) == handlerType {
+                handler.touchCancelled()
+                    self.handlers[1] = nil
+            }
     }
 
     func cancelAll() {

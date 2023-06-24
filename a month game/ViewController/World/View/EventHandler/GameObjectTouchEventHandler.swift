@@ -32,15 +32,20 @@ extension GameObjectTouchEventHandler: TouchEventHandler {
             return
         }
 
-        EventManager.default.touchEventHandlerManager.remove(from: self.touch)
-        let event = TouchEvent(type: .gameObjectMoveTouchBegan,
+        print("if enough long, activate long touch and cancel self")
+
+        self.touchCancelled()
+
+        TouchEventHandlerManager.default.remove(from: self.touch)
+        let event = TouchBeganEvent(type: .gameObjectMove,
                                touch: touch,
                                sender: self.go)
-        EventManager.default.touchBeganEventQueue.enqueue(event)
-        self.touchCancelled()
+        TouchBeganEventManager.default.enqueue(event)
     }
 
     func touchEnded() {
+        print("interact world event")
+
         self.go.deactivate()
     }
 

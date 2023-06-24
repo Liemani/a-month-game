@@ -8,19 +8,17 @@
 import Foundation
 import SpriteKit
 
-protocol Inventory: SKNode, Sequence {
+protocol Inventory<T, U>: Sequecen {
 
-    /// Called to check whether GOMO.goCoord is valid
-    /// The goCoord generated inside of app is considered always valid
-    /// - Returns whether the coordinate is valid or not. Don't consider whether preceding GO exist or not
-    func isValid(index: Int) -> Bool
+    func contains(_ go: T) -> Bool
+    func isValid(_ coord: U) -> Bool
 
-    func add(_ go: GameObject, to index: Int)
+    func element(at coord: U) -> T?
+    func coord(of go: T) -> U?
 
-    func move(_ go: GameObject, to index: Int)
-
-    func goAtLocation(of touch: UITouch) -> GameObject?
-
-    func contains(_ go: GameObject) -> Bool
+    // MARK: edit
+    func add(_ go: T, to coord: U)
+    func move(_ go: T, from coord: U, to coord: U)
+    func remove(_ go: T, from coord: U)
 
 }

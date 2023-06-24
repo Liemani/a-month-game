@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class WorldSceneViewModel {
+class WorldViewModel {
 
     let movingLayer: MovingLayer
 
@@ -21,7 +21,7 @@ class WorldSceneViewModel {
 
     let character: Character
 
-    var interactableGOTracker: AccessableGOTracker
+    var accessableGOTracker: AccessableGOTracker
 
     // MARK: - computed property
     var fieldGOs: some Sequence<GameObject> { self.chunkContainer.gos }
@@ -54,29 +54,44 @@ class WorldSceneViewModel {
 
         chunkContainer.setUp(chunkCoord: character.data.chunkCoord)
 
-        self.interactableGOTracker = AccessableGOTracker()
-        EventManager.default.shouldUpdate.update(with: .interaction)
+        self.accessableGOTracker = AccessableGOTracker()
+        WorldUpdateManager.default.update(with: .interaction)
     }
 
     // MARK: - update
     func update(_ timeInterval: TimeInterval) {
-//        self.handleSceneEvent()
+        self.handleWorldEvent()
 
         self.updateCharacter(timeInterval)
-        if EventManager.default.shouldUpdate.contains(.interaction) {
-            self.interactableGOTracker.updateWhole(character: self.character,
+        if WorldUpdateManager.default.contains(.interaction) {
+            self.accessableGOTracker.updateWhole(character: self.character,
                                                  gos: self.fieldGOs)
         }
     }
 
-//    func handleSceneEvent() {
-//        var handler: SceneEventHandler
-//        while let event = EventManager.default.sceneEventQueue.dequeue() {
-//            switch event.type {
-//            }
-//            handler.handle()
-//        }
-//    }
+    func handleWorldEvent() {
+        while let event = WorldEventManager.default.dequeue() {
+            switch event.type {
+            case .accessableGOTrackerAdd:
+                self.accessableGOTracker.add(event.sender as! GameObject)
+            case .accessableGOTrackerRemove:
+                self.accessableGOTracker.remove(event.sender as! GameObject)
+            case .gameObjectMoveTouchEnded:
+                let handler = GameObjectMoveTouchEndedWorldEventHandler(
+                    touch: event.udata as! UITouch,
+                    go: event.sender as! GameObject,
+                    chunkContainer: self.chunkContainer)
+                handler.handle()
+            case .gameObjectRemoveFromChunk:
+            case .gameObjectAddToCharacter:
+                (event.sender as! GameObject).move(toParent: self.character)
+            case .gameObjectAddToChunk:
+                    let go = (event.sender as! GameObject)
+                    self.chunkContainer.add(go)
+            }
+        }
+    }
+
 
     func updateCharacter(_ timeInterval: TimeInterval) {
         self.applyCharacterVelocity(timeInterval)
@@ -84,7 +99,7 @@ class WorldSceneViewModel {
         self.resolveCharacterCollision()
 
         if self.hasMovedToAnotherTile {
-            EventManager.default.shouldUpdate.update(with: .interaction)
+            WorldUpdateManager.default.update(with: .interaction)
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)

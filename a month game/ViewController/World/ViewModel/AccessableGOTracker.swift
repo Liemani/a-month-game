@@ -38,6 +38,16 @@ class AccessableGOTracker {
         }
     }
 
+    func add(_ go: GameObject) {
+        self.dict[go.id] = go
+        self.activate(go)
+    }
+
+    func remove(_ go: GameObject) {
+        self.deactivate(go)
+        self.dict[go.id] = nil
+    }
+
     // MARK: - activate
     func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
@@ -69,8 +79,8 @@ class AccessableGOTracker {
             }
         }
 
-        EventManager.default.shouldUpdate.update(with: .craftWindow)
-        EventManager.default.shouldUpdate.subtract(.interaction)
+        WorldUpdateManager.default.update(with: .craftWindow)
+        WorldUpdateManager.default.subtract(.interaction)
     }
 
     private func reset() {

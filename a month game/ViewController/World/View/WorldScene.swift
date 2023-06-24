@@ -10,8 +10,8 @@ import GameplayKit
 
 class WorldScene: SKScene, TouchResponder {
 
-    var worldViewController: WorldSceneViewController {
-        return self.view!.next! as! WorldSceneViewController
+    var worldViewController: WorldViewController {
+        return self.view!.next! as! WorldViewController
     }
 
     // MARK: view
@@ -29,6 +29,7 @@ class WorldScene: SKScene, TouchResponder {
     var munuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
 
+    // MARK: - init
     /// initialize with size
     override init(size: CGSize) {
         super.init(size: size)
@@ -42,7 +43,6 @@ class WorldScene: SKScene, TouchResponder {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - init scene layer
     func initSceneLayer() {
         let worldLayer = SKNode()
         worldLayer.xScale = Constant.sceneScale
@@ -116,31 +116,28 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func handleTouchBeganEvent() {
-        let eventQueue = EventManager.default.touchBeganEventQueue
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        while let event = eventQueue.dequeue() {
+        while let event = TouchBeganEventManager.default.dequeue() {
             switch event.type {
-            case .characterTouchBegan:
+            case .character:
                 let handler = CharacterMoveTouchEventHandler(
                     touch: event.touch,
                     worldScene: self,
                     character: self.character)
-                if eventHandlerManager.add(handler) {
+                if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
-            case .gameObjectTouchBegan:
+            case .gameObject:
                 let handler = GameObjectTouchEventHandler(
                     touch: event.touch,
                     go: event.sender as! GameObject)
-                if eventHandlerManager.add(handler) {
+                if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
-            case .gameObjectMoveTouchBegan:
+            case .gameObjectMove:
                 let handler = GameObjectMoveTouchEventHandler(
                     touch: event.touch,
                     go: event.sender as! GameObject)
-                if eventHandlerManager.add(handler) {
+                if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
             }
@@ -170,18 +167,16 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-        EventManager.default.touchEventHandlerManager.cancelAll(of: CharacterMoveTouchEventHandler.self)
+        TouchEventHandlerManager.default.cancelAll(of: CharacterMoveTouchEventHandler.self)
 
-        let event = TouchEvent(type: .characterTouchBegan,
-                               touch: touch,
-                               sender: self)
-        EventManager.default.touchBeganEventQueue.enqueue(event)
+        let event = TouchBeganEvent(type: .character,
+                                    touch: touch,
+                                    sender: self)
+        TouchBeganEventManager.default.enqueue(event)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -189,9 +184,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -200,9 +193,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let eventHandlerManager = EventManager.default.touchEventHandlerManager
-
-        guard let handler = eventHandlerManager.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
             return
         }
 
@@ -211,7 +202,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func resetTouch(_ touch: UITouch) {
-        EventManager.default.touchEventHandlerManager.remove(from: touch)
+        TouchEventHandlerManager.default.remove(from: touch)
     }
 
     // MARK: - override

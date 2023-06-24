@@ -27,8 +27,6 @@ extension Chunk {
 
 class Chunk: LMINode {
 
-    var gos: [GameObject] { self.children as! [GameObject] }
-
     // MARK: - init
     override init() {
         super.init()
@@ -48,6 +46,50 @@ class Chunk: LMINode {
             let go = GameObject(from: goData)
             self.addChild(go)
         }
+    }
+
+}
+
+extension Chunk: Inventory<GameObject, Coordinate<Int>> {
+
+    func contains(_ go: GameObject) -> Bool {
+        for childGO in self.child {
+            if childGO == go {
+                return true
+            }
+        }
+        return false
+    }
+
+    func isValid(_ coord: Coordinate<Int>) -> Bool {
+        let tileCountOfChunkSide = Constant.tileCountOfChunkSide
+        return 0 <= coord.x && coord.x < tileCountOfChunkSide
+            && 0 <= coord.y && coord.y < tileCountOfChunkSide
+    }
+
+    func element(at coord: Coordinate<Int>) -> GameObject? {
+        for go in self {
+            go.coord == coord
+        }
+    }
+
+    func coord(of go: GameObject) -> Coordinate<Int>? {
+    }
+
+    // MARK: edit
+    func add(_ go: GameObject, to coord: Coordinate<Int>) {
+    }
+
+    func move(_ go: GameObject,
+            from coord: Coordinate<Int>,
+            to coord: Coordinate<Int>) {
+    }
+
+    func remove(_ go: GameObject, from coord: Coordinate<Int>) {
+    }
+
+    func makeIterator() -> [GameObject] {
+        return self.children as! [GameObject]
     }
 
 }

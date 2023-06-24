@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 class ChunkContainer: LMINode {
 
@@ -66,15 +67,45 @@ class ChunkContainer: LMINode {
     }
 
     // MARK: - game object
-    func update(_ go: GameObject, to currDirection: Direction8) {
-        go.removeFromParent()
-        let currChunk = self.chunks[currDirection]
-        currChunk.addChild(go)
+    func chunk(of go: GameObject, characterChunkCoord: ChunkCoord) -> Chunk? {
+        guard let goChunkCoord = go.chunkCoord else {
+            return nil
+        }
+
+        let midChunkCoord = characterChunkCoord
+        midChunkCoord.building = 0
+
+        guard let direction = midChunkCoord.chunkDirection(to: goChunkCoord) else {
+            return nil
+        }
+
+        return self.chunks[direction]
     }
 
-    func remove(_ go: GameObject) {
-        go.removeFromParent()
+    func add(of go: GameObject, characterChunkCoord: ChunkCoord) {
+        let chunk = self.chunk(of: go,
+                characterChunkCoord: self.character.chunkCoord)
+        chunk.add(go)
     }
+
+    func goAtLocation(of touch: UITouch) -> GameObject? {
+        for index in 0..<9 {
+            if let go = self.chunks[index].childAtLocation(of: touch) as! GameObject? {
+                return go
+            }
+        }
+        return nil
+    }
+
+//    func update(_ go: GameObject, to currDirection: Direction8) {
+//        go.removeFromParent()
+//        let currChunk = self.chunks[currDirection]
+//        currChunk.addChild(go)
+//    }
+
+//      func remove(_ go: GameObject) {
+//          go.removeFromParent()
+//      }
 
     // MARK: - private
     private func shift(direction: Direction4) {
