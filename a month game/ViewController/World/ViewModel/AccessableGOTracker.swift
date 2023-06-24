@@ -67,7 +67,7 @@ class AccessableGOTracker {
     }
 
     // MARK: - update
-    func updateWhole(character: Character, gos: any Sequence<GameObject>) {
+    func updateWhole(character: Character, gos: any Sequence) {
         self.reset()
 
         for go in gos {

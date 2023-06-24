@@ -23,8 +23,15 @@ class GameObjectMoveTouchEndedWorldEventHandler {
     }
 
     func handle() {
-        if let touchedGo = self.chunkContainer.goAtLocation(of: touch) {
+        if self.chunkContainer.itemAtLocation(of: touch) == nil {
             self.go.setUpPosition()
+            self.go.removeFromParent()
+            print("if in field put it there")
+            let event = WorldEvent(type: .gameObjectAddToChunk,
+                                    udata: nil,
+                                    sender: self.go)
+            WorldEventManager.default.enqueue(event)
+            print("else to inventory")
             return
         }
 
@@ -34,6 +41,12 @@ class GameObjectMoveTouchEndedWorldEventHandler {
 //                      go.put(tileCoord)
 //                  }
 //          }
+        self.go.removeFromParent()
+        self.go.setUpPosition()
+        let event = WorldEvent(type: .gameObjectAddToChunk,
+                               udata: nil,
+                               sender: self.go)
+        WorldEventManager.default.enqueue(event)
 
         print("if touch is puttable put else cancel")
     }

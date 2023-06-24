@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 // MARK: usage extension
 #if DEBUG
@@ -70,6 +71,16 @@ extension Chunk: Inventory {
         for go in self {
             let go = go as! GameObject
             if go.chunkCoord!.street.building == coord.street.building {
+                return go
+            }
+        }
+        return nil
+    }
+
+    func itemAtLocation(of touch: UITouch) -> GameObject? {
+        for go in self {
+            let go = go as! GameObject
+            if go.isAtLocation(of: touch) {
                 return go
             }
         }

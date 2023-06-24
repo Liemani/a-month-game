@@ -34,11 +34,12 @@ class ChunkContainer: LMINode {
         for direction in Direction9.allCases {
             let chunk = Chunk()
 
-            self.updateChunk(direction: direction)
             chunk.position = direction.coordOfAChunk.cgPoint * Constant.tileWidth
 
             self.addChild(chunk)
             self.chunks.append(chunk)
+
+            self.updateChunk(direction: direction)
         }
     }
 
@@ -194,6 +195,16 @@ extension ChunkContainer: Inventory {
         return go
     }
 
+    func itemAtLocation(of touch: UITouch) -> GameObject? {
+        let touchPoint = touch.location(in: self)
+        let tileCoord = TileCoordinate(from: touchPoint)
+        let directionCoord = tileCoord.coord
+        let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
+        let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
+        let go = chunk.itemAtLocation(of: touch)
+        return go
+    }
+
     // MARK: edit
     func add(_ item: GameObject) {
         guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
@@ -210,10 +221,7 @@ extension ChunkContainer: Inventory {
     }
 
     func remove(_ item: GameObject) {
-        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
-            fatalError("game object is out of chunk container")
-        }
-        self.chunks[direction].remove(item)
+        item.removeFromParent()
     }
 
     private func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {

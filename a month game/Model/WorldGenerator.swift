@@ -43,7 +43,7 @@ final class WorldGenerator {
     private func new(type: GameObjectType, x: Int, y: Int) {
         let id = WorldServiceContainer.default.idGeneratorServ.generate()
         let goMO = WorldServiceContainer.default.goRepo.new(id: id, type: type)
-        let chunkCoord = ChunkCoordinate(from: Coordinate(x, y))
+        let chunkCoord = ChunkCoordinate(x, y)
         goMO.update(to: chunkCoord)
     }
 

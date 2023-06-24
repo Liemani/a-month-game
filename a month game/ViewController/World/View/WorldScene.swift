@@ -52,13 +52,13 @@ class WorldScene: SKScene, TouchResponder {
         self.addChild(worldLayer)
 
         // MARK: moving layer
-        let movingLayer = MovingLayer()
-        worldLayer.addChild(movingLayer)
-        self.movingLayer = movingLayer
-
         let character = Character()
         worldLayer.addChild(character)
         self.character = character
+
+        let movingLayer = MovingLayer(character: character)
+        worldLayer.addChild(movingLayer)
+        self.movingLayer = movingLayer
 
         // MARK: fixed layer
         let fixedLayer = SKNode()

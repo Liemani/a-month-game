@@ -41,16 +41,13 @@ class GameObject: LMISpriteNode {
     var id: Int { self.data.id }
     var type: GameObjectType { self.data.type }
 
-    var chunkCoord: ChunkCoordinate? { self.data.chunkCoord! }
+    var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
 
     func setUpPosition() {
-        let buildingLocation = self.chunkCoord!.building
-        let x = Int(buildingLocation >> 4)
-        let y = Int(buildingLocation & 0x0f)
-        self.position = TileCoordinate(x, y).fieldPoint
+        self.position = TileCoordinate(self.buildingCoord!).fieldPoint
     }
 
-    var buildingLocation: UInt8? { self.data.chunkCoord?.building }
+    var buildingCoord: Coordinate<Int>? { self.chunkCoord?.street.building.coord }
 
     // MARK: - init
     init(from goData: GameObjectData) {

@@ -93,8 +93,8 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 extension WorldViewController {
 
     private func debugCode() {
-        let gos = self.viewModel.fieldGOs
-        for go in gos {
+        for go in self.viewModel.chunkContainer {
+            let go = go as! GameObject
             let data = go.data
             guard let chunkCoord = data.chunkCoord else { continue }
 

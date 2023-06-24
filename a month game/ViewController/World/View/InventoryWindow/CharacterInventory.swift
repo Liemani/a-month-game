@@ -79,41 +79,56 @@ class CharacterInventory: LMISpriteNode {
 
 extension CharacterInventory: Inventory {
 
-    func isValid(index: Int) -> Bool {
-        guard 0 <= index && index < self.cellCount else {
-            return false
-        }
-        return true
-    }
+    func isValid(_ coord: InventoryCoordinate) -> Bool { false }
+    func contains(_ item: GameObject) -> Bool { false }
 
-    func add(_ go: GameObject, to index: Int) {
-        self.cells[index].addGO(go)
-    }
+    func item(at coord: InventoryCoordinate) -> GameObject? { return nil }
+    func itemAtLocation(of touch: UITouch) -> GameObject? { return nil }
 
-    func move(_ go: GameObject, to index: Int) {
-        self.cells[index].moveGO(go)
-    }
+    // MARK: edit
+    func add(_ item: GameObject) { }
+    func move(_ item: GameObject) { }
+    func remove(_ item: GameObject) { }
 
-    func goAtLocation(of touch: UITouch) -> GameObject? {
-        for cell in self.cells {
-            if let go = cell.children.first as! GameObject?
-                , go.isAtLocation(of: touch) {
-                return go
-            }
-        }
-        return nil
-    }
-
-    func contains(_ go: GameObject) -> Bool {
-        if let cell = go.parent, let container = cell.parent {
-            return container == self
-        }
-        return false
-    }
-
-    func makeIterator() -> some IteratorProtocol<GameObject> {
+    func makeIterator() -> some IteratorProtocol {
         return CharacterInventoryIterator(self)
     }
+
+//    func isValid(index: Int) -> Bool {
+//        guard 0 <= index && index < self.cellCount else {
+//            return false
+//        }
+//        return true
+//    }
+//
+//    func add(_ go: GameObject, to index: Int) {
+//        self.cells[index].addGO(go)
+//    }
+//
+//    func move(_ go: GameObject, to index: Int) {
+//        self.cells[index].moveGO(go)
+//    }
+//
+//    func goAtLocation(of touch: UITouch) -> GameObject? {
+//        for cell in self.cells {
+//            if let go = cell.children.first as! GameObject?
+//                , go.isAtLocation(of: touch) {
+//                return go
+//            }
+//        }
+//        return nil
+//    }
+//
+//    func contains(_ go: GameObject) -> Bool {
+//        if let cell = go.parent, let container = cell.parent {
+//            return container == self
+//        }
+//        return false
+//    }
+//
+//    func makeIterator() -> some IteratorProtocol<GameObject> {
+//        return CharacterInventoryIterator(self)
+//    }
 
 }
 

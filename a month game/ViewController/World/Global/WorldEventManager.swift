@@ -9,17 +9,13 @@ import Foundation
 
 enum WorldEventType {
     
+    case gameObjectMoveTouchEnded
+    case gameObjectAddToCharacter
+    case gameObjectAddToChunk
     case accessableGOTrackerAdd
     case accessableGOTrackerRemove
-    case gameObjectMoveTouchEnded
-    case gameObjectMoveToCharacter
-    case gameObjectMoveToChunk
 
 }
-
-//      case GameObjectRemoveFromChunkWorldEventHandler
-//      case GameObjectMoveToCharacterWorldEventHandler
-//      case GameObjectMoveToChunkWorldEventHandler
 
 class WorldEvent {
 

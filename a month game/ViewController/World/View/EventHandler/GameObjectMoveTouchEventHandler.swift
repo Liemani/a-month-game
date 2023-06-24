@@ -29,10 +29,16 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 
         self.touchMoved()
 
-        let event = WorldEvent(type: .accessableGOTrackerRemove,
-                               udata: self.touch,
+        self.go.removeFromParent()
+        let event1 = WorldEvent(type: .gameObjectAddToCharacter,
+                               udata: nil,
                                sender: self.go)
-        WorldEventManager.default.enqueue(event)
+        WorldEventManager.default.enqueue(event1)
+
+        let event2 = WorldEvent(type: .accessableGOTrackerRemove,
+                               udata: nil,
+                               sender: self.go)
+        WorldEventManager.default.enqueue(event2)
     }
 
     func touchMoved() {
@@ -64,8 +70,8 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 
         TouchEventHandlerManager.default.remove(from: self.touch)
         let event = WorldEvent(type: .gameObjectMoveTouchEnded,
-                udata: self.touch,
-                sender: self.go)
+                               udata: self.touch,
+                               sender: self.go)
         WorldEventManager.default.enqueue(event)
 
 //        guard self.touchResponderManager.contains(from: touch) else {
@@ -113,6 +119,12 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
 
     func touchCancelled() {
         self.go.setUpPosition()
+
+        self.go.removeFromParent()
+        let event = WorldEvent(type: .gameObjectAddToChunk,
+                               udata: nil,
+                               sender: self.go)
+        WorldEventManager.default.enqueue(event)
 
         print("move go to it's original position if fail drop current tile")
 

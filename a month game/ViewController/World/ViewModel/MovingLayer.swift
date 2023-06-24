@@ -13,13 +13,13 @@ class MovingLayer: LMINode {
     var chunkContainer: ChunkContainer!
 
     // MARK: - init
-    override init() {
+    init(character: Character) {
         super.init()
 
         self.zPosition = Constant.ZPosition.movingLayer
 
         // MARK: chunkContainer
-        let chunkContainer = ChunkContainer()
+        let chunkContainer = ChunkContainer(character: character)
         self.addChild(chunkContainer)
         self.chunkContainer = chunkContainer
 

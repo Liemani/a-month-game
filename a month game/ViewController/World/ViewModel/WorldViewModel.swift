@@ -23,9 +23,6 @@ class WorldViewModel {
 
     var accessableGOTracker: AccessableGOTracker
 
-    // MARK: - computed property
-    var fieldGOs: some Sequence<GameObject> { self.chunkContainer.gos }
-
 //    var interactableGOs: [GameObject] {
 //        var interactableGOs = [GameObjectNode]()
 //
@@ -52,8 +49,6 @@ class WorldViewModel {
         self.characterInvInv = characterInvInv
         self.character = character
 
-        chunkContainer.setUp(chunkCoord: character.data.chunkCoord)
-
         self.accessableGOTracker = AccessableGOTracker()
         WorldUpdateManager.default.update(with: .interaction)
     }
@@ -65,29 +60,27 @@ class WorldViewModel {
         self.updateCharacter(timeInterval)
         if WorldUpdateManager.default.contains(.interaction) {
             self.accessableGOTracker.updateWhole(character: self.character,
-                                                 gos: self.fieldGOs)
+                                                 gos: self.chunkContainer)
         }
     }
 
     func handleWorldEvent() {
         while let event = WorldEventManager.default.dequeue() {
             switch event.type {
-            case .accessableGOTrackerAdd:
-                self.accessableGOTracker.add(event.sender as! GameObject)
-            case .accessableGOTrackerRemove:
-                self.accessableGOTracker.remove(event.sender as! GameObject)
             case .gameObjectMoveTouchEnded:
                 let handler = GameObjectMoveTouchEndedWorldEventHandler(
                     touch: event.udata as! UITouch,
                     go: event.sender as! GameObject,
                     chunkContainer: self.chunkContainer)
                 handler.handle()
-            case .gameObjectRemoveFromChunk:
             case .gameObjectAddToCharacter:
-                (event.sender as! GameObject).move(toParent: self.character)
+                self.character.addChild(event.sender as! GameObject)
             case .gameObjectAddToChunk:
-                    let go = (event.sender as! GameObject)
-                    self.chunkContainer.add(go)
+                self.chunkContainer.add(event.sender as! GameObject)
+            case .accessableGOTrackerAdd:
+                self.accessableGOTracker.add(event.sender as! GameObject)
+            case .accessableGOTrackerRemove:
+                self.accessableGOTracker.remove(event.sender as! GameObject)
             }
         }
     }
@@ -103,7 +96,7 @@ class WorldViewModel {
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)
-                chunkContainer.update(streetChunkCoord: self.character.streetChunkCoord, direction: direction)
+                chunkContainer.update(direction: direction)
             }
         }
 
@@ -170,7 +163,7 @@ class WorldViewModel {
 
     func saveCharacterPosition() {
         var streetChunkCoord = self.character.streetChunkCoord
-        streetChunkCoord.building = 0
+        streetChunkCoord.street.building = AddressComponent()
 
         let buildingCoord = TileCoordinate(from: self.character.position).coord
         let chunkCoord = streetChunkCoord + buildingCoord

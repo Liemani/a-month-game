@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol Inventory: Sequence {
+protocol Inventory: SKNode, Sequence {
 
     associatedtype Item
     associatedtype Coord
@@ -17,6 +17,7 @@ protocol Inventory: Sequence {
     func contains(_ item: Item) -> Bool
 
     func item(at coord: Coord) -> Item?
+    func itemAtLocation(of touch: UITouch) -> Item?
 
     // MARK: edit
     func add(_ item: Item)

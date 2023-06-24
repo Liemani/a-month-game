@@ -19,8 +19,8 @@ struct CharacterData {
     }
 
     var buildingCoord: Coordinate<Int> {
-        let x = Int(self.chunkCoord.buildingX)
-        let y = Int(self.chunkCoord.buildingY)
+        let x = self.chunkCoord.street.building.coordX
+        let y = self.chunkCoord.street.building.coordY
         let coord = Coordinate(x, y)
         return coord
     }
@@ -29,11 +29,13 @@ struct CharacterData {
     init() {
         let worldDataRep = WorldServiceContainer.default.worldDataRepo
 
-        let chunkX = worldDataRep.load(at: .characterLocationChunkX)
-        let chunkY = worldDataRep.load(at: .characterLocationChunkY)
-        let chunkLocation = worldDataRep.load(at: .characterLocationChunkLocation)
+        let x = worldDataRep.load(at: .characterLocationChunkX)
+        let y = worldDataRep.load(at: .characterLocationChunkY)
+        let streetAddress = worldDataRep.load(at: .characterLocationChunkLocation)
 
-        self._chunkCoord = ChunkCoordinate(x: chunkX, y: chunkY, location: chunkLocation)
+        self._chunkCoord = ChunkCoordinate(x: Int32(truncatingIfNeeded: x),
+                                           y: Int32(truncatingIfNeeded: y),
+                                           streetAddress: UInt16(truncatingIfNeeded: streetAddress))
     }
 
     private func update(chunkCoord: ChunkCoordinate) {
@@ -41,7 +43,7 @@ struct CharacterData {
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)
         worldDataRep.update(value: Int(chunkCoord.y), to: .characterLocationChunkY)
-        worldDataRep.update(value: Int(chunkCoord.location), to: .characterLocationChunkLocation)
+        worldDataRep.update(value: Int(chunkCoord.street.address), to: .characterLocationChunkLocation)
     }
 
 }

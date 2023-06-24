@@ -29,10 +29,10 @@ struct ChunkCoordinate {
         self.street = StreetAddress()
     }
 
-    init(x: Int32, y: Int32, fullStreetAddress: UInt16) {
+    init(x: Int32, y: Int32, streetAddress: UInt16) {
         self.x = x
         self.y = y
-        self.street = StreetAddress(adress: fullStreetAddress)
+        self.street = StreetAddress(adress: streetAddress)
     }
 
     init(_ x: Int, _ y: Int) {
