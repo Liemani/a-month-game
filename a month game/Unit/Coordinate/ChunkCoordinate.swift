@@ -18,7 +18,7 @@ struct ChunkCoordinate {
         set {
             self.x = Int32(truncatingIfNeeded: x >> 8)
             self.y = Int32(truncatingIfNeeded: y >> 8)
-            self.street = StreetAddress(x, y)
+            self.street = StreetAddress(Int(x), Int(y))
         }
     }
 
@@ -52,7 +52,6 @@ struct ChunkCoordinate {
 //        return direction
 //    }
 
-    // TODO: performance improvable
     func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
         let differenceCoord = chunkCoord.coord - self.coord
         let chunkDirection = Direction9(from: differenceCoord >> 4)

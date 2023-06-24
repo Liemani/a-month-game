@@ -10,17 +10,16 @@ import SpriteKit
 
 class ChunkContainer: LMINode {
 
-    // MARK: - stored property
+    private let character: Character
     private var chunks: [Chunk]
 
-    // MARK: - computed property
-    var gos: some Sequence<GameObject> {
-        let sequences = self.chunks.map { $0.gos }
-        return CombineSequences(sequences: sequences)
-    }
+    // MARK: computed property
+    var lowerBound: Coordinate<Int> { self.character.streetChunkCoord.coord + Direction9.southWest.coordOfAChunk }
+    var upperBound: Coordinate<Int> { self.character.streetChunkCoord.coord + Direction9.northEast.coordOfAChunk * 2 }
 
     // MARK: - init
-    override init() {
+    init(character: Character) {
+        self.character = character
         self.chunks = []
 
         super.init()
@@ -32,13 +31,11 @@ class ChunkContainer: LMINode {
     }
 
     func initChunks() {
-        for index in 0..<9 {
+        for direction in Direction9.allCases {
             let chunk = Chunk()
 
-            let direction = Direction9(rawValue: index)!
-            let directionCoord = direction.coord
-            let chunkPosition = (directionCoord << 4).cgPoint * Constant.tileWidth
-            chunk.position = chunkPosition
+            self.updateChunk(direction: direction)
+            chunk.position = direction.coordOfAChunk.cgPoint * Constant.tileWidth
 
             self.addChild(chunk)
             self.chunks.append(chunk)
@@ -50,62 +47,19 @@ class ChunkContainer: LMINode {
     }
 
     // MARK: - chunk
-    func setUp(chunkCoord: ChunkCoordinate) {
-        for direction in Direction9.allCases {
-            let targetChunkCoord = chunkCoord + direction.coord << 4
-            self.chunks[direction].update(chunkCoord: targetChunkCoord)
-        }
-    }
-
-    func update(streetChunkCoord: ChunkCoordinate, direction: Direction4) {
+    func update(direction: Direction4) {
         self.shift(direction: direction.opposite)
 
         for direction in direction.direction9 {
-            let tartgetChunkCoord = streetChunkCoord + direction.coord << 4
-            self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
+            self.updateChunk(direction: direction)
         }
     }
 
-    // MARK: - game object
-    func chunk(of go: GameObject, characterChunkCoord: ChunkCoord) -> Chunk? {
-        guard let goChunkCoord = go.chunkCoord else {
-            return nil
-        }
-
-        let midChunkCoord = characterChunkCoord
-        midChunkCoord.building = 0
-
-        guard let direction = midChunkCoord.chunkDirection(to: goChunkCoord) else {
-            return nil
-        }
-
-        return self.chunks[direction]
+    private func updateChunk(direction: Direction9) {
+        let chunkOffset = direction.coordOfAChunk
+        let tartgetChunkCoord = self.character.streetChunkCoord + chunkOffset
+        self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
-
-    func add(of go: GameObject, characterChunkCoord: ChunkCoord) {
-        let chunk = self.chunk(of: go,
-                characterChunkCoord: self.character.chunkCoord)
-        chunk.add(go)
-    }
-
-    func goAtLocation(of touch: UITouch) -> GameObject? {
-        for index in 0..<9 {
-            if let go = self.chunks[index].childAtLocation(of: touch) as! GameObject? {
-                return go
-            }
-        }
-        return nil
-    }
-
-//    func update(_ go: GameObject, to currDirection: Direction8) {
-//        go.removeFromParent()
-//        let currChunk = self.chunks[currDirection]
-//        currChunk.addChild(go)
-//    }
-
-//      func remove(_ go: GameObject) {
-//          go.removeFromParent()
-//      }
 
     // MARK: - private
     private func shift(direction: Direction4) {
@@ -212,5 +166,68 @@ class ChunkContainer: LMINode {
             self.chunks[8].position = temp6
         }
     }
+
+}
+
+extension ChunkContainer: Inventory {
+
+    func isValid(_ coord: ChunkCoordinate) -> Bool {
+        let coord = coord.coord
+        let lowerBound = self.lowerBound
+        let upperBound = self.upperBound
+        return lowerBound.x <= coord.x && coord.x < upperBound.x
+            && lowerBound.y <= coord.y && coord.y < upperBound.y
+    }
+
+    func contains(_ item: GameObject) -> Bool {
+        guard let goChunkCoord = item.chunkCoord else {
+            return false
+        }
+        return self.isValid(goChunkCoord)
+    }
+
+    func item(at coord: ChunkCoordinate) -> GameObject? {
+        guard let direction = self.chunkDirection(to: coord) else {
+            return nil
+        }
+        let go = self.chunks[direction].item(at: coord)
+        return go
+    }
+
+    // MARK: edit
+    func add(_ item: GameObject) {
+        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
+            fatalError("game object is out of chunk container")
+        }
+        self.chunks[direction].add(item)
+    }
+
+    func move(_ item: GameObject) {
+        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
+            fatalError("game object is out of chunk container")
+        }
+        self.chunks[direction].move(item)
+    }
+
+    func remove(_ item: GameObject) {
+        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
+            fatalError("game object is out of chunk container")
+        }
+        self.chunks[direction].remove(item)
+    }
+
+    private func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
+        return self.character.streetChunkCoord.chunkDirection(to: chunkCoord)
+    }
+
+    func makeIterator() -> some IteratorProtocol {
+        return CombineSequences(sequences: self.chunks)
+    }
+
+//    // MARK: - computed property
+//    var gos: some Sequence<GameObject> {
+//        let sequences = self.chunks.map { $0.gos }
+//        return CombineSequences(sequences: sequences)
+//    }
 
 }

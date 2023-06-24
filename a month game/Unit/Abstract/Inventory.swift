@@ -8,17 +8,19 @@
 import Foundation
 import SpriteKit
 
-protocol Inventory<T, U>: Sequecen {
+protocol Inventory: Sequence {
 
-    func contains(_ go: T) -> Bool
-    func isValid(_ coord: U) -> Bool
+    associatedtype Item
+    associatedtype Coord
 
-    func element(at coord: U) -> T?
-    func coord(of go: T) -> U?
+    func isValid(_ coord: Coord) -> Bool
+    func contains(_ item: Item) -> Bool
+
+    func item(at coord: Coord) -> Item?
 
     // MARK: edit
-    func add(_ go: T, to coord: U)
-    func move(_ go: T, from coord: U, to coord: U)
-    func remove(_ go: T, from coord: U)
+    func add(_ item: Item)
+    func move(_ item: Item)
+    func remove(_ item: Item)
 
 }

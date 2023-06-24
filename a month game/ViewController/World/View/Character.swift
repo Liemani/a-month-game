@@ -14,9 +14,9 @@ class Character: SKShapeNode {
 
     var streetChunkCoord: ChunkCoordinate
     func moveChunk(direction: Direction4) {
-        let directionStreetCoord = direction.coord * 16
-        self.position -= directionStreetCoord.cgPoint * Constant.tileWidth
-        self.streetChunkCoord += directionStreetCoord
+        let directionCoordOfAChunk = direction.coordOfAChunk
+        self.position -= directionCoordOfAChunk.cgPoint * Constant.tileWidth
+        self.streetChunkCoord += directionCoordOfAChunk
     }
 
     /// character position is always in the midle chunk

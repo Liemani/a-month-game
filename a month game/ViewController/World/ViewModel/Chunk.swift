@@ -44,52 +44,54 @@ class Chunk: LMINode {
         let goDatas = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
         for goData in goDatas {
             let go = GameObject(from: goData)
-            self.addChild(go)
+            self.add(go)
         }
     }
 
 }
 
-extension Chunk: Inventory<GameObject, Coordinate<Int>> {
+extension Chunk: Inventory {
 
-    func contains(_ go: GameObject) -> Bool {
-        for childGO in self.child {
-            if childGO == go {
+    func isValid(_ coord: ChunkCoordinate) -> Bool {
+        return true
+    }
+
+    func contains(_ item: GameObject) -> Bool {
+        for go in self {
+            let go = go as! GameObject
+            if go == item {
                 return true
             }
         }
         return false
     }
 
-    func isValid(_ coord: Coordinate<Int>) -> Bool {
-        let tileCountOfChunkSide = Constant.tileCountOfChunkSide
-        return 0 <= coord.x && coord.x < tileCountOfChunkSide
-            && 0 <= coord.y && coord.y < tileCountOfChunkSide
-    }
-
-    func element(at coord: Coordinate<Int>) -> GameObject? {
+    func item(at coord: ChunkCoordinate) -> GameObject? {
         for go in self {
-            go.coord == coord
+            let go = go as! GameObject
+            if go.chunkCoord!.street.building == coord.street.building {
+                return go
+            }
         }
-    }
-
-    func coord(of go: GameObject) -> Coordinate<Int>? {
+        return nil
     }
 
     // MARK: edit
-    func add(_ go: GameObject, to coord: Coordinate<Int>) {
+    func add(_ item: GameObject) {
+        self.addChild(item)
+        self.move(item)
     }
 
-    func move(_ go: GameObject,
-            from coord: Coordinate<Int>,
-            to coord: Coordinate<Int>) {
+    func move(_ item: GameObject) {
+        item.position = TileCoordinate(item.chunkCoord!.street.building.coord).fieldPoint
     }
 
-    func remove(_ go: GameObject, from coord: Coordinate<Int>) {
+    func remove(_ item: GameObject) {
+        item.removeFromParent()
     }
 
-    func makeIterator() -> [GameObject] {
-        return self.children as! [GameObject]
+    func makeIterator() -> some IteratorProtocol {
+        return self.children.makeIterator()
     }
 
 }

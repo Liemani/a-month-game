@@ -27,6 +27,7 @@ enum Direction4: Int, CaseIterable {
     }
 
     var coord: Coordinate<Int> { Direction4.coordTable[self] }
+    var coordOfAChunk: Coordinate<Int> { Direction4.coordOfAChunkTable[self] }
     var opposite: Direction4 { Direction4.oppositeTable[self] }
     var direction9: [Direction9] { Direction4.direction9Table[self] }
 
@@ -36,6 +37,13 @@ enum Direction4: Int, CaseIterable {
         Coordinate(0, -1),
         Coordinate(-1, 0),
         Coordinate(0, 1),
+    ]
+
+    static let coordOfAChunkTable = [
+        Coordinate(16, 0),
+        Coordinate(0, -16),
+        Coordinate(-16, 0),
+        Coordinate(0, 16),
     ]
 
     static let oppositeTable: [Direction4] = [
@@ -138,9 +146,8 @@ enum Direction9: Int, CaseIterable {
         self.init(rawValue: rawValue)
     }
 
-    var coord: Coordinate<Int> {
-        Direction9.coordTable[self.rawValue]
-    }
+    var coord: Coordinate<Int> { Direction9.coordTable[self.rawValue] }
+    var coordOfAChunk: Coordinate<Int> { Direction9.coordOfAChunkTable[self.rawValue] }
 
     static let coordTable = [
         Coordinate(-1, -1),
@@ -152,6 +159,18 @@ enum Direction9: Int, CaseIterable {
         Coordinate(-1, 1),
         Coordinate(0, 1),
         Coordinate(1, 1),
+    ]
+
+    static let coordOfAChunkTable = [
+        Coordinate(-16, -16),
+        Coordinate(0, -16),
+        Coordinate(16, -16),
+        Coordinate(-16, 0),
+        Coordinate(0, 0),
+        Coordinate(16, 0),
+        Coordinate(-16, 16),
+        Coordinate(0, 16),
+        Coordinate(16, 16),
     ]
 
 }
