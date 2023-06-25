@@ -33,7 +33,7 @@ class Character: SKShapeNode {
     override init() {
         self.data = CharacterData()
         self.streetChunkCoord = self.data.chunkCoord
-        self.streetChunkCoord.street.building.rawCoord = Coordinate()
+        self.streetChunkCoord.chunk.building.rawCoord = Coordinate()
         self.velocityVector = CGVector()
 
         super.init()

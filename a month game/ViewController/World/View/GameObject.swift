@@ -47,7 +47,7 @@ class GameObject: LMISpriteNode {
         self.position = TileCoordinate(self.buildingCoord!).fieldPoint
     }
 
-    var buildingCoord: Coordinate<Int>? { self.chunkCoord?.street.building.coord }
+    var buildingCoord: Coordinate<Int>? { self.chunkCoord?.chunk.building.coord }
 
     var invCoord: InventoryCoordinate? { self.data.invCoord }
 
@@ -88,11 +88,13 @@ class GameObject: LMISpriteNode {
 
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
-        guard TouchEventHandlerManager.default.handler(of: GameObjectTouchEventHandler.self) == nil else {
+        guard TouchEventHandlerManager.default.handler(
+                of: GameObjectTouchEventHandler.self) == nil else {
             return
         }
 
-        guard TouchEventHandlerManager.default.handler(of: GameObjectMoveTouchEventHandler.self) == nil else {
+        guard TouchEventHandlerManager.default.handler(
+                of: GameObjectMoveTouchEventHandler.self) == nil else {
             return
         }
 
@@ -103,7 +105,8 @@ class GameObject: LMISpriteNode {
     }
 
     override func touchMoved(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(
+                from: touch) else {
             return
         }
 
@@ -111,7 +114,8 @@ class GameObject: LMISpriteNode {
     }
 
     override func touchEnded(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(
+                from: touch) else {
             return
         }
 
@@ -120,7 +124,8 @@ class GameObject: LMISpriteNode {
     }
 
     override func touchCancelled(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+        guard let handler = TouchEventHandlerManager.default.handler(
+                from: touch) else {
             return
         }
 

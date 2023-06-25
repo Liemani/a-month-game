@@ -51,10 +51,10 @@ class GameObjectData {
         self._invCoord = nil
 
         if let chunkCoordMO = goMO.chunkCoord {
-            let streetAddress = UInt16(truncatingIfNeeded: UInt32(bitPattern: chunkCoordMO.location))
+            let chunkAddress = UInt16(truncatingIfNeeded: UInt32(bitPattern: chunkCoordMO.location))
             self._chunkCoord = ChunkCoordinate(x: chunkCoordMO.x,
                                                y: chunkCoordMO.y,
-                                               streetAddress: streetAddress)
+                                               chunkAddress: chunkAddress)
         }
 
         if let invCoordMO = goMO.invCoord {

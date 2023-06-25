@@ -60,25 +60,23 @@ struct Constant {
     // MARK: - z position
     struct ZPosition {
         // MARK: portal scene
-        static let background = -500.0
-        static let resetWindow = 500.0
+        static let background = -100.0
+        static let resetWindow = 100.0
 
         // MARK: world scene
         static let worldLayer = 0.0
             static let movingLayer = 0.0
-                static let tileMap = -500.0
+                static let tileMap = -100.0
                 static let chunkContainer = 0.0
-                static let tile = -10.0
-                static let gameObject = 0.0
-                static let gameObjectCover = 20.0
-            static let character = 10.0
-
-        // TODO: reset value
-        static let fixedLayer = 0.0
-            static let ui = 100.0
-            static let characterInv = 0.0
-            static let craftCell = 1.0
-            static let munuWindow = 500.0
+                static let tile = 10.0
+                static let gameObject = 20.0
+                static let gameObjectCover = 40.0
+            static let character = 30.0
+        static let fixedLayer = 100.0
+            static let ui = 0.0
+                static let characterInv = 0.0
+                static let craftCell = 0.0
+            static let munuWindow = 100.0
     }
 
     // MARK: - frame

@@ -37,7 +37,7 @@
 		034637822A238D3600370C71 /* AccessableGOTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637812A238D3600370C71 /* AccessableGOTracker.swift */; };
 		034637842A23947400370C71 /* CraftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034637832A23947400370C71 /* CraftCell.swift */; };
 		0347BA722A46E67500E31FA1 /* AddressComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA712A46E67500E31FA1 /* AddressComponent.swift */; };
-		0347BA742A46E68500E31FA1 /* StreetAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA732A46E68500E31FA1 /* StreetAddress.swift */; };
+		0347BA742A46E68500E31FA1 /* ChunkAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA732A46E68500E31FA1 /* ChunkAddress.swift */; };
 		0347BA782A481BAB00E31FA1 /* InventoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA772A481BAB00E31FA1 /* InventoryRepository.swift */; };
 		0347BA7A2A481C4100E31FA1 /* InventoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA792A481C4100E31FA1 /* InventoryService.swift */; };
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
@@ -127,7 +127,7 @@
 		034637812A238D3600370C71 /* AccessableGOTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessableGOTracker.swift; sourceTree = "<group>"; };
 		034637832A23947400370C71 /* CraftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftCell.swift; sourceTree = "<group>"; };
 		0347BA712A46E67500E31FA1 /* AddressComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressComponent.swift; sourceTree = "<group>"; };
-		0347BA732A46E68500E31FA1 /* StreetAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreetAddress.swift; sourceTree = "<group>"; };
+		0347BA732A46E68500E31FA1 /* ChunkAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkAddress.swift; sourceTree = "<group>"; };
 		0347BA772A481BAB00E31FA1 /* InventoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryRepository.swift; sourceTree = "<group>"; };
 		0347BA792A481C4100E31FA1 /* InventoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryService.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
@@ -304,7 +304,7 @@
 				03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */,
 				039037CC2A17AB3E0014A571 /* Coordinate.swift */,
 				03F7A2692A3AFA8B0061E030 /* ChunkCoordinate.swift */,
-				0347BA732A46E68500E31FA1 /* StreetAddress.swift */,
+				0347BA732A46E68500E31FA1 /* ChunkAddress.swift */,
 				0347BA712A46E67500E31FA1 /* AddressComponent.swift */,
 			);
 			path = Coordinate;
@@ -455,8 +455,8 @@
 			isa = PBXGroup;
 			children = (
 				03F7A2612A39E6420061E030 /* WorldServiceContainer.swift */,
-				03C65E192A446FA10042BF22 /* EventManager.swift */,
 				03C65E252A4693D70042BF22 /* TouchEventHandlerManager.swift */,
+				03C65E192A446FA10042BF22 /* EventManager.swift */,
 				03C65E2A2A46B04E0042BF22 /* WorldUpdateManager.swift */,
 			);
 			path = Global;
@@ -614,7 +614,7 @@
 				030ABFC32A0E290E00BAB9B8 /* WorldDataModel.xcdatamodeld in Sources */,
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
-				0347BA742A46E68500E31FA1 /* StreetAddress.swift in Sources */,
+				0347BA742A46E68500E31FA1 /* ChunkAddress.swift in Sources */,
 				03F7A2662A39EBCC0061E030 /* WorldDirectoryUtility.swift in Sources */,
 				0392E9362A3C1E94001C22C4 /* GameObjectRepository.swift in Sources */,
 				033D68F62A4001DF005D3CB0 /* CharacterMovedToAnotherChunkEventHandler.swift in Sources */,

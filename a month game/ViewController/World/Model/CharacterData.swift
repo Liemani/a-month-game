@@ -19,8 +19,8 @@ struct CharacterData {
     }
 
     var buildingCoord: Coordinate<Int> {
-        let x = self.chunkCoord.street.building.coordX
-        let y = self.chunkCoord.street.building.coordY
+        let x = self.chunkCoord.chunk.building.coordX
+        let y = self.chunkCoord.chunk.building.coordY
         let coord = Coordinate(x, y)
         return coord
     }
@@ -31,11 +31,11 @@ struct CharacterData {
 
         let x = worldDataRep.load(at: .characterLocationChunkX)
         let y = worldDataRep.load(at: .characterLocationChunkY)
-        let streetAddress = worldDataRep.load(at: .characterLocationChunkLocation)
+        let chunkAddress = worldDataRep.load(at: .characterLocationChunkLocation)
 
         self._chunkCoord = ChunkCoordinate(x: Int32(truncatingIfNeeded: x),
                                            y: Int32(truncatingIfNeeded: y),
-                                           streetAddress: UInt16(truncatingIfNeeded: streetAddress))
+                                           chunkAddress: UInt16(truncatingIfNeeded: chunkAddress))
     }
 
     private func update(chunkCoord: ChunkCoordinate) {
@@ -43,7 +43,7 @@ struct CharacterData {
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)
         worldDataRep.update(value: Int(chunkCoord.y), to: .characterLocationChunkY)
-        worldDataRep.update(value: Int(chunkCoord.street.address), to: .characterLocationChunkLocation)
+        worldDataRep.update(value: Int(chunkCoord.chunk.address), to: .characterLocationChunkLocation)
     }
 
 }

@@ -11,14 +11,14 @@ struct ChunkCoordinate {
 
     var x: Int32
     var y: Int32
-    var street: StreetAddress
+    var chunk: ChunkAddress
 
     var coord: Coordinate<Int> {
-        get { Coordinate<Int>(Int(self.x), Int(self.y)) << 8 + self.street.coord }
+        get { Coordinate<Int>(Int(self.x), Int(self.y)) << 8 + self.chunk.coord }
         set {
             self.x = Int32(truncatingIfNeeded: x >> 8)
             self.y = Int32(truncatingIfNeeded: y >> 8)
-            self.street = StreetAddress(Int(x), Int(y))
+            self.chunk = ChunkAddress(Int(x), Int(y))
         }
     }
 
@@ -26,19 +26,19 @@ struct ChunkCoordinate {
     init() {
         self.x = 0
         self.y = 0
-        self.street = StreetAddress()
+        self.chunk = ChunkAddress()
     }
 
-    init(x: Int32, y: Int32, streetAddress: UInt16) {
+    init(x: Int32, y: Int32, chunkAddress: UInt16) {
         self.x = x
         self.y = y
-        self.street = StreetAddress(adress: streetAddress)
+        self.chunk = ChunkAddress(adress: chunkAddress)
     }
 
     init(_ x: Int, _ y: Int) {
         self.x = Int32(truncatingIfNeeded: x >> 8)
         self.y = Int32(truncatingIfNeeded: y >> 8)
-        self.street = StreetAddress(x, y)
+        self.chunk = ChunkAddress(x, y)
     }
 
     // MARK: -
@@ -88,7 +88,7 @@ struct ChunkCoordinate {
 extension ChunkCoordinate: CustomDebugStringConvertible {
 
     var debugDescription: String {
-        return "(\(self.x), \(self.y), \(self.street))"
+        return "(\(self.x), \(self.y), \(self.chunk))"
     }
 
 }

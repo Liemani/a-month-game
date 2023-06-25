@@ -71,7 +71,7 @@ extension Chunk: InventoryProtocol {
     func item(at coord: ChunkCoordinate) -> GameObject? {
         for go in self {
             let go = go as! GameObject
-            if go.chunkCoord!.street.building == coord.street.building {
+            if go.chunkCoord!.chunk.building == coord.chunk.building {
                 return go
             }
         }
@@ -90,7 +90,7 @@ extension Chunk: InventoryProtocol {
 
     func add(_ item: GameObject) {
         self.addChild(item)
-        let buildingCoord = item.chunkCoord!.street.building.coord
+        let buildingCoord = item.chunkCoord!.chunk.building.coord
         item.position = TileCoordinate(buildingCoord).fieldPoint
     }
 

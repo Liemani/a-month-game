@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct StreetAddress {
+struct ChunkAddress {
     
     var street: AddressComponent
     var building: AddressComponent
@@ -61,7 +61,7 @@ struct StreetAddress {
 
 }
 
-extension StreetAddress: CustomDebugStringConvertible {
+extension ChunkAddress: CustomDebugStringConvertible {
 
     var debugDescription: String {
         return "\(self.street), (\(self.building))"
