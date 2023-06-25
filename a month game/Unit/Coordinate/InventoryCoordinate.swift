@@ -12,6 +12,11 @@ struct InventoryCoordinate {
     var id: Int
     var index: Int
 
+    init() {
+        self.id = 0
+        self.index = 0
+    }
+
     init(_ id: Int, _ index: Int) {
         self.id = id
         self.index = index

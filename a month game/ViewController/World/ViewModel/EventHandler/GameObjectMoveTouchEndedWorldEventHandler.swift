@@ -25,7 +25,6 @@ class GameObjectMoveTouchEndedWorldEventHandler {
     func handle() {
         if self.chunkContainer.itemAtLocation(of: touch) == nil {
             self.go.setUpPosition()
-            self.go.removeFromParent()
             print("if in field put it there")
             let event = WorldEvent(type: .gameObjectAddToChunk,
                                     udata: nil,

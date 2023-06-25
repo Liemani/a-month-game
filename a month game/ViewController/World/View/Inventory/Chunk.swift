@@ -51,7 +51,7 @@ class Chunk: LMINode {
 
 }
 
-extension Chunk: Inventory {
+extension Chunk: InventoryProtocol {
 
     func isValid(_ coord: ChunkCoordinate) -> Bool {
         return true
@@ -60,6 +60,7 @@ extension Chunk: Inventory {
     func contains(_ item: GameObject) -> Bool {
         for go in self {
             let go = go as! GameObject
+#warning("How to checking equality?")
             if go == item {
                 return true
             }
@@ -87,18 +88,10 @@ extension Chunk: Inventory {
         return nil
     }
 
-    // MARK: edit
     func add(_ item: GameObject) {
         self.addChild(item)
-        self.move(item)
-    }
-
-    func move(_ item: GameObject) {
-        item.position = TileCoordinate(item.chunkCoord!.street.building.coord).fieldPoint
-    }
-
-    func remove(_ item: GameObject) {
-        item.removeFromParent()
+        let buildingCoord = item.chunkCoord!.street.building.coord
+        item.position = TileCoordinate(buildingCoord).fieldPoint
     }
 
     func makeIterator() -> some IteratorProtocol {

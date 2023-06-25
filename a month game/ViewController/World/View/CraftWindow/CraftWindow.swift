@@ -22,13 +22,13 @@ class CraftWindow: LMISpriteNode {
 
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.craftCell)
 
-        let defaultSize = Constant.defaultSize
+        let defaultWidth = Constant.defaultWidth
         let craftWindowSize = Constant.craftWindowSize
 
         let cellCount = self.cellCount
 
-        let craftCellFirstPosition = CGPoint(x: defaultSize / 2.0, y: craftWindowSize.height - defaultSize / 2.0)
-        let craftCellLastPosition = CGPoint() + defaultSize / 2.0
+        let craftCellFirstPosition = CGPoint(x: defaultWidth / 2.0, y: craftWindowSize.height - defaultWidth / 2.0)
+        let craftCellLastPosition = CGPoint() + defaultWidth / 2.0
         let craftCellPositionGap: CGFloat = (craftCellFirstPosition.y - craftCellLastPosition.y) / CGFloat(cellCount - 1)
 
         let x = craftCellFirstPosition.x

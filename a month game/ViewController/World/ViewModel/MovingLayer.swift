@@ -26,7 +26,7 @@ class MovingLayer: LMINode {
         // MARK: corner
         for direction in DiagonalDirection4.allCases {
             let position = (direction.coord.cgPoint - 0.5) * Constant.chunkWidth
-            let corner = SKShapeNode(circleOfRadius: Constant.defaultSize / 4.0)
+            let corner = SKShapeNode(circleOfRadius: Constant.defaultWidth / 4.0)
             corner.fillColor = .white
             corner.position = position
             corner.zPosition = Double.infinity

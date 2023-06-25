@@ -170,7 +170,7 @@ class ChunkContainer: LMINode {
 
 }
 
-extension ChunkContainer: Inventory {
+extension ChunkContainer: InventoryProtocol {
 
     func isValid(_ coord: ChunkCoordinate) -> Bool {
         let coord = coord.coord
@@ -180,6 +180,7 @@ extension ChunkContainer: Inventory {
             && lowerBound.y <= coord.y && coord.y < upperBound.y
     }
 
+    /// - Suppose: item is alwasy has chunk coordinate
     func contains(_ item: GameObject) -> Bool {
         guard let goChunkCoord = item.chunkCoord else {
             return false
@@ -205,23 +206,9 @@ extension ChunkContainer: Inventory {
         return go
     }
 
-    // MARK: edit
     func add(_ item: GameObject) {
-        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
-            fatalError("game object is out of chunk container")
-        }
+        let direction = self.chunkDirection(to: item.chunkCoord!)!
         self.chunks[direction].add(item)
-    }
-
-    func move(_ item: GameObject) {
-        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
-            fatalError("game object is out of chunk container")
-        }
-        self.chunks[direction].move(item)
-    }
-
-    func remove(_ item: GameObject) {
-        item.removeFromParent()
     }
 
     private func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {

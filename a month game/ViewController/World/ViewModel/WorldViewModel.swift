@@ -14,10 +14,10 @@ class WorldViewModel {
 
     var chunkContainer: ChunkContainer
 
-    let characterInv: any Inventory
+    let characterInv: any InventoryProtocol
 
-    var fieldInv: (any Inventory)?
-    var characterInvInv: (any Inventory)?
+    var fieldInv: (any InventoryProtocol)?
+    var characterInvInv: (any InventoryProtocol)?
 
     let character: Character
 
@@ -38,9 +38,9 @@ class WorldViewModel {
     // MARK: - init
     init(movingLayer: MovingLayer,
          chunkContainer: ChunkContainer,
-         characterInv: any Inventory,
-         fieldInv: (any Inventory)? = nil,
-         characterInvInv: (any Inventory)? = nil,
+         characterInv: any InventoryProtocol,
+         fieldInv: (any InventoryProtocol)? = nil,
+         characterInvInv: (any InventoryProtocol)? = nil,
          character: Character) {
         self.movingLayer = movingLayer
         self.chunkContainer = chunkContainer
@@ -76,7 +76,9 @@ class WorldViewModel {
             case .gameObjectAddToCharacter:
                 self.character.addChild(event.sender as! GameObject)
             case .gameObjectAddToChunk:
-                self.chunkContainer.add(event.sender as! GameObject)
+                let go = event.sender as! GameObject
+                go.removeFromParent()
+                self.chunkContainer.add(go)
             case .accessableGOTrackerAdd:
                 self.accessableGOTracker.add(event.sender as! GameObject)
             case .accessableGOTrackerRemove:

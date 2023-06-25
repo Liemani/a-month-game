@@ -77,10 +77,9 @@ class WorldScene: SKScene, TouchResponder {
         menuButtonNode.delegate = self
         ui.addChild(menuButtonNode)
 
-        let invWindow = CharacterInventory()
-        invWindow.setUp()
-        ui.addChild(invWindow)
-        self.characterInv = invWindow
+        let characterInv = CharacterInventory(id: 0)
+        ui.addChild(characterInv)
+        self.characterInv = characterInv
 
         let craftWindow = CraftWindow()
         craftWindow.setUp()

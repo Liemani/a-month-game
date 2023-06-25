@@ -49,6 +49,8 @@ class GameObject: LMISpriteNode {
 
     var buildingCoord: Coordinate<Int>? { self.chunkCoord?.street.building.coord }
 
+    var invCoord: InventoryCoordinate? { self.data.invCoord }
+
     // MARK: - init
     init(from goData: GameObjectData) {
         self.data = goData

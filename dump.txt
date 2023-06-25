@@ -472,6 +472,13 @@ character 안에 chunkCoord 를 넣는다
 한 함수에서 하는 일은 그 invoker 가 주체적인 역할을 하는 작업이다
 막 잡다하게 다른 객체가 주체인 일을 하지 말자
 
+add inventory
+check go whether accessable or not when move ended came back
+remove view model
+add child 는 기본적인 경우
+move 는 position 을 유지하고 싶은 경우
+game boject'id can be 0 at generation
+
 데이터를 분산적으로 갖지 않는다
     캐릭터의 위치를 여러 객체가 갖지 않는다
 

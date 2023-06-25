@@ -10,15 +10,15 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultSize = tileWidth
-    static let tileTextureWidth = 16.0
+    static let defaultWidth = tileWidth
+    static let tileTextureWidth: CGFloat = 16.0
     static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
     static let tileScale = 6.0
     static let tileWidth = tileTextureWidth * tileScale
     static let tileSize = CGSize(width: tileWidth, height: tileWidth)
-    static let margin = defaultSize / 5.0
+    static let margin = defaultWidth / 5.0
 
-    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
+    static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
@@ -31,19 +31,21 @@ struct Constant {
 
     // MARK: portal scene
     static let enterButtonNodePosition = screenUpRight
-    static let enterButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
-    static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
-    static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
+    static let enterButtonNodeSize = CGSize(width: defaultWidth * 3, height: defaultWidth)
+    static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultWidth * 2)
+    static let resetButtonNodeSize = CGSize(width: defaultWidth * 2, height: defaultWidth)
 
     // MARK: misc
-    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).cgPoint
-    static let characterRadius = defaultSize / 3.0
-    static let exitWorldButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
+    static let menuPosition = (sceneSize - defaultWidth / 2.0 - margin).cgPoint
+    static let characterRadius = defaultWidth / 3.0
+    static let exitWorldButtonNodeSize = CGSize(width: defaultWidth * 3, height: defaultWidth)
 
     // MARK: inventory
-    static let invWindowPosition = CGPoint() + margin
-    static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultSize)
-    static let inventoryCellCount = 5
+    static let invWindowPosition = CGPoint(x: sceneCenter.x,
+                                           y: defaultWidth / 2.0 + invCellSpacing)
+    static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultWidth)
+    static let invCellCount: Int = 5
+    static let invCellSpacing: CGFloat = tileTextureWidth
 
     // MARK: craft pane
     static let craftWindowPosition = CGPoint(x: margin, y: (sceneSize.height - invWindowSize.width) / 2.0)
@@ -74,8 +76,7 @@ struct Constant {
         // TODO: reset value
         static let fixedLayer = 0.0
             static let ui = 100.0
-            static let inventoryCell = 1.0
-            static let inventoryCellHand = 2.0
+            static let characterInv = 0.0
             static let craftCell = 1.0
             static let munuWindow = 500.0
     }
@@ -83,7 +84,7 @@ struct Constant {
     // MARK: - frame
     struct Frame {
         static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButtonNode = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultSize, height: Constant.defaultSize))
+        static let menuButtonNode = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
         static let enterButtonNode = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
         static let resetButtonNode = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
         static let exitWorldButtonNode = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
