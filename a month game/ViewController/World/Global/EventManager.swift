@@ -15,22 +15,59 @@ enum EventType: Int, CaseIterable {
     case gameObjectMoveTouchBegan
     case gameObjectMoveTouchEnded
 
-    case gameObjectAddToCharacter
     case gameObjectAddToChunk
     case gameObjectMoveToUI
+    case gameObjectInteract
     case accessableGOTrackerAdd
     case accessableGOTrackerRemove
 
-//    game object
-//        make new
-//        move to inventory
-//        move to chunk container
-//        interact
-//        interact with game object
-//
-//    accessable go tracker
-//        add
-//        remove
+    /* NEED EVENT HANDLER
+       game object
+           move to chunk
+           move to inventory
+           interact
+           interact with game object
+
+       accessable go tracker
+           add
+           remove
+-
+game object pop info window
+    open info window
+
+game object move ended
+    if any GO is at the location of touch
+        game object fail put
+    else
+        if chunk is touched
+            if touched tile is accessable
+                put GO to touched tile
+            else
+                GO fail put
+        else inv is touched
+            put GO to inv
+
+game object fail put
+    if GO was on the tile
+        if the tile is accessable
+            move GO to tile
+//          else if character inv has space
+//              move GO to character inv
+//          else
+//              drop at the position of character
+    else if GO was on the inventory
+        if the inv is accessable
+            put GO to inv
+//          else if character inv has space
+//              move GO to character inv
+//          else
+//              drop at the position of character
+    else if GO has no coord
+//          if character inv has space
+//              move GO to character inv
+//          else
+//              drop at the position of character
+    */
 
     static let eventHandlers: [(WorldScene, Event) -> Void] = [
         { scene, event in // characterTouchBegan
@@ -65,9 +102,6 @@ enum EventType: Int, CaseIterable {
                 chunkContainer: scene.chunkContainer)
             handler.handle()
         },
-        { scene, event in // gameObjectAddToCharacter
-            scene.character.addChild(event.sender as! GameObject)
-        },
         { scene, event in // gameObjectAddToChunk
             let go = event.sender as! GameObject
             go.removeFromParent()
@@ -75,6 +109,9 @@ enum EventType: Int, CaseIterable {
         },
         { scene, event in // gameObjectMoveToUI
             scene.character.move(toParent: event.sender as! GameObject)
+        },
+        { scene, event in // case gameObjectInteract
+            print("interact go")
         },
         { scene, event in // accessableGOTrackerAdd
             scene.accessableGOTracker.add(event.sender as! GameObject)

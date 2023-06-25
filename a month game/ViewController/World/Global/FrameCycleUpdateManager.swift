@@ -11,17 +11,18 @@ struct UpdateOptionSet : OptionSet {
 
     let rawValue: Int
 
-    static let interaction = UpdateOptionSet(rawValue: 0x1 << 0)
+    static let accessableGOTracker = UpdateOptionSet(rawValue: 0x1 << 0)
     static let craftWindow = UpdateOptionSet(rawValue: 0x1 << 1)
+    static let timer = UpdateOptionSet(rawValue: 0x1 << 2)
 
 }
 
-class WorldUpdateManager {
+class FrameCycleUpdateManager {
 
-    private static var _default: WorldUpdateManager?
-    static var `default`: WorldUpdateManager { self._default! }
+    private static var _default: FrameCycleUpdateManager?
+    static var `default`: FrameCycleUpdateManager { self._default! }
 
-    static func set() { self._default = WorldUpdateManager() }
+    static func set() { self._default = FrameCycleUpdateManager() }
     static func free() { self._default = nil }
 
     private var updateOptionSet: UpdateOptionSet

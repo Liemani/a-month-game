@@ -16,8 +16,9 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: model
     var accessableGOTracker: AccessableGOTracker!
-    
+
     // MARK: view
+    var invContainer: InventoryContainer!
     var characterInv: CharacterInventory!
     var leftHandGO: GameObject? { self.characterInv.leftHandGO }
     var rightHandGO: GameObject? { self.characterInv.rightHandGO }
@@ -43,7 +44,7 @@ class WorldScene: SKScene, TouchResponder {
         self.initSceneLayer()
         
         self.accessableGOTracker = AccessableGOTracker()
-        WorldUpdateManager.default.update(with: .interaction)
+        FrameCycleUpdateManager.default.update(with: .accessableGOTracker)
 
 #if DEBUG
         self.debugCode()
@@ -89,9 +90,11 @@ class WorldScene: SKScene, TouchResponder {
         menuButtonNode.delegate = self
         ui.addChild(menuButtonNode)
 
-        let characterInv = CharacterInventory(id: 0)
+        let invContainer = InventoryContainer()
+        let characterInv = invContainer.characterInv
         ui.addChild(characterInv)
         self.characterInv = characterInv
+        self.invContainer = invContainer
 
         let craftWindow = CraftWindow()
         craftWindow.setUp()
@@ -122,7 +125,7 @@ class WorldScene: SKScene, TouchResponder {
         let timeInterval = currentTime - self.lastUpdateTime
 
         self.updateCharacter(timeInterval)
-        if WorldUpdateManager.default.contains(.interaction) {
+        if FrameCycleUpdateManager.default.contains(.accessableGOTracker) {
             self.accessableGOTracker.updateWhole(character: self.character,
                                                  gos: self.chunkContainer)
         }
@@ -173,7 +176,7 @@ class WorldScene: SKScene, TouchResponder {
         self.resolveCharacterCollision()
 
         if self.hasMovedToAnotherTile {
-            WorldUpdateManager.default.update(with: .interaction)
+            FrameCycleUpdateManager.default.update(with: .accessableGOTracker)
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)
@@ -275,7 +278,6 @@ class WorldScene: SKScene, TouchResponder {
         }
 
         handler.touchEnded()
-        self.resetTouch(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
@@ -284,11 +286,6 @@ class WorldScene: SKScene, TouchResponder {
         }
 
         handler.touchCancelled()
-        self.resetTouch(touch)
-    }
-
-    func resetTouch(_ touch: UITouch) {
-        TouchEventHandlerManager.default.remove(from: touch)
     }
 
     // MARK: - override

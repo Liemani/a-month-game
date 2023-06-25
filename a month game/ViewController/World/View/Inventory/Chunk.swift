@@ -81,7 +81,7 @@ extension Chunk: InventoryProtocol {
     func itemAtLocation(of touch: UITouch) -> GameObject? {
         for go in self {
             let go = go as! GameObject
-            if go.isAtLocation(of: touch) {
+            if go.isBeing(touched: touch) {
                 return go
             }
         }

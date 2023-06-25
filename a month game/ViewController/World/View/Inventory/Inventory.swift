@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol InventoryProtocol: SKNode, Sequence {
+protocol InventoryProtocol: Sequence {
 
     associatedtype Item
     associatedtype Coord
@@ -93,11 +93,8 @@ class Inventory: SKSpriteNode {
 extension Inventory: InventoryProtocol {
     
     func isValid(_ coord: InventoryCoordinate) -> Bool {
-        guard 0 <= coord.index && coord.index < self.cellCount else {
-            return false
-        }
-
-        return self.children[coord.index].children.first == nil
+        return coord.id == self.id
+                && 0 <= coord.index && coord.index < self.cellCount
     }
 
     func contains(_ item: GameObject) -> Bool {
@@ -105,6 +102,10 @@ extension Inventory: InventoryProtocol {
     }
 
     func item(at coord: InventoryCoordinate) -> GameObject? {
+        guard coord.id == self.id else {
+            return nil
+        }
+
         let cell = self.children[coord.index]
 
         return cell.children.first as! GameObject?
@@ -112,7 +113,7 @@ extension Inventory: InventoryProtocol {
 
     func itemAtLocation(of touch: UITouch) -> GameObject? {
         for cell in self.children {
-            if let go = cell.children.first as! GameObject?, go.isAtLocation(of: touch) {
+            if let go = cell.children.first as! GameObject?, go.isBeing(touched: touch) {
                     return go
             }
         }

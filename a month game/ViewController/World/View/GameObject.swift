@@ -8,31 +8,6 @@
 import Foundation
 import SpriteKit
 
-// MARK: - usage extension
-#if DEBUG
-extension GameObject {
-
-    private func set(go: GameObject,
-
-                     midChunkCoord: ChunkCoordinate,
-                     chunks: [Chunk],
-
-                     from prevChunkCoord: ChunkCoordinate?,
-                     to currChunkCoord: ChunkCoordinate) {
-        if prevChunkCoord != nil {
-            go.removeFromParent()
-        }
-
-        let currChunkDirection = midChunkCoord.chunkDirection(to: currChunkCoord)!
-        let currChunk = chunks[currChunkDirection]
-        currChunk.addChild(go)
-
-        go.setUpPosition()
-    }
-
-}
-#endif
-
 // MARK: - class GameObjectNode
 class GameObject: LMISpriteNode {
 
@@ -120,7 +95,6 @@ class GameObject: LMISpriteNode {
         }
 
         handler.touchEnded()
-        self.resetTouch(touch)
     }
 
     override func touchCancelled(_ touch: UITouch) {
@@ -130,11 +104,6 @@ class GameObject: LMISpriteNode {
         }
 
         handler.touchEnded()
-        self.resetTouch(touch)
-    }
-
-    override func resetTouch(_ touch: UITouch) {
-        TouchEventHandlerManager.default.remove(from: touch)
     }
 
 //     MARK: - interact

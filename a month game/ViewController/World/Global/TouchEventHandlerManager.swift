@@ -16,6 +16,7 @@ protocol TouchEventHandler {
     func touchMoved()
     func touchEnded()
     func touchCancelled()
+    func complete()
 
 }
 

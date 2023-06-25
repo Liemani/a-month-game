@@ -506,6 +506,13 @@ chunkCoord.chunk.building.coord
 streetChunkAddress ->
 StreetAddress -> ChunkAddress
 
+move character position update to new handler file
+
+설계는 밖에서 하고, 코드는 한 점에 집중하여 작성한다
+저수준 레이어를 구현하는 것 만으로는 한계가 있다
+사용자 입장에서 어떻게 사용할지를 귀납적으로 파악해야 한다
+그래야 무엇을 구현해야 하는지를 볼 수 있다
+
 데이터를 분산적으로 갖지 않는다
     캐릭터의 위치를 여러 객체가 갖지 않는다
 

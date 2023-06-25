@@ -99,7 +99,7 @@ extension SKNode {
         return self.parent?.children.firstIndex(of: self)
     }
 
-    func isAtLocation(of touch: UITouch) -> Bool {
+    func isBeing(touched touch: UITouch) -> Bool {
         return self.contains(touch.location(in: self.parent!))
     }
 
@@ -244,9 +244,7 @@ extension CGPoint {
         return CGPoint(x: lhs.x * Double(rhs.x), y: lhs.y * Double(rhs.y))
     }
 
-    func toVector() -> CGVector {
-        return CGVector(dx: self.x, dy: self.y)
-    }
+    var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
 
 }
 

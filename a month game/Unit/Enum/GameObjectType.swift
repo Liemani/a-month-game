@@ -14,7 +14,6 @@ enum GameObjectType: Int, CaseIterable {
         resourceName: String,
         isWalkable: Bool,
         isPickable: Bool,
-        isInteractable: Bool,
         isTile: Bool
     )
 
@@ -32,14 +31,14 @@ enum GameObjectType: Int, CaseIterable {
     }
 
     private static let resources: [ResourceType] = [
-        ("game_object_none", false, false, false, false),
-        ("game_object_wood_floor", true, false, false, true),
-        ("game_object_pine_cone", true, true, true, false),
-        ("game_object_pine_tree", false, false, true, false),
-        ("game_object_wood_wall", false, false, true, false),
-        ("game_object_wood_stick", true, true, true, false),
-        ("game_object_stone", true, true, true, false),
-        ("game_object_axe", true, true, true, false),
+        ("game_object_none", false, false, false),
+        ("game_object_wood_floor", true, false, true),
+        ("game_object_pine_cone", true, true, false),
+        ("game_object_pine_tree", false, false, false),
+        ("game_object_wood_wall", false, false, false),
+        ("game_object_wood_stick", true, true, false),
+        ("game_object_stone", true, true, false),
+        ("game_object_axe", true, true, false),
     ]
 
     private static let textures: [SKTexture] = ({
@@ -62,7 +61,6 @@ enum GameObjectType: Int, CaseIterable {
 
     var isWalkable: Bool { self.resources[self.rawValue].isWalkable }
     var isPickable: Bool { self.resources[self.rawValue].isPickable }
-    var isInteractable: Bool { self.resources[self.rawValue].isInteractable }
     var isTile: Bool { self.resources[self.rawValue].isTile }
 
 }

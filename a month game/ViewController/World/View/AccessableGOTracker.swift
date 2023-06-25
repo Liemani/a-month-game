@@ -52,7 +52,7 @@ class AccessableGOTracker {
     func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
         go.colorBlendFactor = Constant.accessableGOColorBlendFactor
-        go.isUserInteractionEnabled = go.type.isInteractable
+        go.isUserInteractionEnabled = true
     }
 
     func activateAll() {
@@ -79,8 +79,8 @@ class AccessableGOTracker {
             }
         }
 
-        WorldUpdateManager.default.update(with: .craftWindow)
-        WorldUpdateManager.default.subtract(.interaction)
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
+        FrameCycleUpdateManager.default.subtract(.accessableGOTracker)
     }
 
     private func reset() {

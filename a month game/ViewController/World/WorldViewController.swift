@@ -54,7 +54,7 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
         WorldServiceContainer.free()
         TouchEventHandlerManager.free()
         EventManager.free()
-        WorldUpdateManager.free()
+        FrameCycleUpdateManager.free()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {

@@ -20,59 +20,37 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
     }
 
     func touchBegan() {
-        guard self.go.type.isPickable else {
-            TouchEventHandlerManager.default.remove(from: touch)
+        if self.go.chunkCoord != nil && !self.go.type.isPickable {
+            self.complete()
             return
         }
 
         self.go.activate()
 
-        self.touchMoved()
-
-        self.go.removeFromParent()
-        let event1 = Event(type: .gameObjectAddToCharacter,
-                               udata: nil,
-                               sender: self.go)
-        EventManager.default.enqueue(event1)
+        let event = Event(type: .gameObjectMoveToUI,
+                          udata: nil,
+                          sender: self.go)
+        EventManager.default.enqueue(event)
 
         let event2 = Event(type: .accessableGOTrackerRemove,
-                               udata: nil,
-                               sender: self.go)
+                          udata: nil,
+                          sender: self.go)
         EventManager.default.enqueue(event2)
+
+        self.touchMoved()
     }
 
     func touchMoved() {
         self.go.setPositionToLocation(of: touch)
-
-//        switch self.parent {
-//        case is FieldNode:
-//            if !self.isPickable {
-//                self.touchCancelled(touch)
-//            } else {
-//                let coord = Coordinate<Int>(0, 0)
-//                self.worldScene.thirdHand.moveGOMO(from: self, to: coord)
-//            }
-//        case is InventoryCell:
-//            let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-//            self.worldScene.moveGOMO(from: self, to: goCoord)
-//        case is CraftCell:
-//            if self.type == .none {
-//                self.touchCancelled(touch)
-//            } else {
-//                self.craftWindow.refill(self)
-//            }
-//        default: break
-//        }
     }
 
     func touchEnded() {
-        self.go.deactivate()
-
-        TouchEventHandlerManager.default.remove(from: self.touch)
         let event = Event(type: .gameObjectMoveTouchEnded,
                                udata: self.touch,
                                sender: self.go)
         EventManager.default.enqueue(event)
+
+        self.complete()
 
 //        guard self.touchResponderManager.contains(from: touch) else {
 //            return
@@ -118,17 +96,20 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
     }
 
     func touchCancelled() {
-        self.go.setUpPosition()
-
-        self.go.removeFromParent()
+        #warning("in progress")
         let event = Event(type: .gameObjectAddToChunk,
-                               udata: nil,
-                               sender: self.go)
+                          udata: nil,
+                          sender: self.go)
         EventManager.default.enqueue(event)
 
         print("move go to it's original position if fail drop current tile")
 
+        self.complete()
+    }
+
+    func complete() {
         self.go.deactivate()
+        TouchEventHandlerManager.default.remove(from: self.touch)
     }
 
 }
