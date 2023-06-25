@@ -96,10 +96,10 @@ class GameObject: LMISpriteNode {
             return
         }
 
-        let event = TouchBeganEvent(type: .gameObject,
-                                    touch: touch,
-                                    sender: self)
-        TouchBeganEventManager.default.enqueue(event)
+        let event = Event(type: .gameObjectTouchBegan,
+                          udata: touch,
+                          sender: self)
+        EventManager.default.enqueue(event)
     }
 
     override func touchMoved(_ touch: UITouch) {

@@ -52,9 +52,8 @@ class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc
     func requestPresentWorldSceneViewController() {
         WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
-        TouchBeganEventManager.set()
         TouchEventHandlerManager.set()
-        WorldEventManager.set()
+        EventManager.set()
         WorldUpdateManager.set()
 
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController

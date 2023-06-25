@@ -124,7 +124,32 @@ extension Inventory: InventoryProtocol {
         item.position = CGPoint()
     }
 
-    func makeIterator() -> some IteratorProtocol {
-        return self.children.makeIterator()
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        return InventoryIterator(self)
     }
+}
+
+struct InventoryIterator: IteratorProtocol {
+
+    let inv: Inventory
+    var index: Int
+
+    init(_ inv: Inventory) {
+        self.inv = inv
+        self.index = 0
+    }
+
+    mutating func next() -> GameObject? {
+        while index < self.inv.cellCount {
+//            if let go = self.inv.children[index].children.first {
+            let invCoord = InventoryCoordinate(0, index)
+            index += 1
+
+            if let go = self.inv.item(at: invCoord) {
+                return go
+            }
+        }
+        return nil
+    }
+
 }

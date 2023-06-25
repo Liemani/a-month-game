@@ -14,6 +14,9 @@ class WorldScene: SKScene, TouchResponder {
         return self.view!.next! as! WorldViewController
     }
 
+    // MARK: model
+    var accessableGOTracker: AccessableGOTracker!
+    
     // MARK: view
     var characterInv: CharacterInventory!
     var leftHandGO: GameObject? { self.characterInv.leftHandGO }
@@ -21,6 +24,7 @@ class WorldScene: SKScene, TouchResponder {
 
     // MARK: layer
     var movingLayer: MovingLayer!
+    var chunkContainer: ChunkContainer!
 
     var character: Character!
     var ui: SKNode!
@@ -37,6 +41,13 @@ class WorldScene: SKScene, TouchResponder {
         self.scaleMode = .aspectFit
 
         self.initSceneLayer()
+        
+        self.accessableGOTracker = AccessableGOTracker()
+        WorldUpdateManager.default.update(with: .interaction)
+
+#if DEBUG
+        self.debugCode()
+#endif
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -59,6 +70,7 @@ class WorldScene: SKScene, TouchResponder {
         let movingLayer = MovingLayer(character: character)
         worldLayer.addChild(movingLayer)
         self.movingLayer = movingLayer
+        self.chunkContainer = movingLayer.chunkContainer
 
         // MARK: fixed layer
         let fixedLayer = SKNode()
@@ -105,40 +117,69 @@ class WorldScene: SKScene, TouchResponder {
     // MARK: - update
     var lastUpdateTime: TimeInterval = 0.0
     override func update(_ currentTime: TimeInterval) {
-        self.handleTouchBeganEvent()
+        self.handleEvent()
 
         let timeInterval = currentTime - self.lastUpdateTime
 
-        self.worldViewController.update(timeInterval)
+        self.updateCharacter(timeInterval)
+        if WorldUpdateManager.default.contains(.interaction) {
+            self.accessableGOTracker.updateWhole(character: self.character,
+                                                 gos: self.chunkContainer)
+        }
+
+        self.updateData()
 
         self.lastUpdateTime = currentTime
     }
 
-    func handleTouchBeganEvent() {
-        while let event = TouchBeganEventManager.default.dequeue() {
+    func updateData() {
+        let moContext = WorldServiceContainer.default.moContext
+        if moContext.hasChanges {
+            try! moContext.save()
+        }
+    }
+
+    func handleEvent() {
+        while let event = EventManager.default.dequeue() {
             switch event.type {
-            case .character:
+            case .characterTouchBegan:
                 let handler = CharacterMoveTouchEventHandler(
-                    touch: event.touch,
+                    touch: event.udata as! UITouch,
                     worldScene: self,
                     character: self.character)
                 if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
-            case .gameObject:
+            case .gameObjectTouchBegan:
                 let handler = GameObjectTouchEventHandler(
-                    touch: event.touch,
+                    touch: event.udata as! UITouch,
                     go: event.sender as! GameObject)
                 if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
-            case .gameObjectMove:
+            case .gameObjectMoveTouchBegan:
                 let handler = GameObjectMoveTouchEventHandler(
-                    touch: event.touch,
+                    touch: event.udata as! UITouch,
                     go: event.sender as! GameObject)
                 if TouchEventHandlerManager.default.add(handler) {
                     handler.touchBegan()
                 }
+            case .gameObjectMoveTouchEnded:
+                let handler = GameObjectMoveTouchEndedEventHandler(
+                    touch: event.udata as! UITouch,
+                    go: event.sender as! GameObject,
+                    chunkContainer: self.chunkContainer)
+                handler.handle()
+            case .gameObjectAddToCharacter:
+                self.character.addChild(event.sender as! GameObject)
+            case .gameObjectAddToChunk:
+                let go = event.sender as! GameObject
+                go.removeFromParent()
+                self.chunkContainer.add(go)
+            case .accessableGOTrackerAdd:
+                self.accessableGOTracker.add(event.sender as! GameObject)
+            case .accessableGOTrackerRemove:
+                self.accessableGOTracker.remove(event.sender as! GameObject)
             }
         }
     }
@@ -168,10 +209,10 @@ class WorldScene: SKScene, TouchResponder {
     func touchBegan(_ touch: UITouch) {
         TouchEventHandlerManager.default.cancelAll(of: CharacterMoveTouchEventHandler.self)
 
-        let event = TouchBeganEvent(type: .character,
-                                    touch: touch,
-                                    sender: self)
-        TouchBeganEventManager.default.enqueue(event)
+        let event = Event(type: .characterTouchBegan,
+                          udata: touch,
+                          sender: self)
+        EventManager.default.enqueue(event)
     }
 
     func touchMoved(_ touch: UITouch) {
@@ -204,6 +245,90 @@ class WorldScene: SKScene, TouchResponder {
         TouchEventHandlerManager.default.remove(from: touch)
     }
 
+
+    func updateCharacter(_ timeInterval: TimeInterval) {
+        self.applyCharacterVelocity(timeInterval)
+        self.updateCharacterVelocity(timeInterval)
+        self.resolveCharacterCollision()
+
+        if self.hasMovedToAnotherTile {
+            WorldUpdateManager.default.update(with: .interaction)
+
+            if let direction = self.currChunkDirection {
+                self.character.moveChunk(direction: direction)
+                chunkContainer.update(direction: direction)
+            }
+        }
+
+        self.movingLayer.position = -self.character.position
+        self.character.lastPosition = self.character.position
+
+        self.saveCharacterPosition()
+    }
+
+    private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
+        let differenceVector = self.character.velocityVector * timeInterval
+        self.character.position += differenceVector
+    }
+
+    // TODO: update wrong formula
+    private func updateCharacterVelocity(_ timeInterval: TimeInterval) {
+        let velocity = self.character.velocityVector.magnitude
+        self.character.velocityVector =
+            velocity > Constant.velocityDamping
+                ? self.character.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
+                : CGVector()
+    }
+
+    private func resolveCharacterCollision() {
+        //        self.character.resolveWorldBorderCollision()
+        //        self.character.resolveCollisionOfNonWalkable()
+    }
+
+//    private func resolveWorldBorderCollision() {
+//        self.character.position.x = self.character.position.x < Constant.moveableArea.minX
+//        ? Constant.moveableArea.minX
+//        : self.character.position.x
+//        self.character.position.x = self.character.position.x > Constant.moveableArea.maxX
+//        ? Constant.moveableArea.maxX
+//        : self.character.position.x
+//        self.character.position.y = self.character.position.y < Constant.moveableArea.minY
+//        ? Constant.moveableArea.minY
+//        : self.character.position.y
+//        self.character.position.y = self.character.position.y > Constant.moveableArea.maxY
+//        ? Constant.moveableArea.maxY
+//        : self.character.position.y
+//    }
+
+    var hasMovedToAnotherTile: Bool {
+        let lastTileCoord = TileCoordinate(from: self.character.lastPosition)
+        let currTileCoord = TileCoordinate(from: self.character.position)
+
+        return lastTileCoord != currTileCoord
+    }
+
+    var currChunkDirection: Direction4? {
+        let halfChunkwidth = Constant.chunkWidth / 2.0
+        if self.character.position.x > halfChunkwidth {
+            return .east
+        } else if self.character.position.y < -halfChunkwidth {
+            return .south
+        } else if self.character.position.x < -halfChunkwidth {
+            return .west
+        } else if self.character.position.y > halfChunkwidth {
+            return .north
+        }
+        return nil
+    }
+
+    func saveCharacterPosition() {
+        var streetChunkCoord = self.character.streetChunkCoord
+        streetChunkCoord.street.building = AddressComponent()
+
+        let buildingCoord = TileCoordinate(from: self.character.position).coord
+        let chunkCoord = streetChunkCoord + buildingCoord
+        self.character.data.chunkCoord = chunkCoord
+    }
     // MARK: - override
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchBegan(touch) }
@@ -230,3 +355,22 @@ extension WorldScene: ButtonNodeDelegate {
     }
 
 }
+
+// MARK: debug
+#if DEBUG
+extension WorldScene {
+
+    private func debugCode() {
+        for go in self.chunkContainer {
+            let go = go as! GameObject
+
+            print("id: \(go.id), typeID: \(go.type), coordinate: (\(go.chunkCoord!))")
+        }
+
+        for go in self.characterInv {
+            print("id: \(go.id), typeID: \(go.type), coordinate: (\(go.invCoord!))")
+        }
+    }
+
+}
+#endif

@@ -219,10 +219,4 @@ extension ChunkContainer: InventoryProtocol {
         return CombineSequences(sequences: self.chunks)
     }
 
-//    // MARK: - computed property
-//    var gos: some Sequence<GameObject> {
-//        let sequences = self.chunks.map { $0.gos }
-//        return CombineSequences(sequences: sequences)
-//    }
-
 }

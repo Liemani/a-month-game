@@ -11,8 +11,6 @@ import GameplayKit
 
 class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
-    var viewModel: WorldViewModel!
-
     /// initialize task without relation to view
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -33,32 +31,6 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
-
-        let viewModel = WorldViewModel(
-            movingLayer: scene.movingLayer,
-            chunkContainer: scene.movingLayer.chunkContainer,
-            characterInv: scene.characterInv,
-            character: scene.character)
-        self.viewModel = viewModel
-
-#if DEBUG
-        self.debugCode()
-#endif
-    }
-
-    // MARK: - update
-    // TODO: there is event have to occur, one time if need, multiple time
-    func update(_ timeInterval: TimeInterval) {
-        self.viewModel.update(timeInterval)
-
-        self.updateData()
-    }
-
-    func updateData() {
-        let moContext = WorldServiceContainer.default.moContext
-        if moContext.hasChanges {
-            try! moContext.save()
-        }
     }
 
     // TODO: check this method, other edit is perfect
@@ -80,26 +52,9 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
         self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
 
         WorldServiceContainer.free()
-        TouchBeganEventManager.free()
         TouchEventHandlerManager.free()
-        WorldEventManager.free()
+        EventManager.free()
         WorldUpdateManager.free()
-    }
-
-}
-
-// MARK: debug
-#if DEBUG
-extension WorldViewController {
-
-    private func debugCode() {
-        for go in self.viewModel.chunkContainer {
-            let go = go as! GameObject
-            let data = go.data
-            guard let chunkCoord = data.chunkCoord else { continue }
-
-            print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
-        }
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -115,7 +70,6 @@ extension WorldViewController {
     }
 
 }
-#endif
 
 // MARK: - edit model
     // MARK: - game object

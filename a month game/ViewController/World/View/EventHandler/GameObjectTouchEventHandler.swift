@@ -37,10 +37,10 @@ extension GameObjectTouchEventHandler: TouchEventHandler {
         self.touchCancelled()
 
         TouchEventHandlerManager.default.remove(from: self.touch)
-        let event = TouchBeganEvent(type: .gameObjectMove,
-                               touch: touch,
-                               sender: self.go)
-        TouchBeganEventManager.default.enqueue(event)
+        let event = Event(type: .gameObjectMoveTouchBegan,
+                          udata: touch,
+                          sender: self.go)
+        EventManager.default.enqueue(event)
     }
 
     func touchEnded() {

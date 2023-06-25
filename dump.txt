@@ -478,6 +478,7 @@ remove view model
 add child 는 기본적인 경우
 move 는 position 을 유지하고 싶은 경우
 game boject'id can be 0 at generation
+unite event queues
 
 데이터를 분산적으로 갖지 않는다
     캐릭터의 위치를 여러 객체가 갖지 않는다

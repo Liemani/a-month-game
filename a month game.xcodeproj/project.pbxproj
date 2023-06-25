@@ -58,7 +58,7 @@
 		0392E9362A3C1E94001C22C4 /* GameObjectRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */; };
 		039EEFC92A243DD900CB93C6 /* TouchContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFC82A243DD900CB93C6 /* TouchContext.swift */; };
 		03C65E172A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */; };
-		03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* WorldEventManager.swift */; };
+		03C65E1A2A446FA10042BF22 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* EventManager.swift */; };
 		03C65E1E2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */; };
 		03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */; };
 		03C65E222A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */; };
@@ -150,7 +150,7 @@
 		0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectRepository.swift; sourceTree = "<group>"; };
 		039EEFC82A243DD900CB93C6 /* TouchContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchContext.swift; sourceTree = "<group>"; };
 		03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedToAnotherTileEventHandler.swift; sourceTree = "<group>"; };
-		03C65E192A446FA10042BF22 /* WorldEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldEventManager.swift; sourceTree = "<group>"; };
+		03C65E192A446FA10042BF22 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
 		03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterUpdatePositionEventHandler.swift; sourceTree = "<group>"; };
 		03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedEventHandler.swift; sourceTree = "<group>"; };
 		03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectMoveTouchEventHandler.swift; sourceTree = "<group>"; };
@@ -202,7 +202,6 @@
 				03C65E282A46950D0042BF22 /* Global */,
 				03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */,
 				031D57602A07C849007EF383 /* View */,
-				033D68FD2A41397D005D3CB0 /* ViewModel */,
 				031D575A2A07C232007EF383 /* Model */,
 			);
 			path = World;
@@ -256,21 +255,12 @@
 				031AA80B2A25CF630017EFCD /* MenuWindow.swift */,
 				030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */,
 				03EA27B32A43F9AA007BAF4F /* Character.swift */,
+				034637812A238D3600370C71 /* AccessableGOTracker.swift */,
+				030261232A3C56E40050E697 /* MovingLayer.swift */,
 				0347BA752A47DD7900E31FA1 /* Inventory */,
 				039EEFCD2A24586C00CB93C6 /* CraftWindow */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		033D68FD2A41397D005D3CB0 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				03EA27BA2A4417FB007BAF4F /* EventHandler */,
-				033D68F32A3FF932005D3CB0 /* WorldViewModel.swift */,
-				034637812A238D3600370C71 /* AccessableGOTracker.swift */,
-				030261232A3C56E40050E697 /* MovingLayer.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		033D68FE2A413AD7005D3CB0 /* Model */ = {
@@ -366,6 +356,8 @@
 		033D69092A41447C005D3CB0 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				03EA27BB2A442B5D007BAF4F /* TouchBeganEventManager.swift */,
+				033D68F32A3FF932005D3CB0 /* WorldViewModel.swift */,
 				03C65E232A46878E0042BF22 /* AccessableGOTrackerRemoveEventHandler.swift */,
 				03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */,
 				03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */,
@@ -463,9 +455,8 @@
 			isa = PBXGroup;
 			children = (
 				03F7A2612A39E6420061E030 /* WorldServiceContainer.swift */,
-				03EA27BB2A442B5D007BAF4F /* TouchBeganEventManager.swift */,
+				03C65E192A446FA10042BF22 /* EventManager.swift */,
 				03C65E252A4693D70042BF22 /* TouchEventHandlerManager.swift */,
-				03C65E192A446FA10042BF22 /* WorldEventManager.swift */,
 				03C65E2A2A46B04E0042BF22 /* WorldUpdateManager.swift */,
 			);
 			path = Global;
@@ -477,13 +468,6 @@
 				0302612B2A3DBA530050E697 /* CharacterMoveTouchEventHandler.swift */,
 				03EA27C12A4438C3007BAF4F /* GameObjectTouchEventHandler.swift */,
 				03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */,
-			);
-			path = EventHandler;
-			sourceTree = "<group>";
-		};
-		03EA27BA2A4417FB007BAF4F /* EventHandler */ = {
-			isa = PBXGroup;
-			children = (
 				03C65E2C2A46C4F90042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift */,
 			);
 			path = EventHandler;
@@ -638,7 +622,7 @@
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				03C65E2B2A46B04E0042BF22 /* WorldUpdateManager.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* GameObjectDataSource.swift in Sources */,
-				03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */,
+				03C65E1A2A446FA10042BF22 /* EventManager.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,

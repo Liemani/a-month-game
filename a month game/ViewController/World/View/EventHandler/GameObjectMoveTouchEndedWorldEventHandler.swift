@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class GameObjectMoveTouchEndedWorldEventHandler {
+class GameObjectMoveTouchEndedEventHandler {
 
     let touch: UITouch
 
@@ -26,10 +26,10 @@ class GameObjectMoveTouchEndedWorldEventHandler {
         if self.chunkContainer.itemAtLocation(of: touch) == nil {
             self.go.setUpPosition()
             print("if in field put it there")
-            let event = WorldEvent(type: .gameObjectAddToChunk,
-                                    udata: nil,
-                                    sender: self.go)
-            WorldEventManager.default.enqueue(event)
+            let event = Event(type: .gameObjectAddToChunk,
+                              udata: nil,
+                              sender: self.go)
+            EventManager.default.enqueue(event)
             print("else to inventory")
             return
         }
@@ -42,10 +42,10 @@ class GameObjectMoveTouchEndedWorldEventHandler {
 //          }
         self.go.removeFromParent()
         self.go.setUpPosition()
-        let event = WorldEvent(type: .gameObjectAddToChunk,
-                               udata: nil,
-                               sender: self.go)
-        WorldEventManager.default.enqueue(event)
+        let event = Event(type: .gameObjectAddToChunk,
+                          udata: nil,
+                          sender: self.go)
+        EventManager.default.enqueue(event)
 
         print("if touch is puttable put else cancel")
     }
