@@ -12,28 +12,17 @@ class ChunkRepository {
 
     private var goDataSource: GameObjectDataSource
     private var chunkCoordDataSource: ChunkCoordinateDataSource
-    private var invCoordDataSource: InventoryCoordinateDataSource
 
     init(goDataSource: GameObjectDataSource,
-         chunkCoordDataSource: ChunkCoordinateDataSource,
-         invCoordDataSource: InventoryCoordinateDataSource) {
+         chunkCoordDataSource: ChunkCoordinateDataSource) {
         self.goDataSource = goDataSource
         self.chunkCoordDataSource = chunkCoordDataSource
-        self.invCoordDataSource = invCoordDataSource
     }
 
     func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {
         let chunkCoordMOs = self.chunkCoordDataSource.load(at: chunkCoord)
         let goMOs = chunkCoordMOs.compactMap { chunkCoordMO -> GameObjectMO? in
             return chunkCoordMO.gameObjectMO
-        }
-        return goMOs
-    }
-
-    func load(at invCoord: InventoryCoordinate) -> [GameObjectMO] {
-        let invCoordMOs = self.invCoordDataSource.load(at: invCoord)
-        let goMOs = invCoordMOs.compactMap { invCoordMO -> GameObjectMO? in
-            return invCoordMO.gameObjectMO
         }
         return goMOs
     }

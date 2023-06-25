@@ -24,9 +24,9 @@ class ChunkCoordinateDataSource {
 
     func load(at chunkCoord: ChunkCoordinate) -> [ChunkCoordinateMO] {
         let request = NSFetchRequest<ChunkCoordinateMO>(entityName: Constant.Name.chunkCoordinateEntity)
-        let chunkLocation = UInt32(bitPattern: Int32(chunkCoord.street.address)) & 0xff00
-        let nextChunkLocation = chunkLocation + 0x0100
-        let arguments: [Any] = [chunkCoord.x, chunkCoord.y, chunkLocation, nextChunkLocation]
+        let streetChunkAddress = UInt32(chunkCoord.street.street.address) << 8
+        let nextChunkAdress = streetChunkAddress + 0x0100
+        let arguments: [Any] = [chunkCoord.x, chunkCoord.y, streetChunkAddress, nextChunkAdress]
         request.predicate = NSPredicate(format: "x == %@ AND y == %@ AND %@ <= location AND location < %@", argumentArray: arguments)
 
         let chunkCoordMOs = try! self.moContext.fetch(request)

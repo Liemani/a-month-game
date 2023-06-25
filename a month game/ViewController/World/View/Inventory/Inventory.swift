@@ -78,6 +78,16 @@ class Inventory: SKSpriteNode {
         }
     }
 
+    func update(invCoord: InventoryCoordinate) {
+        self.removeAllChildren()
+
+        let goDatas = WorldServiceContainer.default.invServ.load(at: invCoord)
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+            self.add(go)
+        }
+    }
+
 }
 
 extension Inventory: InventoryProtocol {
