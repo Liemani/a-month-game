@@ -10,7 +10,7 @@ import Foundation
 /// Coordinate system structure specifically for tile coordination
 struct TileCoordinate {
 
-    let coord: Coordinate<Int>
+    var coord: Coordinate<Int>
 
     var x: Int { get { return self.coord.x } }
     var y: Int { get { return self.coord.y } }

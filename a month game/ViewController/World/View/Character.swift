@@ -33,6 +33,7 @@ class Character: SKShapeNode {
     override init() {
         self.data = CharacterData()
         self.streetChunkCoord = self.data.chunkCoord
+        self.streetChunkCoord.street.building.rawCoord = Coordinate()
         self.velocityVector = CGVector()
 
         super.init()
@@ -49,8 +50,7 @@ class Character: SKShapeNode {
         self.lineWidth = 5.0
         self.zPosition = Constant.ZPosition.character
 
-        let buildingCoord = TileCoordinate(self.data.buildingCoord)
-        let position = buildingCoord.fieldPoint
+        let position = TileCoordinate(self.data.buildingCoord).fieldPoint
         self.lastPosition = position
         self.position = position
     }
