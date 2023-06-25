@@ -141,48 +141,51 @@ class WorldScene: SKScene, TouchResponder {
 
     func handleEvent() {
         while let event = EventManager.default.dequeue() {
-            switch event.type {
-            case .characterTouchBegan:
-                let handler = CharacterMoveTouchEventHandler(
-                    touch: event.udata as! UITouch,
-                    worldScene: self,
-                    character: self.character)
-                if TouchEventHandlerManager.default.add(handler) {
-                    handler.touchBegan()
-                }
-            case .gameObjectTouchBegan:
-                let handler = GameObjectTouchEventHandler(
-                    touch: event.udata as! UITouch,
-                    go: event.sender as! GameObject)
-                if TouchEventHandlerManager.default.add(handler) {
-                    handler.touchBegan()
-                }
-            case .gameObjectMoveTouchBegan:
-                let handler = GameObjectMoveTouchEventHandler(
-                    touch: event.udata as! UITouch,
-                    go: event.sender as! GameObject)
-                if TouchEventHandlerManager.default.add(handler) {
-                    handler.touchBegan()
-                }
-            case .gameObjectMoveTouchEnded:
-                let handler = GameObjectMoveTouchEndedEventHandler(
-                    touch: event.udata as! UITouch,
-                    go: event.sender as! GameObject,
-                    chunkContainer: self.chunkContainer)
-                handler.handle()
-            case .gameObjectAddToCharacter:
-                self.character.addChild(event.sender as! GameObject)
-            case .gameObjectAddToChunk:
-                let go = event.sender as! GameObject
-                go.removeFromParent()
-                self.chunkContainer.add(go)
-            case .accessableGOTrackerAdd:
-                self.accessableGOTracker.add(event.sender as! GameObject)
-            case .accessableGOTrackerRemove:
-                self.accessableGOTracker.remove(event.sender as! GameObject)
-            }
+            self.eventHandlers[event.type](self, event)
         }
     }
+
+    let eventHandlers: [(WorldScene, Event) -> Void] = [
+        { scene, event in
+            let handler = CharacterMoveTouchEventHandler(
+                touch: event.udata as! UITouch,
+                worldScene: scene,
+                character: scene.character)
+            if TouchEventHandlerManager.default.add(handler) {
+                handler.touchBegan()
+            }
+        }, { scene, event in
+            let handler = GameObjectTouchEventHandler(
+                touch: event.udata as! UITouch,
+                go: event.sender as! GameObject)
+            if TouchEventHandlerManager.default.add(handler) {
+                handler.touchBegan()
+            }
+        }, { scene, event in
+            let handler = GameObjectMoveTouchEventHandler(
+                touch: event.udata as! UITouch,
+                go: event.sender as! GameObject)
+            if TouchEventHandlerManager.default.add(handler) {
+                handler.touchBegan()
+            }
+        }, { scene, event in
+            let handler = GameObjectMoveTouchEndedEventHandler(
+                touch: event.udata as! UITouch,
+                go: event.sender as! GameObject,
+                chunkContainer: scene.chunkContainer)
+            handler.handle()
+        }, { scene, event in
+            scene.character.addChild(event.sender as! GameObject)
+        }, { scene, event in
+            let go = event.sender as! GameObject
+            go.removeFromParent()
+            scene.chunkContainer.add(go)
+        }, { scene, event in
+            scene.accessableGOTracker.add(event.sender as! GameObject)
+        }, { scene, event in
+            scene.accessableGOTracker.remove(event.sender as! GameObject)
+        }
+    ]
 
     // MARK: - delegate
 //    func addGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
@@ -329,6 +332,7 @@ class WorldScene: SKScene, TouchResponder {
         let chunkCoord = streetChunkCoord + buildingCoord
         self.character.data.chunkCoord = chunkCoord
     }
+
     // MARK: - override
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchBegan(touch) }

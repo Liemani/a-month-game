@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum EventType {
+enum EventType: Int, CaseIterable {
     
     case characterTouchBegan
     case gameObjectTouchBegan
