@@ -75,7 +75,7 @@ class AccessibleGOTracker {
 
         for go in gos {
             let go = go as! GameObject
-            if self.character.accessibleFrame.contains(go.position + go.parent!.position) {
+            if go.isAccessible(by: self.character) {
                 self.dict[go.id] = go
                 self.activate(go)
             }

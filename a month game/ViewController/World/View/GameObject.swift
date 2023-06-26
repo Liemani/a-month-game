@@ -61,6 +61,15 @@ class GameObject: LMISpriteNode {
         self.alpha = 1.0
     }
 
+    // MARK: -
+    func isAccessible(by character: Character) -> Bool {
+        if self.invCoord != nil {
+            return true
+        }
+
+        return character.accessibleFrame.contains(self.position + self.parent!.position)
+    }
+
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
         guard TouchEventHandlerManager.default.handler(

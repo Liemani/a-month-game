@@ -106,6 +106,9 @@ game object fail put
             let go = event.sender as! GameObject
             go.removeFromParent()
             scene.chunkContainer.add(go)
+            if go.isAccessible(by: scene.character) {
+                scene.accessibleGOTracker.add(go)
+            }
         },
         { scene, event in // gameObjectMoveToUI
             let go = event.sender as! GameObject
