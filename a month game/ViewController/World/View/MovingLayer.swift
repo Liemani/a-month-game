@@ -16,6 +16,7 @@ class MovingLayer: LMINode {
     init(character: Character) {
         super.init()
 
+        self.isUserInteractionEnabled = true
         self.zPosition = Constant.ZPosition.movingLayer
 
         // MARK: chunkContainer
@@ -49,6 +50,57 @@ class MovingLayer: LMINode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+     // MARK: - touch
+    override func touchBegan(_ touch: UITouch) {
+        TouchEventHandlerManager.default.cancelAll(of: CharacterMoveTouchEventHandler.self)
+
+        let event = Event(type: .characterTouchBegan,
+                          udata: touch,
+                          sender: self)
+        EventManager.default.enqueue(event)
+    }
+
+    override func touchMoved(_ touch: UITouch) {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+            return
+        }
+
+        handler.touchMoved()
+    }
+
+    override func touchEnded(_ touch: UITouch) {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+            return
+        }
+
+        handler.touchEnded()
+    }
+
+    override func touchCancelled(_ touch: UITouch) {
+        guard let handler = TouchEventHandlerManager.default.handler(from: touch) else {
+            return
+        }
+
+        handler.touchCancelled()
+    }
+
+    // MARK: - override
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchBegan(touch) }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchMoved(touch) }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchEnded(touch) }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchCancelled(touch) }
     }
 
 }

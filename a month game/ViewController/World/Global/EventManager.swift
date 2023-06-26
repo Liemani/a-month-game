@@ -136,7 +136,7 @@ enum EventType: Int, CaseIterable {
         { scene, event in // gameObjectMoveToBelong
             let go = event.sender as! GameObject
 
-            if let goChunkCoord = go.chunkCoord {
+            if go.chunkCoord != nil {
                 let event = Event(type: .gameObjectMoveToBelongField,
                                   udata: nil,
                                   sender: go)
@@ -145,7 +145,7 @@ enum EventType: Int, CaseIterable {
                 return
             }
 
-            if go.chunkCoord != nil {
+            if go.invCoord != nil {
                 let event = Event(type: .gameObjectMoveToBelongInv,
                                   udata: nil,
                                   sender: go)
@@ -221,7 +221,6 @@ enum EventType: Int, CaseIterable {
 
         { scene, event in // gameObjectInteract
             let go = event.sender as! GameObject
-            let targetGO = event.udata as! GameObject
 
             print("interact go")
         },

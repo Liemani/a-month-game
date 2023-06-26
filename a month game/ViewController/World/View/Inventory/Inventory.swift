@@ -79,7 +79,7 @@ class Inventory: SKSpriteNode {
 
     var emptyIndex: Int? {
         for (index, cell) in self.children.enumerated() {
-            if cell.children.first != nil {
+            if cell.children.first == nil {
                 return index
             }
         }

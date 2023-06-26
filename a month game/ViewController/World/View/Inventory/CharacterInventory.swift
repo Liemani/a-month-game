@@ -30,6 +30,7 @@ class CharacterInventory: Inventory {
                    cellSpacing: Constant.invCellSpacing)
 
         self.position = Constant.invWindowPosition
+        self.size = CGSize()
         self.zPosition = Constant.ZPosition.characterInv
     }
 
