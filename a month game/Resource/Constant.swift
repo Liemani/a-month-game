@@ -48,7 +48,7 @@ struct Constant {
     static let invCellSpacing: CGFloat = tileTextureWidth
 
     // MARK: craft pane
-    static let craftWindowPosition = CGPoint(x: margin, y: (sceneSize.height - invWindowSize.width) / 2.0)
+    static let craftWindowPosition = CGPoint(x: margin + tileWidth / 2, y: sceneSize.height / 2.0)
     static let craftWindowSize = CGSize(width: invWindowSize.height, height: invWindowSize.width)
     static let craftWindowCellCount = 5
 
@@ -138,9 +138,9 @@ struct Constant {
     static let touchBeganEventQueueSize = 10
     static let worldEventQueueSize = 100
 
-    static let accessableGOColorBlendFactor = 0.5
+    static let accessibleGOColorBlendFactor = 0.5
 
-    static let accessableRange = tileWidth * 1.5
+    static let characterAccessibleRange = 1
 
 //    // MARK: table
 //    static let spaceShiftTable: [UInt8] = [

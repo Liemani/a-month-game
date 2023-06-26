@@ -15,7 +15,7 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     // MARK: model
-    var accessableGOTracker: AccessableGOTracker!
+    var accessibleGOTracker: AccessibleGOTracker!
 
     // MARK: view
     var invContainer: InventoryContainer!
@@ -41,10 +41,8 @@ class WorldScene: SKScene, TouchResponder {
 
         self.scaleMode = .aspectFit
 
+        self.initModel()
         self.initSceneLayer()
-        
-        self.accessableGOTracker = AccessableGOTracker()
-        FrameCycleUpdateManager.default.update(with: .accessableGOTracker)
 
 #if DEBUG
         self.debugCode()
@@ -53,6 +51,26 @@ class WorldScene: SKScene, TouchResponder {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func initModel() {
+        self.character = Character()
+
+        let movingLayer = MovingLayer(character: character)
+        self.movingLayer = movingLayer
+        self.chunkContainer = movingLayer.chunkContainer
+
+        self.accessibleGOTracker = AccessibleGOTracker(character: character)
+        FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
+
+        let invContainer = InventoryContainer()
+        self.invContainer = invContainer
+
+        let characterInv = invContainer.characterInv
+        self.characterInv = characterInv
+
+        self.craftWindow = CraftWindow()
+        self.munuWindow = MenuWindow()
     }
 
     func initSceneLayer() {
@@ -64,14 +82,8 @@ class WorldScene: SKScene, TouchResponder {
         self.addChild(worldLayer)
 
         // MARK: moving layer
-        let character = Character()
-        worldLayer.addChild(character)
-        self.character = character
-
-        let movingLayer = MovingLayer(character: character)
+        worldLayer.addChild(self.character)
         worldLayer.addChild(movingLayer)
-        self.movingLayer = movingLayer
-        self.chunkContainer = movingLayer.chunkContainer
 
         // MARK: fixed layer
         let fixedLayer = SKNode()
@@ -89,22 +101,9 @@ class WorldScene: SKScene, TouchResponder {
         menuButtonNode.set(frame: Constant.Frame.menuButtonNode)
         menuButtonNode.delegate = self
         ui.addChild(menuButtonNode)
-
-        let invContainer = InventoryContainer()
-        let characterInv = invContainer.characterInv
-        ui.addChild(characterInv)
-        self.characterInv = characterInv
-        self.invContainer = invContainer
-
-        let craftWindow = CraftWindow()
-        craftWindow.setUp()
-        ui.addChild(craftWindow)
-        self.craftWindow = craftWindow
-
-        let munuWindow = MenuWindow()
-        munuWindow.setUp()
-        ui.addChild(munuWindow)
-        self.munuWindow = munuWindow
+        ui.addChild(self.characterInv)
+        ui.addChild(self.craftWindow)
+        ui.addChild(self.munuWindow)
     }
 
     // MARK: - edit model
@@ -125,11 +124,8 @@ class WorldScene: SKScene, TouchResponder {
         let timeInterval = currentTime - self.lastUpdateTime
 
         self.updateCharacter(timeInterval)
-        if FrameCycleUpdateManager.default.contains(.accessableGOTracker) {
-            self.accessableGOTracker.updateWhole(character: self.character,
-                                                 gos: self.chunkContainer)
-        }
 
+        self.updateModel()
         self.updateData()
 
         self.lastUpdateTime = currentTime
@@ -139,6 +135,22 @@ class WorldScene: SKScene, TouchResponder {
         while let event = EventManager.default.dequeue() {
             event.type.handler(self, event)
         }
+    }
+
+    func updateModel() {
+        if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
+            self.accessibleGOTracker.updateWhole(gos: self.chunkContainer)
+        }
+
+        if FrameCycleUpdateManager.default.contains(.craftWindow) {
+            self.craftWindow.update()
+        }
+
+        if FrameCycleUpdateManager.default.contains(.timer) {
+            // TODO: implement long touch timer
+        }
+
+        FrameCycleUpdateManager.default.clear()
     }
 
     func updateData() {
@@ -176,7 +188,7 @@ class WorldScene: SKScene, TouchResponder {
         self.resolveCharacterCollision()
 
         if self.hasMovedToAnotherTile {
-            FrameCycleUpdateManager.default.update(with: .accessableGOTracker)
+            FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)

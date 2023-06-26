@@ -18,8 +18,8 @@ enum EventType: Int, CaseIterable {
     case gameObjectAddToChunk
     case gameObjectMoveToUI
     case gameObjectInteract
-    case accessableGOTrackerAdd
-    case accessableGOTrackerRemove
+    case accessibleGOTrackerAdd
+    case accessibleGOTrackerRemove
 
     /* NEED EVENT HANDLER
        game object
@@ -28,7 +28,7 @@ enum EventType: Int, CaseIterable {
            interact
            interact with game object
 
-       accessable go tracker
+       accessible go tracker
            add
            remove
 -
@@ -40,7 +40,7 @@ game object move ended
         game object fail put
     else
         if chunk is touched
-            if touched tile is accessable
+            if touched tile is accessible
                 put GO to touched tile
             else
                 GO fail put
@@ -49,14 +49,14 @@ game object move ended
 
 game object fail put
     if GO was on the tile
-        if the tile is accessable
+        if the tile is accessible
             move GO to tile
 //          else if character inv has space
 //              move GO to character inv
 //          else
 //              drop at the position of character
     else if GO was on the inventory
-        if the inv is accessable
+        if the inv is accessible
             put GO to inv
 //          else if character inv has space
 //              move GO to character inv
@@ -108,16 +108,17 @@ game object fail put
             scene.chunkContainer.add(go)
         },
         { scene, event in // gameObjectMoveToUI
-            scene.character.move(toParent: event.sender as! GameObject)
+            let go = event.sender as! GameObject
+            go.move(toParent: scene.ui)
         },
         { scene, event in // case gameObjectInteract
             print("interact go")
         },
-        { scene, event in // accessableGOTrackerAdd
-            scene.accessableGOTracker.add(event.sender as! GameObject)
+        { scene, event in // accessibleGOTrackerAdd
+            scene.accessibleGOTracker.add(event.sender as! GameObject)
         },
-        { scene, event in // accessableGOTrackerRemove
-            scene.accessableGOTracker.remove(event.sender as! GameObject)
+        { scene, event in // accessibleGOTrackerRemove
+            scene.accessibleGOTracker.remove(event.sender as! GameObject)
         },
     ]
 

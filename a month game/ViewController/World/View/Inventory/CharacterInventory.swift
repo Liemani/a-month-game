@@ -24,8 +24,8 @@ class CharacterInventory: Inventory {
 
         var cells: [SKSpriteNode] = []
         cells.reserveCapacity(5)
+        let texture = SKTexture(imageNamed: "inventory_cell")
         for _ in 0..<5 {
-            let texture = SKTexture(imageNamed: "inventory_cell")
             let cell = SKSpriteNode(texture: texture)
             cell.size = Constant.defaultNodeSize
             cells.append(cell)

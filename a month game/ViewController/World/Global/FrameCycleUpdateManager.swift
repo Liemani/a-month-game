@@ -11,7 +11,7 @@ struct UpdateOptionSet : OptionSet {
 
     let rawValue: Int
 
-    static let accessableGOTracker = UpdateOptionSet(rawValue: 0x1 << 0)
+    static let accessibleGOTracker = UpdateOptionSet(rawValue: 0x1 << 0)
     static let craftWindow = UpdateOptionSet(rawValue: 0x1 << 1)
     static let timer = UpdateOptionSet(rawValue: 0x1 << 2)
 
@@ -41,6 +41,10 @@ class FrameCycleUpdateManager {
 
     func subtract(_ member: UpdateOptionSet.Element) {
         self.updateOptionSet.subtract(member)
+    }
+
+    func clear() {
+        self.updateOptionSet = UpdateOptionSet(rawValue: 0)
     }
 
 }

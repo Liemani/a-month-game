@@ -8,12 +8,15 @@
 import Foundation
 import SpriteKit
 
-class AccessableGOTracker {
+class AccessibleGOTracker {
+
+    var character: Character
 
     private var dict: [Int: GameObject]
     var gos: some Sequence<GameObject> { self.dict.values }
 
-    init() {
+    init(character: Character) {
+        self.character = character
         self.dict = [:]
     }
 
@@ -51,7 +54,7 @@ class AccessableGOTracker {
     // MARK: - activate
     func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
-        go.colorBlendFactor = Constant.accessableGOColorBlendFactor
+        go.colorBlendFactor = Constant.accessibleGOColorBlendFactor
         go.isUserInteractionEnabled = true
     }
 
@@ -67,20 +70,18 @@ class AccessableGOTracker {
     }
 
     // MARK: - update
-    func updateWhole(character: Character, gos: any Sequence) {
+    func updateWhole(gos: any Sequence) {
         self.reset()
 
         for go in gos {
             let go = go as! GameObject
-            if go.intersectsSqure(node: character,
-                                  range: Constant.accessableRange) {
+            if self.character.accessibleFrame.contains(go.position + go.parent!.position) {
                 self.dict[go.id] = go
                 self.activate(go)
             }
         }
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
-        FrameCycleUpdateManager.default.subtract(.accessableGOTracker)
     }
 
     private func reset() {

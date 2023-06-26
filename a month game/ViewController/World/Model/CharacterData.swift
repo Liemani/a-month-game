@@ -18,13 +18,6 @@ struct CharacterData {
         }
     }
 
-    var buildingCoord: Coordinate<Int> {
-        let x = self.chunkCoord.chunk.building.coordX
-        let y = self.chunkCoord.chunk.building.coordY
-        let coord = Coordinate(x, y)
-        return coord
-    }
-
     // MARK: - init
     init() {
         let worldDataRep = WorldServiceContainer.default.worldDataRepo

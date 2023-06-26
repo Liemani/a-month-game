@@ -32,7 +32,7 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
                           sender: self.go)
         EventManager.default.enqueue(event)
 
-        let event2 = Event(type: .accessableGOTrackerRemove,
+        let event2 = Event(type: .accessibleGOTrackerRemove,
                           udata: nil,
                           sender: self.go)
         EventManager.default.enqueue(event2)

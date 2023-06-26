@@ -36,7 +36,7 @@ class GameObjectMoveTouchEndedEventHandler {
 
 //          if touch not intersect with any object {
 //              let tileCoord = touch tile coord
-//                  if the tile is in accessable range {
+//                  if the tile is in accessible range {
 //                      go.put(tileCoord)
 //                  }
 //          }

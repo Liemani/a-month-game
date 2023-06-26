@@ -19,6 +19,8 @@ class Character: SKShapeNode {
         self.streetChunkCoord += directionCoordOfAChunk
     }
 
+    var buildingCoord: Coordinate<Int> { self.data.chunkCoord.chunk.building.coord }
+
     /// character position is always in the midle chunk
     var lastPosition: CGPoint!
     private var _position: CGPoint!
@@ -28,6 +30,15 @@ class Character: SKShapeNode {
     }
 
     var velocityVector: CGVector
+
+    private var accessibleRange: Int { Constant.characterAccessibleRange }
+    var accessibleFrame: CGRect {
+        let side = Constant.tileWidth * Double(self.accessibleRange * 2 + 1)
+        let originTileCoord = TileCoordinate(self.buildingCoord - 1)
+        let origin = originTileCoord.fieldPoint - Constant.tileWidth / 2
+
+        return CGRect(origin: origin, size: CGSize(width: side, height: side))
+    }
 
     // MARK: - init
     override init() {
@@ -50,7 +61,7 @@ class Character: SKShapeNode {
         self.lineWidth = 5.0
         self.zPosition = Constant.ZPosition.character
 
-        let position = TileCoordinate(self.data.buildingCoord).fieldPoint
+        let position = TileCoordinate(self.buildingCoord).fieldPoint
         self.lastPosition = position
         self.position = position
     }
