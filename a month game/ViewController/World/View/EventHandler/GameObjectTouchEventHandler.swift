@@ -22,21 +22,41 @@ class GameObjectTouchEventHandler {
 }
 
 extension GameObjectTouchEventHandler: TouchEventHandler {
-    
+
     func touchBegan() {
-        print("game object touch began")
+        self.go.activate()
+        print("add long touch timer")
     }
 
     func touchMoved() {
-        print("game object touch moved")
+        if self.go.isBeing(touched: touch) {
+            return
+        }
+
+        self.touchCancelled()
+
+        let event = Event(type: .gameObjectMoveTouchBegan,
+                          udata: touch,
+                          sender: self.go)
+        EventManager.default.enqueue(event)
     }
 
     func touchEnded() {
-        print("game object touch ended")
+        let event = Event(type: .gameObjectInteract,
+                          udata: nil,
+                          sender: self.go)
+        EventManager.default.enqueue(event)
+
+        self.complete()
     }
 
     func touchCancelled() {
-        print("game object touch cancelled")
+        self.complete()
+    }
+
+    func complete() {
+        self.go.deactivate()
+        TouchEventHandlerManager.default.remove(from: self.touch)
     }
 
 }

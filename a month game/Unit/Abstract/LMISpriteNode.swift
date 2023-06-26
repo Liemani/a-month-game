@@ -10,13 +10,10 @@ import SpriteKit
 
 class LMISpriteNode: SKSpriteNode, TouchResponder {
 
-    var worldScene: WorldScene { self.scene as! WorldScene }
-
     func touchBegan(_ touch: UITouch) {}
     func touchMoved(_ touch: UITouch) {}
     func touchEnded(_ touch: UITouch) {}
     func touchCancelled(_ touch: UITouch) {}
-    func resetTouch(_ touch: UITouch) {}
 
     // MARK: - override
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

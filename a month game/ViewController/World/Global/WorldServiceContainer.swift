@@ -32,9 +32,11 @@ final class WorldServiceContainer {
 
     var idGeneratorServ: IDGeneratorService
     var chunkServ: ChunkService
+    var invServ: InventoryService
 
     var goRepo: GameObjectRepository
     var chunkRepo: ChunkRepository
+    var invRepo: InventoryRepository
     var worldDataRepo: WorldDataRepository
 
     var goDS: GameObjectDataSource
@@ -78,9 +80,13 @@ final class WorldServiceContainer {
 
         let chunkRepo = ChunkRepository(
             goDataSource: goDS,
-            chunkCoordDataSource: chunkCoordDS,
-            invCoordDataSource: invCoordDS)
+            chunkCoordDataSource: chunkCoordDS)
         self.chunkRepo = chunkRepo
+
+        let invRepo = InventoryRepository(
+            goDataSource: goDS,
+            invCoordDataSource: invCoordDS)
+        self.invRepo = invRepo
 
         let worldDataRepo = WorldDataRepository(worldDataDataSource: worldDataDS)
         self.worldDataRepo = worldDataRepo
@@ -89,8 +95,11 @@ final class WorldServiceContainer {
         let idGeneratorServ = IDGeneratorService(worldDataRepository: worldDataRepo)
         self.idGeneratorServ = idGeneratorServ
 
-        let chunkServ = ChunkService(chunkRepository: chunkRepo)
+        let chunkServ = ChunkService(chunkRepo: chunkRepo)
         self.chunkServ = chunkServ
+
+        let invServ = InventoryService(inventoryRepo: invRepo)
+        self.invServ = invServ
 
 #if DEBUG
         print(worldDirURL)

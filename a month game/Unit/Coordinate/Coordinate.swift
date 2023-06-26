@@ -9,22 +9,17 @@ import Foundation
 
 struct Coordinate<T> where T: Numeric {
 
-    typealias T = Int
-
     var x: T
     var y: T
+
+    init() {
+        self.x = 0
+        self.y = 0
+    }
 
     init(_ x: T, _ y: T) {
         self.x = x
         self.y = y
-    }
-
-    static func == (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
-        return lhs.x == rhs.x && lhs.y == rhs.y
-    }
-
-    static func != (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
-        return !(lhs == rhs)
     }
 
     static func + (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Coordinate<T> {
@@ -35,6 +30,17 @@ struct Coordinate<T> where T: Numeric {
         return Coordinate(lhs.x - rhs.x, lhs.y - rhs.y)
     }
 
+}
+
+extension Coordinate: Equatable {
+
+    static func == (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
+        return lhs.x == rhs.x && lhs.y == rhs.y
+    }
+
+    static func != (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
+        return !(lhs == rhs)
+    }
 }
 
 extension Coordinate<Int> {
@@ -57,8 +63,16 @@ extension Coordinate<Int> {
         return Coordinate<Int>(lhs.x + rhs, lhs.y + rhs)
     }
 
+    static func - (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x - rhs, lhs.y - rhs)
+    }
+
     static func * (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
         return Coordinate<Int>(lhs.x * rhs, lhs.y * rhs)
+    }
+
+    static func / (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x / rhs, lhs.y / rhs)
     }
 
     static func << (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
@@ -67,6 +81,10 @@ extension Coordinate<Int> {
 
     static func >> (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
         return Coordinate<Int>(lhs.x >> rhs, lhs.y >> rhs)
+    }
+
+    static func & (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x & rhs, lhs.y & rhs)
     }
 
 }

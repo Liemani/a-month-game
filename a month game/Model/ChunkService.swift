@@ -9,14 +9,14 @@ import Foundation
 
 class ChunkService {
 
-    private var chunkRepository: ChunkRepository!
+    private var chunkRepo: ChunkRepository!
 
-    init(chunkRepository: ChunkRepository) {
-        self.chunkRepository = chunkRepository
+    init(chunkRepo: ChunkRepository) {
+        self.chunkRepo = chunkRepo
     }
 
     func load(at chunkCoord: ChunkCoordinate) -> [GameObjectData] {
-        let goMOs = self.chunkRepository.load(at: chunkCoord)
+        let goMOs = self.chunkRepo.load(at: chunkCoord)
         let goDatas = goMOs.compactMap {
             GameObjectData(from: $0)
         }

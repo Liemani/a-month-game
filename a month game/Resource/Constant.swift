@@ -10,15 +10,15 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultSize = tileWidth
-    static let tileTextureWidth = 16.0
+    static let defaultWidth = tileWidth
+    static let tileTextureWidth: CGFloat = 16.0
     static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
     static let tileScale = 6.0
     static let tileWidth = tileTextureWidth * tileScale
     static let tileSize = CGSize(width: tileWidth, height: tileWidth)
-    static let margin = defaultSize / 5.0
+    static let margin = defaultWidth / 5.0
 
-    static let defaultNodeSize = CGSize(width: defaultSize, height: defaultSize)
+    static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
@@ -26,27 +26,31 @@ struct Constant {
 
     static let sceneCenter = sceneSize.cgPoint / 2.0
 
+    static let worldLayer = CGPoint(x: sceneCenter.x, y: sceneCenter.x + tileWidth)
+
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
 
     // MARK: portal scene
     static let enterButtonNodePosition = screenUpRight
-    static let enterButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
-    static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultSize * 2)
-    static let resetButtonNodeSize = CGSize(width: defaultSize * 2, height: defaultSize)
+    static let enterButtonNodeSize = CGSize(width: defaultWidth * 3, height: defaultWidth)
+    static let resetButtonNodePosition = CGPoint(x: screenUpRight.x, y: screenUpRight.y - defaultWidth * 2)
+    static let resetButtonNodeSize = CGSize(width: defaultWidth * 2, height: defaultWidth)
 
     // MARK: misc
-    static let menuPosition = (sceneSize - defaultSize / 2.0 - margin).cgPoint
-    static let characterRadius = defaultSize / 3.0
-    static let exitWorldButtonNodeSize = CGSize(width: defaultSize * 3, height: defaultSize)
+    static let menuPosition = (sceneSize - defaultWidth / 2.0 - margin).cgPoint
+    static let characterRadius = defaultWidth / 3.0
+    static let exitWorldButtonNodeSize = CGSize(width: defaultWidth * 3, height: defaultWidth)
 
     // MARK: inventory
-    static let invWindowPosition = CGPoint() + margin
-    static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultSize)
-    static let inventoryCellCount = 5
+    static let invWindowPosition = CGPoint(x: sceneCenter.x,
+                                           y: defaultWidth / 2.0 + invCellSpacing)
+    static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultWidth)
+    static let invCellCount: Int = 5
+    static let invCellSpacing: CGFloat = tileTextureWidth
 
     // MARK: craft pane
-    static let craftWindowPosition = CGPoint(x: margin, y: (sceneSize.height - invWindowSize.width) / 2.0)
+    static let craftWindowPosition = CGPoint(x: margin + tileWidth / 2, y: sceneSize.height / 2.0)
     static let craftWindowSize = CGSize(width: invWindowSize.height, height: invWindowSize.width)
     static let craftWindowCellCount = 5
 
@@ -58,32 +62,29 @@ struct Constant {
     // MARK: - z position
     struct ZPosition {
         // MARK: portal scene
-        static let background = -500.0
-        static let resetWindow = 500.0
+        static let background = -100.0
+        static let resetWindow = 100.0
 
         // MARK: world scene
         static let worldLayer = 0.0
             static let movingLayer = 0.0
-                static let tileMap = -500.0
+                static let tileMap = -100.0
                 static let chunkContainer = 0.0
-                static let tile = -10.0
-                static let gameObject = 0.0
-                static let gameObjectCover = 20.0
-            static let character = 10.0
-
-        // TODO: reset value
-        static let fixedLayer = 0.0
-            static let ui = 100.0
-            static let inventoryCell = 1.0
-            static let inventoryCellHand = 2.0
-            static let craftCell = 1.0
-            static let munuWindow = 500.0
+                static let tile = 10.0
+                static let gameObject = 20.0
+                static let gameObjectCover = 40.0
+            static let character = 30.0
+        static let fixedLayer = 100.0
+            static let ui = 0.0
+                static let characterInv = 0.0
+                static let craftCell = 0.0
+            static let munuWindow = 100.0
     }
 
     // MARK: - frame
     struct Frame {
         static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButtonNode = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultSize, height: Constant.defaultSize))
+        static let menuButtonNode = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
         static let enterButtonNode = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
         static let resetButtonNode = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
         static let exitWorldButtonNode = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
@@ -116,9 +117,9 @@ struct Constant {
     static let idGeneratorKey = "idGenerator"
 
     // MARK: - etc
-    static let tileCountInChunkSide: Int = 16
-    static let tileMapSide: Int = tileCountInChunkSide * 3
-    static let chunkWidth: Double = tileWidth * Double(tileCountInChunkSide)
+    static let tileCountOfChunkSide: Int = 16
+    static let tileMapSide: Int = tileCountOfChunkSide * 3
+    static let chunkWidth: Double = tileWidth * Double(tileCountOfChunkSide)
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001
@@ -136,12 +137,12 @@ struct Constant {
     }
 
     static let initialNextID = 1
-    static let touchEventQueueSize = 10
-    static let sceneEventQueueSize = 100
+    static let touchBeganEventQueueSize = 10
+    static let worldEventQueueSize = 100
 
-    static let accessableGOColorBlendFactor = 0.5
+    static let accessibleGOColorBlendFactor = 0.5
 
-    static let accessableRange = tileWidth * 1.5
+    static let characterAccessibleRange = 1
 
 //    // MARK: table
 //    static let spaceShiftTable: [UInt8] = [

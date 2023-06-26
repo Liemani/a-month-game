@@ -14,6 +14,5 @@ protocol TouchResponder {
     func touchMoved(_ touch: UITouch)
     func touchEnded(_ touch: UITouch)
     func touchCancelled(_ touch: UITouch)
-    func resetTouch(_ touch: UITouch)
 
 }

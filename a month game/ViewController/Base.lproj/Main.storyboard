@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--World Scene View Controller-->
+        <!--World View Controller-->
         <scene sceneID="nPw-8J-WsK">
             <objects>
-                <viewController storyboardIdentifier="WorldViewController" id="gFG-nk-a0r" customClass="WorldSceneViewController" customModule="a_month_game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WorldViewController" id="gFG-nk-a0r" customClass="WorldViewController" customModule="a_month_game" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Itk-qQ-2uU" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,10 +23,10 @@
             </objects>
             <point key="canvasLocation" x="1936.6412213740457" y="-35.211267605633807"/>
         </scene>
-        <!--Portal Scene View Controller-->
+        <!--Portal View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController storyboardIdentifier="PortalSceneViewController" id="BV1-FR-VrT" customClass="PortalSceneViewController" customModule="a_month_game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PortalSceneViewController" id="BV1-FR-VrT" customClass="PortalViewController" customModule="a_month_game" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

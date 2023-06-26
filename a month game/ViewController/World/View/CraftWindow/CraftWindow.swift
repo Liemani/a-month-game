@@ -8,50 +8,43 @@
 import Foundation
 import SpriteKit
 
-class CraftWindow: LMISpriteNode {
+class CraftWindow: LMINode {
 
     var cellCount: Int { Constant.craftWindowCellCount }
 
-    private var shouldUpdate: Bool = true
-
-    func setUp() {
-        self.anchorPoint = CGPoint()
+    override init() {
+        super.init()
 
         self.position = Constant.craftWindowPosition
-        self.size = Constant.craftWindowSize
 
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.craftCell)
 
-        let defaultSize = Constant.defaultSize
-        let craftWindowSize = Constant.craftWindowSize
+        let cellWidth = Constant.defaultWidth
+        let cellSpacing = Constant.invCellSpacing
 
-        let cellCount = self.cellCount
+        let distanceOfCellsCenter = cellWidth + cellSpacing
+        let endCellOffset = distanceOfCellsCenter * Double((self.cellCount - 1) / 2)
 
-        let craftCellFirstPosition = CGPoint(x: defaultSize / 2.0, y: craftWindowSize.height - defaultSize / 2.0)
-        let craftCellLastPosition = CGPoint() + defaultSize / 2.0
-        let craftCellPositionGap: CGFloat = (craftCellFirstPosition.y - craftCellLastPosition.y) / CGFloat(cellCount - 1)
+        var positionY = -endCellOffset
 
-        let x = craftCellFirstPosition.x
-        var y = craftCellFirstPosition.y
-
-        for _ in 0..<cellCount {
+        for _ in 0..<self.cellCount {
             let cell = CraftCell(texture: cellTexture)
 
-            cell.position = CGPoint(x: x, y: y)
             cell.setUp()
+            cell.position = CGPoint(x: 0, y: positionY)
 
             self.addChild(cell)
 
-             y -= craftCellPositionGap
+            positionY += distanceOfCellsCenter
         }
     }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     // MARK: - update
-    func reserveUpdate() { self.shouldUpdate = true }
-
     func update() {
-        guard self.shouldUpdate else { return }
-
 //        let sequences: [any Sequence<GameObjectNode>] = [
 //            self.interactionZone.gos,
 //            self.worldScene.characterInv,
@@ -76,17 +69,15 @@ class CraftWindow: LMISpriteNode {
             }
             craftObjectIndex += 1
         }
-
-        self.shouldUpdate = false
     }
 
     private func reset() {
         for cell in self.children {
-            let go = cell.children[0] as! GameObject
-
-            print("craft window will not have game object node, it must has craft object")
-//            go.type = .none
-            go.isUserInteractionEnabled = false
+//            let go = cell.children[0] as! GameObject
+//
+//            print("craft window will not have game object node, it must has craft object")
+////            go.type = .none
+//            go.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }

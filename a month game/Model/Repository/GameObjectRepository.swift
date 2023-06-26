@@ -47,7 +47,10 @@ extension GameObjectMO {
             chunkCoordMO.update(chunkCoord)
             chunkCoordMO.gameObjectMO = self
             self.chunkCoord = chunkCoordMO
-            self.invCoord = nil
+
+            if let invCoordMO = self.invCoord {
+                invCoordMO.delete()
+            }
         }
     }
 
@@ -59,7 +62,10 @@ extension GameObjectMO {
             invCoordMO.update(invCoord)
             invCoordMO.gameObjectMO = self
             self.invCoord = invCoordMO
-            self.chunkCoord = nil
+            
+            if let chunkCoordMO = self.chunkCoord {
+                chunkCoordMO.delete()
+            }
         }
     }
 

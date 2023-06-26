@@ -1,5 +1,5 @@
 //
-//  TileCoordinate.swift
+//  FieldCoordinate.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/24.
@@ -8,13 +8,14 @@
 import Foundation
 
 /// Coordinate system structure specifically for tile coordination
-struct TileCoordinate {
+struct FieldCoordinate {
 
-    let coord: Coordinate<Int>
+    var coord: Coordinate<Int>
 
     var x: Int { get { return self.coord.x } }
     var y: Int { get { return self.coord.y } }
 
+    // MARK: - init
     init() {
         self.coord = Coordinate<Int>()
     }
@@ -24,7 +25,7 @@ struct TileCoordinate {
         let x = (Int(floor(point.x)) - (point.x < 0.0 ? (tileSide - 1) : 0)) / tileSide
         let y = (Int(floor(point.y)) - (point.y < 0.0 ? (tileSide - 1) : 0)) / tileSide
         let fieldCoord = Coordinate(x, y)
-        self.coord = fieldCoord + Constant.tileCountInChunkSide / 2
+        self.coord = fieldCoord + Constant.tileCountOfChunkSide / 2
     }
 
     init(_ coord: Coordinate<Int>) {
@@ -36,27 +37,27 @@ struct TileCoordinate {
     }
 
     var fieldPoint: CGPoint {
-        let fieldCoord = self.coord.cgPoint + 0.5 - Double(Constant.tileCountInChunkSide / 2)
+        let fieldCoord = self.coord.cgPoint + 0.5 - Double(Constant.tileCountOfChunkSide / 2)
         return fieldCoord * Constant.tileWidth
     }
 
-    func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {
-        self.coord.isAdjacent(to: tileCoordinate.coord)
+    func isAdjacent(to fieldCoord: FieldCoordinate) -> Bool {
+        self.coord.isAdjacent(to: fieldCoord.coord)
     }
 
-    static func + (lhs: TileCoordinate, rhs: Coordinate<Int>) -> TileCoordinate {
-        return TileCoordinate(lhs.coord + rhs)
+    static func + (lhs: FieldCoordinate, rhs: Coordinate<Int>) -> FieldCoordinate {
+        return FieldCoordinate(lhs.coord + rhs)
     }
 
 }
 
-extension TileCoordinate: Equatable {
+extension FieldCoordinate: Equatable {
 
-    static func == (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {
+    static func == (lhs: FieldCoordinate, rhs: FieldCoordinate) -> Bool {
         return lhs.coord == rhs.coord
     }
 
-    static func != (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {
+    static func != (lhs: FieldCoordinate, rhs: FieldCoordinate) -> Bool {
         return !(lhs == rhs)
     }
 

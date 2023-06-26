@@ -27,7 +27,7 @@ extension Array {
 
 }
 
-#warning("move to GameObject")
+// TODO: move to GameObject
 //// MARK: - GameObjectMO
 //extension GameObjectMO {
 //
@@ -71,23 +71,18 @@ extension Array {
 // MARK: - SKNode
 extension SKNode {
 
-    func intersectsSqure(node: SKNode, range: Double) -> Bool {
-        let center = node.convert(CGPoint(), to: self.parent!)
-        let distanceX = self.position.x - center.x
-        let distanceY = self.position.y - center.y
-
-        return -range <= distanceX && distanceX <= range
-            && -range <= distanceY && distanceY <= range
+    func setPositionToLocation(of touch: UITouch) {
+        let touchPoint = touch.location(in: self.parent!)
+        self.position = touchPoint
     }
 
-    func child(at touch: UITouch) -> SKNode? {
-        let touchLocation = touch.location(in: self)
+    func childAtLocation(of touch: UITouch) -> SKNode? {
+        let touchPoint = touch.location(in: self)
         for child in self.children {
-            if child.contains(touchLocation) {
+            if child.contains(touchPoint) {
                 return child
             }
         }
-
         return nil
     }
 
@@ -95,7 +90,7 @@ extension SKNode {
         return self.parent?.children.firstIndex(of: self)
     }
 
-    func isAtLocation(of touch: UITouch) -> Bool {
+    func isBeing(touched touch: UITouch) -> Bool {
         return self.contains(touch.location(in: self.parent!))
     }
 
@@ -235,13 +230,23 @@ extension CGPoint {
         return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 
+    static func < (lhs: CGPoint, rhs: Double) -> Bool {
+        return lhs.x < rhs && lhs.y < rhs
+    }
+
     // MARK: Coordinate<Int>
     static func * (lhs: CGPoint, rhs: Coordinate<Int>) -> CGPoint {
         return CGPoint(x: lhs.x * Double(rhs.x), y: lhs.y * Double(rhs.y))
     }
 
-    func toVector() -> CGVector {
-        return CGVector(dx: self.x, dy: self.y)
+    var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
+
+}
+
+extension Double {
+
+    static func <= (lhs: Double, rhs: CGPoint) -> Bool {
+        return lhs <= rhs.x && lhs <= rhs.y
     }
 
 }

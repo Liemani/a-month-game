@@ -8,12 +8,15 @@
 import Foundation
 import SpriteKit
 
-class InteractableGOTracker {
+class AccessibleGOTracker {
+
+    var character: Character
 
     private var dict: [Int: GameObject]
     var gos: some Sequence<GameObject> { self.dict.values }
 
-    init() {
+    init(character: Character) {
+        self.character = character
         self.dict = [:]
     }
 
@@ -38,11 +41,21 @@ class InteractableGOTracker {
         }
     }
 
+    func add(_ go: GameObject) {
+        self.dict[go.id] = go
+        self.activate(go)
+    }
+
+    func remove(_ go: GameObject) {
+        self.deactivate(go)
+        self.dict[go.id] = nil
+    }
+
     // MARK: - activate
     func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
-        go.colorBlendFactor = Constant.accessableGOColorBlendFactor
-        go.isUserInteractionEnabled = go.type.isInteractable
+        go.colorBlendFactor = Constant.accessibleGOColorBlendFactor
+        go.isUserInteractionEnabled = true
     }
 
     func activateAll() {
@@ -57,20 +70,18 @@ class InteractableGOTracker {
     }
 
     // MARK: - update
-    func updateWhole(character: Character, gos: any Sequence<GameObject>) {
+    func updateWhole(gos: any Sequence) {
         self.reset()
 
         for go in gos {
             let go = go as! GameObject
-            if go.intersectsSqure(node: character,
-                                  range: Constant.accessableRange) {
+            if go.isAccessible(by: self.character) {
                 self.dict[go.id] = go
                 self.activate(go)
             }
         }
 
-        EventManager.default.shouldUpdate.update(with: .craftWindow)
-        EventManager.default.shouldUpdate.subtract(.interaction)
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     private func reset() {

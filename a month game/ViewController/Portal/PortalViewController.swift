@@ -9,7 +9,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class PortalSceneViewController: UIViewController, UIGestureRecognizerDelegate {
+class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,9 +52,11 @@ class PortalSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc
     func requestPresentWorldSceneViewController() {
         WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        TouchEventHandlerManager.set()
         EventManager.set()
+        FrameCycleUpdateManager.set()
 
-        let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldSceneViewController
+        let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController
 
         self.navigationController?.setViewControllers([worldViewController], animated: false)
     }

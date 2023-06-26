@@ -12,12 +12,16 @@ class Character: SKShapeNode {
 
     var data: CharacterData
 
-    var streetChunkCoord: ChunkCoordinate
+    var chunkCoord: ChunkCoordinate { self.data.chunkCoord }
+
+    var chunkChunkCoord: ChunkCoordinate
     func moveChunk(direction: Direction4) {
-        let directionStreetCoord = direction.coord * 16
-        self.position -= directionStreetCoord.cgPoint * Constant.tileWidth
-        self.streetChunkCoord += directionStreetCoord
+        let directionCoordOfAChunk = direction.coordOfAChunk
+        self.position -= directionCoordOfAChunk.cgPoint * Constant.tileWidth
+        self.chunkChunkCoord += directionCoordOfAChunk
     }
+
+    var tileCoord: Coordinate<Int> { self.data.chunkCoord.address.tile.coord }
 
     /// character position is always in the midle chunk
     var lastPosition: CGPoint!
@@ -29,10 +33,20 @@ class Character: SKShapeNode {
 
     var velocityVector: CGVector
 
+    private var accessibleRange: Int { Constant.characterAccessibleRange }
+    var accessibleFrame: CGRect {
+        let side = Constant.tileWidth * Double(self.accessibleRange * 2 + 1)
+        let originTileCoord = FieldCoordinate(self.tileCoord - 1)
+        let origin = originTileCoord.fieldPoint - Constant.tileWidth / 2
+
+        return CGRect(origin: origin, size: CGSize(width: side, height: side))
+    }
+
     // MARK: - init
     override init() {
         self.data = CharacterData()
-        self.streetChunkCoord = self.data.chunkCoord
+        self.chunkChunkCoord = self.data.chunkCoord
+        self.chunkChunkCoord.address.tile.rawCoord = Coordinate()
         self.velocityVector = CGVector()
 
         super.init()
@@ -49,8 +63,7 @@ class Character: SKShapeNode {
         self.lineWidth = 5.0
         self.zPosition = Constant.ZPosition.character
 
-        let buildingCoord = TileCoordinate(self.data.buildingCoord)
-        let position = buildingCoord.fieldPoint
+        let position = FieldCoordinate(self.tileCoord).fieldPoint
         self.lastPosition = position
         self.position = position
     }

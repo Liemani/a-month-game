@@ -9,9 +9,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
-
-    var viewModel: WorldSceneViewModel!
+class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     /// initialize task without relation to view
     required init?(coder: NSCoder) {
@@ -33,32 +31,6 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
 
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
-
-        let viewModel = WorldSceneViewModel(
-            movingLayer: scene.movingLayer,
-            chunkContainer: scene.movingLayer.chunkContainer,
-            characterInv: scene.characterInv,
-            character: scene.character)
-        self.viewModel = viewModel
-
-#if DEBUG
-        self.debugCode()
-#endif
-    }
-
-    // MARK: - update
-    // TODO: there is event have to occur, one time if need, multiple time
-    func update(_ timeInterval: TimeInterval) {
-        self.viewModel.update(timeInterval)
-
-        self.updateData()
-    }
-
-    func updateData() {
-        let moContext = WorldServiceContainer.default.moContext
-        if moContext.hasChanges {
-            try! moContext.save()
-        }
     }
 
     // TODO: check this method, other edit is perfect
@@ -76,27 +48,13 @@ class WorldSceneViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - transition
     @objc
     func requestPresentPortalSceneViewController() {
-        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalSceneViewController
+        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
         self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
 
         WorldServiceContainer.free()
+        TouchEventHandlerManager.free()
         EventManager.free()
-    }
-
-}
-
-// MARK: debug
-#if DEBUG
-extension WorldSceneViewController {
-
-    private func debugCode() {
-        let gos = self.viewModel.fieldGOs
-        for go in gos {
-            let data = go.data
-            guard let chunkCoord = data.chunkCoord else { continue }
-
-            print("id: \(data.id), typeID: \(data.type), coordinate: (\(chunkCoord))")
-        }
+        FrameCycleUpdateManager.free()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -112,7 +70,6 @@ extension WorldSceneViewController {
     }
 
 }
-#endif
 
 // MARK: - edit model
     // MARK: - game object

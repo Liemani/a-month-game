@@ -62,7 +62,7 @@ class ButtonNode: LMISpriteNode {
     override func touchMoved(_ touch: UITouch) {
         guard touch == self.touch else { return }
 
-        if self.isAtLocation(of: touch) {
+        if self.isBeing(touched: touch) {
             self.activate()
         } else {
             self.deactivate()
@@ -72,19 +72,20 @@ class ButtonNode: LMISpriteNode {
     override func touchEnded(_ touch: UITouch) {
         guard touch == self.touch else { return }
 
-        if self.isAtLocation(of: touch) {
+        if self.isBeing(touched: touch) {
             self.delegate!.buttonTapped(sender: self)
         }
-        self.resetTouch(touch)
+
+        self.completeTouch(touch)
     }
 
     override func touchCancelled(_ touch: UITouch) {
         guard touch == self.touch else { return }
 
-        self.resetTouch(touch)
+        self.completeTouch(touch)
     }
 
-    override func resetTouch(_ touch: UITouch) {
+    func completeTouch(_ touch: UITouch) {
         self.deactivate()
         self.touch = nil
     }

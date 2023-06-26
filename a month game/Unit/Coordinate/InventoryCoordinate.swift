@@ -12,10 +12,9 @@ struct InventoryCoordinate {
     var id: Int
     var index: Int
 
-    init(from invCoordMO: InventoryCoordinateMO) {
-        let id = Int(invCoordMO.id)
-        let index = Int(invCoordMO.index)
-        self.init(id, index)
+    init() {
+        self.id = 0
+        self.index = 0
     }
 
     init(_ id: Int, _ index: Int) {
