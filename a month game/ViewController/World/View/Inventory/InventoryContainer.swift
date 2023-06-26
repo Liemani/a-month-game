@@ -121,6 +121,14 @@ extension InventoryContainer: InventoryProtocol {
         }
     }
 
+    func move(_ item: GameObject, toParent parent: SKNode) {
+        item.move(toParent: parent)
+    }
+
+    func remove(_ item: GameObject) {
+        item.removeFromParent()
+    }
+
     func makeIterator() -> some IteratorProtocol {
         var sequences: [Inventory] = [self.characterInv]
 

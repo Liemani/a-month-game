@@ -165,9 +165,9 @@ enum EventType: Int, CaseIterable {
             let characterCoord = scene.character.data.chunkCoord.coord
 
             if go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
-                go.removeFromParent()
-                    scene.chunkContainer.add(go)
-                    scene.accessibleGOTracker.add(go)
+                go.lmiRemoveFromParent()
+                scene.chunkContainer.add(go)
+                scene.accessibleGOTracker.add(go)
 
                 return
             }
@@ -182,7 +182,7 @@ enum EventType: Int, CaseIterable {
             let go = event.sender as! GameObject
 
             guard !scene.invContainer.isValid(go.invCoord!) else {
-                go.removeFromParent()
+                go.lmiRemoveFromParent()
                     scene.invContainer.add(go)
 
                 return
@@ -201,14 +201,14 @@ enum EventType: Int, CaseIterable {
             if let index = characterInv.emptyIndex {
                 let newInvCoord = InventoryCoordinate(characterInv.id, index)
                 go.data.set(invCoord: newInvCoord)
-                go.removeFromParent()
+                go.lmiRemoveFromParent()
                 characterInv.add(go)
 
                 return
             }
 
             go.data.set(chunkCoord: scene.character.data.chunkCoord)
-            go.removeFromParent()
+            go.lmiRemoveFromParent()
             scene.chunkContainer.chunks[Direction9.origin].add(go)
             scene.accessibleGOTracker.add(go)
         },
@@ -216,7 +216,7 @@ enum EventType: Int, CaseIterable {
         { scene, event in // gameObjectMoveToUI
             let go = event.sender as! GameObject
 
-            go.move(toParent: scene.ui)
+            go.lmiMove(toParent: scene.ui)
         },
 
         { scene, event in // gameObjectInteract

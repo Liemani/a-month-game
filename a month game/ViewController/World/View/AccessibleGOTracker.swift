@@ -70,18 +70,23 @@ class AccessibleGOTracker {
     }
 
     // MARK: - update
-    func updateWhole(gos: any Sequence) {
+    func update(chunkContainer: ChunkContainer) {
         self.reset()
 
-        for go in gos {
-            let go = go as! GameObject
-            if go.isAccessible(by: self.character) {
-                self.dict[go.id] = go
-                self.activate(go)
+        for direction in Direction9.allCases {
+            let tileChunkCoord = self.character.chunkCoord + direction.coord
+            let chunkDirection = chunkContainer.chunkDirection(to: tileChunkCoord)!
+            let tileAddr = tileChunkCoord.address.tile.value
+            let chunk = chunkContainer.chunks[chunkDirection]
+
+            guard let tileGOs = chunk.data.tileGOs(tileAddr: tileAddr) else {
+                continue
+            }
+
+            for go in tileGOs {
+                self.add(go)
             }
         }
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     private func reset() {

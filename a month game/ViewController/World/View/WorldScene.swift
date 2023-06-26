@@ -139,7 +139,7 @@ class WorldScene: SKScene {
 
     func updateModel() {
         if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
-            self.accessibleGOTracker.updateWhole(gos: self.chunkContainer)
+            self.accessibleGOTracker.update(chunkContainer: self.chunkContainer)
         }
 
         if FrameCycleUpdateManager.default.contains(.craftWindow) {

@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol InventoryProtocol: Sequence {
+protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Item
     associatedtype Coord
@@ -22,6 +22,8 @@ protocol InventoryProtocol: Sequence {
     func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
+    func move(_ item: Item, toParent parent: SKNode)
+    func remove(_ item: Item)
 
 }
 
@@ -89,7 +91,7 @@ class Inventory: SKSpriteNode {
 }
 
 extension Inventory: InventoryProtocol {
-    
+
     func isValid(_ coord: Int) -> Bool {
         return 0 <= coord && coord < self.cellCount
     }
@@ -126,6 +128,14 @@ extension Inventory: InventoryProtocol {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
         item.isUserInteractionEnabled = true
+    }
+
+    func move(_ item: GameObject, toParent parent: SKNode) {
+        item.move(toParent: parent)
+    }
+
+    func remove(_ item: GameObject) {
+        item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {

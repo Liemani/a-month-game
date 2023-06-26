@@ -528,7 +528,18 @@ InventoryProtocol::coord(touch: UITouch) { }
 if only the original coord is accessible, rewind
 if inventory is not accessible fail
 
-TODO: take item invInv also
+## TODO: take item invInv also
+if no go interact to go, check
+implement craft system
+address -> addr
+add FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+wood is to dark
+    grass is to green
+    bright is better than dark
+add timer
+make temporary circle at touch location
+when tile move, improve the performence of accessibleGOTracker
 
 hide reset button to menu window
 

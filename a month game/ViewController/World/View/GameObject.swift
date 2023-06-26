@@ -60,6 +60,22 @@ class GameObject: LMISpriteNode {
         return character.accessibleFrame.contains(self.position + self.parent!.position)
     }
 
+    func lmiRemoveFromParent() {
+        if let inventory = self.parent as? any InventoryProtocol<GameObject> {
+            inventory.remove(self)
+        } else {
+            super.removeFromParent()
+        }
+    }
+
+    func lmiMove(toParent parent: SKNode) {
+        if let inventory = self.parent as? any InventoryProtocol<GameObject> {
+            inventory.move(self, toParent: parent)
+        } else {
+            super.move(toParent: parent)
+        }
+    }
+
     // MARK: - touch
     override func touchBegan(_ touch: UITouch) {
         guard TouchEventHandlerManager.default.handler(

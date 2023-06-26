@@ -41,6 +41,7 @@
 		0347BA782A481BAB00E31FA1 /* InventoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA772A481BAB00E31FA1 /* InventoryRepository.swift */; };
 		0347BA7A2A481C4100E31FA1 /* InventoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA792A481C4100E31FA1 /* InventoryService.swift */; };
 		0347BA7C2A48703900E31FA1 /* InventoryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA7B2A48703900E31FA1 /* InventoryContainer.swift */; };
+		0347BA7E2A49BB8F00E31FA1 /* ChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */; };
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkContainer.swift */; };
 		036FE52C2A43136B007E66A5 /* tiny_homeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */; };
@@ -132,6 +133,7 @@
 		0347BA772A481BAB00E31FA1 /* InventoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryRepository.swift; sourceTree = "<group>"; };
 		0347BA792A481C4100E31FA1 /* InventoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryService.swift; sourceTree = "<group>"; };
 		0347BA7B2A48703900E31FA1 /* InventoryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryContainer.swift; sourceTree = "<group>"; };
+		0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkData.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		036FE5212A429E8D007E66A5 /* ChunkContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainer.swift; sourceTree = "<group>"; };
 		036FE5292A43136B007E66A5 /* tiny_homeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tiny_homeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -244,6 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				031D57552A076DC8007EF383 /* CharacterData.swift */,
+				0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */,
 				03CE3AF42A3E26FC00D95152 /* GameObjectData.swift */,
 			);
 			path = Model;
@@ -631,6 +634,7 @@
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
+				0347BA7E2A49BB8F00E31FA1 /* ChunkData.swift in Sources */,
 				039037CB2A15FBCD0014A571 /* Extension.swift in Sources */,
 				03CE3AF32A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift in Sources */,
 				034637822A238D3600370C71 /* AccessibleGOTracker.swift in Sources */,

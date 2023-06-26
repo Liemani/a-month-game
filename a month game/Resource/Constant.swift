@@ -26,7 +26,7 @@ struct Constant {
 
     static let sceneCenter = sceneSize.cgPoint / 2.0
 
-    static let worldLayer = CGPoint(x: sceneCenter.x, y: sceneCenter.x + tileWidth)
+    static let worldLayer = CGPoint(x: sceneCenter.x, y: sceneCenter.x + tileWidth + invCellSpacing)
 
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)

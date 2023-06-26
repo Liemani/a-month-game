@@ -62,6 +62,11 @@ class ChunkContainer: LMINode {
         self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
 
+    // MARK: -
+    func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
+        return self.character.chunkChunkCoord.chunkDirection(to: chunkCoord)
+    }
+
     // MARK: - private
     private func shift(direction: Direction4) {
         switch direction {
@@ -176,6 +181,7 @@ extension ChunkContainer: InventoryProtocol {
         let coord = coord.coord
         let lowerBound = self.lowerBound
         let upperBound = self.upperBound
+
         return lowerBound.x <= coord.x && coord.x < upperBound.x
             && lowerBound.y <= coord.y && coord.y < upperBound.y
     }
@@ -185,6 +191,7 @@ extension ChunkContainer: InventoryProtocol {
         guard let goChunkCoord = item.chunkCoord else {
             return false
         }
+
         return self.isValid(goChunkCoord)
     }
 
@@ -192,7 +199,9 @@ extension ChunkContainer: InventoryProtocol {
         guard let direction = self.chunkDirection(to: coord) else {
             return nil
         }
+
         let go = self.chunks[direction].item(at: coord.address.tile.coord)
+
         return go
     }
 
@@ -203,6 +212,7 @@ extension ChunkContainer: InventoryProtocol {
         let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
         let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
         let go = chunk.itemAtLocation(of: touch)
+
         return go
     }
 
@@ -226,8 +236,12 @@ extension ChunkContainer: InventoryProtocol {
         self.chunks[direction].add(item)
     }
 
-    private func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        return self.character.chunkChunkCoord.chunkDirection(to: chunkCoord)
+    func move(_ item: GameObject, toParent parent: SKNode) {
+        item.move(toParent: parent)
+    }
+
+    func remove(_ item: GameObject) {
+        item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol {

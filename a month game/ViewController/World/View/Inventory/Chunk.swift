@@ -8,28 +8,14 @@
 import Foundation
 import SpriteKit
 
-// MARK: usage extension
-#if DEBUG
-extension Chunk {
-
-    /// empty chunk node
-    private static func new() -> Chunk {
-        let chunk = Chunk()
-        return chunk
-    }
-
-    /// chunk node load and add game object node
-    private static func update(chunk: Chunk, chunkCoord: ChunkCoordinate) {
-        chunk.update(chunkCoord: chunkCoord)
-    }
-
-}
-#endif
-
 class Chunk: LMINode {
+
+    var data: ChunkData
 
     // MARK: - init
     override init() {
+        self.data = ChunkData()
+
         super.init()
     }
 
@@ -41,10 +27,12 @@ class Chunk: LMINode {
     // MARK: chunk
     func update(chunkCoord: ChunkCoordinate) {
         self.removeAllChildren()
+        self.data.removeAll()
 
         let goDatas = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
         for goData in goDatas {
             let go = GameObject(from: goData)
+
             self.add(go)
         }
     }
@@ -59,10 +47,14 @@ extension Chunk: InventoryProtocol {
     }
 
     func contains(_ item: GameObject) -> Bool {
-        for go in self {
-            let go = go as! GameObject
-#warning("How to checking equality?")
-            if item.id == go.id {
+        let tileAddr = item.chunkCoord!.address.tile.value
+
+        guard let tileGOs = self.data.tileGOs(tileAddr: tileAddr) else {
+            return false
+        }
+
+        for go in tileGOs {
+            if go.id == item.id {
                 return true
             }
         }
@@ -70,22 +62,24 @@ extension Chunk: InventoryProtocol {
     }
 
     func item(at coord: Coordinate<Int>) -> GameObject? {
-        for go in self {
-            let go = go as! GameObject
-            if coord == go.chunkCoord!.address.tile.coord {
-                return go
-            }
+        let addr = Address(coord.x, coord.y).tile.value
+        if let tileGOs = self.data.tileGOs(tileAddr: addr) {
+            return tileGOs[0]
         }
+
         return nil
     }
 
     func itemAtLocation(of touch: UITouch) -> GameObject? {
-        for go in self {
-            let go = go as! GameObject
-            if go.isBeing(touched: touch) {
-                return go
-            }
+        let touchedLocation = touch.location(in: self)
+        let touchedFieldCoord = FieldCoordinate(from: touchedLocation)
+        let touchedChunkCoord = ChunkCoordinate(touchedFieldCoord.coord.x, touchedFieldCoord.coord.y)
+
+        let tileAddr = touchedChunkCoord.address.tile.value
+        if let tileGOs = self.data.tileGOs(tileAddr: tileAddr) {
+            return tileGOs[0]
         }
+
         return nil
     }
 
@@ -104,6 +98,20 @@ extension Chunk: InventoryProtocol {
         self.addChild(item)
         let tileCoord = item.chunkCoord!.address.tile.coord
         item.position = FieldCoordinate(tileCoord).fieldPoint
+
+        self.data.add(item)
+    }
+
+    func move(_ item: GameObject, toParent parent: SKNode) {
+        self.data.remove(item)
+
+        item.move(toParent: parent)
+    }
+
+    func remove(_ item: GameObject) {
+        self.data.remove(item)
+
+        item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol {
