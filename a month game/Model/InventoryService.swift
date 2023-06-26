@@ -15,8 +15,8 @@ class InventoryService {
         self.inventoryRepo = inventoryRepo
     }
 
-    func load(at invCoord: InventoryCoordinate) -> [GameObjectData] {
-        let goMOs = self.inventoryRepo.load(at: invCoord)
+    func load(id: Int) -> [GameObjectData] {
+        let goMOs = self.inventoryRepo.load(id: id)
         let goDatas = goMOs.compactMap {
             GameObjectData(from: $0)
         }

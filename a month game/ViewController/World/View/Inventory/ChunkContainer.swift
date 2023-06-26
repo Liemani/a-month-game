@@ -11,11 +11,11 @@ import SpriteKit
 class ChunkContainer: LMINode {
 
     private let character: Character
-    private var chunks: [Chunk]
+    var chunks: [Chunk]
 
     // MARK: computed property
-    var lowerBound: Coordinate<Int> { self.character.streetChunkCoord.coord + Direction9.southWest.coordOfAChunk }
-    var upperBound: Coordinate<Int> { self.character.streetChunkCoord.coord + Direction9.northEast.coordOfAChunk * 2 }
+    var lowerBound: Coordinate<Int> { self.character.chunkChunkCoord.coord + Direction9.southWest.coordOfAChunk }
+    var upperBound: Coordinate<Int> { self.character.chunkChunkCoord.coord + Direction9.northEast.coordOfAChunk * 2 }
 
     // MARK: - init
     init(character: Character) {
@@ -58,7 +58,7 @@ class ChunkContainer: LMINode {
 
     private func updateChunk(direction: Direction9) {
         let chunkOffset = direction.coordOfAChunk
-        let tartgetChunkCoord = self.character.streetChunkCoord + chunkOffset
+        let tartgetChunkCoord = self.character.chunkChunkCoord + chunkOffset
         self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
 
@@ -192,18 +192,33 @@ extension ChunkContainer: InventoryProtocol {
         guard let direction = self.chunkDirection(to: coord) else {
             return nil
         }
-        let go = self.chunks[direction].item(at: coord)
+        let go = self.chunks[direction].item(at: coord.address.tile.coord)
         return go
     }
 
     func itemAtLocation(of touch: UITouch) -> GameObject? {
         let touchPoint = touch.location(in: self)
-        let tileCoord = TileCoordinate(from: touchPoint)
-        let directionCoord = tileCoord.coord
+        let fieldCoord = FieldCoordinate(from: touchPoint)
+        let directionCoord = fieldCoord.coord
         let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
         let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
         let go = chunk.itemAtLocation(of: touch)
         return go
+    }
+
+    func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
+        let touchPoint = touch.location(in: self)
+
+        let chunkcontainerWidthHalf = Constant.chunkWidth * 3.0 / 2.0
+
+        guard -chunkcontainerWidthHalf <= touchPoint
+            && touchPoint < chunkcontainerWidthHalf else {
+            return nil
+        }
+
+        let fieldCoord = FieldCoordinate(from: touchPoint)
+
+        return self.character.chunkChunkCoord + fieldCoord.coord
     }
 
     func add(_ item: GameObject) {
@@ -212,7 +227,7 @@ extension ChunkContainer: InventoryProtocol {
     }
 
     private func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        return self.character.streetChunkCoord.chunkDirection(to: chunkCoord)
+        return self.character.chunkChunkCoord.chunkDirection(to: chunkCoord)
     }
 
     func makeIterator() -> some IteratorProtocol {

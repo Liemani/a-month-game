@@ -17,7 +17,9 @@ protocol InventoryProtocol: Sequence {
     func contains(_ item: Item) -> Bool
 
     func item(at coord: Coord) -> Item?
+
     func itemAtLocation(of touch: UITouch) -> Item?
+    func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
 
@@ -33,6 +35,7 @@ class Inventory: SKSpriteNode {
 
     init(id: Int,
          texture: SKTexture,
+         cells: [SKSpriteNode],
          cellWidth: Double,
          cellSpacing: Double) {
         self.id = id
@@ -41,25 +44,21 @@ class Inventory: SKSpriteNode {
         self.cellSpacing = cellSpacing
 
         super.init(texture: texture, color: .white, size: texture.size())
+
+        self.addCells(cells)
+
+        let goDatas = WorldServiceContainer.default.invServ.load(id: self.id)
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+            let index = go.invCoord!.index
+            if self.isValid(index) {
+                self.add(go)
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func addCell(_ cell: SKSpriteNode) {
-        self.addChild(cell)
-        self.cellCount += 1
-
-        let distanceOfCellsCenter = self.cellWidth + self.cellSpacing
-        let endCellOffset = distanceOfCellsCenter * Double((self.cellCount - 1) / 2)
-
-        var positionX = -endCellOffset
-
-        for index in 0..<self.cellCount {
-            self.children[index].position = CGPoint(x: positionX, y: 0)
-            positionX += distanceOfCellsCenter
-        }
     }
 
     func addCells(_ cells: [SKSpriteNode]) {
@@ -78,35 +77,29 @@ class Inventory: SKSpriteNode {
         }
     }
 
-    func update(invCoord: InventoryCoordinate) {
-        self.removeAllChildren()
-
-        let goDatas = WorldServiceContainer.default.invServ.load(at: invCoord)
-        for goData in goDatas {
-            let go = GameObject(from: goData)
-            self.add(go)
+    var emptyIndex: Int? {
+        for (index, cell) in self.children.enumerated() {
+            if cell.children.first != nil {
+                return index
+            }
         }
+        return nil
     }
 
 }
 
 extension Inventory: InventoryProtocol {
     
-    func isValid(_ coord: InventoryCoordinate) -> Bool {
-        return coord.id == self.id
-                && 0 <= coord.index && coord.index < self.cellCount
+    func isValid(_ coord: Int) -> Bool {
+        return 0 <= coord && coord < self.cellCount
     }
 
     func contains(_ item: GameObject) -> Bool {
-        return self.isValid(item.invCoord!)
+        return item.invCoord!.id == self.id
     }
 
-    func item(at coord: InventoryCoordinate) -> GameObject? {
-        guard coord.id == self.id else {
-            return nil
-        }
-
-        let cell = self.children[coord.index]
+    func item(at coord: Int) -> GameObject? {
+        let cell = self.children[coord]
 
         return cell.children.first as! GameObject?
     }
@@ -120,9 +113,19 @@ extension Inventory: InventoryProtocol {
         return nil
     }
 
+    func coordAtLocation(of touch: UITouch) -> Int? {
+        for (index, cell) in self.children.enumerated() {
+            if cell.isBeing(touched: touch) {
+                return index
+            }
+        }
+        return nil
+    }
+
     func add(_ item: GameObject) {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
+        item.isUserInteractionEnabled = true
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
@@ -143,12 +146,14 @@ struct InventoryIterator: IteratorProtocol {
     mutating func next() -> GameObject? {
         while index < self.inv.cellCount {
 //            if let go = self.inv.children[index].children.first {
-            let invCoord = InventoryCoordinate(0, index)
-            index += 1
 
-            if let go = self.inv.item(at: invCoord) {
+            if let go = self.inv.item(at: index) {
+                index += 1
+
                 return go
             }
+
+            index += 1
         }
         return nil
     }

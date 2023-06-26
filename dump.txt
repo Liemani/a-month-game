@@ -524,7 +524,13 @@ make texture manager
 Texture.button -> rawValue(?) has SKTexture
 
 fix GO drag bug
-fix accessable range bug
+InventoryProtocol::coord(touch: UITouch) { }
+if only the original coord is accessible, rewind
+if inventory is not accessible fail
+
+TODO: take item invInv also
+
+hide reset button to menu window
 
 데이터를 분산적으로 갖지 않는다
     캐릭터의 위치를 여러 객체가 갖지 않는다

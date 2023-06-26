@@ -19,8 +19,8 @@ class InventoryRepository {
         self.invCoordDataSource = invCoordDataSource
     }
 
-    func load(at invCoord: InventoryCoordinate) -> [GameObjectMO] {
-        let invCoordMOs = self.invCoordDataSource.load(at: invCoord)
+    func load(id: Int) -> [GameObjectMO] {
+        let invCoordMOs = self.invCoordDataSource.load(id: id)
         let goMOs = invCoordMOs.compactMap { invCoordMO -> GameObjectMO? in
             return invCoordMO.gameObjectMO
         }

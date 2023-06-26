@@ -53,25 +53,26 @@ class Chunk: LMINode {
 
 extension Chunk: InventoryProtocol {
 
-    func isValid(_ coord: ChunkCoordinate) -> Bool {
-        return true
+    func isValid(_ coord: Coordinate<Int>) -> Bool {
+        return 0 <= coord.x && coord.x < Constant.tileCountOfChunkSide
+            && 0 <= coord.y && coord.y < Constant.tileCountOfChunkSide
     }
 
     func contains(_ item: GameObject) -> Bool {
         for go in self {
             let go = go as! GameObject
 #warning("How to checking equality?")
-            if go == item {
+            if item.id == go.id {
                 return true
             }
         }
         return false
     }
 
-    func item(at coord: ChunkCoordinate) -> GameObject? {
+    func item(at coord: Coordinate<Int>) -> GameObject? {
         for go in self {
             let go = go as! GameObject
-            if go.chunkCoord!.chunk.building == coord.chunk.building {
+            if coord == go.chunkCoord!.address.tile.coord {
                 return go
             }
         }
@@ -88,10 +89,21 @@ extension Chunk: InventoryProtocol {
         return nil
     }
 
+    func coordAtLocation(of touch: UITouch) -> Coordinate<Int>? {
+        let touchPoint = touch.location(in: self)
+        let chunkWidthHalf = Constant.chunkWidth
+
+        guard -chunkWidthHalf <= touchPoint && touchPoint < chunkWidthHalf else {
+            return nil
+        }
+
+        return FieldCoordinate(from: touchPoint).coord
+    }
+
     func add(_ item: GameObject) {
         self.addChild(item)
-        let buildingCoord = item.chunkCoord!.chunk.building.coord
-        item.position = TileCoordinate(buildingCoord).fieldPoint
+        let tileCoord = item.chunkCoord!.address.tile.coord
+        item.position = FieldCoordinate(tileCoord).fieldPoint
     }
 
     func makeIterator() -> some IteratorProtocol {

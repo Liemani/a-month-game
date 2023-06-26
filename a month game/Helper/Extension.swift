@@ -230,12 +230,24 @@ extension CGPoint {
         return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 
+    static func < (lhs: CGPoint, rhs: Double) -> Bool {
+        return lhs.x < rhs && lhs.y < rhs
+    }
+
     // MARK: Coordinate<Int>
     static func * (lhs: CGPoint, rhs: Coordinate<Int>) -> CGPoint {
         return CGPoint(x: lhs.x * Double(rhs.x), y: lhs.y * Double(rhs.y))
     }
 
     var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
+
+}
+
+extension Double {
+
+    static func <= (lhs: Double, rhs: CGPoint) -> Bool {
+        return lhs <= rhs.x && lhs <= rhs.y
+    }
 
 }
 

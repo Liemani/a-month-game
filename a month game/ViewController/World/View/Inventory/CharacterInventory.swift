@@ -14,14 +14,6 @@ class CharacterInventory: Inventory {
     var rightHandGO: GameObject? { self.children.last!.children.first as! GameObject? }
 
     init(id: Int) {
-        super.init(id: id,
-                   texture: SKTexture(imageNamed: "game_object_none"),
-                   cellWidth: Constant.defaultWidth,
-                   cellSpacing: Constant.invCellSpacing)
-
-        self.position = Constant.invWindowPosition
-        self.zPosition = Constant.ZPosition.characterInv
-
         var cells: [SKSpriteNode] = []
         cells.reserveCapacity(5)
         let texture = SKTexture(imageNamed: "inventory_cell")
@@ -30,7 +22,15 @@ class CharacterInventory: Inventory {
             cell.size = Constant.defaultNodeSize
             cells.append(cell)
         }
-        self.addCells(cells)
+
+        super.init(id: id,
+                   texture: SKTexture(imageNamed: "game_object_none"),
+                   cells: cells,
+                   cellWidth: Constant.defaultWidth,
+                   cellSpacing: Constant.invCellSpacing)
+
+        self.position = Constant.invWindowPosition
+        self.zPosition = Constant.ZPosition.characterInv
     }
 
     required init?(coder aDecoder: NSCoder) {

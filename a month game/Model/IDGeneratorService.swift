@@ -10,13 +10,10 @@ import Foundation
 final class IDGeneratorService {
 
     private var worldDataRepository: WorldDataRepository
-    private var nextID: Int
+    lazy var nextID: Int = self.worldDataRepository.load(at: .nextID)
 
     init(worldDataRepository: WorldDataRepository) {
         self.worldDataRepository = worldDataRepository
-
-        let nextID = self.worldDataRepository.load(at: .nextID)
-        self.nextID = nextID
     }
 
     func generate() -> Int {

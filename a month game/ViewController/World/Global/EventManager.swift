@@ -13,61 +13,19 @@ enum EventType: Int, CaseIterable {
     case characterTouchBegan
     case gameObjectTouchBegan
     case gameObjectMoveTouchBegan
-    case gameObjectMoveTouchEnded
 
-    case gameObjectAddToChunk
+    case gameObjectMoveTouchEnded
+    case gameObjectMoveTouchEndedAtField
+    case gameObjectMoveTouchEndedAtInv
+    case gameObjectMoveToBelong
+    case gameObjectMoveToBelongField
+    case gameObjectMoveToBelongInv
+    case gameObjectTake
     case gameObjectMoveToUI
     case gameObjectInteract
+    case gameObjectInteractToGO
     case accessibleGOTrackerAdd
     case accessibleGOTrackerRemove
-
-    /* NEED EVENT HANDLER
-       game object
-           move to chunk
-           move to inventory
-           interact
-           interact with game object
-
-       accessible go tracker
-           add
-           remove
--
-game object pop info window
-    open info window
-
-game object move ended
-    if any GO is at the location of touch
-        game object fail put
-    else
-        if chunk is touched
-            if touched tile is accessible
-                put GO to touched tile
-            else
-                GO fail put
-        else inv is touched
-            put GO to inv
-
-game object fail put
-    if GO was on the tile
-        if the tile is accessible
-            move GO to tile
-//          else if character inv has space
-//              move GO to character inv
-//          else
-//              drop at the position of character
-    else if GO was on the inventory
-        if the inv is accessible
-            put GO to inv
-//          else if character inv has space
-//              move GO to character inv
-//          else
-//              drop at the position of character
-    else if GO has no coord
-//          if character inv has space
-//              move GO to character inv
-//          else
-//              drop at the position of character
-    */
 
     static let eventHandlers: [(WorldScene, Event) -> Void] = [
         { scene, event in // characterTouchBegan
@@ -79,6 +37,7 @@ game object fail put
                 handler.touchBegan()
             }
         },
+
         { scene, event in // gameObjectTouchBegan
             let handler = GameObjectTouchEventHandler(
                 touch: event.udata as! UITouch,
@@ -87,6 +46,7 @@ game object fail put
                 handler.touchBegan()
             }
         },
+
         { scene, event in // gameObjectMoveTouchBegan
             let handler = GameObjectMoveTouchEventHandler(
                 touch: event.udata as! UITouch,
@@ -95,33 +55,192 @@ game object fail put
                 handler.touchBegan()
             }
         },
+
         { scene, event in // gameObjectMoveTouchEnded
-            let handler = GameObjectMoveTouchEndedEventHandler(
-                touch: event.udata as! UITouch,
-                go: event.sender as! GameObject,
-                chunkContainer: scene.chunkContainer)
-            handler.handle()
-        },
-        { scene, event in // gameObjectAddToChunk
             let go = event.sender as! GameObject
-            go.removeFromParent()
-            scene.chunkContainer.add(go)
-            if go.isAccessible(by: scene.character) {
-                scene.accessibleGOTracker.add(go)
+            let touch = event.udata as! UITouch
+
+            let characterChunkCoord = scene.character.chunkCoord
+
+            if let touchedTileChunkCoord = scene.chunkContainer.coordAtLocation(of: touch),
+               touchedTileChunkCoord.coord.isAdjacent(to: characterChunkCoord.coord) {
+                let event = Event(type: .gameObjectMoveTouchEndedAtField,
+                                  udata: touchedTileChunkCoord,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+
+            if let touchedInvCoord = scene.invContainer.coordAtLocation(of: touch) {
+                let event = Event(type: .gameObjectMoveTouchEndedAtInv,
+                                  udata: touchedInvCoord,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+
+            let event = Event(type: .gameObjectMoveToBelong,
+                              udata: nil,
+                              sender: go)
+            EventManager.default.enqueue(event)
+        },
+
+        { scene, event in // gameObjectMoveTouchEndedAtField
+            let go = event.sender as! GameObject
+            let touchedTileChunkCoord = event.udata as! ChunkCoordinate
+
+            if let targetGO = scene.chunkContainer.item(at: touchedTileChunkCoord) {
+                let event = Event(type: .gameObjectInteractToGO,
+                                  udata: targetGO,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            } else {
+                go.data.set(chunkCoord: touchedTileChunkCoord)
+
+                let event = Event(type: .gameObjectMoveToBelongField,
+                                  udata: nil,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
             }
         },
+
+        { scene, event in // gameObjectMoveTouchEndedAtInv
+            let go = event.sender as! GameObject
+            let invCoord = event.udata as! InventoryCoordinate
+
+            if let targetGO = scene.invContainer.item(at: invCoord) {
+                let event = Event(type: .gameObjectInteractToGO,
+                                  udata: targetGO,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            } else {
+                go.data.set(invCoord: invCoord)
+
+                let event = Event(type: .gameObjectMoveToBelongInv,
+                                  udata: nil,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+        },
+
+        { scene, event in // gameObjectMoveToBelong
+            let go = event.sender as! GameObject
+
+            if let goChunkCoord = go.chunkCoord {
+                let event = Event(type: .gameObjectMoveToBelongField,
+                                  udata: nil,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+
+            if go.chunkCoord != nil {
+                let event = Event(type: .gameObjectMoveToBelongInv,
+                                  udata: nil,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+
+            let event = Event(type: .gameObjectTake,
+                    udata: nil,
+                    sender: go)
+            EventManager.default.enqueue(event)
+        },
+
+        { scene, event in // gameObjectMoveToBelongField
+            let go = event.sender as! GameObject
+            let characterCoord = scene.character.data.chunkCoord.coord
+
+            if go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
+                go.removeFromParent()
+                    scene.chunkContainer.add(go)
+                    scene.accessibleGOTracker.add(go)
+
+                return
+            }
+
+            let event = Event(type: .gameObjectTake,
+                    udata: nil,
+                    sender: go)
+            EventManager.default.enqueue(event)
+        },
+
+        { scene, event in // gameObjectMoveToBelongInv
+            let go = event.sender as! GameObject
+
+            guard !scene.invContainer.isValid(go.invCoord!) else {
+                go.removeFromParent()
+                    scene.invContainer.add(go)
+
+                return
+            }
+
+            let event = Event(type: .gameObjectTake,
+                    udata: nil,
+                    sender: go)
+            EventManager.default.enqueue(event)
+        },
+
+        { scene, event in // gameObjectTake
+            let go = event.sender as! GameObject
+            let characterInv = scene.invContainer.characterInv
+
+            if let index = characterInv.emptyIndex {
+                let newInvCoord = InventoryCoordinate(characterInv.id, index)
+                go.data.set(invCoord: newInvCoord)
+                go.removeFromParent()
+                characterInv.add(go)
+
+                return
+            }
+
+            go.data.set(chunkCoord: scene.character.data.chunkCoord)
+            go.removeFromParent()
+            scene.chunkContainer.chunks[Direction9.origin].add(go)
+            scene.accessibleGOTracker.add(go)
+        },
+
         { scene, event in // gameObjectMoveToUI
             let go = event.sender as! GameObject
+
             go.move(toParent: scene.ui)
         },
-        { scene, event in // case gameObjectInteract
+
+        { scene, event in // gameObjectInteract
+            let go = event.sender as! GameObject
+            let targetGO = event.udata as! GameObject
+
             print("interact go")
         },
-        { scene, event in // accessibleGOTrackerAdd
-            scene.accessibleGOTracker.add(event.sender as! GameObject)
+        { scene, event in // gameObjectInteractToGO
+            let go = event.sender as! GameObject
+            let targetGO = event.udata as! GameObject
+
+            print("interact go to go")
         },
+        { scene, event in // accessibleGOTrackerAdd
+            let go = event.sender as! GameObject
+
+            scene.accessibleGOTracker.add(go)
+        },
+
         { scene, event in // accessibleGOTrackerRemove
-            scene.accessibleGOTracker.remove(event.sender as! GameObject)
+            let go = event.sender as! GameObject
+
+            scene.accessibleGOTracker.remove(go)
         },
     ]
 

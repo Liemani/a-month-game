@@ -11,14 +11,14 @@ struct ChunkCoordinate {
 
     var x: Int32
     var y: Int32
-    var chunk: ChunkAddress
+    var address: Address
 
     var coord: Coordinate<Int> {
-        get { Coordinate<Int>(Int(self.x), Int(self.y)) << 8 + self.chunk.coord }
+        get { Coordinate<Int>(Int(self.x), Int(self.y)) << 8 + self.address.coord }
         set {
             self.x = Int32(truncatingIfNeeded: x >> 8)
             self.y = Int32(truncatingIfNeeded: y >> 8)
-            self.chunk = ChunkAddress(Int(x), Int(y))
+            self.address = Address(Int(x), Int(y))
         }
     }
 
@@ -26,19 +26,19 @@ struct ChunkCoordinate {
     init() {
         self.x = 0
         self.y = 0
-        self.chunk = ChunkAddress()
+        self.address = Address()
     }
 
     init(x: Int32, y: Int32, chunkAddress: UInt16) {
         self.x = x
         self.y = y
-        self.chunk = ChunkAddress(adress: chunkAddress)
+        self.address = Address(adress: chunkAddress)
     }
 
     init(_ x: Int, _ y: Int) {
         self.x = Int32(truncatingIfNeeded: x >> 8)
         self.y = Int32(truncatingIfNeeded: y >> 8)
-        self.chunk = ChunkAddress(x, y)
+        self.address = Address(x, y)
     }
 
     // MARK: -
@@ -88,7 +88,7 @@ struct ChunkCoordinate {
 extension ChunkCoordinate: CustomDebugStringConvertible {
 
     var debugDescription: String {
-        return "(\(self.x), \(self.y), \(self.chunk))"
+        return "(\(self.x), \(self.y), \(self.address))"
     }
 
 }

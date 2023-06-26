@@ -1,5 +1,5 @@
 //
-//  TileCoordinate.swift
+//  FieldCoordinate.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/05/24.
@@ -8,7 +8,7 @@
 import Foundation
 
 /// Coordinate system structure specifically for tile coordination
-struct TileCoordinate {
+struct FieldCoordinate {
 
     var coord: Coordinate<Int>
 
@@ -41,23 +41,23 @@ struct TileCoordinate {
         return fieldCoord * Constant.tileWidth
     }
 
-    func isAdjacent(to tileCoordinate: TileCoordinate) -> Bool {
-        self.coord.isAdjacent(to: tileCoordinate.coord)
+    func isAdjacent(to fieldCoord: FieldCoordinate) -> Bool {
+        self.coord.isAdjacent(to: fieldCoord.coord)
     }
 
-    static func + (lhs: TileCoordinate, rhs: Coordinate<Int>) -> TileCoordinate {
-        return TileCoordinate(lhs.coord + rhs)
+    static func + (lhs: FieldCoordinate, rhs: Coordinate<Int>) -> FieldCoordinate {
+        return FieldCoordinate(lhs.coord + rhs)
     }
 
 }
 
-extension TileCoordinate: Equatable {
+extension FieldCoordinate: Equatable {
 
-    static func == (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {
+    static func == (lhs: FieldCoordinate, rhs: FieldCoordinate) -> Bool {
         return lhs.coord == rhs.coord
     }
 
-    static func != (lhs: TileCoordinate, rhs: TileCoordinate) -> Bool {
+    static func != (lhs: FieldCoordinate, rhs: FieldCoordinate) -> Bool {
         return !(lhs == rhs)
     }
 

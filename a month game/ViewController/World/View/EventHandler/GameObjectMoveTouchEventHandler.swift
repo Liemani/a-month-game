@@ -51,58 +51,13 @@ class GameObjectMoveTouchEventHandler: TouchEventHandler {
         EventManager.default.enqueue(event)
 
         self.complete()
-
-//        guard self.touchResponderManager.contains(from: touch) else {
-//            return
-//        }
-//
-//        switch self.parent {
-//        case is FieldNode:
-//            self.resetTouch(touch)
-//            self.interact()
-//        case is InventoryCell:
-//            self.resetTouch(touch)
-//            self.interact()
-//        case is ThirdHand:
-//            if let touchedCell = self.worldScene.inventory.cellAtLocation(of: touch) {
-//                if touchedCell.isEmpty {
-//                    touchedCell.moveGOMO(self)
-//                    self.resetTouch(touch)
-//                    return
-//                } else {
-//                    self.touchCancelled(touch)
-//                    return
-//                }
-//            }
-//
-//            let characterTC = self.worldScene.worldViewController.character.tileCoord
-//            let touchedTC = Coordinate<Int>(from: touch.location(in: self.worldScene.field))
-//            if touchedTC.isAdjacent(to: characterTC) {
-//                let goAtLocationOfTouch = self.worldScene.interactionZone.goAtLocation(of: touch)
-//                if goAtLocationOfTouch == nil {
-//                    let goCoord = GameObjectCoordinate(containerType: .field, coordinate: touchedTC.coord)
-//                    self.worldScene.moveGOMO(from: self, to: goCoord)
-//                    self.resetTouch(touch)
-//                } else {
-//                    self.touchCancelled(touch)
-//                }
-//            } else {
-//                self.touchCancelled(touch)
-//            }
-//        case is CraftCell:
-//            self.touchCancelled(touch)
-//        default: break
-//        }
     }
 
     func touchCancelled() {
-        #warning("in progress")
-        let event = Event(type: .gameObjectAddToChunk,
+        let event = Event(type: .gameObjectMoveToBelong,
                           udata: nil,
                           sender: self.go)
         EventManager.default.enqueue(event)
-
-        print("move go to it's original position if fail drop current tile")
 
         self.complete()
     }

@@ -36,7 +36,7 @@ struct CharacterData {
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)
         worldDataRep.update(value: Int(chunkCoord.y), to: .characterLocationChunkY)
-        worldDataRep.update(value: Int(chunkCoord.chunk.address), to: .characterLocationChunkLocation)
+        worldDataRep.update(value: Int(chunkCoord.address.value), to: .characterLocationChunkLocation)
     }
 
 }

@@ -237,8 +237,8 @@ class WorldScene: SKScene, TouchResponder {
 //    }
 
     var hasMovedToAnotherTile: Bool {
-        let lastTileCoord = TileCoordinate(from: self.character.lastPosition)
-        let currTileCoord = TileCoordinate(from: self.character.position)
+        let lastTileCoord = FieldCoordinate(from: self.character.lastPosition)
+        let currTileCoord = FieldCoordinate(from: self.character.position)
 
         return lastTileCoord != currTileCoord
     }
@@ -258,11 +258,11 @@ class WorldScene: SKScene, TouchResponder {
     }
 
     func saveCharacterPosition() {
-        var streetChunkCoord = self.character.streetChunkCoord
-        streetChunkCoord.chunk.building = AddressComponent()
+        var chunkChunkCoord = self.character.chunkChunkCoord
+        chunkChunkCoord.address.tile = AddressComponent()
 
-        let buildingCoord = TileCoordinate(from: self.character.position).coord
-        let chunkCoord = streetChunkCoord + buildingCoord
+        let tileCoord = FieldCoordinate(from: self.character.position).coord
+        let chunkCoord = chunkChunkCoord + tileCoord
         self.character.data.chunkCoord = chunkCoord
     }
 

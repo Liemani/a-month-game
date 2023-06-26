@@ -17,14 +17,8 @@ class GameObject: LMISpriteNode {
     var type: GameObjectType { self.data.type }
 
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
-
-    func setUpPosition() {
-        self.position = TileCoordinate(self.buildingCoord!).fieldPoint
-    }
-
-    var buildingCoord: Coordinate<Int>? { self.chunkCoord?.chunk.building.coord }
-
     var invCoord: InventoryCoordinate? { self.data.invCoord }
+    var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
 
     // MARK: - init
     init(from goData: GameObjectData) {
@@ -33,10 +27,6 @@ class GameObject: LMISpriteNode {
         let texture = goData.type.texture
         let size = Constant.defaultNodeSize
         super.init(texture: texture, color: .white, size: size)
-
-        if goData.chunkCoord != nil {
-            self.setUpPosition()
-        }
 
         self.zPosition = !self.type.isTile
             ? Constant.ZPosition.gameObject

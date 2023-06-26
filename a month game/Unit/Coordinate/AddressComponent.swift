@@ -10,7 +10,7 @@ import Foundation
 struct AddressComponent: Equatable {
 
     var rawCoord: Coordinate<UInt8>
-    var address: UInt8 {
+    var value: UInt8 {
         get { self.rawCoord.x << 4 | self.rawCoord.y }
         set {
             self.rawCoord.x = newValue >> 4

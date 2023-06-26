@@ -73,11 +73,11 @@ class CraftWindow: LMINode {
 
     private func reset() {
         for cell in self.children {
-            let go = cell.children[0] as! GameObject
-
-            print("craft window will not have game object node, it must has craft object")
-//            go.type = .none
-            go.isUserInteractionEnabled = false
+//            let go = cell.children[0] as! GameObject
+//
+//            print("craft window will not have game object node, it must has craft object")
+////            go.type = .none
+//            go.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }

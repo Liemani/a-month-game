@@ -22,9 +22,9 @@ class InventoryCoordinateDataSource {
         return invCoordMO
     }
 
-    func load(at invCoord: InventoryCoordinate) -> [InventoryCoordinateMO] {
+    func load(id: Int) -> [InventoryCoordinateMO] {
         let request = NSFetchRequest<InventoryCoordinateMO>(entityName: Constant.Name.invCoordinateEntity)
-        request.predicate = NSPredicate(format: "id == %@", argumentArray: [invCoord.id])
+        request.predicate = NSPredicate(format: "id == %@", argumentArray: [id])
 
         let invCoordMOs = try! self.moContext.fetch(request)
         return invCoordMOs
