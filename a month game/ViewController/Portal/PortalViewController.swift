@@ -58,7 +58,7 @@ class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
 
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController
 
-        self.navigationController?.setViewControllers([worldViewController], animated: false)
+        self.navigationController!.setViewControllers([worldViewController], animated: false)
     }
 
 }

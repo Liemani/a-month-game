@@ -48,13 +48,9 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - transition
     @objc
     func requestPresentPortalSceneViewController() {
-        let portalSceneViewController = storyboard?.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
-        self.navigationController?.setViewControllers([portalSceneViewController], animated: false)
+        let portalSceneViewController = storyboard!.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
 
-        WorldServiceContainer.free()
-        TouchEventHandlerManager.free()
-        EventManager.free()
-        FrameCycleUpdateManager.free()
+        self.navigationController!.setViewControllers([portalSceneViewController], animated: false)
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -67,6 +63,13 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        WorldServiceContainer.free()
+        TouchEventHandlerManager.free()
+        EventManager.free()
+        FrameCycleUpdateManager.free()
     }
 
 }
