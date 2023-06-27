@@ -29,11 +29,16 @@ class Chunk: LMINode {
         self.removeAllChildren()
         self.data.removeAll()
 
-        let goDatas = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
-        for goData in goDatas {
-            let go = GameObject(from: goData)
+        DispatchQueue.global(qos: .userInteractive).async {
+            let goDatas = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
+            
+            DispatchQueue.main.async {
+                for goData in goDatas {
+                    let go = GameObject(from: goData)
 
-            self.add(go)
+                    self.add(go)
+                }
+            }
         }
     }
 
@@ -95,11 +100,12 @@ extension Chunk: InventoryProtocol {
     }
 
     func add(_ item: GameObject) {
-        self.addChild(item)
+        self.data.add(item)
+
         let tileCoord = item.chunkCoord!.address.tile.coord
         item.position = FieldCoordinate(tileCoord).fieldPoint
 
-        self.data.add(item)
+        self.addChild(item)
     }
 
     func move(_ item: GameObject, toParent parent: SKNode) {

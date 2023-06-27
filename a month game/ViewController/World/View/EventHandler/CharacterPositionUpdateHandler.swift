@@ -71,7 +71,7 @@ class CharacterPositionUpdateHandler: EventHandler {
         for go in self.accessibleGOTracker.gos {
             guard !go.type.isWalkable else { continue }
 
-            let characterRadius = character.path!.boundingBox.width / 2.0
+            let characterRadius = self.character.path!.boundingBox.width / 2.0
 
             let goFrameOnChunkContainer = go.frame + go.parent!.position
 
@@ -143,7 +143,6 @@ class CharacterPositionUpdateHandler: EventHandler {
     /// - Returns: true if collision resolved else false
     func resolveTileSideCollision(character: Character, tileFrame: CGRect) {
         let characterRadius = character.path!.boundingBox.width / 2.0
-        let minimalDistanceToCollision = tileFrame.width / 2.0 + characterRadius
 
         let differenceX = character.position.x - tileFrame.midX
         let differenceY = character.position.y - tileFrame.midY

@@ -10,8 +10,8 @@ import CoreData
 
 class ChunkRepository {
 
-    private var goDataSource: GameObjectDataSource
-    private var chunkCoordDataSource: ChunkCoordinateDataSource
+    private let goDataSource: GameObjectDataSource
+    private let chunkCoordDataSource: ChunkCoordinateDataSource
 
     init(goDataSource: GameObjectDataSource,
          chunkCoordDataSource: ChunkCoordinateDataSource) {

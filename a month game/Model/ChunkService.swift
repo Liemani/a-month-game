@@ -9,7 +9,7 @@ import Foundation
 
 class ChunkService {
 
-    private var chunkRepo: ChunkRepository!
+    private let chunkRepo: ChunkRepository
 
     init(chunkRepo: ChunkRepository) {
         self.chunkRepo = chunkRepo
