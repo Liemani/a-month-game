@@ -16,7 +16,7 @@ struct Constant {
     static let tileScale = 6.0
     static let tileWidth = tileTextureWidth * tileScale
     static let tileSize = CGSize(width: tileWidth, height: tileWidth)
-    static let margin = defaultWidth / 5.0
+    static let margin = defaultWidth / 2.0
 
     static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
 
@@ -50,7 +50,7 @@ struct Constant {
     static let invCellSpacing: CGFloat = tileTextureWidth
 
     // MARK: craft pane
-    static let craftWindowPosition = CGPoint(x: margin + tileWidth / 2, y: sceneSize.height / 2.0)
+    static let craftWindowPosition = CGPoint(x: tileWidth / 2 + invCellSpacing, y: sceneSize.height / 2.0)
     static let craftWindowSize = CGSize(width: invWindowSize.height, height: invWindowSize.width)
     static let craftWindowCellCount = 5
 

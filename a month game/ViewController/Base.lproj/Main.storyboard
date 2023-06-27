@@ -12,7 +12,7 @@
         <scene sceneID="nPw-8J-WsK">
             <objects>
                 <viewController storyboardIdentifier="WorldViewController" id="gFG-nk-a0r" customClass="WorldViewController" customModule="a_month_game" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Itk-qQ-2uU" customClass="SKView">
+                    <view key="view" multipleTouchEnabled="YES" contentMode="scaleToFill" id="Itk-qQ-2uU" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="dAB-Hj-sHj"/>
