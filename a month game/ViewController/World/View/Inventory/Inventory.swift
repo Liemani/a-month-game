@@ -49,23 +49,23 @@ class Inventory: SKSpriteNode {
 
         self.addCells(cells)
 
-        DispatchQueue.global(qos: .userInteractive).async {
-            let goDatas = WorldServiceContainer.default.invServ.load(id: self.id)
-
-            DispatchQueue.main.async {
-                for goData in goDatas {
-                    let go = GameObject(from: goData)
-                    let index = go.invCoord!.index
-                    if self.isValid(index) {
-                        self.add(go)
-                    }
-                }
-            }
-        }
+        self.setUp()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setUp() {
+        let goDatas = WorldServiceContainer.default.invServ.load(id: self.id)
+
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+            let index = go.invCoord!.index
+            if self.isValid(index) {
+                self.add(go)
+            }
+        }
     }
 
     private func addCells(_ cells: [SKSpriteNode]) {

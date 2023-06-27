@@ -39,7 +39,7 @@ class ChunkContainer: LMINode {
             self.addChild(chunk)
             self.chunks.append(chunk)
 
-            self.updateChunk(direction: direction)
+            self.setUpChunks(direction: direction)
         }
     }
 
@@ -52,11 +52,17 @@ class ChunkContainer: LMINode {
         self.shift(direction: direction.opposite)
 
         for direction in direction.direction9 {
-            self.updateChunk(direction: direction)
+            self.loadChunk(direction: direction)
         }
     }
 
-    private func updateChunk(direction: Direction9) {
+    private func setUpChunks(direction: Direction9) {
+        let chunkOffset = direction.coordOfAChunk
+        let tartgetChunkCoord = self.character.chunkChunkCoord + chunkOffset
+        self.chunks[direction].setUp(chunkCoord: tartgetChunkCoord)
+    }
+
+    private func loadChunk(direction: Direction9) {
         let chunkOffset = direction.coordOfAChunk
         let tartgetChunkCoord = self.character.chunkChunkCoord + chunkOffset
         self.chunks[direction].update(chunkCoord: tartgetChunkCoord)

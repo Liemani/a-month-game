@@ -23,6 +23,16 @@ class Chunk: LMINode {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func setUp(chunkCoord: ChunkCoordinate) {
+        let goDatas = WorldServiceContainer.default.chunkServ.load(at: chunkCoord)
+
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+
+            self.add(go)
+        }
+    }
+
     // MARK: - edit
     // MARK: chunk
     func update(chunkCoord: ChunkCoordinate) {
