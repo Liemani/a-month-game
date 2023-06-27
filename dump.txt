@@ -446,6 +446,11 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+apply interact to tile
+apply walkable
+add leaf bag
+debug 에서는 터치 포인트에 원이 따라다니게 하기(hide, reveal)
+
 -
 character update
 if character moved

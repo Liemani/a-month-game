@@ -224,17 +224,30 @@ enum EventType: Int, CaseIterable {
 
             print("interact go")
         },
+
         { scene, event in // gameObjectInteractToGO
             let go = event.sender as! GameObject
             let targetGO = event.udata as! GameObject
 
-//            if no interaction
+            if targetGO.type.isTile {
+                let tileChunkCoord = targetGO.chunkCoord!
+                go.data.set(chunkCoord: tileChunkCoord)
 
+                let event = Event(type: .gameObjectMoveToBelongField,
+                                  udata: nil,
+                                  sender: go)
+                EventManager.default.enqueue(event)
+
+                return
+            }
+
+//            if no interaction
             let event = Event(type: .gameObjectMoveToBelong,
                               udata: nil,
                               sender: go)
             EventManager.default.enqueue(event)
         },
+
         { scene, event in // accessibleGOTrackerAdd
             let go = event.sender as! GameObject
 
