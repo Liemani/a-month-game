@@ -19,14 +19,5 @@
 //    }
 //
 //
-//    //    private func resolveCollisionOfNonWalkable() {
-//    //        for go in self.character.interactionZone.gos {
-//    //            guard !go.type.isWalkable else { continue }
-//    //
-//    //            if !go.resolveSideCollisionPointWithCircle(ofOrigin: &self.character.position, andRadius: Constant.characterRadius) {
-//    //                go.resolvePointCollisionPointWithCircle(ofOrigin: &self.character.position, andRadius: Constant.characterRadius)
-//    //            }
-//    //        }
-//    //    }
 //
 //}

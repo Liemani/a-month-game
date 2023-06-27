@@ -123,9 +123,13 @@ class WorldScene: SKScene {
 
         let timeInterval = currentTime - self.lastUpdateTime
 
-        self.updateCharacter(timeInterval)
-
         self.updateModel()
+        CharacterPositionUpdateHandler(character: self.character,
+                                       movingLayer: self.movingLayer,
+                                       chunkContainer: self.chunkContainer,
+                                       accessibleGOTracker: self.accessibleGOTracker,
+                                       timeInterval: timeInterval).handle()
+
         self.updateData()
 
         self.lastUpdateTime = currentTime
@@ -161,110 +165,6 @@ class WorldScene: SKScene {
     }
 
     // MARK: - delegate
-//    func addGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
-//        self.worldViewController.addGOMO(from: go, to: goCoord)
-//    }
-//
-//    func addGOMO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) {
-//        self.worldViewController.addGOMO(of: goType, to: goCoord)
-//    }
-//
-//    func moveGOMO(from go: GameObjectNode, to goCoord: GameObjectCoordinate) {
-//        self.worldViewController.moveGOMO(from: go, to: goCoord)
-//    }
-
-    func remove(from gos: any Sequence<GameObject>) {
-        self.worldViewController.remove(from: gos)
-    }
-
-//    func removeGOMO(from go: GameObjectNode) {
-//        self.worldViewController.removeGOMO(from: go)
-//    }
-
-
-    func updateCharacter(_ timeInterval: TimeInterval) {
-        self.applyCharacterVelocity(timeInterval)
-        self.updateCharacterVelocity(timeInterval)
-        self.resolveCharacterCollision()
-
-        if self.hasMovedToAnotherTile {
-            FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
-
-            if let direction = self.currChunkDirection {
-                self.character.moveChunk(direction: direction)
-                chunkContainer.update(direction: direction)
-            }
-        }
-
-        self.movingLayer.position = -self.character.position
-        self.character.lastPosition = self.character.position
-
-        self.saveCharacterPosition()
-    }
-
-    private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
-        let differenceVector = self.character.velocityVector * timeInterval
-        self.character.position += differenceVector
-    }
-
-    // TODO: update wrong formula
-    private func updateCharacterVelocity(_ timeInterval: TimeInterval) {
-        let velocity = self.character.velocityVector.magnitude
-        self.character.velocityVector =
-            velocity > Constant.velocityDamping
-                ? self.character.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-                : CGVector()
-    }
-
-    private func resolveCharacterCollision() {
-        //        self.character.resolveWorldBorderCollision()
-        //        self.character.resolveCollisionOfNonWalkable()
-    }
-
-//    private func resolveWorldBorderCollision() {
-//        self.character.position.x = self.character.position.x < Constant.moveableArea.minX
-//        ? Constant.moveableArea.minX
-//        : self.character.position.x
-//        self.character.position.x = self.character.position.x > Constant.moveableArea.maxX
-//        ? Constant.moveableArea.maxX
-//        : self.character.position.x
-//        self.character.position.y = self.character.position.y < Constant.moveableArea.minY
-//        ? Constant.moveableArea.minY
-//        : self.character.position.y
-//        self.character.position.y = self.character.position.y > Constant.moveableArea.maxY
-//        ? Constant.moveableArea.maxY
-//        : self.character.position.y
-//    }
-
-    var hasMovedToAnotherTile: Bool {
-        let lastTileCoord = FieldCoordinate(from: self.character.lastPosition)
-        let currTileCoord = FieldCoordinate(from: self.character.position)
-
-        return lastTileCoord != currTileCoord
-    }
-
-    var currChunkDirection: Direction4? {
-        let halfChunkwidth = Constant.chunkWidth / 2.0
-        if self.character.position.x > halfChunkwidth {
-            return .east
-        } else if self.character.position.y < -halfChunkwidth {
-            return .south
-        } else if self.character.position.x < -halfChunkwidth {
-            return .west
-        } else if self.character.position.y > halfChunkwidth {
-            return .north
-        }
-        return nil
-    }
-
-    func saveCharacterPosition() {
-        var chunkChunkCoord = self.character.chunkChunkCoord
-        chunkChunkCoord.address.tile = AddressComponent()
-
-        let tileCoord = FieldCoordinate(from: self.character.position).coord
-        let chunkCoord = chunkChunkCoord + tileCoord
-        self.character.data.chunkCoord = chunkCoord
-    }
 
 }
 

@@ -306,7 +306,7 @@ class EventManager {
 
 }
 
-protocol WorlEventHandler {
+protocol EventHandler {
 
     func handle()
 

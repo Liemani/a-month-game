@@ -446,12 +446,12 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
-apply interact to tile
+-
+change chunk view to just world
 apply walkable
 add leaf bag
 debug 에서는 터치 포인트에 원이 따라다니게 하기(hide, reveal)
 
--
 character update
 if character moved
     if character moved to another tile
@@ -771,6 +771,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+apply interact to tile
 add inventory
 remove view model
 add child 는 기본적인 경우

@@ -94,85 +94,6 @@ extension SKNode {
         return self.contains(touch.location(in: self.parent!))
     }
 
-    // TODO: 99 move to physics(?) module
-    /// - Returns: true if collision resolved else false
-    func resolveSideCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) -> Bool {
-        let minimalDistanceToCollision = self.frame.width / 2.0 + circleRadius
-        if self.position.x - circleOrigin.x < minimalDistanceToCollision
-            && circleOrigin.x <= self.position.x
-            && self.frame.minY < circleOrigin.y && circleOrigin.y < self.frame.maxY {
-            circleOrigin.x = self.frame.minX - circleRadius
-            return true
-        } else if circleOrigin.x - self.position.x < minimalDistanceToCollision
-            && self.position.x <= circleOrigin.x
-            && self.frame.minY < circleOrigin.y && circleOrigin.y < self.frame.maxY {
-            circleOrigin.x = self.frame.maxX + circleRadius
-            return true
-        } else if self.position.y - circleOrigin.y < minimalDistanceToCollision
-            && circleOrigin.y <= self.position.y
-            && self.frame.minX < circleOrigin.x && circleOrigin.x < self.frame.maxX {
-            circleOrigin.y = self.frame.minY - circleRadius
-            return true
-        } else if circleOrigin.y - self.position.y < minimalDistanceToCollision
-            && self.position.y <= circleOrigin.y
-            && self.frame.minX < circleOrigin.x && circleOrigin.x < self.frame.maxX {
-            circleOrigin.y = self.frame.maxY + circleRadius
-            return true
-        }
-
-        return false
-    }
-
-    // NOTE: optimization possible
-    // TODO: 99 move to physics(?) module
-    func resolvePointCollisionPointWithCircle(ofOrigin circleOrigin: inout CGPoint, andRadius circleRadius: Double) {
-        if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
-            let xDifference = self.position.x - circleOrigin.x
-            let yDifference = self.position.y - circleOrigin.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (self.position.x * circleOrigin.y - circleOrigin.x * self.position.y) / xDifference
-            let temp = yIntercept - self.frame.minY
-            let a = inclination * inclination + 1.0
-            let b = inclination * temp - self.frame.minX
-            let c = self.frame.minX * self.frame.minX + temp * temp - circleRadius * circleRadius
-            circleOrigin.x = (-b - (b * b - a * c).squareRoot()) / a
-            circleOrigin.y = inclination * circleOrigin.x + yIntercept
-        } else if CGVector(dx: circleOrigin.x - self.frame.maxX, dy: circleOrigin.y - self.frame.minY).magnitude < circleRadius {
-            let xDifference = self.position.x - circleOrigin.x
-            let yDifference = self.position.y - circleOrigin.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (self.position.x * circleOrigin.y - circleOrigin.x * self.position.y) / xDifference
-            let temp = yIntercept - self.frame.minY
-            let a = inclination * inclination + 1.0
-            let b = inclination * temp - self.frame.maxX
-            let c = self.frame.maxX * self.frame.maxX + temp * temp - circleRadius * circleRadius
-            circleOrigin.x = (-b + (b * b - a * c).squareRoot()) / a
-            circleOrigin.y = inclination * circleOrigin.x + yIntercept
-        } else if CGVector(dx: circleOrigin.x - self.frame.minX, dy: circleOrigin.y - self.frame.maxY).magnitude < circleRadius {
-            let xDifference = self.position.x - circleOrigin.x
-            let yDifference = self.position.y - circleOrigin.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (self.position.x * circleOrigin.y - circleOrigin.x * self.position.y) / xDifference
-            let temp = yIntercept - self.frame.maxY
-            let a = inclination * inclination + 1.0
-            let b = inclination * temp - self.frame.minX
-            let c = self.frame.minX * self.frame.minX + temp * temp - circleRadius * circleRadius
-            circleOrigin.x = (-b - (b * b - a * c).squareRoot()) / a
-            circleOrigin.y = inclination * circleOrigin.x + yIntercept
-        } else if CGVector(dx: circleOrigin.x - self.frame.maxX, dy: circleOrigin.y - self.frame.maxY).magnitude < circleRadius {
-            let xDifference = self.position.x - circleOrigin.x
-            let yDifference = self.position.y - circleOrigin.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (self.position.x * circleOrigin.y - circleOrigin.x * self.position.y) / xDifference
-            let temp = yIntercept - self.frame.maxY
-            let a = inclination * inclination + 1.0
-            let b = inclination * temp - self.frame.maxX
-            let c = self.frame.maxX * self.frame.maxX + temp * temp - circleRadius * circleRadius
-            circleOrigin.x = (-b + (b * b - a * c).squareRoot()) / a
-            circleOrigin.y = inclination * circleOrigin.x + yIntercept
-        }
-    }
-
 }
 
 // MARK: - CGPoint
@@ -289,6 +210,14 @@ extension CGVector {
 
     var magnitude: CGFloat {
         return (self.dx * self.dx + self.dy * self.dy).squareRoot()
+    }
+
+}
+
+extension CGRect {
+
+    static func + (lhs: CGRect, rhs: CGPoint) -> CGRect {
+        return CGRect(origin: lhs.origin + rhs, size: lhs.size)
     }
 
 }
