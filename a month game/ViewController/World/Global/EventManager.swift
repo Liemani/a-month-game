@@ -15,7 +15,7 @@ enum EventType: Int, CaseIterable {
     case gameObjectMoveTouchBegan
 
     case gameObjectMoveTouchEnded
-    case gameObjectMoveTouchEndedAtField
+    case gameObjectMoveTouchEndedAtAccessibleField
     case gameObjectMoveTouchEndedAtInv
     case gameObjectMoveToBelong
     case gameObjectMoveToBelongField
@@ -64,7 +64,7 @@ enum EventType: Int, CaseIterable {
 
             if let touchedTileChunkCoord = scene.chunkContainer.coordAtLocation(of: touch),
                touchedTileChunkCoord.coord.isAdjacent(to: characterChunkCoord.coord) {
-                let event = Event(type: .gameObjectMoveTouchEndedAtField,
+                let event = Event(type: .gameObjectMoveTouchEndedAtAccessibleField,
                                   udata: touchedTileChunkCoord,
                                   sender: go)
                 EventManager.default.enqueue(event)
@@ -87,7 +87,7 @@ enum EventType: Int, CaseIterable {
             EventManager.default.enqueue(event)
         },
 
-        { scene, event in // gameObjectMoveTouchEndedAtField
+        { scene, event in // gameObjectMoveTouchEndedAtAccessibleField
             let go = event.sender as! GameObject
             let touchedTileChunkCoord = event.udata as! ChunkCoordinate
 
@@ -228,7 +228,12 @@ enum EventType: Int, CaseIterable {
             let go = event.sender as! GameObject
             let targetGO = event.udata as! GameObject
 
-            print("interact go to go")
+//            if no interaction
+
+            let event = Event(type: .gameObjectMoveToBelong,
+                              udata: nil,
+                              sender: go)
+            EventManager.default.enqueue(event)
         },
         { scene, event in // accessibleGOTrackerAdd
             let go = event.sender as! GameObject
