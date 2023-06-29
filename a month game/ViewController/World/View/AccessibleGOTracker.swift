@@ -37,39 +37,20 @@ class AccessibleGOTracker {
     func add(_ gos: [GameObject]) {
         for go in gos {
             self.dict[go.id] = go
-            self.activate(go)
         }
     }
 
     func add(_ go: GameObject) {
         self.dict[go.id] = go
-        self.activate(go)
     }
 
     func remove(_ go: GameObject) {
-        self.deactivate(go)
         self.dict[go.id] = nil
-    }
-
-    // MARK: - activate
-    func activate(_ go: GameObject) {
-        go.color = .green.withAlphaComponent(0.9)
-        go.colorBlendFactor = Constant.accessibleGOColorBlendFactor
-    }
-
-    func activateAll() {
-        for go in self.gos {
-            self.activate(go)
-        }
-    }
-
-    func deactivate(_ go: GameObject) {
-        go.colorBlendFactor = 0.0
     }
 
     // MARK: - update
     func update(chunkContainer: ChunkContainer) {
-        self.reset()
+        self.dict.removeAll()
 
         for direction in Direction9.allCases {
             let tileChunkCoord = self.character.chunkCoord + direction.coord
@@ -85,13 +66,6 @@ class AccessibleGOTracker {
                 self.add(go)
             }
         }
-    }
-
-    private func reset() {
-        for go in self.gos {
-            self.deactivate(go)
-        }
-        self.dict.removeAll()
     }
 
 }
