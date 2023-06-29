@@ -40,6 +40,7 @@ class WorldScene: SKScene {
         super.init(size: size)
 
         self.scaleMode = .aspectFit
+        self.backgroundColor = .darkGray
 
         self.initModel()
         self.initSceneLayer()
