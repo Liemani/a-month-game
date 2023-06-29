@@ -15,9 +15,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
     case menuButton
     case menuExitButton
-    
-    case gameObjectTouchBegan
-    case gameObjectMoveTouchBegan
 
     case gameObjectMoveTouchEnded
     case gameObjectMoveTouchEndedAtAccessibleField
@@ -39,26 +36,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
         { scene, event in // menuExitButton
             NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
-        },
-
-        { scene, event in // gameObjectTouchBegan
-            print("Under construction")
-//            let handler = GameObjectTouchEventHandler(
-//                touch: event.udata as! UITouch,
-//                go: event.sender as! GameObject)
-//            if GestureEventHandlerManager.default.add(handler) {
-//                handler.began()
-//            }
-        },
-
-        { scene, event in // gameObjectMoveTouchBegan
-            print("Under construction")
-//            let handler = GameObjectMoveTouchEventHandler(
-//                touch: event.udata as! UITouch,
-//                go: event.sender as! GameObject)
-//            if GestureEventHandlerManager.default.add(handler) {
-//                handler.began()
-//            }
         },
 
         { scene, event in // gameObjectMoveTouchEnded
@@ -205,8 +182,8 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
             if let index = characterInv.emptyIndex {
                 let newInvCoord = InventoryCoordinate(characterInv.id, index)
-                go.data.set(invCoord: newInvCoord)
                 go.lmiRemoveFromParent()
+                go.data.set(invCoord: newInvCoord)
                 characterInv.add(go)
 
                 return

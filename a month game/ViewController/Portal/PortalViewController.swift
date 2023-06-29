@@ -57,6 +57,7 @@ class PortalViewController: UIViewController {
     @objc func requestPresentWorldSceneViewController() {
         WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
         WorldEventManager.set()
+        TouchHandlerContainer.set()
         FrameCycleUpdateManager.set()
 
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController

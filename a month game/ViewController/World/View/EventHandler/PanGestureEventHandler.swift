@@ -24,12 +24,6 @@ final class PanGestureEventHandler: EventHandler {
         return self.view.scene!.convertPoint(fromView: viewPoint)
     }
 
-    func velocityInScene() -> CGPoint {
-        let viewVelocity = self.gesture!.velocity(in: self.view)
-
-        return self.view.scene!.convertPoint(fromView: viewVelocity)
-    }
-
     // MARK: - init
     init(view: SKView, character: Character) {
         self.view = view

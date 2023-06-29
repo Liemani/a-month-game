@@ -39,6 +39,7 @@ class WorldScene: SKScene {
 //    var tapHandler: TapEventHandler!
     var panHandler: PanGestureEventHandler!
     var pinchHandler: PinchGestureEventHandler!
+    var goTouchHandler: GameObjectTouchHandler!
 
     // MARK: - init
     /// initialize with size
@@ -126,6 +127,7 @@ class WorldScene: SKScene {
         self.pinchHandler = PinchGestureEventHandler(view: self.view!,
                                                      world: self.worldLayer,
                                                      character: self.character)
+        self.goTouchHandler = GameObjectTouchHandler()
     }
 
     // MARK: - edit model
