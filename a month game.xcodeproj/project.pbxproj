@@ -61,12 +61,12 @@
 		0392E9362A3C1E94001C22C4 /* GameObjectRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */; };
 		039EEFC92A243DD900CB93C6 /* TouchContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039EEFC82A243DD900CB93C6 /* TouchContext.swift */; };
 		03C65E172A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */; };
-		03C65E1A2A446FA10042BF22 /* EventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* EventManager.swift */; };
+		03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E192A446FA10042BF22 /* WorldEventManager.swift */; };
 		03C65E1E2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */; };
 		03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */; };
 		03C65E222A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */; };
 		03C65E242A46878E0042BF22 /* AccessableGOTrackerRemoveEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E232A46878E0042BF22 /* AccessableGOTrackerRemoveEventHandler.swift */; };
-		03C65E262A4693D70042BF22 /* TouchEventHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E252A4693D70042BF22 /* TouchEventHandlerManager.swift */; };
+		03C65E262A4693D70042BF22 /* GestureEventHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E252A4693D70042BF22 /* GestureEventHandlerManager.swift */; };
 		03C65E2B2A46B04E0042BF22 /* FrameCycleUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E2A2A46B04E0042BF22 /* FrameCycleUpdateManager.swift */; };
 		03C65E2D2A46C4FA0042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C65E2C2A46C4F90042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift */; };
 		03CE3AE52A3DEBCC00D95152 /* InventoryCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */; };
@@ -74,6 +74,8 @@
 		03CE3AF12A3DFEA700D95152 /* LMIPersistentContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AF02A3DFEA700D95152 /* LMIPersistentContainer.swift */; };
 		03CE3AF32A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AF22A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift */; };
 		03CE3AF52A3E26FC00D95152 /* GameObjectData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CE3AF42A3E26FC00D95152 /* GameObjectData.swift */; };
+		03D42BD92A4D5D4D00ACB90E /* PortalEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D42BD82A4D5D4D00ACB90E /* PortalEventManager.swift */; };
+		03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D42BDA2A4D697C00ACB90E /* Event.swift */; };
 		03DBB1222A3611EF00DA4E73 /* WorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* FieldCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* FieldCoordinate.swift */; };
@@ -156,12 +158,12 @@
 		0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectRepository.swift; sourceTree = "<group>"; };
 		039EEFC82A243DD900CB93C6 /* TouchContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchContext.swift; sourceTree = "<group>"; };
 		03C65E162A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedToAnotherTileEventHandler.swift; sourceTree = "<group>"; };
-		03C65E192A446FA10042BF22 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
+		03C65E192A446FA10042BF22 /* WorldEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldEventManager.swift; sourceTree = "<group>"; };
 		03C65E1D2A455F5A0042BF22 /* CharacterUpdatePositionEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterUpdatePositionEventHandler.swift; sourceTree = "<group>"; };
 		03C65E1F2A45631C0042BF22 /* CharacterMovedEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterMovedEventHandler.swift; sourceTree = "<group>"; };
 		03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectMoveTouchEventHandler.swift; sourceTree = "<group>"; };
 		03C65E232A46878E0042BF22 /* AccessableGOTrackerRemoveEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessableGOTrackerRemoveEventHandler.swift; sourceTree = "<group>"; };
-		03C65E252A4693D70042BF22 /* TouchEventHandlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchEventHandlerManager.swift; sourceTree = "<group>"; };
+		03C65E252A4693D70042BF22 /* GestureEventHandlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GestureEventHandlerManager.swift; sourceTree = "<group>"; };
 		03C65E2A2A46B04E0042BF22 /* FrameCycleUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameCycleUpdateManager.swift; sourceTree = "<group>"; };
 		03C65E2C2A46C4F90042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectMoveTouchEndedWorldEventHandler.swift; sourceTree = "<group>"; };
 		03CE3AE42A3DEBCC00D95152 /* InventoryCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinate.swift; sourceTree = "<group>"; };
@@ -169,6 +171,8 @@
 		03CE3AF02A3DFEA700D95152 /* LMIPersistentContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LMIPersistentContainer.swift; sourceTree = "<group>"; };
 		03CE3AF22A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCoordinateDataSource.swift; sourceTree = "<group>"; };
 		03CE3AF42A3E26FC00D95152 /* GameObjectData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectData.swift; sourceTree = "<group>"; };
+		03D42BD82A4D5D4D00ACB90E /* PortalEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalEventManager.swift; sourceTree = "<group>"; };
+		03D42BDA2A4D697C00ACB90E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldViewController.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* FieldCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldCoordinate.swift; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 		030ABFAC2A0BCC4C00BAB9B8 /* Portal */ = {
 			isa = PBXGroup;
 			children = (
+				03D42BD72A4D5D3700ACB90E /* Global */,
 				038330A92A02850A008DEA10 /* PortalViewController.swift */,
 				030ABFAE2A0BCDF900BAB9B8 /* View */,
 			);
@@ -352,9 +357,7 @@
 			children = (
 				031AA8032A24A5D20017EFCD /* CombineSequences.swift */,
 				031AA80D2A25CFB70017EFCD /* Button.swift */,
-				03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */,
-				031AA8062A24F20E0017EFCD /* LMISpriteNode.swift */,
-				030261252A3C71FC0050E697 /* LMINode.swift */,
+				03D42BDA2A4D697C00ACB90E /* Event.swift */,
 				03EA27B12A43E523007BAF4F /* Queue.swift */,
 			);
 			path = Abstract;
@@ -363,6 +366,9 @@
 		033D69092A41447C005D3CB0 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */,
+				031AA8062A24F20E0017EFCD /* LMISpriteNode.swift */,
+				030261252A3C71FC0050E697 /* LMINode.swift */,
 				03C65E2C2A46C4F90042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift */,
 				03EA27BB2A442B5D007BAF4F /* TouchBeganEventManager.swift */,
 				033D68F32A3FF932005D3CB0 /* WorldViewModel.swift */,
@@ -464,9 +470,17 @@
 			isa = PBXGroup;
 			children = (
 				03F7A2612A39E6420061E030 /* WorldServiceContainer.swift */,
-				03C65E192A446FA10042BF22 /* EventManager.swift */,
-				03C65E252A4693D70042BF22 /* TouchEventHandlerManager.swift */,
+				03C65E192A446FA10042BF22 /* WorldEventManager.swift */,
+				03C65E252A4693D70042BF22 /* GestureEventHandlerManager.swift */,
 				03C65E2A2A46B04E0042BF22 /* FrameCycleUpdateManager.swift */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
+		03D42BD72A4D5D3700ACB90E /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				03D42BD82A4D5D4D00ACB90E /* PortalEventManager.swift */,
 			);
 			path = Global;
 			sourceTree = "<group>";
@@ -623,6 +637,7 @@
 				03CE3AF12A3DFEA700D95152 /* LMIPersistentContainer.swift in Sources */,
 				030ABFC32A0E290E00BAB9B8 /* WorldDataModel.xcdatamodeld in Sources */,
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
+				03D42BD92A4D5D4D00ACB90E /* PortalEventManager.swift in Sources */,
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
 				0347BA742A46E68500E31FA1 /* Address.swift in Sources */,
 				03F7A2662A39EBCC0061E030 /* WorldDirectoryUtility.swift in Sources */,
@@ -632,7 +647,7 @@
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				03C65E2B2A46B04E0042BF22 /* FrameCycleUpdateManager.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* GameObjectDataSource.swift in Sources */,
-				03C65E1A2A446FA10042BF22 /* EventManager.swift in Sources */,
+				03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,
@@ -654,9 +669,10 @@
 				037E3F462A1CDFEC008A50CA /* TileType.swift in Sources */,
 				031D57562A076DC8007EF383 /* CharacterData.swift in Sources */,
 				033D68F02A3EE5DD005D3CB0 /* ChunkService.swift in Sources */,
+				03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */,
 				03C65E2D2A46C4FA0042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift in Sources */,
 				0392E9302A3B3E8E001C22C4 /* WorldGenerator.swift in Sources */,
-				03C65E262A4693D70042BF22 /* TouchEventHandlerManager.swift in Sources */,
+				03C65E262A4693D70042BF22 /* GestureEventHandlerManager.swift in Sources */,
 				0347BA722A46E67500E31FA1 /* AddressComponent.swift in Sources */,
 				031AA8072A24F20E0017EFCD /* LMISpriteNode.swift in Sources */,
 				031D57522A06298F007EF383 /* Constant.swift in Sources */,

@@ -9,14 +9,19 @@ import SpriteKit
 
 class PortalScene: SKScene {
 
+    var viewController: PortalViewController { self.view!.next as! PortalViewController }
+
     var uiLayer: SKNode!
-    var enterButtonNode: ButtonNode!
-    var resetButtonNode: ButtonNode!
     var resetWindow: ResetWindow!
 
-    func setUp() {
-        self.size = Constant.sceneSize
+    override init() {
+        super.init(size: Constant.sceneSize)
+
         self.scaleMode = .aspectFit
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - ui
@@ -26,66 +31,52 @@ class PortalScene: SKScene {
     }
 
     func addBackground() {
-        let backgroundNode = SKSpriteNode(imageNamed: Constant.ResourceName.bgPortal)
+        let background = SKSpriteNode(imageNamed: Constant.ResourceName.bgPortal)
 
-        backgroundNode.position = Constant.screenUpRight
-        backgroundNode.zPosition = Constant.ZPosition.background
+        background.position = Constant.screenUpRight
+        background.zPosition = Constant.ZPosition.background
 
-        self.addChild(backgroundNode)
+        self.addChild(background)
     }
 
     func addUI() {
         let uiLayer = SKNode()
 
-        addButtonNode(uiLayer)
+        addButton(to: uiLayer)
         addResetWindow(uiLayer)
 
         self.addChild(uiLayer)
         self.uiLayer = uiLayer
     }
 
-    func addButtonNode(_ parent: SKNode) {
-        let buttonTexture = SKTexture(imageNamed: Constant.ResourceName.button)
+    func addButton(to parent: SKNode) {
+        let texture = SKTexture(imageNamed: Constant.ResourceName.button)
 
-        let enterButtonNode = ButtonNode(texture: buttonTexture)
-        enterButtonNode.setUp()
-        enterButtonNode.set(frame: Constant.Frame.enterButtonNode)
-        enterButtonNode.set(text: "Enter World")
-        enterButtonNode.delegate = self
-        parent.addChild(enterButtonNode)
-        self.enterButtonNode = enterButtonNode
+        let enterButton = Button(texture: texture,
+                                 frame: Constant.Frame.enterButton,
+                                 text: "Enter World",
+                                 eventType: PortalEventType.enterButton)
+        parent.addChild(enterButton)
 
-        let resetButtonNode = ButtonNode(texture: buttonTexture)
-        resetButtonNode.setUp()
-        resetButtonNode.set(frame: Constant.Frame.resetButtonNode)
-        resetButtonNode.set(text: "Reset")
-        resetButtonNode.delegate = self
-        parent.addChild(resetButtonNode)
-        self.resetButtonNode = resetButtonNode
+        let resetButton = Button(texture: texture,
+                                 frame: Constant.Frame.resetButton,
+                                 text: "Reset",
+                                 eventType: PortalEventType.resetButton)
+        parent.addChild(resetButton)
     }
 
     func addResetWindow(_ parent: SKNode) {
         let resetWindow = ResetWindow()
-        resetWindow.setUp()
-
         parent.addChild(resetWindow)
         self.resetWindow = resetWindow
 
+        resetWindow.setUp()
     }
 
-}
-
-extension PortalScene: ButtonNodeDelegate {
-
-    func buttonTapped(sender: Any?) {
-        guard let button = sender as? ButtonNode else { return }
-
-        switch button {
-        case self.enterButtonNode:
-            NotificationCenter.default.post(name: .requestPresentWorldSceneViewController, object: nil)
-        case self.resetButtonNode:
-            self.resetWindow.reveal()
-        default: break
+    override func update(_ currentTime: TimeInterval) {
+        while let event = PortalEventManager.default.dequeue() {
+            let portalEventType = event.type as! PortalEventType
+            portalEventType.handler(self, event)
         }
     }
 

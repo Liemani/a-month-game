@@ -1,5 +1,5 @@
 //
-//  TouchEventHandlerManager.swift
+//  GestureEventHandlerManager.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/06/24.
@@ -8,52 +8,52 @@
 import Foundation
 import SpriteKit
 
-protocol TouchEventHandler {
+protocol GestureEventHandler {
 
-    var touch: UITouch { get }
+    var recognizer: UIGestureRecognizer { get }
 
-    func touchBegan()
-    func touchMoved()
-    func touchEnded()
-    func touchCancelled()
+    func began()
+    func moved()
+    func ended()
+    func cancelled()
     func complete()
 
 }
 
-class TouchEventHandlerManager {
+class GestureEventHandlerManager {
 
-    private static var _default: TouchEventHandlerManager?
-    static var `default`: TouchEventHandlerManager { self._default! }
+    private static var _default: GestureEventHandlerManager?
+    static var `default`: GestureEventHandlerManager { self._default! }
 
-    static func set() { self._default = TouchEventHandlerManager() }
+    static func set() { self._default = GestureEventHandlerManager() }
     static func free() { self._default = nil }
 
-    private var handlers: [TouchEventHandler?]
+    private var handlers: [GestureEventHandler?]
 
     init() {
-        self.handlers = [TouchEventHandler?](repeating: nil, count: 2)
+        self.handlers = [GestureEventHandler?](repeating: nil, count: 2)
     }
 
     // MARK: - edit
-    func contains(from touch: UITouch) -> Bool {
-        if self.handlers[0]?.touch == touch {
+    func contains(from recognizer: UIGestureRecognizer) -> Bool {
+        if self.handlers[0]?.recognizer == recognizer {
             return true
-        } else if self.handlers[1]?.touch == touch {
+        } else if self.handlers[1]?.recognizer == recognizer {
             return true
         }
         return false
     }
 
-    func handler(from touch: UITouch) -> TouchEventHandler? {
-        if let handler = self.handlers[0], handler.touch == touch {
+    func handler(from recognizer: UIGestureRecognizer) -> GestureEventHandler? {
+        if let handler = self.handlers[0], handler.recognizer == recognizer {
             return handler
-        } else if let handler = self.handlers[1], handler.touch == touch {
+        } else if let handler = self.handlers[1], handler.recognizer == recognizer {
             return handler
         }
         return nil
     }
 
-    func handler(of handlerType: TouchEventHandler.Type) -> TouchEventHandler? {
+    func handler(of handlerType: GestureEventHandler.Type) -> GestureEventHandler? {
         if let handler = self.handlers[0], type(of: handler) == handlerType {
             return handler
         } else if let handler = self.handlers[1], type(of: handler) == handlerType {
@@ -62,7 +62,7 @@ class TouchEventHandlerManager {
         return nil
     }
 
-    func add(_ handler: TouchEventHandler) -> Bool {
+    func add(_ handler: GestureEventHandler) -> Bool {
         if self.handlers[0] == nil {
             self.handlers[0] = handler
             return true
@@ -73,34 +73,34 @@ class TouchEventHandlerManager {
         return false
     }
 
-    func remove(from touch: UITouch) {
-        if self.handlers[0]?.touch == touch {
+    func remove(from recognizer: UIGestureRecognizer) {
+        if self.handlers[0]?.recognizer == recognizer {
             self.handlers[0] = nil
-        } else if self.handlers[1]?.touch == touch {
+        } else if self.handlers[1]?.recognizer == recognizer {
             self.handlers[1] = nil
         }
     }
 
-    func cancelAll(of handlerType: TouchEventHandler.Type) {
+    func cancelAll(of handlerType: GestureEventHandler.Type) {
         if let handler = self.handlers[0],
             type(of: handler) == handlerType {
-                handler.touchCancelled()
+                handler.cancelled()
                     self.handlers[0] = nil
             }
         if let handler = self.handlers[1],
             type(of: handler) == handlerType {
-                handler.touchCancelled()
+                handler.cancelled()
                     self.handlers[1] = nil
             }
     }
 
     func cancelAll() {
         if let handler = self.handlers[0] {
-            handler.touchCancelled()
+            handler.cancelled()
             self.handlers[0] = nil
         }
         if let handler = self.handlers[1] {
-            handler.touchCancelled()
+            handler.cancelled()
             self.handlers[1] = nil
         }
     }

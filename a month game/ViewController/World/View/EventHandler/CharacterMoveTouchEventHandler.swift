@@ -10,66 +10,63 @@ import SpriteKit
 
 final class CharacterMoveTouchEventHandler {
 
-    let touch: UITouch
+    let recognizer: UIGestureRecognizer
 
-    private let scene: WorldScene
+    private let view: SKView
     private let character: Character
 
-    private var ppTimestamp: TimeInterval!
-    private var pTimestamp: TimeInterval!
-    private var ppLocation: CGPoint?
+    private var pPoint: CGPoint!
+    private var cPoint: CGPoint!
 
     // MARK: - init
-    init(touch: UITouch, worldScene: WorldScene, character: Character) {
-        self.touch = touch
-        self.scene = worldScene
+    init(recognizer: UIGestureRecognizer, view: SKView, character: Character) {
+        self.recognizer = recognizer
+        self.view = view
         self.character = character
+    }
+
+    func locationInScene(recognizer: UIGestureRecognizer) -> CGPoint {
+        let viewPoint = self.recognizer.location(in: self.view)
+        return self.view.scene!.convertPoint(fromView: viewPoint)
     }
 
 }
 
-extension CharacterMoveTouchEventHandler: TouchEventHandler {
+extension CharacterMoveTouchEventHandler: GestureEventHandler {
 
-    func touchBegan() {
-        self.pTimestamp = self.touch.timestamp
+    func began() {
         self.character.velocityVector = CGVector()
+        self.cPoint = self.locationInScene(recognizer: self.recognizer)
     }
 
-    func touchMoved() {
-        let pPoint = self.touch.previousLocation(in: self.scene)
-        let currentPoint = self.touch.location(in: self.scene)
-        let difference = currentPoint - pPoint
+    func moved() {
+        self.pPoint = self.cPoint
+        self.cPoint = self.locationInScene(recognizer: self.recognizer)
+        let difference = self.cPoint - self.pPoint
 
         self.character.position -= difference
-
-        self.ppTimestamp = self.pTimestamp
-        self.pTimestamp = self.touch.timestamp
-        self.ppLocation = pPoint
     }
 
-    func touchEnded() {
+    func ended() {
         self.setCharacterVelocity()
     }
 
     private func setCharacterVelocity() {
-        guard let ppLocation = self.ppLocation else {
-            return
-        }
+        guard self.pPoint != nil else { return }
 
-        let pLocation = self.touch.previousLocation(in: self.scene)
-        let timeInterval = self.pTimestamp - self.ppTimestamp
+        let timeInterval = (self.view.scene as! WorldScene).timeInterval
 
-        self.character.velocityVector = (-(pLocation - ppLocation) / timeInterval).vector
+        self.character.velocityVector = (-(self.cPoint - self.pPoint) / timeInterval).vector
 
         self.complete()
     }
 
-    func touchCancelled() {
+    func cancelled() {
         self.complete()
     }
 
     func complete() {
-        TouchEventHandlerManager.default.remove(from: self.touch)
+        GestureEventHandlerManager.default.remove(from: self.recognizer)
     }
 
 }

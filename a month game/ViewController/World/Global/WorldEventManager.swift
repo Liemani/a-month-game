@@ -8,7 +8,13 @@
 import Foundation
 import SpriteKit
 
-enum EventType: Int, CaseIterable {
+enum WorldEventType: Int, CaseIterable, EventType {
+
+    var manager: EventManager { WorldEventManager.default }
+    var handler: (WorldScene, Event) -> Void { WorldEventType.eventHandlers[self] }
+
+    case menuButton
+    case menuExitButton
     
     case characterTouchBegan
     case gameObjectTouchBegan
@@ -28,32 +34,42 @@ enum EventType: Int, CaseIterable {
     case accessibleGOTrackerRemove
 
     static let eventHandlers: [(WorldScene, Event) -> Void] = [
+        { scene, event in // menuButton
+            scene.munuWindow.reveal()
+        },
+
+        { scene, event in // menuExitButton
+            NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
+        },
+
         { scene, event in // characterTouchBegan
             let handler = CharacterMoveTouchEventHandler(
-                touch: event.udata as! UITouch,
-                worldScene: scene,
+                recognizer: event.sender as! UIGestureRecognizer,
+                view: scene.view!,
                 character: scene.character)
-            if TouchEventHandlerManager.default.add(handler) {
-                handler.touchBegan()
+            if GestureEventHandlerManager.default.add(handler) {
+                handler.began()
             }
         },
 
         { scene, event in // gameObjectTouchBegan
-            let handler = GameObjectTouchEventHandler(
-                touch: event.udata as! UITouch,
-                go: event.sender as! GameObject)
-            if TouchEventHandlerManager.default.add(handler) {
-                handler.touchBegan()
-            }
+            print("Under construction")
+//            let handler = GameObjectTouchEventHandler(
+//                touch: event.udata as! UITouch,
+//                go: event.sender as! GameObject)
+//            if GestureEventHandlerManager.default.add(handler) {
+//                handler.began()
+//            }
         },
 
         { scene, event in // gameObjectMoveTouchBegan
-            let handler = GameObjectMoveTouchEventHandler(
-                touch: event.udata as! UITouch,
-                go: event.sender as! GameObject)
-            if TouchEventHandlerManager.default.add(handler) {
-                handler.touchBegan()
-            }
+            print("Under construction")
+//            let handler = GameObjectMoveTouchEventHandler(
+//                touch: event.udata as! UITouch,
+//                go: event.sender as! GameObject)
+//            if GestureEventHandlerManager.default.add(handler) {
+//                handler.began()
+//            }
         },
 
         { scene, event in // gameObjectMoveTouchEnded
@@ -64,27 +80,27 @@ enum EventType: Int, CaseIterable {
 
             if let touchedTileChunkCoord = scene.chunkContainer.coordAtLocation(of: touch),
                touchedTileChunkCoord.coord.isAdjacent(to: characterChunkCoord.coord) {
-                let event = Event(type: .gameObjectMoveTouchEndedAtAccessibleField,
+                let event = Event(type: WorldEventType.gameObjectMoveTouchEndedAtAccessibleField,
                                   udata: touchedTileChunkCoord,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
 
             if let touchedInvCoord = scene.invContainer.coordAtLocation(of: touch) {
-                let event = Event(type: .gameObjectMoveTouchEndedAtInv,
+                let event = Event(type: WorldEventType.gameObjectMoveTouchEndedAtInv,
                                   udata: touchedInvCoord,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
 
-            let event = Event(type: .gameObjectMoveToBelong,
+            let event = Event(type: WorldEventType.gameObjectMoveToBelong,
                               udata: nil,
                               sender: go)
-            EventManager.default.enqueue(event)
+            WorldEventManager.default.enqueue(event)
         },
 
         { scene, event in // gameObjectMoveTouchEndedAtAccessibleField
@@ -92,19 +108,19 @@ enum EventType: Int, CaseIterable {
             let touchedTileChunkCoord = event.udata as! ChunkCoordinate
 
             if let targetGO = scene.chunkContainer.item(at: touchedTileChunkCoord) {
-                let event = Event(type: .gameObjectInteractToGO,
+                let event = Event(type: WorldEventType.gameObjectInteractToGO,
                                   udata: targetGO,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             } else {
                 go.data.set(chunkCoord: touchedTileChunkCoord)
 
-                let event = Event(type: .gameObjectMoveToBelongField,
+                let event = Event(type: WorldEventType.gameObjectMoveToBelongField,
                                   udata: nil,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
@@ -115,19 +131,19 @@ enum EventType: Int, CaseIterable {
             let invCoord = event.udata as! InventoryCoordinate
 
             if let targetGO = scene.invContainer.item(at: invCoord) {
-                let event = Event(type: .gameObjectInteractToGO,
+                let event = Event(type: WorldEventType.gameObjectInteractToGO,
                                   udata: targetGO,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             } else {
                 go.data.set(invCoord: invCoord)
 
-                let event = Event(type: .gameObjectMoveToBelongInv,
+                let event = Event(type: WorldEventType.gameObjectMoveToBelongInv,
                                   udata: nil,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
@@ -137,27 +153,27 @@ enum EventType: Int, CaseIterable {
             let go = event.sender as! GameObject
 
             if go.chunkCoord != nil {
-                let event = Event(type: .gameObjectMoveToBelongField,
+                let event = Event(type: WorldEventType.gameObjectMoveToBelongField,
                                   udata: nil,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
 
             if go.invCoord != nil {
-                let event = Event(type: .gameObjectMoveToBelongInv,
+                let event = Event(type: WorldEventType.gameObjectMoveToBelongInv,
                                   udata: nil,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
 
-            let event = Event(type: .gameObjectTake,
+            let event = Event(type: WorldEventType.gameObjectTake,
                     udata: nil,
                     sender: go)
-            EventManager.default.enqueue(event)
+            WorldEventManager.default.enqueue(event)
         },
 
         { scene, event in // gameObjectMoveToBelongField
@@ -172,10 +188,10 @@ enum EventType: Int, CaseIterable {
                 return
             }
 
-            let event = Event(type: .gameObjectTake,
+            let event = Event(type: WorldEventType.gameObjectTake,
                     udata: nil,
                     sender: go)
-            EventManager.default.enqueue(event)
+            WorldEventManager.default.enqueue(event)
         },
 
         { scene, event in // gameObjectMoveToBelongInv
@@ -188,10 +204,10 @@ enum EventType: Int, CaseIterable {
                 return
             }
 
-            let event = Event(type: .gameObjectTake,
+            let event = Event(type: WorldEventType.gameObjectTake,
                     udata: nil,
                     sender: go)
-            EventManager.default.enqueue(event)
+            WorldEventManager.default.enqueue(event)
         },
 
         { scene, event in // gameObjectTake
@@ -233,19 +249,19 @@ enum EventType: Int, CaseIterable {
                 let tileChunkCoord = targetGO.chunkCoord!
                 go.data.set(chunkCoord: tileChunkCoord)
 
-                let event = Event(type: .gameObjectMoveToBelongField,
+                let event = Event(type: WorldEventType.gameObjectMoveToBelongField,
                                   udata: nil,
                                   sender: go)
-                EventManager.default.enqueue(event)
+                WorldEventManager.default.enqueue(event)
 
                 return
             }
 
 //            if no interaction
-            let event = Event(type: .gameObjectMoveToBelong,
+            let event = Event(type: WorldEventType.gameObjectMoveToBelong,
                               udata: nil,
                               sender: go)
-            EventManager.default.enqueue(event)
+            WorldEventManager.default.enqueue(event)
         },
 
         { scene, event in // accessibleGOTrackerAdd
@@ -261,33 +277,14 @@ enum EventType: Int, CaseIterable {
         },
     ]
 
-    var handler: (WorldScene, Event) -> Void {
-        return EventType.eventHandlers[self]
-    }
-
 }
 
-class Event {
+class WorldEventManager: EventManager {
 
-    let type: EventType
-    let udata: Any?
+    private static var _default: WorldEventManager?
+    static var `default`: WorldEventManager { self._default! }
 
-    let sender: Any
-
-    init(type: EventType, udata: Any?, sender: Any) {
-        self.type = type
-        self.udata = udata
-        self.sender = sender
-    }
-
-}
-
-class EventManager {
-
-    private static var _default: EventManager?
-    static var `default`: EventManager { self._default! }
-
-    static func set() { self._default = EventManager() }
+    static func set() { self._default = WorldEventManager() }
     static func free() { self._default = nil }
 
     private var queue: Queue<Event>
@@ -303,11 +300,5 @@ class EventManager {
     func dequeue() -> Event? {
         return self.queue.dequeue()
     }
-
-}
-
-protocol EventHandler {
-
-    func handle()
 
 }

@@ -26,7 +26,7 @@ struct Constant {
 
     static let sceneCenter = sceneSize.cgPoint / 2.0
 
-    static let worldLayer = CGPoint(x: sceneCenter.x, y: sceneCenter.x + tileWidth + invCellSpacing)
+    static let worldLayer = sceneCenter
 
     static let screenDownLeft = CGPoint(x: -sceneSize.width / 2.0, y: -sceneSize.height / 2.0)
     static let screenUpRight = CGPoint(x: sceneSize.width / 2.0, y: sceneSize.height / 2.0)
@@ -84,12 +84,12 @@ struct Constant {
     // MARK: - frame
     struct Frame {
         static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButtonNode = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
-        static let enterButtonNode = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
-        static let resetButtonNode = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
-        static let exitWorldButtonNode = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
-        static let yesButtonNode = CGRect(origin: Constant.Frame.enterButtonNode.origin, size: Constant.Frame.resetButtonNode.size)
-        static let noButtonNode = Constant.Frame.resetButtonNode
+        static let menuButton = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
+        static let enterButton = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
+        static let resetButton = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
+        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
+        static let yesButton = CGRect(origin: Constant.Frame.enterButton.origin, size: Constant.Frame.resetButton.size)
+        static let noButton = Constant.Frame.resetButton
     }
 
     struct Name {
@@ -127,7 +127,7 @@ struct Constant {
     static let sceneScale = 1.0
 
     struct ResourceName {
-        static let menuButtonNode = "menu button"
+        static let menuButton = "menu button"
         static let inventoryCell = "inventory_cell"
         static let craftCell = "craft_cell"
         static let bgPortal = "bg_portal"
@@ -136,8 +136,12 @@ struct Constant {
         static let rightHand = "right_hand"
     }
 
+    static let minSceneScale = 0.3
+    static let maxSceneScale = 1.0
+
     static let initialNextID = 1
-    static let touchBeganEventQueueSize = 10
+
+    static let portalEventQueueSize = 2
     static let worldEventQueueSize = 100
 
     static let accessibleGOColorBlendFactor = 0.5

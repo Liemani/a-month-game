@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Chunk: LMINode {
+class Chunk: SKNode {
 
     var data: ChunkData
 

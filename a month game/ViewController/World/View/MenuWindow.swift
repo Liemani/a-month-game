@@ -8,13 +8,12 @@
 import Foundation
 import SpriteKit
 
-class MenuWindow: LMINode {
+class MenuWindow: SKNode {
 
     override init() {
         super.init()
 
         // TODO: move to background(have to implement new class)
-        self.isUserInteractionEnabled = true
         self.zPosition = Constant.ZPosition.munuWindow
 
         let background = SKSpriteNode(color: .black, size: Constant.sceneSize)
@@ -23,12 +22,12 @@ class MenuWindow: LMINode {
         background.alpha = 0.5
         self.addChild(background)
 
-        let exitButtonNode = ButtonNode(imageNamed: Constant.ResourceName.button)
-        exitButtonNode.setUp()
-        exitButtonNode.set(frame: Constant.Frame.exitWorldButtonNode)
-        exitButtonNode.set(text: "Exit World")
-        exitButtonNode.delegate = self
-        self.addChild(exitButtonNode)
+        let texture = SKTexture(imageNamed: Constant.ResourceName.button)
+        let exitButton = Button(texture: texture,
+                                frame: Constant.Frame.exitWorldButton,
+                                text: "Exit World",
+                                eventType: WorldEventType.menuExitButton)
+        self.addChild(exitButton)
 
         self.hide()
     }
@@ -40,27 +39,18 @@ class MenuWindow: LMINode {
     // MARK: - isHidden
     func reveal() {
         self.isHidden = false
-        TouchEventHandlerManager.default.cancelAll()
+        GestureEventHandlerManager.default.cancelAll()
     }
 
     func hide() {
         self.isHidden = true
-        let button = self.children[1] as! ButtonNode
-        if let touch = button.touch {
-            button.touchCancelled(touch)
-        }
-    }
-
-    // MARK: - touch
-    override func touchBegan(_ touch: UITouch) {
-        self.hide()
     }
 
 }
 
-extension MenuWindow: ButtonNodeDelegate {
+extension MenuWindow {
 
-    func buttonTapped(sender: Any?) {
+    func touchUp(sender: Any?) {
         NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
     }
 
