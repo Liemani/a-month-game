@@ -16,7 +16,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
     case menuButton
     case menuExitButton
     
-    case characterTouchBegan
     case gameObjectTouchBegan
     case gameObjectMoveTouchBegan
 
@@ -40,16 +39,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
         { scene, event in // menuExitButton
             NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
-        },
-
-        { scene, event in // characterTouchBegan
-            let handler = CharacterMoveTouchEventHandler(
-                recognizer: event.sender as! UIGestureRecognizer,
-                view: scene.view!,
-                character: scene.character)
-            if GestureEventHandlerManager.default.add(handler) {
-                handler.began()
-            }
         },
 
         { scene, event in // gameObjectTouchBegan

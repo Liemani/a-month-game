@@ -24,6 +24,7 @@ class WorldScene: SKScene {
     var rightHandGO: GameObject? { self.characterInv.rightHandGO }
 
     // MARK: layer
+    var worldLayer: SKNode!
     var movingLayer: MovingLayer!
     var chunkContainer: ChunkContainer!
 
@@ -33,6 +34,11 @@ class WorldScene: SKScene {
 
     var munuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
+
+    // MARK: gesture recognizer
+//    var tapHandler: TapEventHandler!
+    var panHandler: PanGestureEventHandler!
+    var pinchHandler: PinchGestureEventHandler!
 
     // MARK: - init
     /// initialize with size
@@ -80,6 +86,7 @@ class WorldScene: SKScene {
         worldLayer.position = Constant.worldLayer
         worldLayer.zPosition = Constant.ZPosition.worldLayer
         self.addChild(worldLayer)
+        self.worldLayer = worldLayer
 
         // MARK: moving layer
         worldLayer.addChild(self.character)
@@ -108,12 +115,16 @@ class WorldScene: SKScene {
         ui.addChild(self.munuWindow)
     }
 
-    override func didMove(to view: SKView) {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        view.addGestureRecognizer(panGesture)
+    override func sceneDidLoad() {
+        self.cTime = CACurrentMediaTime()
+    }
 
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-        view.addGestureRecognizer(pinchGesture)
+    override func didMove(to view: SKView) {
+        self.panHandler = PanGestureEventHandler(view: self.view!,
+                                                 character: self.character)
+        self.pinchHandler = PinchGestureEventHandler(view: self.view!,
+                                                     world: self.worldLayer,
+                                                     character: self.character)
     }
 
     // MARK: - edit model
@@ -127,18 +138,11 @@ class WorldScene: SKScene {
     //    }
 
     // MARK: - update
-    var pTime: TimeInterval = 0.0
-    var cTime: TimeInterval = 0.0
+    var pTime: TimeInterval!
+    var cTime: TimeInterval!
     var timeInterval: TimeInterval { self.cTime - self.pTime }
 
     override func update(_ currentTime: TimeInterval) {
-        if (pTime == 0.0) {
-            print(currentTime)
-            print(CACurrentMediaTime())
-            print(CFAbsoluteTimeGetCurrent())
-            print(Date.distantPast.timeIntervalSinceReferenceDate)
-        }
-
         self.pTime = self.cTime
         self.cTime = currentTime
 
@@ -181,67 +185,6 @@ class WorldScene: SKScene {
         let moContext = WorldServiceContainer.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
-        }
-    }
-
-    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-        if gesture.state == .began {
-            GestureEventHandlerManager.default.cancelAll(of: CharacterMoveTouchEventHandler.self)
-
-            let event = Event(type: WorldEventType.characterTouchBegan,
-                              udata: nil,
-                              sender: gesture)
-            WorldEventManager.default.enqueue(event)
-
-            return
-        }
-
-        if gesture.state == .changed {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.moved()
-
-            return
-        }
-
-        if gesture.state == .ended {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.ended()
-
-            return
-        }
-
-        if gesture.state == .cancelled {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.cancelled()
-        }
-    }
-
-    @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        if gesture.state == .began {
-            print("Pinch began")
-
-            return
-        }
-
-        if gesture.state == .changed {
-            print("Pinch changed")
-
-            return
-        }
-
-        if gesture.state == .ended {
-            print("Pinch eneded")
-
-            return
         }
     }
 

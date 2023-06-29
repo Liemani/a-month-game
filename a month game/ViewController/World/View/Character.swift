@@ -31,7 +31,7 @@ class Character: SKShapeNode {
         set { self._position = newValue }
     }
 
-    var velocityVector: CGVector
+    var velocity: CGPoint
 
     private var accessibleRange: Int { Constant.characterAccessibleRange }
     var accessibleFrame: CGRect {
@@ -47,7 +47,7 @@ class Character: SKShapeNode {
         self.data = CharacterData()
         self.chunkChunkCoord = self.data.chunkCoord
         self.chunkChunkCoord.address.tile.rawCoord = Coordinate()
-        self.velocityVector = CGVector()
+        self.velocity = CGPoint()
 
         super.init()
 

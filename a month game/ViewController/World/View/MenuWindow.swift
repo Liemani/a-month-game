@@ -39,7 +39,7 @@ class MenuWindow: SKNode {
     // MARK: - isHidden
     func reveal() {
         self.isHidden = false
-        GestureEventHandlerManager.default.cancelAll()
+//        GestureEventHandlerManager.default.cancelAll()
     }
 
     func hide() {

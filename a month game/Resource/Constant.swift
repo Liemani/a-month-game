@@ -148,22 +148,7 @@ struct Constant {
 
     static let characterAccessibleRange = 1
 
-//    // MARK: table
-//    static let spaceShiftTable: [UInt8] = [
-//        6, 7, 0,
-//        5, 8, 1,
-//        4, 3, 2,
-//    ]
-
-//    static let coordVectorTable = [
-//        Coordinate(1, 1),
-//        Coordinate(1, 0),
-//        Coordinate(1, -1),
-//        Coordinate(0, -1),
-//        Coordinate(-1, -1),
-//        Coordinate(-1, 0),
-//        Coordinate(-1, 1),
-//        Coordinate(0, 1),
-//    ]
+    static let minZoomScale = 0.1
+    static let maxZoomScale = 1.0
 
 }
