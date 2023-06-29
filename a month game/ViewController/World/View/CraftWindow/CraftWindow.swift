@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class CraftWindow: LMINode {
+class CraftWindow: SKNode {
 
     var cellCount: Int { Constant.craftWindowCellCount }
 
@@ -77,7 +77,6 @@ class CraftWindow: LMINode {
 //
 //            print("craft window will not have game object node, it must has craft object")
 ////            go.type = .none
-//            go.isUserInteractionEnabled = false
             cell.alpha = 0.2
         }
     }
@@ -109,7 +108,6 @@ class CraftWindow: LMINode {
         let go = cell.children[0] as! GameObject
             print("craft window will not have game object node, it must has craft object")
 //        go.type = goType
-        go.isUserInteractionEnabled = true
         cell.alpha = 1.0
     }
 

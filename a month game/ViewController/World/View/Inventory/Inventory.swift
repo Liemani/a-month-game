@@ -132,7 +132,6 @@ extension Inventory: InventoryProtocol {
     func add(_ item: GameObject) {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
-        item.isUserInteractionEnabled = true
     }
 
     func move(_ item: GameObject, toParent parent: SKNode) {

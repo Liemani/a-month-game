@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: LMISpriteNode {
+class GameObject: SKSpriteNode {
 
     var data: GameObjectData
 
@@ -77,48 +77,56 @@ class GameObject: LMISpriteNode {
     }
 
     // MARK: - touch
-    override func touchBegan(_ touch: UITouch) {
-        guard TouchEventHandlerManager.default.handler(
-                of: GameObjectTouchEventHandler.self) == nil else {
-            return
-        }
-
-        guard TouchEventHandlerManager.default.handler(
-                of: GameObjectMoveTouchEventHandler.self) == nil else {
-            return
-        }
-
-        let event = Event(type: .gameObjectTouchBegan,
-                          udata: touch,
-                          sender: self)
-        EventManager.default.enqueue(event)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch = touches.first!
+//
+//        guard GestureEventHandlerManager.default.handler(
+//                of: GameObjectTouchEventHandler.self) == nil else {
+//            return
+//        }
+//
+//        guard GestureEventHandlerManager.default.handler(
+//                of: GameObjectMoveTouchEventHandler.self) == nil else {
+//            return
+//        }
+//
+//        let event = Event(type: WorldEventType.gameObjectTouchBegan,
+//                          udata: touch,
+//                          sender: self)
+//        WorldEventManager.default.enqueue(event)
     }
 
-    override func touchMoved(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(
-                from: touch) else {
-            return
-        }
-
-        handler.touchMoved()
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch = touches.first!
+//
+//        guard let handler = GestureEventHandlerManager.default.handler(
+//                from: touch) else {
+//            return
+//        }
+//
+//        handler.touchMoved()
     }
 
-    override func touchEnded(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(
-                from: touch) else {
-            return
-        }
-
-        handler.touchEnded()
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch = touches.first!
+//
+//        guard let handler = GestureEventHandlerManager.default.handler(
+//                from: touch) else {
+//            return
+//        }
+//
+//        handler.touchEnded()
     }
 
-    override func touchCancelled(_ touch: UITouch) {
-        guard let handler = TouchEventHandlerManager.default.handler(
-                from: touch) else {
-            return
-        }
-
-        handler.touchEnded()
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        let touch = touches.first!
+//
+//        guard let handler = GestureEventHandlerManager.default.handler(
+//                from: touch) else {
+//            return
+//        }
+//
+//        handler.touchEnded()
     }
 
 //     MARK: - interact

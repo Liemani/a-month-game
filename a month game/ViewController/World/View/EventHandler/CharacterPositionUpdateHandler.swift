@@ -49,17 +49,17 @@ class CharacterPositionUpdateHandler: EventHandler {
     }
 
     private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
-        let differenceVector = self.character.velocityVector * timeInterval
-        self.character.position += differenceVector
+        let difference = self.character.velocity * timeInterval
+        self.character.position += difference
     }
 
     // TODO: update wrong formula
     private func updateCharacterVelocity(_ timeInterval: TimeInterval) {
-        let velocity = self.character.velocityVector.magnitude
-        self.character.velocityVector =
+        let velocity = self.character.velocity.magnitude
+        self.character.velocity =
         velocity > Constant.velocityDamping
-        ? self.character.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-        : CGVector()
+        ? self.character.velocity * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
+        : CGPoint()
     }
 
     private func resolveCharacterCollision() {
@@ -165,7 +165,7 @@ class CharacterPositionUpdateHandler: EventHandler {
     func resolveTilePointCollision(character: Character, tileFrame: CGRect) {
         let characterRadius = character.path!.boundingBox.width / 2.0
 
-        if CGVector(dx: character.position.x - tileFrame.minX, dy: character.position.y - tileFrame.minY).magnitude < characterRadius {
+        if CGPoint(x: character.position.x - tileFrame.minX, y: character.position.y - tileFrame.minY).magnitude < characterRadius {
             let xDifference = tileFrame.midX - character.position.x
             let yDifference = tileFrame.midY - character.position.y
             let inclination = yDifference / xDifference
@@ -176,7 +176,7 @@ class CharacterPositionUpdateHandler: EventHandler {
             let c = tileFrame.minX * tileFrame.minX + temp * temp - characterRadius * characterRadius
             character.position.x = (-b - (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
-        } else if CGVector(dx: character.position.x - tileFrame.maxX, dy: character.position.y - tileFrame.minY).magnitude < characterRadius {
+        } else if CGPoint(x: character.position.x - tileFrame.maxX, y: character.position.y - tileFrame.minY).magnitude < characterRadius {
             let xDifference = tileFrame.midX - character.position.x
             let yDifference = tileFrame.midY - character.position.y
             let inclination = yDifference / xDifference
@@ -187,7 +187,7 @@ class CharacterPositionUpdateHandler: EventHandler {
             let c = tileFrame.maxX * tileFrame.maxX + temp * temp - characterRadius * characterRadius
             character.position.x = (-b + (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
-        } else if CGVector(dx: character.position.x - tileFrame.minX, dy: character.position.y - tileFrame.maxY).magnitude < characterRadius {
+        } else if CGPoint(x: character.position.x - tileFrame.minX, y: character.position.y - tileFrame.maxY).magnitude < characterRadius {
             let xDifference = tileFrame.midX - character.position.x
             let yDifference = tileFrame.midY - character.position.y
             let inclination = yDifference / xDifference
@@ -198,7 +198,7 @@ class CharacterPositionUpdateHandler: EventHandler {
             let c = tileFrame.minX * tileFrame.minX + temp * temp - characterRadius * characterRadius
             character.position.x = (-b - (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
-        } else if CGVector(dx: character.position.x - tileFrame.maxX, dy: character.position.y - tileFrame.maxY).magnitude < characterRadius {
+        } else if CGPoint(x: character.position.x - tileFrame.maxX, y: character.position.y - tileFrame.maxY).magnitude < characterRadius {
             let xDifference = tileFrame.midX - character.position.x
             let yDifference = tileFrame.midY - character.position.y
             let inclination = yDifference / xDifference

@@ -8,36 +8,32 @@
 import Foundation
 import SpriteKit
 
-protocol ButtonNodeDelegate: AnyObject {
+class Button: SKSpriteNode {
 
-    func buttonTapped(sender: Any?)
+    private let eventType: EventType
 
-}
+    init(texture: SKTexture, frame: CGRect, text: String?, eventType: EventType) {
+        self.eventType = eventType
 
-class ButtonNode: LMISpriteNode {
+        super.init(texture: texture, color: .white, size: frame.size)
 
-    weak var delegate: ButtonNodeDelegate?
-
-    func setUp() {
         self.isUserInteractionEnabled = true
 
-        let label = SKLabelNode()
-        label.position = CGPoint(x: 0, y: -label.fontSize / 2.0)
-        label.zPosition = 1.0
-        self.addChild(label)
-    }
-
-    func set(frame: CGRect) {
         self.position = frame.origin
         self.size = frame.size
 
-        let label = self.children[0] as! SKLabelNode
+        let label = SKLabelNode()
+
+        label.text = text
         label.fontSize = self.size.height / 2.0
+        label.position = CGPoint(x: 0, y: -label.fontSize / 2.0)
+        label.zPosition = 1.0
+
+        self.addChild(label)
     }
 
-    func set(text: String) {
-        let label = self.children[0] as! SKLabelNode
-        label.text = text
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - activate
@@ -52,14 +48,18 @@ class ButtonNode: LMISpriteNode {
     // MARK: - touch
     var touch: UITouch? = nil
 
-    override func touchBegan(_ touch: UITouch) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+
         if self.touch == nil {
             self.activate()
             self.touch = touch
         }
     }
 
-    override func touchMoved(_ touch: UITouch) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+
         guard touch == self.touch else { return }
 
         if self.isBeing(touched: touch) {
@@ -69,17 +69,23 @@ class ButtonNode: LMISpriteNode {
         }
     }
 
-    override func touchEnded(_ touch: UITouch) {
-        guard touch == self.touch else { return }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
 
-        if self.isBeing(touched: touch) {
-            self.delegate!.buttonTapped(sender: self)
+        if touch == self.touch
+                && self.isBeing(touched: touch) {
+            let event = Event(type: self.eventType,
+                              udata: nil,
+                              sender: self)
+            event.manager.enqueue(event)
         }
 
         self.completeTouch(touch)
     }
 
-    override func touchCancelled(_ touch: UITouch) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+
         guard touch == self.touch else { return }
 
         self.completeTouch(touch)

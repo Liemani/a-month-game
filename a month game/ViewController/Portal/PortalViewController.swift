@@ -9,7 +9,9 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
+class PortalViewController: UIViewController {
+
+    private var skView: SKView { return self.view as! SKView }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,25 +20,28 @@ class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
         self.setScene()
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentWorldSceneViewController), name: .requestPresentWorldSceneViewController, object: nil)
+
+        PortalEventManager.set()
     }
 
     func setView() {
-        let view = self.view as! SKView
-        view.ignoresSiblingOrder = true
+        self.skView.ignoresSiblingOrder = true
 #if DEBUG
-        view.showsFPS = true
-        view.showsNodeCount = true
+        self.skView.showsFPS = true
+        self.skView.showsNodeCount = true
 #endif
     }
 
     func setScene() {
         let portalScene = PortalScene()
-        portalScene.setUp()
-
-        let view = self.view as! SKView
-        view.presentScene(portalScene)
+        self.skView.presentScene(portalScene)
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        PortalEventManager.free()
+    }
+
+    // TODO: check
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
@@ -49,11 +54,9 @@ class PortalViewController: UIViewController, UIGestureRecognizerDelegate {
         return true
     }
 
-    @objc
-    func requestPresentWorldSceneViewController() {
+    @objc func requestPresentWorldSceneViewController() {
         WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
-        TouchEventHandlerManager.set()
-        EventManager.set()
+        WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
         let worldViewController = self.storyboard!.instantiateViewController(identifier: "WorldViewController") as! WorldViewController

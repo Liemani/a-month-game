@@ -9,7 +9,7 @@ import UIKit
 import SpriteKit
 import GameplayKit
 
-class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
+class WorldViewController: UIViewController {
 
     /// initialize task without relation to view
     required init?(coder: NSCoder) {
@@ -67,8 +67,7 @@ class WorldViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidDisappear(_ animated: Bool) {
         WorldServiceContainer.free()
-        TouchEventHandlerManager.free()
-        EventManager.free()
+        WorldEventManager.free()
         FrameCycleUpdateManager.free()
     }
 

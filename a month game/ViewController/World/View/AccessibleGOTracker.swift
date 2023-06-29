@@ -55,7 +55,6 @@ class AccessibleGOTracker {
     func activate(_ go: GameObject) {
         go.color = .green.withAlphaComponent(0.9)
         go.colorBlendFactor = Constant.accessibleGOColorBlendFactor
-        go.isUserInteractionEnabled = true
     }
 
     func activateAll() {
@@ -66,7 +65,6 @@ class AccessibleGOTracker {
 
     func deactivate(_ go: GameObject) {
         go.colorBlendFactor = 0.0
-        go.isUserInteractionEnabled = false
     }
 
     // MARK: - update

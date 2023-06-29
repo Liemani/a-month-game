@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class ChunkContainer: LMINode {
+class ChunkContainer: SKNode {
 
     private let character: Character
     var chunks: [Chunk]

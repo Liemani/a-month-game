@@ -24,6 +24,7 @@ class WorldScene: SKScene {
     var rightHandGO: GameObject? { self.characterInv.rightHandGO }
 
     // MARK: layer
+    var worldLayer: SKNode!
     var movingLayer: MovingLayer!
     var chunkContainer: ChunkContainer!
 
@@ -33,6 +34,11 @@ class WorldScene: SKScene {
 
     var munuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
+
+    // MARK: gesture recognizer
+//    var tapHandler: TapEventHandler!
+    var panHandler: PanGestureEventHandler!
+    var pinchHandler: PinchGestureEventHandler!
 
     // MARK: - init
     /// initialize with size
@@ -80,6 +86,7 @@ class WorldScene: SKScene {
         worldLayer.position = Constant.worldLayer
         worldLayer.zPosition = Constant.ZPosition.worldLayer
         self.addChild(worldLayer)
+        self.worldLayer = worldLayer
 
         // MARK: moving layer
         worldLayer.addChild(self.character)
@@ -96,48 +103,65 @@ class WorldScene: SKScene {
         fixedLayer.addChild(ui)
         self.ui = ui
 
-        let menuButtonNode: ButtonNode = ButtonNode(imageNamed: Constant.ResourceName.menuButtonNode)
-        menuButtonNode.setUp()
-        menuButtonNode.set(frame: Constant.Frame.menuButtonNode)
-        menuButtonNode.delegate = self
-        ui.addChild(menuButtonNode)
+        let texture = SKTexture(imageNamed: Constant.ResourceName.menuButton)
+        let menuButton: Button = Button(texture: texture,
+                                        frame: Constant.Frame.menuButton,
+                                        text: nil,
+                                        eventType: WorldEventType.menuButton)
+        ui.addChild(menuButton)
+
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
         ui.addChild(self.munuWindow)
     }
 
+    override func sceneDidLoad() {
+        self.cTime = CACurrentMediaTime()
+    }
+
+    override func didMove(to view: SKView) {
+        self.panHandler = PanGestureEventHandler(view: self.view!,
+                                                 character: self.character)
+        self.pinchHandler = PinchGestureEventHandler(view: self.view!,
+                                                     world: self.worldLayer,
+                                                     character: self.character)
+    }
+
     // MARK: - edit model
 
-//    func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectNode {
-//        let container = self.containers[goCoord.containerType]!
-//        let go = GameObjectNode.new(of: goType)
-//        container.addGO(go, to: goCoord.coord)
-//        self.interactionZone.reserveUpdate()
-//        return go
-//    }
+    //    func addGO(of goType: GameObjectType, to goCoord: GameObjectCoordinate) -> GameObjectNode {
+    //        let container = self.containers[goCoord.containerType]!
+    //        let go = GameObjectNode.new(of: goType)
+    //        container.addGO(go, to: goCoord.coord)
+    //        self.interactionZone.reserveUpdate()
+    //        return go
+    //    }
 
     // MARK: - update
-    var lastUpdateTime: TimeInterval = 0.0
-    override func update(_ currentTime: TimeInterval) {
-        self.handleEvent()
+    var pTime: TimeInterval!
+    var cTime: TimeInterval!
+    var timeInterval: TimeInterval { self.cTime - self.pTime }
 
-        let timeInterval = currentTime - self.lastUpdateTime
+    override func update(_ currentTime: TimeInterval) {
+        self.pTime = self.cTime
+        self.cTime = currentTime
+
+        self.handleEvent()
 
         self.updateModel()
         CharacterPositionUpdateHandler(character: self.character,
                                        movingLayer: self.movingLayer,
                                        chunkContainer: self.chunkContainer,
                                        accessibleGOTracker: self.accessibleGOTracker,
-                                       timeInterval: timeInterval).handle()
+                                       timeInterval: self.timeInterval).handle()
 
         self.updateData()
-
-        self.lastUpdateTime = currentTime
     }
 
     func handleEvent() {
-        while let event = EventManager.default.dequeue() {
-            event.type.handler(self, event)
+        while let event = WorldEventManager.default.dequeue() {
+            let eventType = event.type as! WorldEventType
+            eventType.handler(self, event)
         }
     }
 
@@ -162,16 +186,6 @@ class WorldScene: SKScene {
         if moContext.hasChanges {
             try! moContext.save()
         }
-    }
-
-    // MARK: - delegate
-
-}
-
-extension WorldScene: ButtonNodeDelegate {
-
-    func buttonTapped(sender: Any?) {
-        self.munuWindow.reveal()
     }
 
 }
