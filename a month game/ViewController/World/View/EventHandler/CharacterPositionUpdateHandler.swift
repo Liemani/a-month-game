@@ -49,8 +49,8 @@ class CharacterPositionUpdateHandler: EventHandler {
     }
 
     private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
-        let differenceVector = self.character.velocityVector * timeInterval
-        self.character.position += differenceVector
+        let deltaVector = self.character.velocityVector * timeInterval
+        self.character.position += deltaVector
     }
 
     // TODO: update wrong formula
@@ -144,11 +144,11 @@ class CharacterPositionUpdateHandler: EventHandler {
     func resolveTileSideCollision(character: Character, tileFrame: CGRect) {
         let characterRadius = character.path!.boundingBox.width / 2.0
 
-        let differenceX = character.position.x - tileFrame.midX
-        let differenceY = character.position.y - tileFrame.midY
+        let deltaX = character.position.x - tileFrame.midX
+        let deltaY = character.position.y - tileFrame.midY
 
-        let sum = differenceY + differenceX
-        let sub = differenceY - differenceX
+        let sum = deltaY + deltaX
+        let sub = deltaY - deltaX
 
         if sub < 0 && sum >= 0 {
             character.position.x = tileFrame.maxX + characterRadius
@@ -166,10 +166,10 @@ class CharacterPositionUpdateHandler: EventHandler {
         let characterRadius = character.path!.boundingBox.width / 2.0
 
         if CGVector(dx: character.position.x - tileFrame.minX, dy: character.position.y - tileFrame.minY).magnitude < characterRadius {
-            let xDifference = tileFrame.midX - character.position.x
-            let yDifference = tileFrame.midY - character.position.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / xDifference
+            let deltaX = tileFrame.midX - character.position.x
+            let deltaY = tileFrame.midY - character.position.y
+            let inclination = deltaY / deltaX
+            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.minY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.minX
@@ -177,10 +177,10 @@ class CharacterPositionUpdateHandler: EventHandler {
             character.position.x = (-b - (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
         } else if CGVector(dx: character.position.x - tileFrame.maxX, dy: character.position.y - tileFrame.minY).magnitude < characterRadius {
-            let xDifference = tileFrame.midX - character.position.x
-            let yDifference = tileFrame.midY - character.position.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / xDifference
+            let deltaX = tileFrame.midX - character.position.x
+            let deltaY = tileFrame.midY - character.position.y
+            let inclination = deltaY / deltaX
+            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.minY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.maxX
@@ -188,10 +188,10 @@ class CharacterPositionUpdateHandler: EventHandler {
             character.position.x = (-b + (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
         } else if CGVector(dx: character.position.x - tileFrame.minX, dy: character.position.y - tileFrame.maxY).magnitude < characterRadius {
-            let xDifference = tileFrame.midX - character.position.x
-            let yDifference = tileFrame.midY - character.position.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / xDifference
+            let deltaX = tileFrame.midX - character.position.x
+            let deltaY = tileFrame.midY - character.position.y
+            let inclination = deltaY / deltaX
+            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.maxY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.minX
@@ -199,10 +199,10 @@ class CharacterPositionUpdateHandler: EventHandler {
             character.position.x = (-b - (b * b - a * c).squareRoot()) / a
             character.position.y = inclination * character.position.x + yIntercept
         } else if CGVector(dx: character.position.x - tileFrame.maxX, dy: character.position.y - tileFrame.maxY).magnitude < characterRadius {
-            let xDifference = tileFrame.midX - character.position.x
-            let yDifference = tileFrame.midY - character.position.y
-            let inclination = yDifference / xDifference
-            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / xDifference
+            let deltaX = tileFrame.midX - character.position.x
+            let deltaY = tileFrame.midY - character.position.y
+            let inclination = deltaY / deltaX
+            let yIntercept = (tileFrame.midX * character.position.y - character.position.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.maxY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.maxX

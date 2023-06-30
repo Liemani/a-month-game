@@ -46,15 +46,15 @@ struct ChunkCoordinate {
 //        let originBuildingCoord = origin >> 4
 //        let destinationBuildingCoord = destination >> 4
 //
-//        let difference = destinationBuildingCoord - originBuildingCoord
-//        let direction = Direction9(coord: difference)
+//        let delta = destinationBuildingCoord - originBuildingCoord
+//        let direction = Direction9(coord: delta)
 //
 //        return direction
 //    }
 
     func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        let differenceCoord = chunkCoord.coord - self.coord
-        let chunkDirection = Direction9(from: differenceCoord >> 4)
+        let deltaCoord = chunkCoord.coord - self.coord
+        let chunkDirection = Direction9(from: deltaCoord >> 4)
         return chunkDirection
     }
 

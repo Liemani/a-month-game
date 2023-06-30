@@ -42,9 +42,9 @@ extension CharacterMoveTouchEventHandler: GestureEventHandler {
     func moved() {
         self.pPoint = self.cPoint
         self.cPoint = self.locationInScene(recognizer: self.recognizer)
-        let difference = self.cPoint - self.pPoint
+        let delta = self.cPoint - self.pPoint
 
-        self.character.position -= difference
+        self.character.position -= delta
     }
 
     func ended() {

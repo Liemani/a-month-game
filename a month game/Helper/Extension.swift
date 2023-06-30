@@ -43,10 +43,10 @@ extension Array {
 //            let goMO = goMO as! GameObjectMO
 //            let goMOCoord = goMO.coord
 //            if coord.isAdjacent(to: goMOCoord) {
-//                let differenceX = goMOCoord.x - coord.x
-//                let differenceY = goMOCoord.y - coord.y
-//                let differenceCoord = Coordinate(differenceX, differenceY)
-//                guard let direction = Direction9(coord: differenceCoord) else {
+//                let deltaX = goMOCoord.x - coord.x
+//                let deltaY = goMOCoord.y - coord.y
+//                let deltaCoord = Coordinate(deltaX, deltaY)
+//                guard let direction = Direction9(coord: deltaCoord) else {
 //                    continue
 //                }
 //                filledSpaceFlags |= 0x1 << direction.rawValue
