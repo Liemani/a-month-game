@@ -109,10 +109,6 @@ extension CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
     }
 
-    static func += (lhs: inout CGPoint, rhs: CGPoint) {
-        lhs = lhs + rhs
-    }
-
     static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
     }
@@ -166,10 +162,6 @@ extension CGPoint {
 
     var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
 
-    var magnitude: CGFloat {
-        return (self.x * self.x + self.y * self.y).squareRoot()
-    }
-
 }
 
 extension Double {
@@ -214,6 +206,10 @@ extension CGVector {
 
     static func / (lhs: CGVector, rhs: Double) -> CGVector {
         return CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
+    }
+
+    var magnitude: CGFloat {
+        return (self.dx * self.dx + self.dy * self.dy).squareRoot()
     }
 
 }

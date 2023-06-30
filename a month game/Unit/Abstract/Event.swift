@@ -16,6 +16,8 @@ protocol EventType {
 
 protocol EventHandler {
 
+    func handle()
+
 }
 
 class Event {

@@ -447,12 +447,24 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-change accessibleGOTracker to manage only non-walkable GO
-block ui pan gesture recognizing
-if i touch end the second go touch?
-    have problem
+이 문제 해결
+    view 하고 scene 하고 locatino 다를텐데..
+    시간을 초기 설정하는 방법
+atPoint(point) 를 사용하면 기존의 go.touched() 를 재현할 수 있다
+portalScene touch 확인
+GameObject::fieldPosition
+new touch
+    if not pickable, interact
+    else touch inventory GO -> activate GO
+        touch another GO -> GO interact
+        else touch empty cell -> put
+        else touch empty or tile field tile -> put
+    else touch field GO -> take to inventory
 craft
     possible must have empty inventory space
+
+drag -> move
+거리 제한 해제
 
 무료 에셋 찾아보기
 조금 빨라지기
@@ -704,24 +716,6 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
-is while move tap will button tap work? chekc
-add world scene button event manager
-이 문제 해결
-    view 하고 scene 하고 locatino 다를텐데..
-    시간을 초기 설정하는 방법
-atPoint(point) 를 사용하면 기존의 go.touched() 를 재현할 수 있다
-portalScene touch 확인
-GameObject::fieldPosition
-new touch
-    if not pickable, interact
-    else touch inventory GO -> activate GO
-        touch another GO -> GO interact
-        else touch empty cell -> put
-        else touch empty or tile field tile -> put
-    else touch field GO -> take to inventory
-drag -> move
-거리 제한 해제
-
 apply walkable
 apply interact to tile
 
