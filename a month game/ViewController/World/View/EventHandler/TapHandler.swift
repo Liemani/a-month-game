@@ -20,57 +20,35 @@ final class TapHandler {
     }
 
     private let scene: WorldScene
-    private let character: Character
-
-    private var pPoint: CGPoint!
-    private var cPoint: CGPoint!
 
     // MARK: - init
-    init(scene: WorldScene, character: Character) {
+    init(scene: WorldScene) {
         self.scene = scene
-        self.character = character
     }
 
 }
 
 extension TapHandler: TouchHandler {
 
-    func discriminate(touch: LMITouch) -> Bool { return true }
-
-    func removeFromTracking(touch: LMITouch) {
-
-    }
+    func discriminate(touches: [LMITouch]) -> Bool { return true }
 
     func began(touches: [LMITouch]) {
-        let touch = touches[0]
-        self.touch = touch
-        self.character.velocityVector = CGVector()
-        self.cPoint = touch.touch.location(in: self.scene)
+        print("tap began")
+
+        self.touch = touches[0]
     }
 
     func moved() {
-        self.pPoint = self.cPoint
-        self.cPoint = self.touch!.touch.location(in: self.scene)
-        let delta = self.cPoint - self.pPoint
-
-        self.character.position -= delta
+        print("tap moved")
     }
 
     func ended() {
-        self.setCharacterVelocity()
-    }
-
-    private func setCharacterVelocity() {
-        guard self.pPoint != nil else { return }
-
-        let timeInterval = self.scene.timeInterval
-
-        self.character.velocityVector = (-(self.cPoint - self.pPoint) / timeInterval).vector
-
+        print("tap ended")
         self.complete()
     }
 
     func cancelled() {
+        print("tap cancelled")
         self.complete()
     }
 

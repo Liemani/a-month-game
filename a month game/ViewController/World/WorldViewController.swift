@@ -29,8 +29,14 @@ class WorldViewController: UIViewController {
         skView.showsNodeCount = true
 #endif
 
+        WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        WorldEventManager.set()
+        FrameCycleUpdateManager.set()
+
         let scene = WorldScene(size: Constant.sceneSize)
         skView.presentScene(scene)
+
+        TouchManager.set(scene: scene, character: scene.character)
     }
 
     // TODO: check this method, other edit is perfect

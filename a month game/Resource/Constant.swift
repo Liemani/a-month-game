@@ -135,8 +135,8 @@ struct Constant {
         static let rightHand = "right_hand"
     }
 
-    static let minSceneScale = 0.3
-    static let maxSceneScale = 1.0
+    static let minZoomScale = 0.3
+    static let maxZoomScale = 1.0
 
     static let initialNextID = 1
 
@@ -147,6 +147,6 @@ struct Constant {
 
     static let characterAccessibleRange = 1
 
-    static let panThreshold = 10.0
+    static let panThreshold = tileWidth * 2.0
 
 }

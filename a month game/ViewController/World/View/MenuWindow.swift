@@ -39,7 +39,7 @@ class MenuWindow: SKNode {
     // MARK: - isHidden
     func reveal() {
         self.isHidden = false
-        TouchManager.default.cancelAll()
+        TouchManager.default.cancelAllTouches()
     }
 
     func hide() {
