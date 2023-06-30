@@ -74,11 +74,10 @@ struct Constant {
                 static let gameObject = 20.0
                 static let gameObjectCover = 40.0
             static let character = 30.0
-        static let fixedLayer = 100.0
-            static let ui = 0.0
-                static let characterInv = 0.0
-                static let craftCell = 0.0
-            static let munuWindow = 100.0
+        static let ui = 100.0
+            static let characterInv = 0.0
+            static let craftCell = 0.0
+        static let munuWindow = 200.0
     }
 
     // MARK: - frame
@@ -148,22 +147,6 @@ struct Constant {
 
     static let characterAccessibleRange = 1
 
-//    // MARK: table
-//    static let spaceShiftTable: [UInt8] = [
-//        6, 7, 0,
-//        5, 8, 1,
-//        4, 3, 2,
-//    ]
-
-//    static let coordVectorTable = [
-//        Coordinate(1, 1),
-//        Coordinate(1, 0),
-//        Coordinate(1, -1),
-//        Coordinate(0, -1),
-//        Coordinate(-1, -1),
-//        Coordinate(-1, 0),
-//        Coordinate(-1, 1),
-//        Coordinate(0, 1),
-//    ]
+    static let panThreshold = 10.0
 
 }

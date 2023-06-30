@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class WorldScene: SKScene {
+class WorldScene: SKScene, TouchResponder {
 
     var worldViewController: WorldViewController {
         return self.view!.next! as! WorldViewController
@@ -86,15 +86,10 @@ class WorldScene: SKScene {
         worldLayer.addChild(self.character)
         worldLayer.addChild(movingLayer)
 
-        // MARK: fixed layer
-        let fixedLayer = SKNode()
-        fixedLayer.zPosition = Constant.ZPosition.fixedLayer
-        self.addChild(fixedLayer)
-
         // MARK: ui
         let ui = SKNode()
         ui.zPosition = Constant.ZPosition.ui
-        fixedLayer.addChild(ui)
+        self.addChild(ui)
         self.ui = ui
 
         let texture = SKTexture(imageNamed: Constant.ResourceName.menuButton)
@@ -106,15 +101,8 @@ class WorldScene: SKScene {
 
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
-        ui.addChild(self.munuWindow)
-    }
 
-    override func didMove(to view: SKView) {
-        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        view.addGestureRecognizer(panGesture)
-
-        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(handlePinch(_:)))
-        view.addGestureRecognizer(pinchGesture)
+        self.addChild(self.munuWindow)
     }
 
     // MARK: - edit model
@@ -185,65 +173,25 @@ class WorldScene: SKScene {
         }
     }
 
-    @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
-        if gesture.state == .began {
-            GestureEventHandlerManager.default.cancelAll(of: CharacterMoveTouchEventHandler.self)
-
-            let event = Event(type: WorldEventType.characterTouchBegan,
-                              udata: nil,
-                              sender: gesture)
-            WorldEventManager.default.enqueue(event)
-
-            return
-        }
-
-        if gesture.state == .changed {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.moved()
-
-            return
-        }
-
-        if gesture.state == .ended {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.ended()
-
-            return
-        }
-
-        if gesture.state == .cancelled {
-            guard let handler = GestureEventHandlerManager.default.handler(from: gesture) else {
-                return
-            }
-
-            handler.cancelled()
-        }
+    // MARK: - override
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        TouchManager.default.touchBegan(touch)
     }
 
-    @objc func handlePinch(_ gesture: UIPinchGestureRecognizer) {
-        if gesture.state == .began {
-            print("Pinch began")
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        TouchManager.default.touchMoved(touch)
+    }
 
-            return
-        }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        TouchManager.default.touchEnded(touch)
+    }
 
-        if gesture.state == .changed {
-            print("Pinch changed")
-
-            return
-        }
-
-        if gesture.state == .ended {
-            print("Pinch eneded")
-
-            return
-        }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        TouchManager.default.touchCancelled(touch)
     }
 
 }

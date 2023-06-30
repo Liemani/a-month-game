@@ -445,8 +445,20 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         tree rustle
         firing
 
+## layer
+scene
+    worldLayer
+        movingLayer
+        character
+    ui
+        characterInv
+        craftWindow
+        menuButton
+    menuWindow
+
 # issue
 -
+
 이 문제 해결
     view 하고 scene 하고 locatino 다를텐데..
     시간을 초기 설정하는 방법

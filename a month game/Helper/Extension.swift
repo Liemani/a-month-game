@@ -162,6 +162,8 @@ extension CGPoint {
 
     var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
 
+    var magnitude: CGFloat { (self.x * self.x + self.y * self.y).squareRoot() }
+
 }
 
 extension Double {

@@ -8,40 +8,49 @@
 import Foundation
 import SpriteKit
 
-final class CharacterMoveTouchEventHandler {
+final class TapHandler {
 
-    let recognizer: UIGestureRecognizer
+    var touch: LMITouch?
+    var touches: [LMITouch] {
+        if let touch = self.touch {
+            return [touch]
+        } else {
+            return []
+        }
+    }
 
-    private let view: SKView
+    private let scene: WorldScene
     private let character: Character
 
     private var pPoint: CGPoint!
     private var cPoint: CGPoint!
 
     // MARK: - init
-    init(recognizer: UIGestureRecognizer, view: SKView, character: Character) {
-        self.recognizer = recognizer
-        self.view = view
+    init(scene: WorldScene, character: Character) {
+        self.scene = scene
         self.character = character
-    }
-
-    func locationInScene(recognizer: UIGestureRecognizer) -> CGPoint {
-        let viewPoint = self.recognizer.location(in: self.view)
-        return self.view.scene!.convertPoint(fromView: viewPoint)
     }
 
 }
 
-extension CharacterMoveTouchEventHandler: GestureEventHandler {
+extension TapHandler: TouchHandler {
 
-    func began() {
+    func discriminate(touch: LMITouch) -> Bool { return true }
+
+    func removeFromTracking(touch: LMITouch) {
+
+    }
+
+    func began(touches: [LMITouch]) {
+        let touch = touches[0]
+        self.touch = touch
         self.character.velocityVector = CGVector()
-        self.cPoint = self.locationInScene(recognizer: self.recognizer)
+        self.cPoint = touch.touch.location(in: self.scene)
     }
 
     func moved() {
         self.pPoint = self.cPoint
-        self.cPoint = self.locationInScene(recognizer: self.recognizer)
+        self.cPoint = self.touch!.touch.location(in: self.scene)
         let delta = self.cPoint - self.pPoint
 
         self.character.position -= delta
@@ -54,7 +63,7 @@ extension CharacterMoveTouchEventHandler: GestureEventHandler {
     private func setCharacterVelocity() {
         guard self.pPoint != nil else { return }
 
-        let timeInterval = (self.view.scene as! WorldScene).timeInterval
+        let timeInterval = self.scene.timeInterval
 
         self.character.velocityVector = (-(self.cPoint - self.pPoint) / timeInterval).vector
 
@@ -66,7 +75,7 @@ extension CharacterMoveTouchEventHandler: GestureEventHandler {
     }
 
     func complete() {
-        GestureEventHandlerManager.default.remove(from: self.recognizer)
+        self.touch = nil
     }
 
 }

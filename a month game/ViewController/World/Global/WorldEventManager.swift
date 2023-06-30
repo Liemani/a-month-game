@@ -43,11 +43,11 @@ enum WorldEventType: Int, CaseIterable, EventType {
         },
 
         { scene, event in // characterTouchBegan
-            let handler = CharacterMoveTouchEventHandler(
+            let handler = TapHandler(
                 recognizer: event.sender as! UIGestureRecognizer,
                 view: scene.view!,
                 character: scene.character)
-            if GestureEventHandlerManager.default.add(handler) {
+            if TouchManager.default.add(handler) {
                 handler.began()
             }
         },

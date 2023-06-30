@@ -67,7 +67,7 @@ class WorldViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         WorldServiceContainer.free()
-        GestureEventHandlerManager.free()
+        TouchManager.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
     }
