@@ -25,6 +25,9 @@ enum GameObjectType: Int, CaseIterable {
     case woodStick
     case stone
     case axe
+    case stoneShovel
+    case pickaxe
+    case leafBag
 
     init?(from goMO: GameObjectMO) {
         self.init(rawValue: Int(goMO.typeID))
@@ -39,6 +42,9 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_wood_stick", true, true, false),
         ("game_object_stone", true, true, false),
         ("game_object_axe", true, true, false),
+        ("game_object_stone_shovel", true, true, false),
+        ("game_object_pickaxe", true, true, false),
+        ("game_object_leaf_bag", true, true, false),
     ]
 
     private static let textures: [SKTexture] = ({
