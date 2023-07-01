@@ -34,21 +34,13 @@ class WorldViewController: UIViewController {
         FrameCycleUpdateManager.set()
 
         let scene = WorldScene(size: Constant.sceneSize)
+
+        TouchRecognizerManager.set(scene: scene,
+                                   ui: scene.ui,
+                                   character: scene.character)
+        TouchHandlerContainer.set()
+
         skView.presentScene(scene)
-
-        TouchManager.set(scene: scene, character: scene.character)
-    }
-
-    // TODO: check this method, other edit is perfect
-    func remove(from gos: any Sequence<GameObject>) {
-        print("ingredient of craft should removed")
-        //        for go in gos {
-        //            let go = go as! GameObjectNode
-        //            let goMO = self.gameObjectModel.goMOGO.remove(go)!
-        //            self.gameObjectModel.remove(goMO)
-        //            go.removeFromParent()
-        //        }
-        //        self.worldScene.interactionZone.reserveUpdate()
     }
 
     // MARK: - transition
@@ -73,12 +65,25 @@ class WorldViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         WorldServiceContainer.free()
-        TouchManager.free()
+        TouchRecognizerManager.free()
+        TouchHandlerContainer.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
     }
 
 }
+
+    // TODO: check this method, other edit is perfect
+//    func remove(from gos: any Sequence<GameObject>) {
+//        print("ingredient of craft should removed")
+//        //        for go in gos {
+//        //            let go = go as! GameObjectNode
+//        //            let goMO = self.gameObjectModel.goMOGO.remove(go)!
+//        //            self.gameObjectModel.remove(goMO)
+//        //            go.removeFromParent()
+//        //        }
+//        //        self.worldScene.interactionZone.reserveUpdate()
+//    }
 
 // MARK: - edit model
     // MARK: - game object

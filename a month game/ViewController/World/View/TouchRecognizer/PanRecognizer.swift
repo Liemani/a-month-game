@@ -8,11 +8,11 @@
 import Foundation
 import SpriteKit
 
-class PanHandler {
+class PanRecognizer {
 
-    var touch: LMITouch?
-    var touches: [LMITouch] {
-        if let touch = self.touch {
+    var lmiTouch: LMITouch?
+    var lmiTouches: [LMITouch] {
+        if let touch = self.lmiTouch {
             return [touch]
         } else {
             return []
@@ -20,47 +20,52 @@ class PanHandler {
     }
 
     private let scene: WorldScene
+    private let ui: SKNode
     private let character: Character
 
     private var pPoint: CGPoint!
     private var cPoint: CGPoint!
 
-    init(scene: WorldScene, character: Character) {
+    init(scene: WorldScene, ui: SKNode, character: Character) {
         self.scene = scene
+        self.ui = ui
         self.character = character
     }
 
 }
 
-extension PanHandler: TouchHandler {
+extension PanRecognizer: TouchRecognizer {
 
-    func discriminate(touches: [LMITouch]) -> Bool {
-        guard touches[0].possible.contains(.pan) else {
+    func discriminate(lmiTouches: [LMITouch]) -> Bool {
+        let lmiTouch = lmiTouches[0]
+
+        guard lmiTouch.possible.contains(.pan) else {
             return false
         }
 
         let currentTime = CACurrentMediaTime()
 
-        if self.touch != nil
-            || currentTime - touches[0].bTime > 1.0 {
-            touches[0].possible.remove(.pan)
+        guard currentTime - lmiTouch.bTime < 1.0
+            && !lmiTouch.touchedNode.isDescendant(self.ui) else {
+            lmiTouch.possible.remove(.pan)
+
             return false
         }
 
-        return touches[0].velocity(in: self.scene) >= Constant.panThreshold
+        return lmiTouch.velocity(in: self.scene) >= Constant.panThreshold
     }
 
-    func began(touches: [LMITouch]) {
+    func began(lmiTouches: [LMITouch]) {
         print("pan began")
 
-        self.touch = touches[0]
+        self.lmiTouch = lmiTouches[0]
         self.character.velocityVector = CGVector()
-        self.cPoint = self.touch!.location(in: self.scene)
+        self.cPoint = self.lmiTouch!.location(in: self.scene)
     }
 
     func moved() {
         self.pPoint = self.cPoint
-        self.cPoint = self.touch!.location(in: self.scene)
+        self.cPoint = self.lmiTouch!.location(in: self.scene)
         let delta = self.cPoint - self.pPoint
 
         self.character.position -= delta
@@ -85,7 +90,7 @@ extension PanHandler: TouchHandler {
     }
 
     func complete() {
-        self.touch = nil
+        self.lmiTouch = nil
     }
 
 }

@@ -8,51 +8,56 @@
 import Foundation
 import SpriteKit
 
-class PinchHandler {
+class PinchRecognizer {
 
-    var touches: [LMITouch]
+    var lmiTouches: [LMITouch]
 
     private var scene: WorldScene
+    private let ui: SKNode
     private let world: SKNode
 
     private var pDistance: Double
 
-    init(scene: WorldScene, world: SKNode) {
-        self.touches = []
+    init(scene: WorldScene, ui: SKNode, world: SKNode) {
+        self.lmiTouches = []
 
         self.scene = scene
+        self.ui = ui
         self.world = world
 
         self.pDistance = 0.0
     }
 
     var distance:Double {
-        let difference = self.touches[0].location(in: self.scene)
-            - self.touches[1].location(in: self.scene)
+        let difference = self.lmiTouches[0].location(in: self.scene)
+            - self.lmiTouches[1].location(in: self.scene)
 
         return difference.magnitude
     }
 
 }
 
-extension PinchHandler: TouchHandler {
+extension PinchRecognizer: TouchRecognizer {
 
-    func discriminate(touches: [LMITouch]) -> Bool {
-        guard touches.count == 2
-                && touches[0].possible.contains(.pinch)
-                && touches[1].possible.contains(.pinch) else {
+    func discriminate(lmiTouches: [LMITouch]) -> Bool {
+        guard lmiTouches.count == 2
+                && lmiTouches[0].possible.contains(.pinch)
+                && lmiTouches[1].possible.contains(.pinch) else {
             return false
         }
 
         let currentTime = CACurrentMediaTime()
 
-        if currentTime - touches[0].bTime > 1.0 {
-            touches[0].possible.remove(.pinch)
+        guard currentTime - lmiTouches[0].bTime < 1.0
+            && !lmiTouches[0].touchedNode.isDescendant(self.ui) else {
+            lmiTouches[0].possible.remove(.pinch)
+
             return false
         }
 
-        if currentTime - touches[1].bTime > 1.0 {
-            touches[1].possible.remove(.pinch)
+        guard currentTime - lmiTouches[1].bTime < 1.0
+            && !lmiTouches[1].touchedNode.isDescendant(self.ui) else {
+            lmiTouches[1].possible.remove(.pinch)
             return false
         }
 
@@ -61,18 +66,18 @@ extension PinchHandler: TouchHandler {
 
         var pTouchPLocation: CGPoint
 
-        if touches[0].touch.timestamp == touches[1].touch.timestamp {
-            pTouch = touches[0]
-            cTouch = touches[1]
+        if lmiTouches[0].touch.timestamp == lmiTouches[1].touch.timestamp {
+            pTouch = lmiTouches[0]
+            cTouch = lmiTouches[1]
 
             pTouchPLocation = pTouch.previousLocation(in: self.scene)
         } else {
-            if touches[0].touch.timestamp < touches[1].touch.timestamp {
-                pTouch = touches[0]
-                cTouch = touches[1]
+            if lmiTouches[0].touch.timestamp < lmiTouches[1].touch.timestamp {
+                pTouch = lmiTouches[0]
+                cTouch = lmiTouches[1]
             } else {
-                pTouch = touches[1]
-                cTouch = touches[0]
+                pTouch = lmiTouches[1]
+                cTouch = lmiTouches[0]
             }
 
             pTouchPLocation = pTouch.location(in: self.scene)
@@ -91,10 +96,10 @@ extension PinchHandler: TouchHandler {
         return 100.0 < abs(velocityDelta)
     }
 
-    func began(touches: [LMITouch]) {
+    func began(lmiTouches: [LMITouch]) {
         print("pinch began")
 
-        self.touches = touches
+        self.lmiTouches = lmiTouches
 
         self.pDistance = self.distance
     }
@@ -126,7 +131,7 @@ extension PinchHandler: TouchHandler {
     }
 
     func complete() {
-        self.touches.removeAll()
+        self.lmiTouches.removeAll()
     }
 
 }

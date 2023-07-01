@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-protocol TouchResponder {
+protocol TouchResponder: SKNode {
 
     func touchBegan(_ touch: UITouch)
     func touchMoved(_ touch: UITouch)

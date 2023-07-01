@@ -94,6 +94,20 @@ extension SKNode {
         return self.contains(touch.location(in: self.parent!))
     }
 
+    func isDescendant(_ node: SKNode) -> Bool {
+        var parent: SKNode? = self.parent
+
+        while let ancestor = parent {
+            if ancestor == node {
+                return true
+            }
+
+            parent = ancestor.parent
+        }
+
+        return false
+    }
+
 }
 
 // MARK: - CGPoint

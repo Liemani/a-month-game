@@ -179,25 +179,25 @@ extension WorldScene {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchManager.default.touchBegan(touch)
+            TouchRecognizerManager.default.touchBegan(touch)
         }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchManager.default.touchMoved(touch)
+            TouchRecognizerManager.default.touchMoved(touch)
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchManager.default.touchEnded(touch)
+            TouchRecognizerManager.default.touchEnded(touch)
         }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchManager.default.touchCancelled(touch)
+            TouchRecognizerManager.default.touchCancelled(touch)
         }
     }
 
