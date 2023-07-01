@@ -52,3 +52,42 @@ class MovingLayer: SKNode {
     }
 
 }
+
+// MARK: - touch responder
+extension MovingLayer: TouchResponder {
+
+    func touchBegan(_ touch: UITouch) {
+            TouchHandlerContainer.default.fieldHandler.began(touch: touch)
+    }
+
+    func touchMoved(_ touch: UITouch) {
+        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+
+        guard touch == fieldHandler.touch else {
+            return
+        }
+
+        fieldHandler.moved()
+    }
+
+    func touchEnded(_ touch: UITouch) {
+        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+
+        guard touch == fieldHandler.touch else {
+            return
+        }
+
+        fieldHandler.ended()
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+
+        guard touch == fieldHandler.touch else {
+            return
+        }
+
+        fieldHandler.cancelled()
+    }
+
+}

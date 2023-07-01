@@ -458,6 +458,10 @@ scene
 
 # issue
 -
+pan recognizing: remove time, change velocity -> position from origin
+인벤토리 셀 터치하면 아이템 이동
+필드 터치하면 아이템 이동
+change accessibleGOTracker only track non walkable
 craft
     possible must have empty inventory space
 

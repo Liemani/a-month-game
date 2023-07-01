@@ -38,7 +38,7 @@ class WorldViewController: UIViewController {
         TouchRecognizerManager.set(scene: scene,
                                    ui: scene.ui,
                                    character: scene.character)
-        TouchHandlerContainer.set()
+        TouchHandlerContainer.set(chunkContainer: scene.chunkContainer)
 
         skView.presentScene(scene)
     }

@@ -18,6 +18,14 @@ protocol EventHandler {
 
 }
 
+protocol TouchEventHandler: EventHandler {
+
+    func moved()
+    func ended()
+    func cancelled()
+
+}
+
 class Event {
 
     let type: EventType

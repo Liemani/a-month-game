@@ -46,6 +46,12 @@ class WorldScene: SKScene {
         self.initModel()
         self.initSceneLayer()
 
+        self.characterPositionUpdateHandler = CharacterPositionUpdateHandler(
+            character: self.character,
+            movingLayer: self.movingLayer,
+            chunkContainer: self.chunkContainer,
+            accessibleGOTracker: self.accessibleGOTracker)
+
 #if DEBUG
         self.debugCode()
 #endif
@@ -125,6 +131,7 @@ class WorldScene: SKScene {
     var pTime: TimeInterval!
     var cTime: TimeInterval!
     var timeInterval: TimeInterval { self.cTime - self.pTime }
+    var characterPositionUpdateHandler: CharacterPositionUpdateHandler!
 
     override func update(_ currentTime: TimeInterval) {
         self.pTime = self.cTime
@@ -133,11 +140,7 @@ class WorldScene: SKScene {
         self.handleEvent()
 
         self.updateModel()
-        CharacterPositionUpdateHandler(character: self.character,
-                                       movingLayer: self.movingLayer,
-                                       chunkContainer: self.chunkContainer,
-                                       accessibleGOTracker: self.accessibleGOTracker,
-                                       timeInterval: self.timeInterval).handle()
+        self.characterPositionUpdateHandler.handle(timeInterval: self.timeInterval)
 
         self.updateData()
     }

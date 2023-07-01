@@ -181,6 +181,7 @@ class ChunkContainer: SKNode {
 
 }
 
+// MARK: - inventory protocol
 extension ChunkContainer: InventoryProtocol {
 
     func isValid(_ coord: ChunkCoordinate) -> Bool {

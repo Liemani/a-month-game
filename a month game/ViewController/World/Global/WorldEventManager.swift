@@ -169,18 +169,9 @@ enum WorldEventType: Int, CaseIterable, EventType {
             let go = event.sender as! GameObject
             let characterCoord = scene.character.data.chunkCoord.coord
 
-            if go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
-                go.lmiRemoveFromParent()
-                scene.chunkContainer.add(go)
-                scene.accessibleGOTracker.add(go)
-
-                return
-            }
-
-            let event = Event(type: WorldEventType.gameObjectTake,
-                    udata: nil,
-                    sender: go)
-            WorldEventManager.default.enqueue(event)
+            go.lmiRemoveFromParent()
+            scene.chunkContainer.add(go)
+            scene.accessibleGOTracker.add(go)
         },
 
         { scene, event in // gameObjectMoveToBelongInv
@@ -204,9 +195,11 @@ enum WorldEventType: Int, CaseIterable, EventType {
             let characterInv = scene.invContainer.characterInv
 
             if let index = characterInv.emptyIndex {
+                go.lmiRemoveFromParent()
+
                 let newInvCoord = InventoryCoordinate(characterInv.id, index)
                 go.data.set(invCoord: newInvCoord)
-                go.lmiRemoveFromParent()
+
                 characterInv.add(go)
 
                 return

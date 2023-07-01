@@ -12,15 +12,6 @@ class GameObjectTouchHandler {
 
     var touch: UITouch!
     private var go: GameObject!
-    private var activatedGO: GameObject?
-
-}
-
-protocol TouchEventHandler: EventHandler {
-
-    func moved()
-    func ended()
-    func cancelled()
 
 }
 
@@ -48,7 +39,7 @@ extension GameObjectTouchHandler: TouchEventHandler {
             return
         }
 
-        if let activatedGO = self.activatedGO {
+        if let activatedGO = TouchHandlerContainer.default.activatedGO {
             if self.go.isOnField {
                 let event = Event(type: WorldEventType.gameObjectInteractToGO,
                                   udata: self.go,
@@ -64,7 +55,7 @@ extension GameObjectTouchHandler: TouchEventHandler {
             }
 
             activatedGO.deactivate()
-            self.activatedGO = nil
+            TouchHandlerContainer.default.activatedGO = nil
             self.complete()
 
             return
@@ -89,7 +80,7 @@ extension GameObjectTouchHandler: TouchEventHandler {
             return
         }
 
-        self.activatedGO = self.go
+        TouchHandlerContainer.default.activatedGO = self.go
 
         self.complete()
         self.go.activate()

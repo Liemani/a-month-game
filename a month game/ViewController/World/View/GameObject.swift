@@ -87,37 +87,37 @@ extension GameObject: TouchResponder {
 
     // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-            TouchHandlerContainer.default.goTouchHandler.began(touch: touch, go: self)
+            TouchHandlerContainer.default.goHandler.began(touch: touch, go: self)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let goHandler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == goHandler.touch else {
             return
         }
 
-        goTouchHandler.moved()
+        goHandler.moved()
     }
 
     func touchEnded(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let goHandler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == goHandler.touch else {
             return
         }
 
-        goTouchHandler.ended()
+        goHandler.ended()
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let goHandler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == goHandler.touch else {
             return
         }
 
-        goTouchHandler.cancelled()
+        goHandler.cancelled()
     }
 
 //     MARK: - interact

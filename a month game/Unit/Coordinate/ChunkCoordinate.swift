@@ -85,6 +85,18 @@ struct ChunkCoordinate {
 
 }
 
+extension ChunkCoordinate: Equatable {
+
+    static func == (lhs: ChunkCoordinate, rhs: ChunkCoordinate) -> Bool {
+        return lhs.x == rhs.x && lhs.y == rhs.y && lhs.address == rhs.address
+    }
+
+    static func != (lhs: ChunkCoordinate, rhs: ChunkCoordinate) -> Bool {
+        return !(lhs == rhs)
+    }
+
+}
+
 extension ChunkCoordinate: CustomDebugStringConvertible {
 
     var debugDescription: String {
