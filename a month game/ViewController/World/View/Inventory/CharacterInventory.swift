@@ -14,11 +14,11 @@ class CharacterInventory: Inventory {
     var rightHandGO: GameObject? { self.children.last!.children.first as! GameObject? }
 
     init(id: Int) {
-        var cells: [SKSpriteNode] = []
+        var cells: [InventoryCell] = []
         cells.reserveCapacity(5)
         let texture = SKTexture(imageNamed: "inventory_cell")
         for _ in 0..<5 {
-            let cell = SKSpriteNode(texture: texture)
+            let cell = InventoryCell(texture: texture)
             cell.size = Constant.defaultNodeSize
             cells.append(cell)
         }

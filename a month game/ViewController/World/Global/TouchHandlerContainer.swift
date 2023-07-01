@@ -19,12 +19,12 @@ class TouchHandlerContainer {
 
     let goHandler: GameObjectTouchHandler
     let fieldHandler: FieldTouchHandler
-//    let inventoryTouchHandler: InventoryTouchHandler
+    let invTouchHandler: InventoryTouchHandler
 
     init(chunkContainer: ChunkContainer) {
         self.goHandler = GameObjectTouchHandler()
         self.fieldHandler = FieldTouchHandler(chunkContainer: chunkContainer)
-//        self.inventoryTouchHandler = InventoryTouchHandler()
+        self.invTouchHandler = InventoryTouchHandler()
     }
 
 }

@@ -83,9 +83,9 @@ class GameObject: SKSpriteNode {
 
 }
 
+// MARK: - touch responder
 extension GameObject: TouchResponder {
 
-    // MARK: - touch
     func touchBegan(_ touch: UITouch) {
             TouchHandlerContainer.default.goHandler.began(touch: touch, go: self)
     }

@@ -49,8 +49,6 @@ extension TapRecognizer: TouchRecognizer {
     }
 
     func began(lmiTouches: [LMITouch]) {
-        print("tap began")
-
         let lmiTouch = lmiTouches[0]
         self.lmiTouch = lmiTouch
 
@@ -63,13 +61,11 @@ extension TapRecognizer: TouchRecognizer {
     }
 
     func ended() {
-        print("tap ended")
         self.touchResponder!.touchEnded(self.lmiTouch!.touch)
         self.complete()
     }
 
     func cancelled() {
-        print("tap cancelled")
         self.touchResponder!.touchCancelled(self.lmiTouch!.touch)
         self.complete()
     }

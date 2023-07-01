@@ -56,8 +56,6 @@ extension PanRecognizer: TouchRecognizer {
     }
 
     func began(lmiTouches: [LMITouch]) {
-        print("pan began")
-
         self.lmiTouch = lmiTouches[0]
         self.character.velocityVector = CGVector()
         self.cPoint = self.lmiTouch!.location(in: self.scene)

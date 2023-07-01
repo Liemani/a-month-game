@@ -8,6 +8,24 @@
 import Foundation
 import SpriteKit
 
+class InventoryCell: SKSpriteNode {
+
+    func activate() {
+        self.alpha = 0.5
+    }
+
+    func deactivate() {
+        self.alpha = 1.0
+    }
+
+    var invCoord: InventoryCoordinate {
+        let inventory = self.parent as! Inventory
+        let index = inventory.coordAtLocation(of: self)!
+        return InventoryCoordinate(inventory.id, index)
+    }
+
+}
+
 protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Item
@@ -37,7 +55,7 @@ class Inventory: SKSpriteNode {
 
     init(id: Int,
          texture: SKTexture,
-         cells: [SKSpriteNode],
+         cells: [InventoryCell],
          cellWidth: Double,
          cellSpacing: Double) {
         self.id = id
@@ -68,7 +86,7 @@ class Inventory: SKSpriteNode {
         }
     }
 
-    private func addCells(_ cells: [SKSpriteNode]) {
+    private func addCells(_ cells: [InventoryCell]) {
         self.cellCount += cells.count
 
         let distanceOfCellsCenter = self.cellWidth + self.cellSpacing
@@ -87,6 +105,15 @@ class Inventory: SKSpriteNode {
     var emptyIndex: Int? {
         for (index, cell) in self.children.enumerated() {
             if cell.children.first == nil {
+                return index
+            }
+        }
+        return nil
+    }
+
+    func coordAtLocation(of invCell: InventoryCell) -> Int? {
+        for (index, cell) in self.children.enumerated() {
+            if cell == invCell {
                 return index
             }
         }
@@ -170,6 +197,46 @@ struct InventoryIterator: IteratorProtocol {
             index += 1
         }
         return nil
+    }
+
+}
+
+// MARK: - touch responder
+extension InventoryCell: TouchResponder {
+
+    func touchBegan(_ touch: UITouch) {
+        TouchHandlerContainer.default.invTouchHandler.began(touch: touch,
+                                                            touchedCell: self)
+    }
+
+    func touchMoved(_ touch: UITouch) {
+        let goHandler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == goHandler.touch else {
+            return
+        }
+
+        goHandler.moved()
+    }
+
+    func touchEnded(_ touch: UITouch) {
+        let goHandler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == goHandler.touch else {
+            return
+        }
+
+        goHandler.ended()
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+        let goHandler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == goHandler.touch else {
+            return
+        }
+
+        goHandler.cancelled()
     }
 
 }
