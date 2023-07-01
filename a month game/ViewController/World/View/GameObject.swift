@@ -20,6 +20,11 @@ class GameObject: SKSpriteNode {
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
 
+    var isOnField: Bool { self.chunkCoord != nil }
+    var isInInv: Bool { self.invCoord != nil }
+
+    var positionFromSceneOrigin: CGPoint { self.position + self.parent!.position }
+
     // MARK: - init
     init(from goData: GameObjectData) {
         self.data = goData
@@ -29,8 +34,8 @@ class GameObject: SKSpriteNode {
         super.init(texture: texture, color: .white, size: size)
 
         self.zPosition = !self.type.isTile
-            ? Constant.ZPosition.gameObject
-            : Constant.ZPosition.tile
+        ? Constant.ZPosition.gameObject
+        : Constant.ZPosition.tile
     }
 
     convenience init(goType: GameObjectType) {
@@ -57,7 +62,7 @@ class GameObject: SKSpriteNode {
             return true
         }
 
-        return character.accessibleFrame.contains(self.position + self.parent!.position)
+        return character.accessibleFrame.contains(self.positionFromSceneOrigin)
     }
 
     func lmiRemoveFromParent() {
@@ -76,57 +81,43 @@ class GameObject: SKSpriteNode {
         }
     }
 
+}
+
+extension GameObject: TouchResponder {
+
     // MARK: - touch
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let touch = touches.first!
-//
-//        guard GestureEventHandlerManager.default.handler(
-//                of: GameObjectTouchEventHandler.self) == nil else {
-//            return
-//        }
-//
-//        guard GestureEventHandlerManager.default.handler(
-//                of: GameObjectMoveTouchEventHandler.self) == nil else {
-//            return
-//        }
-//
-//        let event = Event(type: WorldEventType.gameObjectTouchBegan,
-//                          udata: touch,
-//                          sender: self)
-//        WorldEventManager.default.enqueue(event)
+    func touchBegan(_ touch: UITouch) {
+            TouchHandlerContainer.default.goTouchHandler.began(touch: touch, go: self)
     }
 
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let touch = touches.first!
-//
-//        guard let handler = GestureEventHandlerManager.default.handler(
-//                from: touch) else {
-//            return
-//        }
-//
-//        handler.touchMoved()
+    func touchMoved(_ touch: UITouch) {
+        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+
+        guard touch == goTouchHandler.touch else {
+            return
+        }
+
+        goTouchHandler.moved()
     }
 
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let touch = touches.first!
-//
-//        guard let handler = GestureEventHandlerManager.default.handler(
-//                from: touch) else {
-//            return
-//        }
-//
-//        handler.touchEnded()
+    func touchEnded(_ touch: UITouch) {
+        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+
+        guard touch == goTouchHandler.touch else {
+            return
+        }
+
+        goTouchHandler.ended()
     }
 
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        let touch = touches.first!
-//
-//        guard let handler = GestureEventHandlerManager.default.handler(
-//                from: touch) else {
-//            return
-//        }
-//
-//        handler.touchEnded()
+    func touchCancelled(_ touch: UITouch) {
+        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+
+        guard touch == goTouchHandler.touch else {
+            return
+        }
+
+        goTouchHandler.cancelled()
     }
 
 //     MARK: - interact

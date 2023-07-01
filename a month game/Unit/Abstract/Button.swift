@@ -17,8 +17,6 @@ class Button: SKSpriteNode {
 
         super.init(texture: texture, color: .white, size: frame.size)
 
-        self.isUserInteractionEnabled = true
-
         self.position = frame.origin
         self.size = frame.size
 
@@ -45,23 +43,15 @@ class Button: SKSpriteNode {
         self.alpha = 1.0
     }
 
-    // MARK: - touch
-    var touch: UITouch? = nil
+}
 
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
+extension Button: TouchResponder {
 
-        if self.touch == nil {
-            self.activate()
-            self.touch = touch
-        }
+    func touchBegan(_ touch: UITouch) {
+        self.activate()
     }
 
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-
-        guard touch == self.touch else { return }
-
+    func touchMoved(_ touch: UITouch) {
         if self.isBeing(touched: touch) {
             self.activate()
         } else {
@@ -69,11 +59,8 @@ class Button: SKSpriteNode {
         }
     }
 
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-
-        if touch == self.touch
-                && self.isBeing(touched: touch) {
+    func touchEnded(_ touch: UITouch) {
+        if self.isBeing(touched: touch) {
             let event = Event(type: self.eventType,
                               udata: nil,
                               sender: self)
@@ -83,17 +70,32 @@ class Button: SKSpriteNode {
         self.completeTouch(touch)
     }
 
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-
-        guard touch == self.touch else { return }
-
+    func touchCancelled(_ touch: UITouch) {
         self.completeTouch(touch)
     }
 
     func completeTouch(_ touch: UITouch) {
         self.deactivate()
-        self.touch = nil
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        self.touchBegan(touch)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        self.touchMoved(touch)
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        self.touchEnded(touch)
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touch = touches.first!
+        self.touchCancelled(touch)
     }
 
 }

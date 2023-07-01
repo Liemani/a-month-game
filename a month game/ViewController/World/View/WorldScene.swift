@@ -35,11 +35,6 @@ class WorldScene: SKScene {
     var munuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
 
-    // MARK: gesture recognizer
-//    var tapHandler: TapEventHandler!
-    var panHandler: PanGestureEventHandler!
-    var pinchHandler: PinchGestureEventHandler!
-
     // MARK: - init
     /// initialize with size
     override init(size: CGSize) {
@@ -93,15 +88,10 @@ class WorldScene: SKScene {
         worldLayer.addChild(self.character)
         worldLayer.addChild(movingLayer)
 
-        // MARK: fixed layer
-        let fixedLayer = SKNode()
-        fixedLayer.zPosition = Constant.ZPosition.fixedLayer
-        self.addChild(fixedLayer)
-
         // MARK: ui
         let ui = SKNode()
         ui.zPosition = Constant.ZPosition.ui
-        fixedLayer.addChild(ui)
+        self.addChild(ui)
         self.ui = ui
 
         let texture = SKTexture(imageNamed: Constant.ResourceName.menuButton)
@@ -113,19 +103,12 @@ class WorldScene: SKScene {
 
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
-        ui.addChild(self.munuWindow)
+
+        self.addChild(self.munuWindow)
     }
 
     override func sceneDidLoad() {
         self.cTime = CACurrentMediaTime()
-    }
-
-    override func didMove(to view: SKView) {
-        self.panHandler = PanGestureEventHandler(view: self.view!,
-                                                 character: self.character)
-        self.pinchHandler = PinchGestureEventHandler(view: self.view!,
-                                                     world: self.worldLayer,
-                                                     character: self.character)
     }
 
     // MARK: - edit model
@@ -186,6 +169,35 @@ class WorldScene: SKScene {
         let moContext = WorldServiceContainer.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
+        }
+    }
+
+
+}
+
+extension WorldScene {
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchRecognizerManager.default.touchBegan(touch)
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchRecognizerManager.default.touchMoved(touch)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchRecognizerManager.default.touchEnded(touch)
+        }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchRecognizerManager.default.touchCancelled(touch)
         }
     }
 

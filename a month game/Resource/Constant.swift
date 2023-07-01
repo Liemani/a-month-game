@@ -74,11 +74,10 @@ struct Constant {
                 static let gameObject = 20.0
                 static let gameObjectCover = 40.0
             static let character = 30.0
-        static let fixedLayer = 100.0
-            static let ui = 0.0
-                static let characterInv = 0.0
-                static let craftCell = 0.0
-            static let munuWindow = 100.0
+        static let ui = 100.0
+            static let characterInv = 0.0
+            static let craftCell = 0.0
+        static let munuWindow = 200.0
     }
 
     // MARK: - frame
@@ -136,8 +135,8 @@ struct Constant {
         static let rightHand = "right_hand"
     }
 
-    static let minSceneScale = 0.3
-    static let maxSceneScale = 1.0
+    static let minZoomScale = 0.3
+    static let maxZoomScale = 1.0
 
     static let initialNextID = 1
 
@@ -148,7 +147,6 @@ struct Constant {
 
     static let characterAccessibleRange = 1
 
-    static let minZoomScale = 0.1
-    static let maxZoomScale = 1.0
+    static let panThreshold = tileWidth * 2.0
 
 }

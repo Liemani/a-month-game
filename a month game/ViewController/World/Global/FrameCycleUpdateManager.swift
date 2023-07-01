@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UpdateOptionSet : OptionSet {
+struct UpdateOptionSet: OptionSet {
 
     let rawValue: Int
 

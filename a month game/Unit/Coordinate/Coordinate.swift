@@ -52,11 +52,11 @@ extension Coordinate<Int> {
     var cgPoint: CGPoint { CGPoint(x: self.x, y: self.y) }
 
     func isAdjacent(to coordinate: Coordinate<Int>) -> Bool {
-        let differenceX = self.x - coordinate.x
-        let differenceY = self.y - coordinate.y
+        let deltaX = self.x - coordinate.x
+        let deltaY = self.y - coordinate.y
 
-        return (-1 <= differenceX && differenceX <= 1)
-        && (-1 <= differenceY && differenceY <= 1)
+        return (-1 <= deltaX && deltaX <= 1)
+        && (-1 <= deltaY && deltaY <= 1)
     }
 
     static func + (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {

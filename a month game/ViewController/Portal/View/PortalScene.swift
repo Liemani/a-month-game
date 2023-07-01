@@ -56,12 +56,14 @@ class PortalScene: SKScene {
                                  frame: Constant.Frame.enterButton,
                                  text: "Enter World",
                                  eventType: PortalEventType.enterButton)
+        enterButton.isUserInteractionEnabled = true
         parent.addChild(enterButton)
 
         let resetButton = Button(texture: texture,
                                  frame: Constant.Frame.resetButton,
                                  text: "Reset",
                                  eventType: PortalEventType.resetButton)
+        resetButton.isUserInteractionEnabled = true
         parent.addChild(resetButton)
     }
 

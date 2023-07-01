@@ -43,10 +43,10 @@ extension Array {
 //            let goMO = goMO as! GameObjectMO
 //            let goMOCoord = goMO.coord
 //            if coord.isAdjacent(to: goMOCoord) {
-//                let differenceX = goMOCoord.x - coord.x
-//                let differenceY = goMOCoord.y - coord.y
-//                let differenceCoord = Coordinate(differenceX, differenceY)
-//                guard let direction = Direction9(coord: differenceCoord) else {
+//                let deltaX = goMOCoord.x - coord.x
+//                let deltaY = goMOCoord.y - coord.y
+//                let deltaCoord = Coordinate(deltaX, deltaY)
+//                guard let direction = Direction9(coord: deltaCoord) else {
 //                    continue
 //                }
 //                filledSpaceFlags |= 0x1 << direction.rawValue
@@ -94,6 +94,20 @@ extension SKNode {
         return self.contains(touch.location(in: self.parent!))
     }
 
+    func isDescendant(_ node: SKNode) -> Bool {
+        var parent: SKNode? = self.parent
+
+        while let ancestor = parent {
+            if ancestor == node {
+                return true
+            }
+
+            parent = ancestor.parent
+        }
+
+        return false
+    }
+
 }
 
 // MARK: - CGPoint
@@ -107,10 +121,6 @@ extension CGPoint {
     // MARK: CGPoint, CGPoint
     static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
-    }
-
-    static func += (lhs: inout CGPoint, rhs: CGPoint) {
-        lhs = lhs + rhs
     }
 
     static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
@@ -166,9 +176,7 @@ extension CGPoint {
 
     var vector: CGVector { CGVector(dx: self.x, dy: self.y) }
 
-    var magnitude: CGFloat {
-        return (self.x * self.x + self.y * self.y).squareRoot()
-    }
+    var magnitude: CGFloat { (self.x * self.x + self.y * self.y).squareRoot() }
 
 }
 
@@ -214,6 +222,10 @@ extension CGVector {
 
     static func / (lhs: CGVector, rhs: Double) -> CGVector {
         return CGVector(dx: lhs.dx / rhs, dy: lhs.dy / rhs)
+    }
+
+    var magnitude: CGFloat {
+        return (self.dx * self.dx + self.dy * self.dy).squareRoot()
     }
 
 }
