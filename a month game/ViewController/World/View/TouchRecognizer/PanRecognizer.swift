@@ -45,14 +45,20 @@ extension PanRecognizer: TouchRecognizer {
 
         let currentTime = CACurrentMediaTime()
 
-        guard currentTime - lmiTouch.bTime < 1.0
-            && !lmiTouch.touchedNode.isDescendant(self.ui) else {
+//        guard currentTime - lmiTouch.bTime < 1.0
+//            && !lmiTouch.touchedNode.isDescendant(self.ui) else {
+        guard !lmiTouch.touchedNode.isDescendant(self.ui) else {
             lmiTouch.possible.remove(.pan)
 
             return false
         }
 
-        return lmiTouch.velocity(in: self.scene) >= Constant.panThreshold
+//        return lmiTouch.velocity(in: self.scene) >= Constant.panThreshold
+
+        let deltaPosition = lmiTouch.touch.location(in: self.scene) - lmiTouch.bPosition
+
+        return deltaPosition.magnitude >= Constant.tileWidth / 3.0
+
     }
 
     func began(lmiTouches: [LMITouch]) {

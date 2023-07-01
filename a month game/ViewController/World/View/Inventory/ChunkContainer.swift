@@ -251,7 +251,7 @@ extension ChunkContainer: InventoryProtocol {
         item.removeFromParent()
     }
 
-    func makeIterator() -> some IteratorProtocol {
+    func makeIterator() -> some IteratorProtocol<GameObject> {
         return CombineSequences(sequences: self.chunks)
     }
 

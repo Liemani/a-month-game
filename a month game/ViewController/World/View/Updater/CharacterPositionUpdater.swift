@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CharacterPositionUpdateHandler: EventHandler {
+class CharacterPositionUpdater {
 
     let character: Character
     let movingLayer: MovingLayer
@@ -28,7 +28,7 @@ class CharacterPositionUpdateHandler: EventHandler {
         self.timeInterval = 0
     }
 
-    func handle(timeInterval: TimeInterval) {
+    func update(timeInterval: TimeInterval) {
         self.timeInterval = timeInterval
         self.applyCharacterVelocity(timeInterval)
         self.updateCharacterVelocity(timeInterval)

@@ -46,7 +46,7 @@ class WorldScene: SKScene {
         self.initModel()
         self.initSceneLayer()
 
-        self.characterPositionUpdateHandler = CharacterPositionUpdateHandler(
+        self.characterPositionUpdateHandler = CharacterPositionUpdater(
             character: self.character,
             movingLayer: self.movingLayer,
             chunkContainer: self.chunkContainer,
@@ -78,6 +78,7 @@ class WorldScene: SKScene {
         self.characterInv = characterInv
 
         self.craftWindow = CraftWindow()
+        self.craftWindow.update(gos: self.characterInv)
         self.munuWindow = MenuWindow()
     }
 
@@ -131,7 +132,7 @@ class WorldScene: SKScene {
     var pTime: TimeInterval!
     var cTime: TimeInterval!
     var timeInterval: TimeInterval { self.cTime - self.pTime }
-    var characterPositionUpdateHandler: CharacterPositionUpdateHandler!
+    var characterPositionUpdateHandler: CharacterPositionUpdater!
 
     override func update(_ currentTime: TimeInterval) {
         self.pTime = self.cTime
@@ -140,7 +141,7 @@ class WorldScene: SKScene {
         self.handleEvent()
 
         self.updateModel()
-        self.characterPositionUpdateHandler.handle(timeInterval: self.timeInterval)
+        self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
 
         self.updateData()
     }
@@ -148,6 +149,7 @@ class WorldScene: SKScene {
     func handleEvent() {
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
+            // TODO: remove argument self
             eventType.handler(self, event)
         }
     }
@@ -158,7 +160,7 @@ class WorldScene: SKScene {
         }
 
         if FrameCycleUpdateManager.default.contains(.craftWindow) {
-            self.craftWindow.update()
+            self.craftWindow.update(gos: self.invContainer)
         }
 
         if FrameCycleUpdateManager.default.contains(.timer) {

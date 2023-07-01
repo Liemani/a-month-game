@@ -458,10 +458,6 @@ scene
 
 # issue
 -
-pan recognizing: remove time, change velocity -> position from origin
-인벤토리 셀 터치하면 아이템 이동
-필드 터치하면 아이템 이동
-change accessibleGOTracker only track non walkable
 craft
     possible must have empty inventory space
 
@@ -481,6 +477,21 @@ ui 드래그로 아이템 옮기는 기능 삭제
 잔디 퍼지는거 시간은 상관 없다
 캐릭터는 월드에 귀속된다
 게임 자체적인 재미가 있어야 한다
+
+add mastery system
+
+game object is added to accessible tracker
+    mimic that behabior for craft window
+
+no need update accessibleGOTracker
+    udpate only beginning
+
+but in case craft window, updating at update() in the scene is good choice
+    udpating every add and remove of game object will lower performence
+
+prevent control center is activated at touch(other games prevent it)
+change accessibleGOTracker only track non walkable
+add small none texture
 
 불필요한 경우 1 fps
 service container 를 만드는건 portal view controller 가,
@@ -609,6 +620,11 @@ sense message 구현
 
 enterButton, resetButton 맞춤 resource 제작
 
+# test
+pan recognize distance
+pinch recognize delta
+pan and pinch whether apply bPosition
+multi touch on physical device
 
 # mandatory: 기대 시간(h) + 요구 사항
 view
@@ -715,6 +731,10 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+pan recognizing: remove time, change velocity -> position from origin
+인벤토리 셀 터치하면 아이템 이동
+필드 터치하면 아이템 이동
+
 지금 WorldScene 에서 터치를 다 받아와서 recognize 하도록 하고 있는데 굳이 그래야 할까?
 일단 recognizing 을 위해 모든 터치는 recognizer manager 로 보내고
 후에 적절한 handler 를 호출하는 방식

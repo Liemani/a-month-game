@@ -8,9 +8,72 @@
 import Foundation
 import SpriteKit
 
+class CraftObject: SKSpriteNode {
+
+    var goType: GameObjectType
+
+    init(goType: GameObjectType) {
+        self.goType = goType
+
+        super.init(texture: goType.texture, color: .white, size: Constant.defaultNodeSize)
+
+        self.zPosition = Constant.ZPosition.gameObject
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func update(goType: GameObjectType) {
+        self.goType = goType
+        self.texture = goType.texture
+    }
+
+    func activate() {
+        self.alpha = 0.5
+    }
+
+    func deactivate() {
+        self.alpha = 1.0
+    }
+
+}
+
+class CraftCell: SKSpriteNode {
+
+    var craftObject: CraftObject { self.children.first as! CraftObject }
+
+    init(texture: SKTexture) {
+        super.init(texture: texture, color: .white, size: texture.size())
+
+        self.deactivate()
+        self.addCraftObject()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func addCraftObject() {
+        let craftObject = CraftObject(goType: GameObjectType.none)
+        self.addChild(craftObject)
+    }
+
+    func activate() {
+        self.alpha = 1.0
+    }
+
+    func deactivate() {
+        self.alpha = 0.2
+    }
+
+}
+
 class CraftWindow: SKNode {
 
     var cellCount: Int { Constant.craftWindowCellCount }
+
+    var cells: [CraftCell] { self.children as! [CraftCell] }
 
     override init() {
         super.init()
@@ -30,8 +93,9 @@ class CraftWindow: SKNode {
         for _ in 0..<self.cellCount {
             let cell = CraftCell(texture: cellTexture)
 
-            cell.setUp()
+            cell.size = Constant.defaultNodeSize
             cell.position = CGPoint(x: 0, y: positionY)
+            cell.zPosition = Constant.ZPosition.craftCell
 
             self.addChild(cell)
 
@@ -44,44 +108,36 @@ class CraftWindow: SKNode {
     }
 
     // MARK: - update
-    func update() {
-//        let sequences: [any Sequence<GameObjectNode>] = [
-//            self.interactionZone.gos,
-//            self.worldScene.characterInv,
-//        ]
-//        let gos = CombineSequence(sequences: sequences)
-        let gos: [GameObject] = []
+    func update(gos: any Sequence<GameObject>) {
+        self.clear()
 
         let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
-
-        self.reset()
-
         var craftObjectIndex = 0
+
         for (resultGOType, recipe) in recipes {
-            guard self.hasIngredient(gameObjects: gos, forRecipe: recipe) else {
+            guard craftObjectIndex < self.cellCount else {
+                return
+            }
+
+            guard self.hasIngredient(gos: gos, forRecipe: recipe) else {
                 continue
             }
 
             self.set(index: craftObjectIndex, type: resultGOType)
 
-            if craftObjectIndex == self.cellCount - 1 {
-                return
-            }
             craftObjectIndex += 1
         }
     }
 
-    private func reset() {
-        for cell in self.children {
-//            let go = cell.children[0] as! GameObject
-//
-//            print("craft window will not have game object node, it must has craft object")
-////            go.type = .none
-            cell.alpha = 0.2
+    func clear() {
+        for cell in self.cells {
+            let craftObject = cell.craftObject
+            craftObject.update(goType: .none)
+            cell.deactivate()
         }
     }
 
-    private func hasIngredient(gameObjects gos: any Sequence<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gos: any Sequence<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
         var recipe = recipe
 
         for go in gos {
@@ -103,12 +159,10 @@ class CraftWindow: SKNode {
         return true
     }
 
-    func set(index gameObjectIndex: Int, type goType: GameObjectType) {
-        let cell = self.children[gameObjectIndex]
-        let go = cell.children[0] as! GameObject
-            print("craft window will not have game object node, it must has craft object")
-//        go.type = goType
-        cell.alpha = 1.0
+    func set(index: Int, type goType: GameObjectType) {
+        let cell = self.cells[index]
+        cell.craftObject.update(goType: goType)
+        cell.activate()
     }
 
 //    func refill(_ go: GameObjectNode) {

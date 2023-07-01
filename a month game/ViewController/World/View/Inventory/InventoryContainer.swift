@@ -129,16 +129,13 @@ extension InventoryContainer: InventoryProtocol {
         item.removeFromParent()
     }
 
-    func makeIterator() -> some IteratorProtocol {
-        var sequences: [Inventory] = [self.characterInv]
-
-        if let fieldInv = self.fieldInv {
-            sequences.append(fieldInv)
-        }
-
-        if let invInv = self.invInv {
-            sequences.append(invInv)
-        }
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        let sequences = [
+            self.characterInv,
+            self.fieldInv,
+            self.invInv,
+        ]
+            .compactMap { $0 }
 
         return CombineSequences(sequences: sequences)
     }
