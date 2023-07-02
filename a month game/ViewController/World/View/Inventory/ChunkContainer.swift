@@ -243,14 +243,6 @@ extension ChunkContainer: InventoryProtocol {
         self.chunks[direction].add(item)
     }
 
-    func move(_ item: GameObject, toParent parent: SKNode) {
-        item.move(toParent: parent)
-    }
-
-    func remove(_ item: GameObject) {
-        item.removeFromParent()
-    }
-
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return CombineSequences(sequences: self.chunks)
     }

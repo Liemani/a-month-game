@@ -16,7 +16,7 @@ class GameObjectData {
 
     private var _chunkCoord: ChunkCoordinate?
     var chunkCoord: ChunkCoordinate? { self._chunkCoord }
-    func set(chunkCoord: ChunkCoordinate) {
+    func set(coord chunkCoord: ChunkCoordinate) {
         self._chunkCoord = chunkCoord
         self._invCoord = nil
 
@@ -25,7 +25,7 @@ class GameObjectData {
 
     private var _invCoord: InventoryCoordinate?
     var invCoord: InventoryCoordinate? { self._invCoord }
-    func set(invCoord: InventoryCoordinate) {
+    func set(coord invCoord: InventoryCoordinate) {
         self._chunkCoord = nil
         self._invCoord = invCoord
 
@@ -33,9 +33,9 @@ class GameObjectData {
     }
 
     // MARK: - init
-    init(type: GameObjectType) {
+    init(goType: GameObjectType) {
         let id = WorldServiceContainer.default.idGeneratorServ.generate()
-        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: type)
+        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: goType)
         self._chunkCoord = nil
         self._invCoord = nil
     }

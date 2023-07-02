@@ -107,11 +107,11 @@ struct Constant {
     }
 
     // MARK: - recipe
-    static let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = [
-        .woodWall: [(.woodStick, 4)],
-        .axe: [(.stone, 1), (.woodStick, 1)],
-        .pickaxe: [(.stone, 1), (.woodStick, 1)],
-        .stoneShovel: [(.stone, 1), (.woodStick, 1)],
+    static let recipes: [GameObjectType: [GameObjectType: Int]] = [
+        .woodWall: [.woodStick: 4],
+        .axe: [.stone: 1, .woodStick: 1],
+        .pickaxe: [.stone: 1, .woodStick: 1],
+        .stoneShovel: [.stone: 1, .woodStick: 1],
     ]
 
     // MARK: - UserDefaults key

@@ -41,16 +41,10 @@ extension GameObjectTouchHandler: TouchEventHandler {
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
             if self.go.isOnField {
-                let event = Event(type: WorldEventType.gameObjectInteractToGO,
-                                  udata: self.go,
-                                  sender: activatedGO)
-                WorldEventManager.default.enqueue(event)
+                GameObjectManager.default.interactToGO(activatedGO, to: go)
             } else {
                 if self.go != activatedGO {
-                    let event = Event(type: WorldEventType.gameObjectInteractToGO,
-                                      udata: self.go,
-                                      sender: activatedGO)
-                    WorldEventManager.default.enqueue(event)
+                    GameObjectManager.default.interactToGO(activatedGO, to: go)
                 }
             }
 
@@ -64,15 +58,9 @@ extension GameObjectTouchHandler: TouchEventHandler {
         // no activatedGO
         guard !self.go.isOnField else {
             if self.go.type.isPickable {
-                let event = Event(type: WorldEventType.gameObjectTake,
-                                  udata: nil,
-                                  sender: self.go!)
-                WorldEventManager.default.enqueue(event)
+                GameObjectManager.default.take(go)
             } else {
-                let event = Event(type: WorldEventType.gameObjectInteract,
-                                  udata: nil,
-                                  sender: self.go!)
-                WorldEventManager.default.enqueue(event)
+                GameObjectManager.default.interact(go)
             }
 
             self.complete()

@@ -40,12 +40,9 @@ extension FieldTouchHandler: TouchEventHandler {
         }
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
-            activatedGO.data.set(chunkCoord: chunkCoord)
+            activatedGO.data.set(coord: chunkCoord)
 
-            let event = Event(type: WorldEventType.gameObjectMoveToBelongField,
-                              udata: nil,
-                              sender: activatedGO)
-            WorldEventManager.default.enqueue(event)
+            GameObjectManager.default.moveToBelongField(activatedGO)
 
             activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil

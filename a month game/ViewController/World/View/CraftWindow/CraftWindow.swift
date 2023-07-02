@@ -12,8 +12,11 @@ class CraftObject: SKSpriteNode {
 
     var goType: GameObjectType
 
+    var consumeTargets: [GameObject]
+
     init(goType: GameObjectType) {
         self.goType = goType
+        self.consumeTargets = []
 
         super.init(texture: goType.texture, color: .white, size: Constant.defaultNodeSize)
 
@@ -24,17 +27,32 @@ class CraftObject: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func update(goType: GameObjectType) {
-        self.goType = goType
-        self.texture = goType.texture
-    }
-
     func activate() {
         self.alpha = 0.5
+
+        for go in self.consumeTargets {
+            go.highlight()
+        }
     }
 
     func deactivate() {
         self.alpha = 1.0
+
+        for go in self.consumeTargets {
+            go.removeHIghlight()
+        }
+    }
+
+    func update(goType: GameObjectType, consumeTargets: [GameObject]) {
+        self.goType = goType
+        self.texture = goType.texture
+        self.consumeTargets = consumeTargets
+    }
+
+    func clear() {
+        self.goType = .none
+        self.texture = self.goType.texture
+        self.consumeTargets.removeAll()
     }
 
 }
@@ -59,12 +77,26 @@ class CraftCell: SKSpriteNode {
         self.addChild(craftObject)
     }
 
-    func activate() {
+    private func activate() {
         self.alpha = 1.0
     }
 
-    func deactivate() {
+    private func deactivate() {
         self.alpha = 0.2
+    }
+
+    func update(type goType: GameObjectType, consumeTargets: [GameObject]) {
+        self.craftObject.update(goType: goType, consumeTargets: consumeTargets)
+        if goType == .none {
+            self.deactivate()
+        } else {
+            self.activate()
+        }
+    }
+
+    func clear() {
+        self.craftObject.clear()
+        self.deactivate()
     }
 
 }
@@ -111,7 +143,7 @@ class CraftWindow: SKNode {
     func update(gos: any Sequence<GameObject>) {
         self.clear()
 
-        let recipes: [GameObjectType: [(type: GameObjectType, count: Int)]] = Constant.recipes
+        let recipes: [GameObjectType: [GameObjectType: Int]] = Constant.recipes
         var craftObjectIndex = 0
 
         for (resultGOType, recipe) in recipes {
@@ -123,30 +155,46 @@ class CraftWindow: SKNode {
                 continue
             }
 
-            self.set(index: craftObjectIndex, type: resultGOType)
+            var recipe = recipe
+            var consumeTargets: [GameObject] = []
+
+            for go in gos {
+                let go = go as! GameObject
+                let goType = go.type
+                if var typeCount = recipe[goType],
+                   typeCount > 0 {
+                    recipe[goType] = typeCount - 1
+                    consumeTargets.append(go)
+                }
+            }
+
+            self.update(index: craftObjectIndex,
+                        type: resultGOType,
+                        consumeTargets: consumeTargets)
 
             craftObjectIndex += 1
         }
     }
 
+    func update(index: Int, type goType: GameObjectType, consumeTargets: [GameObject]) {
+        let cell = self.cells[index]
+        cell.update(type: goType, consumeTargets: consumeTargets)
+    }
+
     func clear() {
         for cell in self.cells {
-            let craftObject = cell.craftObject
-            craftObject.update(goType: .none)
-            cell.deactivate()
+            cell.clear()
         }
     }
 
-    private func hasIngredient(gos: any Sequence<GameObject>, forRecipe recipe: [(type: GameObjectType, count: Int)]) -> Bool {
+    private func hasIngredient(gos: any Sequence<GameObject>, forRecipe recipe: [GameObjectType: Int]) -> Bool {
         var recipe = recipe
 
         for go in gos {
             let go = go as! GameObject
             let goType = go.type
-            for index in 0..<recipe.count {
-                if goType == recipe[index].type {
-                    recipe[index].count -= 1
-                }
+            if var typeCount = recipe[goType] {
+                recipe[goType] = typeCount - 1
             }
         }
 
@@ -157,12 +205,6 @@ class CraftWindow: SKNode {
         }
 
         return true
-    }
-
-    func set(index: Int, type goType: GameObjectType) {
-        let cell = self.cells[index]
-        cell.craftObject.update(goType: goType)
-        cell.activate()
     }
 
 //    func refill(_ go: GameObjectNode) {
@@ -188,8 +230,48 @@ class CraftWindow: SKNode {
 //        return CombineSequence(sequences: resourceSequences)
 //    }
 
-    func isCellActivated(_ cell: SKNode) -> Bool {
-        return cell.alpha == 1.0
+    func isCellActivated(_ cell: CraftCell) -> Bool {
+        return cell.craftObject.goType != .none
+    }
+
+}
+
+// MARK: - touch responder
+extension CraftObject: TouchResponder {
+
+    func touchBegan(_ touch: UITouch) {
+        TouchHandlerContainer.default.craftTouchHandler.began(touch: touch,
+                                                            craftObject: self)
+    }
+
+    func touchMoved(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.craftTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.moved()
+    }
+
+    func touchEnded(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.craftTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.ended()
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.craftTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.cancelled()
     }
 
 }

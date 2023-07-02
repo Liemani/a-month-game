@@ -20,7 +20,7 @@ extension InventoryTouchHandler: TouchEventHandler {
     func began(touch: UITouch, touchedCell: InventoryCell) {
         self.touch = touch
         self.touchedCell = touchedCell
-        
+
         touchedCell.activate()
     }
 
@@ -40,12 +40,9 @@ extension InventoryTouchHandler: TouchEventHandler {
         }
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
-            activatedGO.data.set(invCoord: self.touchedCell.invCoord)
+            activatedGO.data.set(coord: self.touchedCell.invCoord)
 
-            let event = Event(type: WorldEventType.gameObjectMoveToBelongInv,
-                              udata: nil,
-                              sender: activatedGO)
-            WorldEventManager.default.enqueue(event)
+            GameObjectManager.default.moveToBelongInv(activatedGO)
 
             activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil
