@@ -87,6 +87,11 @@ class GameObjectManager {
             chunk.data.remove(go)
             self.accessibleGOTracker.remove(go)
         } else if go.parent?.parent is Inventory {
+            if let activatedGO = TouchHandlerContainer.default.activatedGO,
+               go == activatedGO {
+                TouchHandlerContainer.default.activatedGO = nil
+            }
+
             FrameCycleUpdateManager.default.update(with: .craftWindow)
         }
 
