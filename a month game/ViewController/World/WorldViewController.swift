@@ -50,23 +50,28 @@ class WorldViewController: UIViewController {
     }
 
     // MARK: - transition
-    @objc
-    func requestPresentPortalSceneViewController() {
+    @objc func requestPresentPortalSceneViewController() {
         let portalSceneViewController = storyboard!.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
 
         self.navigationController!.setViewControllers([portalSceneViewController], animated: false)
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        if UIDevice.current.userInterfaceIdiom == .phone {
-            return .allButUpsideDown
-        } else {
-            return .all
-        }
+        return [.portrait, .portraitUpsideDown]
+
+//        if UIDevice.current.userInterfaceIdiom == .phone {
+//            return .allButUpsideDown
+//        } else {
+//            return .all
+//        }
     }
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+
+    override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
+        return .all
     }
 
     override func viewDidDisappear(_ animated: Bool) {
