@@ -38,8 +38,20 @@ class GameObject: SKSpriteNode {
         : Constant.ZPosition.tile
     }
 
-    convenience init(goType: GameObjectType) {
-        let goData = GameObjectData(type: goType)
+    convenience init(type goType: GameObjectType) {
+        let goData = GameObjectData(goType: goType)
+        self.init(from: goData)
+    }
+
+    convenience init(type goType: GameObjectType, coord chunkCoord: ChunkCoordinate) {
+        let goData = GameObjectData(goType: goType)
+        goData.set(coord: chunkCoord)
+        self.init(from: goData)
+    }
+
+    convenience init(type goType: GameObjectType, coord invCoord: InventoryCoordinate) {
+        let goData = GameObjectData(goType: goType)
+        goData.set(coord: invCoord)
         self.init(from: goData)
     }
 
@@ -56,6 +68,15 @@ class GameObject: SKSpriteNode {
         self.alpha = 1.0
     }
 
+    func highlight() {
+        self.color = .green.withAlphaComponent(0.9)
+        self.colorBlendFactor = Constant.accessibleGOColorBlendFactor
+    }
+
+    func removeHIghlight() {
+        self.colorBlendFactor = 0.0
+    }
+
     // MARK: -
     func isAccessible(by character: Character) -> Bool {
         if self.invCoord != nil {
@@ -65,59 +86,47 @@ class GameObject: SKSpriteNode {
         return character.accessibleFrame.contains(self.positionFromSceneOrigin)
     }
 
-    func lmiRemoveFromParent() {
-        if let inventory = self.parent as? any InventoryProtocol<GameObject> {
-            inventory.remove(self)
-        } else {
-            super.removeFromParent()
-        }
-    }
-
-    func lmiMove(toParent parent: SKNode) {
-        if let inventory = self.parent as? any InventoryProtocol<GameObject> {
-            inventory.move(self, toParent: parent)
-        } else {
-            super.move(toParent: parent)
-        }
+    func delete() {
+        self.data.delete()
     }
 
 }
 
+// MARK: - touch responder
 extension GameObject: TouchResponder {
 
-    // MARK: - touch
     func touchBegan(_ touch: UITouch) {
-            TouchHandlerContainer.default.goTouchHandler.began(touch: touch, go: self)
+            TouchHandlerContainer.default.goHandler.began(touch: touch, go: self)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let handler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == handler.touch else {
             return
         }
 
-        goTouchHandler.moved()
+        handler.moved()
     }
 
     func touchEnded(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let handler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == handler.touch else {
             return
         }
 
-        goTouchHandler.ended()
+        handler.ended()
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let goTouchHandler = TouchHandlerContainer.default.goTouchHandler
+        let handler = TouchHandlerContainer.default.goHandler
 
-        guard touch == goTouchHandler.touch else {
+        guard touch == handler.touch else {
             return
         }
 
-        goTouchHandler.cancelled()
+        handler.cancelled()
     }
 
 //     MARK: - interact

@@ -19,6 +19,22 @@ class InventoryContainer {
         self.characterInv = CharacterInventory(id: 0)
     }
 
+    var emptyCoord: InventoryCoordinate? {
+        if let emptyCoord = self.characterInv.emptyCoord {
+            return InventoryCoordinate(self.characterInv.id, emptyCoord)
+        }
+
+        if let emptyCoord = self.invInv?.emptyCoord {
+            return InventoryCoordinate(self.invInv!.id, emptyCoord)
+        }
+
+        if let emptyCoord = self.fieldInv?.emptyCoord {
+            return InventoryCoordinate(self.fieldInv!.id, emptyCoord)
+        }
+
+        return nil
+    }
+
 }
 
 extension InventoryContainer: InventoryProtocol {
@@ -121,24 +137,13 @@ extension InventoryContainer: InventoryProtocol {
         }
     }
 
-    func move(_ item: GameObject, toParent parent: SKNode) {
-        item.move(toParent: parent)
-    }
-
-    func remove(_ item: GameObject) {
-        item.removeFromParent()
-    }
-
-    func makeIterator() -> some IteratorProtocol {
-        var sequences: [Inventory] = [self.characterInv]
-
-        if let fieldInv = self.fieldInv {
-            sequences.append(fieldInv)
-        }
-
-        if let invInv = self.invInv {
-            sequences.append(invInv)
-        }
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        let sequences = [
+            self.characterInv,
+            self.fieldInv,
+            self.invInv,
+        ]
+            .compactMap { $0 }
 
         return CombineSequences(sequences: sequences)
     }

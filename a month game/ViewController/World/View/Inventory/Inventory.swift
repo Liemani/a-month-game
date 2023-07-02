@@ -8,6 +8,24 @@
 import Foundation
 import SpriteKit
 
+class InventoryCell: SKSpriteNode {
+
+    func activate() {
+        self.alpha = 0.5
+    }
+
+    func deactivate() {
+        self.alpha = 1.0
+    }
+
+    var invCoord: InventoryCoordinate {
+        let inventory = self.parent as! Inventory
+        let index = inventory.coordAtLocation(of: self)!
+        return InventoryCoordinate(inventory.id, index)
+    }
+
+}
+
 protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Item
@@ -22,8 +40,6 @@ protocol InventoryProtocol<Item>: Sequence {
     func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
-    func move(_ item: Item, toParent parent: SKNode)
-    func remove(_ item: Item)
 
 }
 
@@ -37,7 +53,7 @@ class Inventory: SKSpriteNode {
 
     init(id: Int,
          texture: SKTexture,
-         cells: [SKSpriteNode],
+         cells: [InventoryCell],
          cellWidth: Double,
          cellSpacing: Double) {
         self.id = id
@@ -68,7 +84,7 @@ class Inventory: SKSpriteNode {
         }
     }
 
-    private func addCells(_ cells: [SKSpriteNode]) {
+    private func addCells(_ cells: [InventoryCell]) {
         self.cellCount += cells.count
 
         let distanceOfCellsCenter = self.cellWidth + self.cellSpacing
@@ -84,9 +100,18 @@ class Inventory: SKSpriteNode {
         }
     }
 
-    var emptyIndex: Int? {
+    var emptyCoord: Int? {
         for (index, cell) in self.children.enumerated() {
             if cell.children.first == nil {
+                return index
+            }
+        }
+        return nil
+    }
+
+    func coordAtLocation(of invCell: InventoryCell) -> Int? {
+        for (index, cell) in self.children.enumerated() {
+            if cell == invCell {
                 return index
             }
         }
@@ -132,14 +157,8 @@ extension Inventory: InventoryProtocol {
     func add(_ item: GameObject) {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
-    }
 
-    func move(_ item: GameObject, toParent parent: SKNode) {
-        item.move(toParent: parent)
-    }
-
-    func remove(_ item: GameObject) {
-        item.removeFromParent()
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
@@ -170,6 +189,46 @@ struct InventoryIterator: IteratorProtocol {
             index += 1
         }
         return nil
+    }
+
+}
+
+// MARK: - touch responder
+extension InventoryCell: TouchResponder {
+
+    func touchBegan(_ touch: UITouch) {
+        TouchHandlerContainer.default.invTouchHandler.began(touch: touch,
+                                                            touchedCell: self)
+    }
+
+    func touchMoved(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.moved()
+    }
+
+    func touchEnded(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.ended()
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+        let handler = TouchHandlerContainer.default.invTouchHandler
+
+        guard touch == handler.touch else {
+            return
+        }
+
+        handler.cancelled()
     }
 
 }

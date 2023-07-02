@@ -34,8 +34,10 @@ final class WorldGenerator {
         self.new(type: .woodWall, x: 1, y: 0)
         self.new(type: .woodWall, x: 1, y: -1)
 
-        self.new(type: .stone, x: -1, y: -3)
-        self.new(type: .woodStick, x: 0, y: -3)
+        for x in 0...20 {
+            self.new(type: .stone, x: x, y: -3)
+            self.new(type: .woodStick, x: x, y: -4)
+        }
 
         try! WorldServiceContainer.default.moContext.save()
     }

@@ -12,17 +12,26 @@ class TouchHandlerContainer {
     private static var _default: TouchHandlerContainer?
     static var `default`: TouchHandlerContainer { self._default! }
 
-    static func set() { self._default = TouchHandlerContainer() }
+    static func set(chunkContainer: ChunkContainer,
+                    invContainer: InventoryContainer) {
+        self._default = TouchHandlerContainer(chunkContainer: chunkContainer,
+                                              invContainer: invContainer)
+    }
+
     static func free() { self._default = nil }
 
-    let goTouchHandler: GameObjectTouchHandler
-//    let fieldTouchHandler: FieldTouchEventHandler
-//    let inventoryTouchHandler: InventoryTouchEventHandler
+    var activatedGO: GameObject?
 
-    init() {
-        self.goTouchHandler = GameObjectTouchHandler()
-//        self.fieldTouchEventHandler = FieldTouchEventHandler()
-//        self.inventoryTouchEventHandler = InventoryTouchEventHandler()
+    let goHandler: GameObjectTouchHandler
+    let fieldHandler: FieldTouchHandler
+    let invTouchHandler: InventoryTouchHandler
+    let craftTouchHandler: CraftTouchHandler
+
+    init(chunkContainer: ChunkContainer, invContainer: InventoryContainer) {
+        self.goHandler = GameObjectTouchHandler()
+        self.fieldHandler = FieldTouchHandler(chunkContainer: chunkContainer)
+        self.invTouchHandler = InventoryTouchHandler()
+        self.craftTouchHandler = CraftTouchHandler(invContainer: invContainer)
     }
 
 }

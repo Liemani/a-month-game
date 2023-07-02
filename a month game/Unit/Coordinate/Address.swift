@@ -61,6 +61,18 @@ struct Address {
 
 }
 
+extension Address: Equatable {
+
+    static func == (lhs: Address, rhs: Address) -> Bool {
+        return lhs.chunk == rhs.chunk && lhs.tile == rhs.tile
+    }
+
+    static func != (lhs: Address, rhs: Address) -> Bool {
+        return !(lhs == rhs)
+    }
+
+}
+
 extension Address: CustomDebugStringConvertible {
 
     var debugDescription: String {

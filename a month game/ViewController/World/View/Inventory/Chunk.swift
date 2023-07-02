@@ -118,20 +118,8 @@ extension Chunk: InventoryProtocol {
         self.addChild(item)
     }
 
-    func move(_ item: GameObject, toParent parent: SKNode) {
-        self.data.remove(item)
-
-        item.move(toParent: parent)
-    }
-
-    func remove(_ item: GameObject) {
-        self.data.remove(item)
-
-        item.removeFromParent()
-    }
-
-    func makeIterator() -> some IteratorProtocol {
-        return self.children.makeIterator()
+    func makeIterator() -> some IteratorProtocol<GameObject> {
+        return (self.children as! [GameObject]).makeIterator()
     }
 
 }

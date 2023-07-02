@@ -7,28 +7,29 @@
 
 import Foundation
 
-class CharacterPositionUpdateHandler: EventHandler {
+class CharacterPositionUpdater {
 
     let character: Character
     let movingLayer: MovingLayer
     let chunkContainer: ChunkContainer
     let accessibleGOTracker: AccessibleGOTracker
 
-    let timeInterval: TimeInterval
+    var timeInterval: TimeInterval
 
     init(character: Character,
          movingLayer: MovingLayer,
          chunkContainer: ChunkContainer,
-         accessibleGOTracker: AccessibleGOTracker,
-         timeInterval: TimeInterval) {
+         accessibleGOTracker: AccessibleGOTracker) {
         self.character = character
         self.movingLayer = movingLayer
         self.chunkContainer = chunkContainer
         self.accessibleGOTracker = accessibleGOTracker
-        self.timeInterval = timeInterval
+
+        self.timeInterval = 0
     }
 
-    func handle() {
+    func update(timeInterval: TimeInterval) {
+        self.timeInterval = timeInterval
         self.applyCharacterVelocity(timeInterval)
         self.updateCharacterVelocity(timeInterval)
         self.resolveCharacterCollision()

@@ -38,7 +38,13 @@ class WorldViewController: UIViewController {
         TouchRecognizerManager.set(scene: scene,
                                    ui: scene.ui,
                                    character: scene.character)
-        TouchHandlerContainer.set()
+        TouchHandlerContainer.set(chunkContainer: scene.chunkContainer,
+                                  invContainer: scene.invContainer)
+
+        GameObjectManager.set(character: scene.character,
+                              chunkContainer: scene.chunkContainer,
+                              invContainer: scene.invContainer,
+                              accessibleGOTracker: scene.accessibleGOTracker)
 
         skView.presentScene(scene)
     }
@@ -69,6 +75,7 @@ class WorldViewController: UIViewController {
         TouchHandlerContainer.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
+        GameObjectManager.free()
     }
 
 }

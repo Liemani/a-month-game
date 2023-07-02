@@ -97,16 +97,12 @@ extension PinchRecognizer: TouchRecognizer {
     }
 
     func began(lmiTouches: [LMITouch]) {
-        print("pinch began")
-
         self.lmiTouches = lmiTouches
 
         self.pDistance = self.distance
     }
 
     func moved() {
-        print("pinch moved")
-
         let distance = self.distance
 
         let scaleDelta = distance / self.pDistance
@@ -121,12 +117,10 @@ extension PinchRecognizer: TouchRecognizer {
     }
 
     func ended() {
-        print("pinch ended")
         self.complete()
     }
 
     func cancelled() {
-        print("pinch cancelled")
         self.complete()
     }
 

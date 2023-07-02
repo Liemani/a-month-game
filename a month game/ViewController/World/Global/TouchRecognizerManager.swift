@@ -21,6 +21,7 @@ struct TouchPossible: OptionSet {
 class LMITouch {
 
     let touch: UITouch
+    let bPosition: CGPoint
     let bTime: TimeInterval
     var pTime: TimeInterval
     var recognizer: TouchRecognizer?
@@ -30,6 +31,7 @@ class LMITouch {
 
     init(_ touch: UITouch, scene: WorldScene) {
         self.touch = touch
+        self.bPosition = touch.location(in: scene)
         self.bTime = touch.timestamp
         self.pTime = touch.timestamp
         let rawValue = TouchPossible.tap.rawValue
