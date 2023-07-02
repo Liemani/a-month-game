@@ -161,7 +161,7 @@ class CraftWindow: SKNode {
             for go in gos {
                 let go = go as! GameObject
                 let goType = go.type
-                if var typeCount = recipe[goType],
+                if let typeCount = recipe[goType],
                    typeCount > 0 {
                     recipe[goType] = typeCount - 1
                     consumeTargets.append(go)
@@ -193,7 +193,7 @@ class CraftWindow: SKNode {
         for go in gos {
             let go = go as! GameObject
             let goType = go.type
-            if var typeCount = recipe[goType] {
+            if let typeCount = recipe[goType] {
                 recipe[goType] = typeCount - 1
             }
         }

@@ -43,8 +43,12 @@ extension PanRecognizer: TouchRecognizer {
             return false
         }
 
-        let currentTime = CACurrentMediaTime()
+        guard self.lmiTouch == nil else {
+            return false
+        }
 
+//        let currentTime = CACurrentMediaTime()
+//
 //        guard currentTime - lmiTouch.bTime < 1.0
 //            && !lmiTouch.touchedNode.isDescendant(self.ui) else {
         guard !lmiTouch.touchedNode.isDescendant(self.ui) else {

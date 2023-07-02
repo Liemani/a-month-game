@@ -214,8 +214,6 @@ extension WorldScene {
 
     private func debugCode() {
         for go in self.chunkContainer {
-            let go = go as! GameObject
-
             print("id: \(go.id), typeID: \(go.type), coordinate: (\(go.chunkCoord!))")
         }
 

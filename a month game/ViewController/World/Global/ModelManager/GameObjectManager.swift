@@ -86,7 +86,7 @@ class GameObjectManager {
         if let chunk = go.parent as? Chunk {
             chunk.data.remove(go)
             self.accessibleGOTracker.remove(go)
-        } else if let inventory = go.parent?.parent as? Inventory {
+        } else if go.parent?.parent is Inventory {
             FrameCycleUpdateManager.default.update(with: .craftWindow)
         }
 
