@@ -109,8 +109,8 @@ struct Constant {
     // MARK: - recipe
     static let recipes: [GameObjectType: [GameObjectType: Int]] = [
         .woodWall: [.woodStick: 4],
-        .axe: [.stone: 1, .woodStick: 1],
-        .pickaxe: [.stone: 1, .woodStick: 1],
+        .stoneAxe: [.stone: 1, .woodStick: 1],
+        .stonePickaxe: [.stone: 1, .woodStick: 1],
         .stoneShovel: [.stone: 1, .woodStick: 1],
     ]
 
@@ -137,7 +137,8 @@ struct Constant {
         static let rightHand = "right_hand"
     }
 
-    static let minZoomScale = 0.3
+//    static let minZoomScale = 0.3
+    static let minZoomScale = 0.1
     static let maxZoomScale = 1.0
 
     static let initialNextID = 1

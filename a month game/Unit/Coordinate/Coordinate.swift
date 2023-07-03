@@ -41,6 +41,7 @@ extension Coordinate: Equatable {
     static func != (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
         return !(lhs == rhs)
     }
+
 }
 
 extension Coordinate<Int> {

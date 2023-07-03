@@ -67,33 +67,33 @@ extension InventoryContainer: InventoryProtocol {
         return self.isValid(invCoord)
     }
 
-    func item(at coord: InventoryCoordinate) -> GameObject? {
-        if let go = self.characterInv.item(at: coord.index) {
-            return go
+    func items(at coord: InventoryCoordinate) -> [GameObject]? {
+        if let gos = self.characterInv.items(at: coord.index) {
+            return gos
         }
 
-        if let go = self.fieldInv?.item(at: coord.index) {
-            return go
+        if let gos = self.fieldInv?.items(at: coord.index) {
+            return gos
         }
 
-        if let go = self.invInv?.item(at: coord.index) {
-            return go
+        if let gos = self.invInv?.items(at: coord.index) {
+            return gos
         }
 
         return nil
     }
 
-    func itemAtLocation(of touch: UITouch) -> GameObject? {
-        if let go = self.characterInv.itemAtLocation(of: touch) {
-            return go
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
+        if let gos = self.characterInv.itemsAtLocation(of: touch) {
+            return gos
         }
 
-        if let go = self.fieldInv?.itemAtLocation(of: touch) {
-            return go
+        if let gos = self.fieldInv?.itemsAtLocation(of: touch) {
+            return gos
         }
 
-        if let go = self.invInv?.itemAtLocation(of: touch) {
-            return go
+        if let gos = self.invInv?.itemsAtLocation(of: touch) {
+            return gos
         }
 
         return nil
@@ -116,28 +116,28 @@ extension InventoryContainer: InventoryProtocol {
     }
 
     func add(_ item: GameObject) {
-        if self.characterInv.item(at: item.invCoord!.index) == nil {
+        if self.characterInv.items(at: item.invCoord!.index) == nil {
             self.characterInv.add(item)
 
             return
         }
 
         if let fieldInv = self.fieldInv,
-           fieldInv.item(at: item.invCoord!.index) == nil {
+           fieldInv.items(at: item.invCoord!.index) == nil {
             self.fieldInv!.add(item)
 
             return
         }
 
         if let invInv = self.invInv ,
-           invInv.item(at: item.invCoord!.index) == nil {
+           invInv.items(at: item.invCoord!.index) == nil {
             self.invInv!.add(item)
 
             return
         }
     }
 
-    func makeIterator() -> some IteratorProtocol<GameObject> {
+    func makeIterator() -> CombineSequences<GameObject> {
         let sequences = [
             self.characterInv,
             self.fieldInv,

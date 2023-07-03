@@ -445,187 +445,119 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         tree rustle
         firing
 
-## layer
-scene
-    worldLayer
-        movingLayer
-        character
-    ui
-        characterInv
-        craftWindow
-        menuButton
-    menuWindow
-
 # issue
 -
-craft
-    possible must have empty inventory space
-    remove event activatedGO, and remove from activated at Global
-
-adding and removing GO must in the GOHandler not event!
-
-craft touch handler
-
-무료 에셋 찾아보기
-조금 빨라지기
-ui 드래그로 아이템 옮기는 기능 삭제
-    터치 터치로 상호작용 시키기
-이력서 정리해서 보내드리기
-인벤토리 위치를 생각해보자
-밑에 있어도 되는데 옆에 있다면?
-    아니 그냥 밑에 둘까?
-벽 뚫는거 막는게 좋다
-캐릭터 주변 1 칸만 상호작용 가능한거는 구리다
+menu button -> cancel all gesture
 캐릭터 이미지 추가하기
-옆에서 보는 이미지가 좋겠다
-줌 인 줌 아웃
-잔디 퍼지는거 시간은 상관 없다
-캐릭터는 월드에 귀속된다
-게임 자체적인 재미가 있어야 한다
+    옆에서 보는 이미지가 좋겠다
+inventory in characterInv
+    add leaf bag
+world generator
+    generate in chunk unit dynamically
+    sea
 
+example code
+func isDeepWater(seed: Int, chunkCoord: ChunkCoordinate) -> Bool {
+    return true
+    return chunkCoord.chunk.address % 2
+}
+
+월드의 좌우, 위아래가 각각 연결되어 있다
+그럼 이걸 구형이라고 한다면
+위도 0은 어디이며 위도 90은 어디일까?
+적도는 어디이며 극은 어디일까?
+가운데를 적도라고 하자,
+그럼 극은 2 곳이어야 하므로 1/4 과 3/4 이 극이어야 한다
+그럼 위와 아래는 또 다른 적도가 되어야 한다
+그런데 문제는, 적도를 돌아서 다른 적도와 만날 수 없다는 것이다
+그럼 결국 적도는 하나만 배치해야 한다
+그럼 구형 월드가 아니라 원통형 월드라면 어떨까?
+좌우는 연결되되, 상하는 끊어져 있다
+그래서 중심에 1 개의 적도와 상하에 2개의 극을 가질 수 있다
+그럼 적도는 0 이고, 멀어질수록 높이가 1 청크당 1 씩 높아진다고 하자
+그럼 적도에 물이 모이고 양 극은 대륙이 될 것이다
+하지만 물은 땅과 같은 면적이라고 한다면 평균 높이를 해수면으로 잡으면 안된다
+물은 삼각뿔 형태에 모이기 때문에 땅의 평균 높이보다 더 높아야 물의 양과 땅의 양이 같게 된다
+하지만 그렇게되면 땅이 다 사라진다
+즉, 물과 땅의 비율에서, 물이 더 적어야 한다
+물의 양을 적절하 조절하자
+지구와 같게 하는게 좋겠다
+표면의 물 비율은 70 퍼센트로 한다
+그럼 전체 높이는 청크의 "y 좌표" + "chunk.coord.y" 이니 이 값의 70% 를 해수면으로 한다
+여기에 변주를 줘야 한다
+강은 당연히 있어야 하는 것이고
+    화산 폭발
+    대륙 이동
+    혜성 충돌
+한 청크를 시뮬레이션하기 위해서는 최소 그 주변 청크까지 시뮬레이션 해야 하지 않을까?
+해안선을 랜덤하게 절반씩 결정하는게 좋다
+[] 한 128개의 높이를 설정해야 한다고 하면
+0번 높이는 0이라 하고
+64번 높이는 n의 랜덤성을 주고
+32번 높이에 평균에 n /2 의 랜덤성을 주고
+반복, 너무 단조롭지 않을까?
+괜찮을 것 같긴 하다
+하지만 이 알고리즘은 특정 지점을 알기 위해 다른 지점의 계산을 요구한다
+반대로 작은 랜덤성으로 큰 랜덤성을 유추해나가는 방식이 있으면 좋겠다
+
+region 마다 방향을 하나씩 가지게 한다
+    region 은 큰 영향을 미친다
+chunk 마다 방향을 하나씩 갖는다
+    chunk 는 작은 영향을 미친다
+고정된 multiplier 와 increment 를 준비한다
+seed 에 따라 chunk 를 계산하여 그린다
+
+game object must have it's size not default node size
+    terrain -> default node size
+    else -> middle size
+캐릭터는 월드에 귀속된다
 add mastery system
 
-game object is added to accessible tracker
-    mimic that behabior for craft window
-
-no need update accessibleGOTracker
-    udpate only beginning
-
-but in case craft window, updating at update() in the scene is good choice
-    udpating every add and remove of game object will lower performence
-
-## low priority
-prevent control center is activated at touch(other games prevent it)
-change accessibleGOTracker only track non walkable
-add small none texture
-redraw game object
-
-불필요한 경우 1 fps
-service container 를 만드는건 portal view controller 가,
-    전달받아서 등록하는건 world view controller 가
-git 받아서 실행해보기
-GameObject.instance == GameObject.instance 가 되던데 어떻게 되는거지?
-change chunk view to just world
-add leaf bag
-debug 에서는 터치 포인트에 원이 따라다니게 하기(hide, reveal)
-
-세상의 끝을 설정하긴 해야 한다
-
-<< 도 exception 이 발생할까?
-
-make texture manager
-Texture.button -> rawValue(?) has SKTexture
-
-## TODO: take item invInv also
-implement craft system
-address -> addr
-add FrameCycleUpdateManager.default.update(with: .craftWindow)
-
-wood is to dark
-    grass is to green
-    bright is better than dark
-add timer
-make temporary circle at touch location
-
-hide reset button to menu window
-
-implement inventory
-
-crash when exit, by EventManager.default! at WorldScene.touchbegan()
-아종 데이터
-craft 는 이벤트로 보내고 controller.update() 에서 처리하기
-add quality
-
-update model
-add tools
-잔디 좀 더 연두색으로
-craft cell 이 제작에 소모될 아이템 리스트를 갖도록 하자
-마스터리 작성
-button 은 무조건 부모가 처리하도록 해보자
-resolve portrait warning
-캐릭터의 테두리 색을 검은색으로?
-인벤토리 셀을 클릭하면 셀의 알파를 변하게 하자
-알림 센터를 내리고 있는 상태에서 필드 드래그 터치가 작동하는 현상
-터치 시작 시 살짝 튕기는 글리치
-타일 크기가 딱 맞아서 검은 실선이 보이는 오류
-캐릭터의 스탯과 인벤토리는 월드가 공유한다
-인벤토리와 제작은 아예 화면 테두리에 붙여도 될 것 같다. 피아노 건반처럼. 특히 제작은 그렇게 할 것. 그래야 스크롤이 편해진다
-처음에만 zone 을 만드는 합수가 있고 그 다음은 전부 reserve 로 작동한다
-    addZone, removeZone 에서 should reserve 를 true 로 바꾼다
-    마찬가지로 잔디가 퍼져야 하는지도 리스트로 관리한다
-    매 update() 에서는 should update 가 true 인 경우에만 돌린다
-sense message 켜고 끄는 기능을 menu 에 넣는다
-캐릭터를 조금 아래로 내려서 위 영역을 터치로 사용하는 대신에 상호작용 가능한 영역을 2 거리까지 띄운다
-sense message
-터치, 드래그 -> 기본 이동
-꾹 누르고 있기 -> 설명
-제작
-    아이템을 겹치면 제작 더미가 생긴다
-    아이템을 충분히 넣고 제작 더미를 상호작용하면 성공하면 아이템을, 실패하면 제료를 반환한다
-search testflight
-캐릭터를 조금 아래로 낮춘다
-make cancel touch when craft reset
-make reset pane and menu pane as button
-Add interaction
-    wood wall with axe
-    pine cone
-    pine tree with axe
-check CraftPane
-    consume
-    update
-check game object touch
-if craft object type changed while touching, cancel the touch
-touch pine cone make pine tree
-swap with inventory go
-when pick up item from inventory or field, reserve craft pane update
-
-fix flick to persist direction
-
-menu window touch
-menu -> cancel all touch
-save character position
-PortalScene touch
-add fade effect
-add sound
-
-portrait and upsidedown
-
-터치 간의 상관 관계
-    메뉴 버튼 터치 -> 드래그 중단
 interact 구현
     씨앗 -> 나무
     나무 맨손 -> 나뭇가지 or 씨앗
-제작 구현
-item drag 구현
 sound 구현 및 추가
     background
     interact
     button touch
+fix friction
+touch pine cone make pine tree
+Add interaction
+    wood wall with axe
+    pine cone
+    pine tree with axe
+add tools
+add quality
+hide reset button to menu window
+이력서 정리해서 보내드리기
 
-WorldScene 에서 menu layer 추가
-간단한 아이템 구현
-{
-    WorldScene 에서 터치에 따른 동작 구현
-        터치에 따른 state machine 구상
-    isWalkable 에 따른 캐릭터 이동 구현
-
-    pan -> 이동 (1 개 제한)
-    flick -> 미끄러지는 이동
-    item pan -> 아이템 이동 (1 개 제한)
-    button touch -> 기능 수행
-    item touch -> interact(multi touch -> add queue)
-}
-아이템을 드래그해서 내려놓는 기능
-    placeholder 를 보여주고 불가능하면 못내려 놓는다
-데이터 관리
-    캐릭터
-        위치, 스킬
-    바닥 아이템
-    오브젝트
-sense message 구현
-
-
-enterButton, resetButton 맞춤 resource 제작
+## low priority
+add fade effect
+add sound
+long info touch
+    add timer
+address -> addr
+벽 뚫는거 막는게 좋다
+add small none texture
+redraw game object
+    wood is to dark
+    grass is to green
+    bright is better than dark
+    잔디 좀 더 연두색으로
+불필요한 경우 1 fps
+GameObject.instance == GameObject.instance 가 되던데 어떻게 되는거지?
+세상의 끝을 설정하긴 해야 한다
+<< 도 exception 이 발생할까?
+make texture manager
+    Texture.button -> rawValue(?) has SKTexture
+아종 데이터
+알림 센터를 내리고 있는 상태에서 필드 드래그 터치가 작동하는 현상
+인벤토리와 제작은 아예 화면 테두리에 붙여도 될 것 같다. 피아노 건반처럼. 특히 제작은 그렇게 할 것. 그래야 스크롤이 편해진다
+    마찬가지로 잔디가 퍼져야 하는지도 리스트로 관리한다
+sense message 켜고 끄는 기능을 menu 에 넣는다
+sense message
+search testflight
+button custom image
 
 # test
 pan recognize distance
@@ -738,6 +670,112 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+WorldScene 에서 menu layer 추가
+간단한 아이템 구현
+{
+    WorldScene 에서 터치에 따른 동작 구현
+        터치에 따른 state machine 구상
+    isWalkable 에 따른 캐릭터 이동 구현
+
+    pan -> 이동 (1 개 제한)
+    flick -> 미끄러지는 이동
+    item pan -> 아이템 이동 (1 개 제한)
+    button touch -> 기능 수행
+    item touch -> interact(multi touch -> add queue)
+}
+아이템을 드래그해서 내려놓는 기능
+    placeholder 를 보여주고 불가능하면 못내려 놓는다
+데이터 관리
+    캐릭터
+        위치, 스킬
+    바닥 아이템
+    오브젝트
+sense message 구현
+
+
+enterButton, resetButton 맞춤 resource 제작
+제작 구현
+item drag 구현
+portrait and upsidedown
+
+터치 간의 상관 관계
+    메뉴 버튼 터치 -> 드래그 중단
+swap with inventory go
+when pick up item from inventory or field, reserve craft pane update
+
+fix flick to persist direction
+
+menu window touch
+menu -> cancel all touch
+save character position
+PortalScene touch
+check CraftPane
+    consume
+    update
+check game object touch
+if craft object type changed while touching, cancel the touch
+캐릭터를 조금 아래로 내려서 위 영역을 터치로 사용하는 대신에 상호작용 가능한 영역을 2 거리까지 띄운다
+터치, 드래그 -> 기본 이동
+꾹 누르고 있기 -> 설명
+제작
+    아이템을 겹치면 제작 더미가 생긴다
+    아이템을 충분히 넣고 제작 더미를 상호작용하면 성공하면 아이템을, 실패하면 제료를 반환한다
+캐릭터를 조금 아래로 낮춘다
+make cancel touch when craft reset
+make reset pane and menu pane as button
+터치 시작 시 살짝 튕기는 글리치
+타일 크기가 딱 맞아서 검은 실선이 보이는 오류
+처음에만 zone 을 만드는 합수가 있고 그 다음은 전부 reserve 로 작동한다
+    addZone, removeZone 에서 should reserve 를 true 로 바꾼다
+    매 update() 에서는 should update 가 true 인 경우에만 돌린다
+craft cell 이 제작에 소모될 아이템 리스트를 갖도록 하자
+button 은 무조건 부모가 처리하도록 해보자
+resolve portrait warning
+캐릭터의 테두리 색을 검은색으로?
+인벤토리 셀을 클릭하면 셀의 알파를 변하게 하자
+update model
+craft 는 이벤트로 보내고 controller.update() 에서 처리하기
+crash when exit, by EventManager.default! at WorldScene.touchbegan()
+implement inventory
+make temporary circle at touch location
+take item invInv also
+implement craft system
+add FrameCycleUpdateManager.default.update(with: .craftWindow)
+but in case craft window, updating at update() in the scene is good choice
+    udpating every add and remove of game object will lower performence
+game object is added to accessible tracker
+    mimic that behabior for craft window
+no need update accessibleGOTracker
+    udpate only beginning
+change chunk view to just world
+debug 에서는 터치 포인트에 원이 따라다니게 하기(hide, reveal)
+service container 를 만드는건 portal view controller 가,
+    전달받아서 등록하는건 world view controller 가
+git 받아서 실행해보기
+인벤토리 위치를 생각해보자
+밑에 있어도 되는데 옆에 있다면?
+    아니 그냥 밑에 둘까?
+캐릭터 주변 1 칸만 상호작용 가능한거는 구리다
+줌 인 줌 아웃
+잔디 퍼지는거 시간은 상관 없다
+게임 자체적인 재미가 있어야 한다
+
+prevent control center is activated at touch(other games prevent it)
+change accessibleGOTracker only track non walkable
+
+craft
+    possible must have empty inventory space
+    remove event activatedGO, and remove from activated at Global
+
+adding and removing GO must in the GOHandler not event!
+
+craft touch handler
+
+무료 에셋 찾아보기
+조금 빨라지기
+ui 드래그로 아이템 옮기는 기능 삭제
+    터치 터치로 상호작용 시키기
+
 pan recognizing: remove time, change velocity -> position from origin
 인벤토리 셀 터치하면 아이템 이동
 필드 터치하면 아이템 이동

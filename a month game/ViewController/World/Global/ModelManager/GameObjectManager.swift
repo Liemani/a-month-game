@@ -45,7 +45,7 @@ class GameObjectManager {
         self.removeFromParent(go)
         self.chunkContainer.add(go)
 
-        if !go.type.isWalkable
+        if go.type.walkSpeed == -1.0
             && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
             self.accessibleGOTracker.add(go)
         }
@@ -73,7 +73,7 @@ class GameObjectManager {
     }
 
     func interactToGO(_ go: GameObject, to targetGO: GameObject) {
-        if targetGO.type.isTile,
+        if targetGO.type == .woodFloorTile,
            let targetCoord = targetGO.chunkCoord {
             go.data.set(coord: targetCoord)
             self.moveToBelongField(go)

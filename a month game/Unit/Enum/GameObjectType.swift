@@ -12,21 +12,28 @@ enum GameObjectType: Int, CaseIterable {
 
     typealias ResourceType = (
         resourceName: String,
-        isWalkable: Bool,
+        walkSpeed: Double,
         isPickable: Bool,
         isTile: Bool
     )
 
     case none
-    case woodFloor
+    case caveHoleTile
+    case waterTile
+    case caveCeilTile
+    case sandTile
+    case clayTile
+    case cobblestoneTile
+    case dirtTile
+    case woodFloorTile
     case pineCone
     case pineTree
     case woodWall
     case woodStick
     case stone
-    case axe
+    case stoneAxe
     case stoneShovel
-    case pickaxe
+    case stonePickaxe
     case leafBag
 
     init?(from goMO: GameObjectMO) {
@@ -34,17 +41,24 @@ enum GameObjectType: Int, CaseIterable {
     }
 
     private static let resources: [ResourceType] = [
-        ("game_object_none", false, false, false),
-        ("game_object_wood_floor", true, false, true),
-        ("game_object_pine_cone", true, true, false),
-        ("game_object_pine_tree", false, false, false),
-        ("game_object_wood_wall", false, false, false),
-        ("game_object_wood_stick", true, true, false),
-        ("game_object_stone", true, true, false),
-        ("game_object_axe", true, true, false),
-        ("game_object_stone_shovel", true, true, false),
-        ("game_object_pickaxe", true, true, false),
-        ("game_object_leaf_bag", true, true, false),
+        ("game_object_none", -1.0, false, false),
+        ("game_object_cave_hole_tile", -1.0, false, true),
+        ("game_object_water_tile", 0.25, false, true),
+        ("game_object_cave_ceil_tile", 0.25, false, true),
+        ("game_object_sand_tile", 0.5, false, true),
+        ("game_object_clay_tile", 0.5, false, true),
+        ("game_object_cobblestone_tile", 0.75, false, true),
+        ("game_object_dirt_tile", 1.0, false, true),
+        ("game_object_wood_floor_tile", 1.0, false, true),
+        ("game_object_pine_cone", 1.0, true, false),
+        ("game_object_pine_tree", -1.0, false, false),
+        ("game_object_wood_wall", -1.0, false, false),
+        ("game_object_wood_stick", 1.0, true, false),
+        ("game_object_stone", 1.0, true, false),
+        ("game_object_stone_axe", 1.0, true, false),
+        ("game_object_stone_shovel", 1.0, true, false),
+        ("game_object_stone_pickaxe", 1.0, true, false),
+        ("game_object_leaf_bag", 1.0, true, false),
     ]
 
     private static let textures: [SKTexture] = ({
@@ -65,7 +79,7 @@ enum GameObjectType: Int, CaseIterable {
     var resources: [ResourceType] { GameObjectType.resources }
     var texture: SKTexture { GameObjectType.textures[self.rawValue] }
 
-    var isWalkable: Bool { self.resources[self.rawValue].isWalkable }
+    var walkSpeed: Double { self.resources[self.rawValue].walkSpeed }
     var isPickable: Bool { self.resources[self.rawValue].isPickable }
     var isTile: Bool { self.resources[self.rawValue].isTile }
 

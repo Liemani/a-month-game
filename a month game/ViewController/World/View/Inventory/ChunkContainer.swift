@@ -202,25 +202,23 @@ extension ChunkContainer: InventoryProtocol {
         return self.isValid(goChunkCoord)
     }
 
-    func item(at coord: ChunkCoordinate) -> GameObject? {
+    func items(at coord: ChunkCoordinate) -> [GameObject]? {
         guard let direction = self.chunkDirection(to: coord) else {
             return nil
         }
 
-        let go = self.chunks[direction].item(at: coord.address.tile.coord)
-
-        return go
+        return self.chunks[direction].items(at: coord.address.tile.coord)
     }
 
-    func itemAtLocation(of touch: UITouch) -> GameObject? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         let touchPoint = touch.location(in: self)
         let fieldCoord = FieldCoordinate(from: touchPoint)
         let directionCoord = fieldCoord.coord
         let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
         let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
-        let go = chunk.itemAtLocation(of: touch)
+        let gos = chunk.itemsAtLocation(of: touch)
 
-        return go
+        return gos
     }
 
     func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
