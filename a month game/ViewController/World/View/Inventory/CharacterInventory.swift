@@ -10,8 +10,8 @@ import SpriteKit
 
 class CharacterInventory: Inventory {
 
-    var leftHandGO: GameObject? { self.children.first!.children.first as! GameObject? }
-    var rightHandGO: GameObject? { self.children.last!.children.first as! GameObject? }
+    var leftGO: GameObject? { self.children.first!.children.first as! GameObject? }
+    var rightGO: GameObject? { self.children.last!.children.first as! GameObject? }
 
     init(id: Int) {
         var cells: [InventoryCell] = []

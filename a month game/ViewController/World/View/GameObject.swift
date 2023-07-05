@@ -30,7 +30,7 @@ class GameObject: SKSpriteNode {
         self.data = goData
 
         let texture = goData.type.texture
-        let size = goData.type.isTile || goData.type.walkSpeed == -1.0
+        let size = goData.type.isTile || !goData.type.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize
 

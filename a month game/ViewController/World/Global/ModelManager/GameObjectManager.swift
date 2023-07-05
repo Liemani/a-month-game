@@ -74,7 +74,7 @@ class GameObjectManager {
     }
 
     func interact(_ go: GameObject) {
-        GameObjectInteractionHandler.handler[go.type](self.scene, go)
+        GameObjectInteractionHandler.handler[go.type](go, self.invContainer)
     }
 
     func interactToGO(_ go: GameObject, to targetGO: GameObject) {

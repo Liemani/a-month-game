@@ -9,33 +9,63 @@ import Foundation
 
 class GameObjectInteractionHandler {
 
-    static let handler: [(WorldScene, GameObject) -> Void] = [
-        { scene, go in // none
+    static let handler: [(GameObject, InventoryContainer) -> Void] = [
+        { go, invContainer in // none
 
         },
 
-        { scene, go in // caveHoleTile
+        { go, invContainer in // caveHoleTile
 
         },
 
-        { scene, go in // waterTile
+        { go, invContainer in // waterTile
 
         },
 
-        { scene, go in // caveCeilTile
+        { go, invContainer in // caveCeilTile
+            guard let emptyInvCoord = invContainer.emptyCoord else {
+                return
+            }
 
+            guard invContainer.is(equiping: .stonePickaxe) else {
+                return
+            }
+
+            go.set(type: .caveHoleTile)
+            let stone = GameObject(type: .stone, coord: emptyInvCoord)
+            GameObjectManager.default.moveToBelongInv(stone)
         },
 
-        { scene, go in // sandTile
+        { go, invContainer in // sandTile
+            guard let emptyInvCoord = invContainer.emptyCoord else {
+                return
+            }
 
+            guard invContainer.is(equiping: .stoneShovel) else {
+                return
+            }
+
+            go.set(type: .clayTile)
+            let sand = GameObject(type: .sand, coord: emptyInvCoord)
+            GameObjectManager.default.moveToBelongInv(sand)
         },
 
-        { scene, go in // clayTile
+        { go, invContainer in // clayTile
+            guard let emptyInvCoord = invContainer.emptyCoord else {
+                return
+            }
 
+            guard invContainer.is(equiping: .stoneShovel) else {
+                return
+            }
+
+            go.set(type: .caveCeilTile)
+            let clay = GameObject(type: .clay, coord: emptyInvCoord)
+            GameObjectManager.default.moveToBelongInv(clay)
         },
 
-        { scene, go in // cobblestoneTile
-            guard let emptyInvCoord = scene.invContainer.emptyCoord else {
+        { go, invContainer in // cobblestoneTile
+            guard let emptyInvCoord = invContainer.emptyCoord else {
                 return
             }
 
@@ -44,47 +74,69 @@ class GameObjectInteractionHandler {
             GameObjectManager.default.moveToBelongInv(stone)
         },
 
-        { scene, go in // dirtTile
+        { go, invContainer in // dirtTile
+            guard let emptyInvCoord = invContainer.emptyCoord else {
+                return
+            }
+
+            guard invContainer.is(equiping: .stoneShovel) else {
+                return
+            }
+
+            go.set(type: .clayTile)
+            let dirt = GameObject(type: .dirt, coord: emptyInvCoord)
+            GameObjectManager.default.moveToBelongInv(dirt)
+        },
+
+        { go, invContainer in // woodFloorTile
 
         },
 
-        { scene, go in // woodFloorTile
+        { go, invContainer in // stone
 
         },
 
-        { scene, go in // pineCone
+        { go, invContainer in // dirt
 
         },
 
-        { scene, go in // pineTree
+        { go, invContainer in // sand
 
         },
 
-        { scene, go in // woodWall
+        { go, invContainer in // clay
 
         },
 
-        { scene, go in // woodStick
+        { go, invContainer in // pineCone
 
         },
 
-        { scene, go in // stone
+        { go, invContainer in // pineTree
 
         },
 
-        { scene, go in // stoneAxe
+        { go, invContainer in // woodWall
 
         },
 
-        { scene, go in // stoneShovel
+        { go, invContainer in // woodStick
 
         },
 
-        { scene, go in // stonePickaxe
+        { go, invContainer in // stoneAxe
 
         },
 
-        { scene, go in // leafBag
+        { go, invContainer in // stoneShovel
+
+        },
+
+        { go, invContainer in // stonePickaxe
+
+        },
+
+        { go, invContainer in // leafBag
 
         },
     ]

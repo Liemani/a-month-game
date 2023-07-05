@@ -20,8 +20,6 @@ class WorldScene: SKScene {
     // MARK: view
     var invContainer: InventoryContainer!
     var characterInv: CharacterInventory!
-    var leftHandGO: GameObject? { self.characterInv.leftHandGO }
-    var rightHandGO: GameObject? { self.characterInv.rightHandGO }
 
     // MARK: layer
     var worldLayer: SKNode!

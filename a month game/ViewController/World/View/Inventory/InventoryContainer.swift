@@ -15,6 +15,9 @@ class InventoryContainer {
     var fieldInv: Inventory?
     var invInv: Inventory?
 
+    var leftGO: GameObject? { self.characterInv.leftGO }
+    var rightGO: GameObject? { self.characterInv.rightGO }
+
     init() {
         self.characterInv = CharacterInventory(id: 0)
     }
@@ -33,6 +36,10 @@ class InventoryContainer {
         }
 
         return nil
+    }
+
+    func `is`(equiping goType: GameObjectType) -> Bool {
+        return self.leftGO?.type == goType || self.rightGO?.type == goType
     }
 
 }
@@ -132,6 +139,28 @@ extension InventoryContainer: InventoryProtocol {
         if let invInv = self.invInv ,
            invInv.items(at: item.invCoord!.index) == nil {
             self.invInv!.add(item)
+
+            return
+        }
+    }
+
+    func remove(_ item: GameObject) {
+        if item.invCoord!.id == self.characterInv.id {
+            self.characterInv.remove(item)
+
+            return
+        }
+
+        if let fieldInv = self.fieldInv,
+           item.invCoord!.id == fieldInv.id {
+            fieldInv.remove(item)
+
+            return
+        }
+
+        if let invInv = self.invInv,
+           item.invCoord!.id == invInv.id {
+            invInv.remove(item)
 
             return
         }
