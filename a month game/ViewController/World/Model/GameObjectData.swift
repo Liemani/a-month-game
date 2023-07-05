@@ -14,6 +14,10 @@ class GameObjectData {
     var id: Int { Int(self.mo.id) }
     var type: GameObjectType { GameObjectType(from: self.mo)! }
 
+    func set(type goType: GameObjectType) {
+        self.mo.update(to: goType)
+    }
+
     private var _chunkCoord: ChunkCoordinate?
     var chunkCoord: ChunkCoordinate? { self._chunkCoord }
     func set(coord chunkCoord: ChunkCoordinate) {

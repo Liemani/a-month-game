@@ -80,6 +80,7 @@ enum GameObjectType: Int, CaseIterable {
     var texture: SKTexture { GameObjectType.textures[self.rawValue] }
 
     var walkSpeed: Double { self.resources[self.rawValue].walkSpeed }
+    var isWalkable: Bool { self.walkSpeed != -1.0 }
     var isPickable: Bool { self.resources[self.rawValue].isPickable }
     var isTile: Bool { self.resources[self.rawValue].isTile }
 

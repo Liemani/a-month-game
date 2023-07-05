@@ -18,7 +18,7 @@ class CraftObject: SKSpriteNode {
         self.goType = goType
         self.consumeTargets = []
 
-        super.init(texture: goType.texture, color: .white, size: Constant.defaultNodeSize)
+        super.init(texture: goType.texture, color: .white, size: Constant.gameObjectSize)
 
         self.zPosition = Constant.ZPosition.gameObject
     }

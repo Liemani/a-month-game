@@ -30,7 +30,10 @@ class GameObject: SKSpriteNode {
         self.data = goData
 
         let texture = goData.type.texture
-        let size = Constant.defaultNodeSize
+        let size = goData.type.isTile || goData.type.walkSpeed == -1.0
+            ? Constant.defaultNodeSize
+            : Constant.gameObjectSize
+
         super.init(texture: texture, color: .white, size: size)
 
         self.zPosition = !self.type.isTile
@@ -78,6 +81,19 @@ class GameObject: SKSpriteNode {
     }
 
     // MARK: -
+    func set(type goType: GameObjectType) {
+        self.data.set(type: goType)
+        self.texture = goType.texture
+    }
+
+    func set(coord chunkCoord: ChunkCoordinate) {
+        self.data.set(coord: chunkCoord)
+    }
+
+    func set(coord invCoord: InventoryCoordinate) {
+        self.data.set(coord: invCoord)
+    }
+
     func isAccessible(by character: Character) -> Bool {
         if self.invCoord != nil {
             return true

@@ -10,15 +10,20 @@ import SpriteKit
 
 struct Constant {
 
-    static let defaultWidth = tileWidth
-    static let tileTextureWidth: CGFloat = 16.0
+    static let tileTextureWidth = 16.0
     static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
+
     static let tileScale = 6.0
     static let tileWidth = tileTextureWidth * tileScale
-    static let tileSize = CGSize(width: tileWidth, height: tileWidth)
-    static let margin = defaultWidth / 2.0
+
+    static let defaultWidth = tileWidth
 
     static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
+    static let tileSize = defaultNodeSize
+
+    static let gameObjectSize = defaultNodeSize * 0.9
+
+    static let margin = defaultWidth / 2.0
 
     // MARK: - position, size
     static let iPhone5sResolution = CGSize(width: 750, height: 1334)
@@ -130,11 +135,11 @@ struct Constant {
     struct ResourceName {
         static let menuButton = "menu button"
         static let inventoryCell = "inventory_cell"
+        static let inventoryCellLeftHand = "inventory_cell_left_hand"
+        static let inventoryCellRightHand = "inventory_cell_right_hand"
         static let craftCell = "craft_cell"
         static let bgPortal = "bg_portal"
         static let button = "button"
-        static let leftHand = "left_hand"
-        static let rightHand = "right_hand"
     }
 
 //    static let minZoomScale = 0.3

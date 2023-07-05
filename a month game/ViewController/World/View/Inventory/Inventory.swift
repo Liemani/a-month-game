@@ -41,6 +41,7 @@ protocol InventoryProtocol<Item>: Sequence {
     func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
+    func remove(_ item: Item)
 
 }
 
@@ -169,6 +170,17 @@ extension Inventory: InventoryProtocol {
         item.position = CGPoint()
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    func remove(_ item: GameObject) {
+        if let activatedGO = TouchHandlerContainer.default.activatedGO,
+           item == activatedGO {
+            TouchHandlerContainer.default.activatedGO = nil
+        }
+
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+        item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {

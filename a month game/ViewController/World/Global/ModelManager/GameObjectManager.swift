@@ -12,11 +12,13 @@ class GameObjectManager {
     private static var _default: GameObjectManager?
     static var `default`: GameObjectManager { self._default! }
 
-    static func set(character: Character,
+    static func set(scene: WorldScene,
+                    character: Character,
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
-        self._default = GameObjectManager(character: character,
+        self._default = GameObjectManager(scene: scene,
+                                          character: character,
                                           chunkContainer: chunkContainer,
                                           invContainer: invContainer,
                                           accessibleGOTracker: accessibleGOTracker)
@@ -24,15 +26,18 @@ class GameObjectManager {
 
     static func free() { self._default = nil }
 
+    let scene: WorldScene
     let character: Character
     let chunkContainer: ChunkContainer
     let invContainer: InventoryContainer
     let accessibleGOTracker: AccessibleGOTracker
 
-    init(character: Character,
+    init(scene: WorldScene,
+         character: Character,
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
+        self.scene = scene
         self.character = character
         self.chunkContainer = chunkContainer
         self.invContainer = invContainer
@@ -40,12 +45,12 @@ class GameObjectManager {
     }
 
     func moveToBelongField(_ go: GameObject) {
-        let characterCoord = self.character.data.chunkCoord.coord
+        let characterCoord = self.character.chunkCoord.coord
 
         self.removeFromParent(go)
         self.chunkContainer.add(go)
 
-        if go.type.walkSpeed == -1.0
+        if !go.type.isWalkable
             && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
             self.accessibleGOTracker.add(go)
         }
@@ -64,18 +69,18 @@ class GameObjectManager {
         self.accessibleGOTracker.remove(go)
 
         self.removeFromParent(go)
-        go.data.set(coord: invCoord)
+        go.set(coord: invCoord)
         self.moveToBelongInv(go)
     }
 
     func interact(_ go: GameObject) {
-        print("interact go")
+        GameObjectInteractionHandler.handler[go.type](self.scene, go)
     }
 
     func interactToGO(_ go: GameObject, to targetGO: GameObject) {
         if targetGO.type == .woodFloorTile,
            let targetCoord = targetGO.chunkCoord {
-            go.data.set(coord: targetCoord)
+            go.set(coord: targetCoord)
             self.moveToBelongField(go)
 
             return
@@ -84,18 +89,11 @@ class GameObjectManager {
 
     func removeFromParent(_ go: GameObject) {
         if let chunk = go.parent as? Chunk {
-            chunk.data.remove(go)
+            chunk.remove(go)
             self.accessibleGOTracker.remove(go)
-        } else if go.parent?.parent is Inventory {
-            if let activatedGO = TouchHandlerContainer.default.activatedGO,
-               go == activatedGO {
-                TouchHandlerContainer.default.activatedGO = nil
-            }
-
-            FrameCycleUpdateManager.default.update(with: .craftWindow)
+        } else if let inventory = go.parent?.parent as? Inventory {
+            inventory.remove(go)
         }
-
-        go.removeFromParent()
     }
 
     func new(type goType: GameObjectType, chunkCoord: ChunkCoordinate) {

@@ -39,6 +39,10 @@ class GameObjectRepository {
 
 extension GameObjectMO {
 
+    func update(to goType: GameObjectType) {
+        self.typeID = Int32(goType.rawValue)
+    }
+
     func update(to chunkCoord: ChunkCoordinate) {
         if let chunkCoordMO = self.chunkCoord {
             chunkCoordMO.update(chunkCoord)

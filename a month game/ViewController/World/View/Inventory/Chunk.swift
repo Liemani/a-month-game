@@ -118,6 +118,12 @@ extension Chunk: InventoryProtocol {
         self.addChild(item)
     }
 
+    func remove(_ item: GameObject) {
+        self.data.remove(item)
+
+        item.removeFromParent()
+    }
+
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return (self.children as! [GameObject]).makeIterator()
     }

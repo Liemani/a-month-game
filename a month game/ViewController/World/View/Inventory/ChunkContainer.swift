@@ -241,6 +241,14 @@ extension ChunkContainer: InventoryProtocol {
         self.chunks[direction].add(item)
     }
 
+    func remove(_ item: Item) {
+        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
+            return
+        }
+
+        self.chunks[direction].remove(item)
+    }
+
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return CombineSequences(sequences: self.chunks)
     }

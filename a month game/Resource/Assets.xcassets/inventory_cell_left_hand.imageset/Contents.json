@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "right_hand.png",
+      "filename" : "inventory_cell_left_hand.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
