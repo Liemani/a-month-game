@@ -76,7 +76,7 @@ extension Address: Equatable {
 extension Address: CustomDebugStringConvertible {
 
     var debugDescription: String {
-        return "\(self.chunk), (\(self.tile))"
+        return "\(self.chunk), \(self.tile)"
     }
 
 }

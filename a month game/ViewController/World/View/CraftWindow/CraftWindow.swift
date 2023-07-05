@@ -39,7 +39,7 @@ class CraftObject: SKSpriteNode {
         self.alpha = 1.0
 
         for go in self.consumeTargets {
-            go.removeHIghlight()
+            go.removeHighlight()
         }
     }
 

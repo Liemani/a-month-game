@@ -15,6 +15,7 @@ class GameObject: SKSpriteNode {
 
     var id: Int { self.data.id }
     var type: GameObjectType { self.data.type }
+    var variant: Int { self.data.variant }
 
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
     var invCoord: InventoryCoordinate? { self.data.invCoord }
@@ -37,23 +38,23 @@ class GameObject: SKSpriteNode {
         super.init(texture: texture, color: .white, size: size)
 
         self.zPosition = !self.type.isTile
-        ? Constant.ZPosition.gameObject
-        : Constant.ZPosition.tile
+            ? Constant.ZPosition.gameObject
+            : Constant.ZPosition.tile
     }
 
-    convenience init(type goType: GameObjectType) {
-        let goData = GameObjectData(goType: goType)
+    convenience init(type goType: GameObjectType, variant: Int) {
+        let goData = GameObjectData(goType: goType, variant: variant)
         self.init(from: goData)
     }
 
-    convenience init(type goType: GameObjectType, coord chunkCoord: ChunkCoordinate) {
-        let goData = GameObjectData(goType: goType)
+    convenience init(type goType: GameObjectType, variant: Int, coord chunkCoord: ChunkCoordinate) {
+        let goData = GameObjectData(goType: goType, variant: variant)
         goData.set(coord: chunkCoord)
         self.init(from: goData)
     }
 
-    convenience init(type goType: GameObjectType, coord invCoord: InventoryCoordinate) {
-        let goData = GameObjectData(goType: goType)
+    convenience init(type goType: GameObjectType, variant: Int, coord invCoord: InventoryCoordinate) {
+        let goData = GameObjectData(goType: goType, variant: variant)
         goData.set(coord: invCoord)
         self.init(from: goData)
     }
@@ -76,7 +77,7 @@ class GameObject: SKSpriteNode {
         self.colorBlendFactor = Constant.accessibleGOColorBlendFactor
     }
 
-    func removeHIghlight() {
+    func removeHighlight() {
         self.colorBlendFactor = 0.0
     }
 
@@ -84,6 +85,13 @@ class GameObject: SKSpriteNode {
     func set(type goType: GameObjectType) {
         self.data.set(type: goType)
         self.texture = goType.texture
+        self.size = goType.isTile || !goType.isWalkable
+            ? Constant.defaultNodeSize
+            : Constant.gameObjectSize
+    }
+
+    func set(variant: Int) {
+        self.data.set(variant: variant)
     }
 
     func set(coord chunkCoord: ChunkCoordinate) {

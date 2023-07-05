@@ -29,7 +29,7 @@ class TouchHandlerContainer {
 
     init(chunkContainer: ChunkContainer, invContainer: InventoryContainer) {
         self.goHandler = GameObjectTouchHandler()
-        self.fieldHandler = FieldTouchHandler(chunkContainer: chunkContainer)
+        self.fieldHandler = FieldTouchHandler(invContainer: invContainer, chunkContainer: chunkContainer)
         self.invTouchHandler = InventoryTouchHandler()
         self.craftTouchHandler = CraftTouchHandler(invContainer: invContainer)
     }

@@ -26,6 +26,8 @@ class GameObjectManager {
 
     static func free() { self._default = nil }
 
+    let goInteractionHandlerManager: GameObjectInteractionHandlerManager
+
     let scene: WorldScene
     let character: Character
     let chunkContainer: ChunkContainer
@@ -37,6 +39,8 @@ class GameObjectManager {
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
+        self.goInteractionHandlerManager = GameObjectInteractionHandlerManager(invContainer: invContainer, chunkContainer: chunkContainer)
+
         self.scene = scene
         self.character = character
         self.chunkContainer = chunkContainer
@@ -74,17 +78,27 @@ class GameObjectManager {
     }
 
     func interact(_ go: GameObject) {
-        GameObjectInteractionHandler.handler[go.type](go, self.invContainer)
+        guard let handler = self.goInteractionHandlerManager.goHandler[go.type] else {
+            return
+        }
+
+        handler(self.goInteractionHandlerManager, go)
     }
 
     func interactToGO(_ go: GameObject, to targetGO: GameObject) {
-        if targetGO.type == .woodFloorTile,
+        if targetGO.type.isTile,
            let targetCoord = targetGO.chunkCoord {
             go.set(coord: targetCoord)
             self.moveToBelongField(go)
 
             return
         }
+
+        guard let handler = self.goInteractionHandlerManager.goToGOHandler[targetGO.type] else {
+            return
+        }
+
+        handler(self.goInteractionHandlerManager, go, targetGO)
     }
 
     func removeFromParent(_ go: GameObject) {
@@ -96,15 +110,25 @@ class GameObjectManager {
         }
     }
 
-    func new(type goType: GameObjectType, chunkCoord: ChunkCoordinate) {
-        let go = GameObject(type: goType, coord: chunkCoord)
-        self.moveToBelongField(go)
+    func new(type goType: GameObjectType,
+             variant: Int = 0,
+             count: Int = 1,
+             chunkCoord: ChunkCoordinate) {
+        for _ in 0 ..< count {
+            let go = GameObject(type: goType, variant: variant, coord: chunkCoord)
+            self.moveToBelongField(go)
+        }
     }
 
-    func new(type goType: GameObjectType, invCoord: InventoryCoordinate) {
-        let go = GameObject(type: goType, coord: invCoord)
+    func new(type goType: GameObjectType, variant: Int = 0, invCoord: InventoryCoordinate) {
+        let go = GameObject(type: goType, variant: variant, coord: invCoord)
         self.moveToBelongInv(go)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    func remove(_ go: GameObject) {
+        self.removeFromParent(go)
+        go.delete()
     }
 }

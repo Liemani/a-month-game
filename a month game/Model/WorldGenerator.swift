@@ -34,14 +34,14 @@ final class WorldGenerator {
         self.new(type: .woodWall, x: 1, y: 0)
         self.new(type: .woodWall, x: 1, y: -1)
 
-        for x in 0...20 {
-            self.new(type: .stone, x: x, y: -3)
-            self.new(type: .woodStick, x: x, y: -4)
-        }
-
         for x in -20 ... -5 {
             self.generateTerrain(x, 0)
         }
+
+        self.new(type: .treeOak, x: 5, y: 5)
+        self.new(type: .treeOak, x: 5, y: 6)
+        self.new(type: .treeOak, x: 6, y: 5)
+        self.new(type: .treeOak, x: 6, y: 6)
 
         try! WorldServiceContainer.default.moContext.save()
     }
@@ -58,7 +58,7 @@ final class WorldGenerator {
 
     private func new(type: GameObjectType, x: Int, y: Int) {
         let id = WorldServiceContainer.default.idGeneratorServ.generate()
-        let goMO = WorldServiceContainer.default.goRepo.new(id: id, type: type)
+        let goMO = WorldServiceContainer.default.goRepo.new(id: id, type: type, variant: 0)
         let chunkCoord = ChunkCoordinate(x, y)
         goMO.update(to: chunkCoord)
     }

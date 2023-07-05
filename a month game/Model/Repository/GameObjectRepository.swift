@@ -23,11 +23,11 @@ class GameObjectRepository {
         self.invCoordDataSource = invCoordDataSource
     }
 
-    func new(id: Int, type: GameObjectType) -> GameObjectMO {
+    func new(id: Int, type: GameObjectType, variant: Int) -> GameObjectMO {
         let goMO = self.goDataSource.new()
 
         goMO.id = Int32(id)
-        goMO.typeID = Int32(type.rawValue)
+        goMO.typeID = Int32((variant << 16) | type.rawValue)
 
         goMO.chunkCoord = nil
         goMO.invCoord = nil
@@ -39,8 +39,15 @@ class GameObjectRepository {
 
 extension GameObjectMO {
 
+    var type: Int { Int(self.typeID & 0xffff) }
+    var variant: Int { Int(UInt32(self.typeID) >> 16) }
+
     func update(to goType: GameObjectType) {
         self.typeID = Int32(goType.rawValue)
+    }
+
+    func update(to variant: Int) {
+        self.typeID = Int32(truncatingIfNeeded: variant << 16) | self.typeID
     }
 
     func update(to chunkCoord: ChunkCoordinate) {

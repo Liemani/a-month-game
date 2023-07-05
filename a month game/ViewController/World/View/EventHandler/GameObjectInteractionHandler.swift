@@ -7,138 +7,109 @@
 
 import Foundation
 
-class GameObjectInteractionHandler {
+class GameObjectInteractionHandlerManager {
 
-    static let handler: [(GameObject, InventoryContainer) -> Void] = [
-        { go, invContainer in // none
+    let invContainer: InventoryContainer
+    let chunkContainer: ChunkContainer
 
-        },
+    init(invContainer: InventoryContainer, chunkContainer: ChunkContainer) {
+        self.invContainer = invContainer
+        self.chunkContainer = chunkContainer
+    }
 
-        { go, invContainer in // caveHoleTile
-
-        },
-
-        { go, invContainer in // waterTile
-
-        },
-
-        { go, invContainer in // caveCeilTile
-            guard let emptyInvCoord = invContainer.emptyCoord else {
-                return
-            }
-
-            guard invContainer.is(equiping: .stonePickaxe) else {
+    let goHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject) -> Void] = [
+        .caveCeilTile: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
+                  handlerManager.invContainer.is(equiping: .stonePickaxe) else {
                 return
             }
 
             go.set(type: .caveHoleTile)
-            let stone = GameObject(type: .stone, coord: emptyInvCoord)
-            GameObjectManager.default.moveToBelongInv(stone)
+            GameObjectManager.default.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
         },
-
-        { go, invContainer in // sandTile
-            guard let emptyInvCoord = invContainer.emptyCoord else {
-                return
-            }
-
-            guard invContainer.is(equiping: .stoneShovel) else {
+        .sandTile: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
+                  handlerManager.invContainer.is(equiping: .stoneShovel) else {
                 return
             }
 
             go.set(type: .clayTile)
-            let sand = GameObject(type: .sand, coord: emptyInvCoord)
-            GameObjectManager.default.moveToBelongInv(sand)
+            GameObjectManager.default.new(type: .sand, variant: 0, invCoord: emptyInvCoord)
         },
-
-        { go, invContainer in // clayTile
-            guard let emptyInvCoord = invContainer.emptyCoord else {
-                return
-            }
-
-            guard invContainer.is(equiping: .stoneShovel) else {
+        .clayTile: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
+                  handlerManager.invContainer.is(equiping: .stoneShovel) else {
                 return
             }
 
             go.set(type: .caveCeilTile)
-            let clay = GameObject(type: .clay, coord: emptyInvCoord)
-            GameObjectManager.default.moveToBelongInv(clay)
+            GameObjectManager.default.new(type: .clay, variant: 0, invCoord: emptyInvCoord)
         },
-
-        { go, invContainer in // cobblestoneTile
-            guard let emptyInvCoord = invContainer.emptyCoord else {
+        .cobblestoneTile: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord else {
                 return
             }
 
             go.set(type: .sandTile)
-            let stone = GameObject(type: .stone, coord: emptyInvCoord)
-            GameObjectManager.default.moveToBelongInv(stone)
+            GameObjectManager.default.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
         },
-
-        { go, invContainer in // dirtTile
-            guard let emptyInvCoord = invContainer.emptyCoord else {
-                return
-            }
-
-            guard invContainer.is(equiping: .stoneShovel) else {
+        .dirtTile: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
+                  handlerManager.invContainer.is(equiping: .stoneShovel) else {
                 return
             }
 
             go.set(type: .clayTile)
-            let dirt = GameObject(type: .dirt, coord: emptyInvCoord)
-            GameObjectManager.default.moveToBelongInv(dirt)
+            GameObjectManager.default.new(type: .dirt, variant: 0, invCoord: emptyInvCoord)
         },
+        .treeOak: { handlerManager, go in
+            if handlerManager.invContainer.is(equiping: .stoneAxe) {
+                let chunkCoord = go.chunkCoord!
 
-        { go, invContainer in // woodFloorTile
+                GameObjectManager.default.new(type: .woodLog, chunkCoord: chunkCoord)
+                if go.variant == 0 {
+                    GameObjectManager.default.new(type: .woodStick,
+                                                  count: 2,
+                                                  chunkCoord: chunkCoord)
+                }
 
-        },
+                GameObjectManager.default.new(type: .treeOakSeed,
+                                              count: 2,
+                                              chunkCoord: chunkCoord)
 
-        { go, invContainer in // stone
+                GameObjectManager.default.remove(go)
 
-        },
+                return
+            }
 
-        { go, invContainer in // dirt
+            guard go.variant == 0,
+                  handlerManager.invContainer.space >= 2 else {
+                return
+            }
 
-        },
-
-        { go, invContainer in // sand
-
-        },
-
-        { go, invContainer in // clay
-
-        },
-
-        { go, invContainer in // pineCone
-
-        },
-
-        { go, invContainer in // pineTree
-
-        },
-
-        { go, invContainer in // woodWall
-
-        },
-
-        { go, invContainer in // woodStick
-
-        },
-
-        { go, invContainer in // stoneAxe
-
-        },
-
-        { go, invContainer in // stoneShovel
-
-        },
-
-        { go, invContainer in // stonePickaxe
-
-        },
-
-        { go, invContainer in // leafBag
-
+            go.set(variant: 1)
+            GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
+            GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
         },
     ]
 
+    let goToGOHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject, GameObject) -> Void] = [
+        .treeOakSeed: { handlerManager, go, targetGO in
+            let oakSeed = targetGO
+
+            guard go.type == .dirt,
+                    let seedChunkCoord = oakSeed.chunkCoord else {
+                return
+            }
+
+            let gos = handlerManager.chunkContainer.items(at: seedChunkCoord)!
+            guard let clayTile = gos.first(where: { $0.type == .clayTile }) else {
+                return
+            }
+
+            clayTile.set(type: .dirtTile)
+            oakSeed.set(type: .treeOak)
+            GameObjectManager.default.remove(go)
+        },
+    ]
 }

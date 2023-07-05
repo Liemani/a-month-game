@@ -447,7 +447,13 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-가방 만들기
+add tree sapling
+double click -> interaction or consume
+draw
+    log, leaves
+create tree
+inventory in characterInv
+    add leaf bag
 만약 한 청크를 건너 뛸 정도로 빠르게 이동하면 터지지 않을까?
     한 청크 이상을 건너는 속도는 불가능하도록 제한한다
 지상 및 지하를 미리 로딩해둔다
@@ -455,8 +461,6 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 menu button -> cancel all gesture
 캐릭터 이미지 추가하기
     옆에서 보는 이미지가 좋겠다
-inventory in characterInv
-    add leaf bag
 world generator
     generate in chunk unit dynamically
     sea
@@ -537,6 +541,8 @@ hide reset button to menu window
 이력서 정리해서 보내드리기
 
 ## low priority
+sand color is to yellow
+dirt has wrong outline
 add fade effect
 add sound
 long info touch

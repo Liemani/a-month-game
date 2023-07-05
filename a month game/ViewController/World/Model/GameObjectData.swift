@@ -12,10 +12,17 @@ class GameObjectData {
     private var mo: GameObjectMO
 
     var id: Int { Int(self.mo.id) }
-    var type: GameObjectType { GameObjectType(from: self.mo)! }
+    var type: GameObjectType
+    var variant: Int
 
     func set(type goType: GameObjectType) {
         self.mo.update(to: goType)
+        self.type = goType
+    }
+
+    func set(variant: Int) {
+        self.mo.update(to: variant)
+        self.variant = variant
     }
 
     private var _chunkCoord: ChunkCoordinate?
@@ -37,19 +44,23 @@ class GameObjectData {
     }
 
     // MARK: - init
-    init(goType: GameObjectType) {
+    init(goType: GameObjectType, variant: Int) {
         let id = WorldServiceContainer.default.idGeneratorServ.generate()
-        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: goType)
+        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: goType, variant: variant)
+        self.type = goType
+        self.variant = variant
         self._chunkCoord = nil
         self._invCoord = nil
     }
 
     init?(from goMO: GameObjectMO) {
-        self.mo = goMO
-
-        guard GameObjectType(from: goMO) != nil else {
+        guard let goType = GameObjectType(from: goMO) else {
             return nil
         }
+
+        self.mo = goMO
+        self.type = goType
+        self.variant = goMO.variant
 
         self._chunkCoord = nil
         self._invCoord = nil

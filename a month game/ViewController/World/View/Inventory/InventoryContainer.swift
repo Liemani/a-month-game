@@ -12,8 +12,8 @@ class InventoryContainer {
 
     let characterInv: CharacterInventory
 
-    var fieldInv: Inventory?
     var invInv: Inventory?
+    var fieldInv: Inventory?
 
     var leftGO: GameObject? { self.characterInv.leftGO }
     var rightGO: GameObject? { self.characterInv.rightGO }
@@ -40,6 +40,22 @@ class InventoryContainer {
 
     func `is`(equiping goType: GameObjectType) -> Bool {
         return self.leftGO?.type == goType || self.rightGO?.type == goType
+    }
+
+    var space: Int {
+        var space = 0
+
+        space += self.characterInv.space
+
+        if let invInv = self.invInv {
+            space += invInv.space
+        }
+
+        if let fieldInv = self.fieldInv {
+            space += fieldInv.space
+        }
+
+        return space
     }
 
 }

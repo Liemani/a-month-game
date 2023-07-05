@@ -52,6 +52,7 @@ extension CraftTouchHandler: TouchEventHandler {
 
         let emptyIndex = self.invContainer.emptyCoord!
         GameObjectManager.default.new(type: self.craftObject.goType,
+                                      variant: 0,
                                       invCoord: emptyIndex)
 
         self.complete()

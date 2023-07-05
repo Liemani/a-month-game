@@ -24,6 +24,8 @@ class InventoryCell: SKSpriteNode {
         return InventoryCoordinate(inventory.id, index)
     }
 
+    var isEmpty: Bool { self.children.isEmpty }
+
 }
 
 protocol InventoryProtocol<Item>: Sequence {
@@ -52,6 +54,8 @@ class Inventory: SKSpriteNode {
     var cellCount: Int
     let cellWidth: Double
     let cellSpacing: Double
+
+    var cells: [InventoryCell] { self.children as! [InventoryCell] }
 
     init(id: Int,
          texture: SKTexture,
@@ -103,8 +107,8 @@ class Inventory: SKSpriteNode {
     }
 
     var emptyCoord: Int? {
-        for (index, cell) in self.children.enumerated() {
-            if cell.children.first == nil {
+        for (index, cell) in self.cells.enumerated() {
+            if cell.isEmpty {
                 return index
             }
         }
@@ -118,6 +122,18 @@ class Inventory: SKSpriteNode {
             }
         }
         return nil
+    }
+
+    var space: Int {
+        var space = 0
+
+        for cell in self.cells {
+            if cell.isEmpty {
+                space += 1
+            }
+        }
+
+        return space
     }
 
 }

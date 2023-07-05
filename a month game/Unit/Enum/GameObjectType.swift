@@ -26,21 +26,25 @@ enum GameObjectType: Int, CaseIterable {
     case cobblestoneTile
     case dirtTile
     case woodFloorTile
+    case treeOak
+    case pineTree
+    case woodWall
     case stone
     case dirt
     case sand
     case clay
-    case pineCone
-    case pineTree
-    case woodWall
+    case leaves
     case woodStick
+    case woodLog
+    case treeOakSeed
+    case pineCone
     case stoneAxe
     case stoneShovel
     case stonePickaxe
     case leafBag
 
     init?(from goMO: GameObjectMO) {
-        self.init(rawValue: Int(goMO.typeID))
+        self.init(rawValue: goMO.type)
     }
 
     private static let resources: [ResourceType] = [
@@ -53,14 +57,18 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_cobblestone_tile", 0.75, true, false),
         ("game_object_dirt_tile", 1.0, true, false),
         ("game_object_wood_floor_tile", 1.0, true, false),
+        ("game_object_tree_oak", -1.0, false, false),
+        ("game_object_pine_tree", -1.0, false, false),
+        ("game_object_wood_wall", -1.0, false, false),
         ("game_object_stone", 1.0, false, true),
         ("game_object_dirt", 1.0, false, true),
         ("game_object_sand", 1.0, false, true),
         ("game_object_clay", 1.0, false, true),
-        ("game_object_pine_cone", 1.0, false, true),
-        ("game_object_pine_tree", -1.0, false, false),
-        ("game_object_wood_wall", -1.0, false, false),
+        ("game_object_leaves", 1.0, false, true),
         ("game_object_wood_stick", 1.0, false, true),
+        ("game_object_wood_log", 1.0, false, true),
+        ("game_object_tree_oak_seed", 1.0, false, true),
+        ("game_object_pine_cone", 1.0, false, true),
         ("game_object_stone_axe", 1.0, false, true),
         ("game_object_stone_shovel", 1.0, false, true),
         ("game_object_stone_pickaxe", 1.0, false, true),

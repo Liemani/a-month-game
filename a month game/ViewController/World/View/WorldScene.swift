@@ -212,11 +212,11 @@ extension WorldScene {
 
     private func debugCode() {
         for go in self.chunkContainer {
-            print("id: \(go.id), typeID: \(go.type), coordinate: (\(go.chunkCoord!))")
+            print("id: \(go.id), typeID: \(go.type), coordinate: \(go.chunkCoord!)")
         }
 
         for go in self.characterInv {
-            print("id: \(go.id), typeID: \(go.type), coordinate: (\(go.invCoord!))")
+            print("id: \(go.id), typeID: \(go.type), coordinate: \(go.invCoord!)")
         }
     }
 
