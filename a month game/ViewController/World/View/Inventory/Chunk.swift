@@ -64,11 +64,11 @@ extension Chunk: InventoryProtocol {
     func contains(_ item: GameObject) -> Bool {
         let tileAddr = item.chunkCoord!.address.tile.value
 
-        guard let tileGOs = self.data.tileGOs(tileAddr: tileAddr) else {
+        guard let gos = self.data.tileGOs(tileAddr: tileAddr) else {
             return false
         }
 
-        for go in tileGOs {
+        for go in gos {
             if go.id == item.id {
                 return true
             }
@@ -76,23 +76,23 @@ extension Chunk: InventoryProtocol {
         return false
     }
 
-    func item(at coord: Coordinate<Int>) -> GameObject? {
+    func items(at coord: Coordinate<Int>) -> [GameObject]? {
         let addr = Address(coord.x, coord.y).tile.value
         if let tileGOs = self.data.tileGOs(tileAddr: addr) {
-            return tileGOs[0]
+            return tileGOs
         }
 
         return nil
     }
 
-    func itemAtLocation(of touch: UITouch) -> GameObject? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         let touchedLocation = touch.location(in: self)
         let touchedFieldCoord = FieldCoordinate(from: touchedLocation)
         let touchedChunkCoord = ChunkCoordinate(touchedFieldCoord.coord.x, touchedFieldCoord.coord.y)
 
         let tileAddr = touchedChunkCoord.address.tile.value
         if let tileGOs = self.data.tileGOs(tileAddr: tileAddr) {
-            return tileGOs[0]
+            return tileGOs
         }
 
         return nil
@@ -116,6 +116,12 @@ extension Chunk: InventoryProtocol {
         item.position = FieldCoordinate(tileCoord).fieldPoint
 
         self.addChild(item)
+    }
+
+    func remove(_ item: GameObject) {
+        self.data.remove(item)
+
+        item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {

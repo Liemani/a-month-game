@@ -26,6 +26,22 @@ class CharacterPositionUpdater {
         self.accessibleGOTracker = accessibleGOTracker
 
         self.timeInterval = 0
+        self.updateSpeedModifier()
+    }
+
+    func updateSpeedModifier() {
+        self.character.speedModifier = 1.0
+
+        guard let gos = self.chunkContainer.items(at: self.character.chunkCoord) else {
+            return
+        }
+
+        for go in gos {
+            let goWalkSpeed = go.type.walkSpeed
+
+            if goWalkSpeed < self.character.speedModifier { self.character.speedModifier = go.type.walkSpeed
+            }
+        }
     }
 
     func update(timeInterval: TimeInterval) {
@@ -34,7 +50,9 @@ class CharacterPositionUpdater {
         self.updateCharacterVelocity(timeInterval)
         self.resolveCharacterCollision()
 
-        if self.hasMovedToAnotherTile {
+        let hasMovedToAnotherTile = self.hasMovedToAnotherTile
+
+        if hasMovedToAnotherTile {
             FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
 
             if let direction = self.currChunkDirection {
@@ -47,11 +65,15 @@ class CharacterPositionUpdater {
         self.character.lastPosition = self.character.position
 
         self.saveCharacterPosition()
+
+        if hasMovedToAnotherTile {
+            self.updateSpeedModifier()
+        }
     }
 
     private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
         let deltaVector = self.character.velocityVector * timeInterval
-        self.character.position += deltaVector
+        self.character.position += deltaVector * self.character.speedModifier
     }
 
     // TODO: update wrong formula
@@ -70,7 +92,7 @@ class CharacterPositionUpdater {
 
     private func resolveCollisionOfNonWalkable() {
         for go in self.accessibleGOTracker.gos {
-            guard !go.type.isWalkable else { continue }
+            guard go.type.walkSpeed == -1.0 else { continue }
 
             let characterRadius = self.character.path!.boundingBox.width / 2.0
 

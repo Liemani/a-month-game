@@ -10,18 +10,30 @@ import SpriteKit
 
 class CharacterInventory: Inventory {
 
-    var leftHandGO: GameObject? { self.children.first!.children.first as! GameObject? }
-    var rightHandGO: GameObject? { self.children.last!.children.first as! GameObject? }
+    var leftGO: GameObject? { self.children.first!.children.first as! GameObject? }
+    var rightGO: GameObject? { self.children.last!.children.first as! GameObject? }
 
     init(id: Int) {
         var cells: [InventoryCell] = []
         cells.reserveCapacity(5)
-        let texture = SKTexture(imageNamed: "inventory_cell")
-        for _ in 0..<5 {
-            let cell = InventoryCell(texture: texture)
+
+        let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
+        let leftCellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCellLeftHand)
+        let rightCellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCellRightHand)
+
+        let leftCell = InventoryCell(texture: leftCellTexture)
+        leftCell.size = Constant.defaultNodeSize
+        cells.append(leftCell)
+
+        for _ in 1..<4 {
+            let cell = InventoryCell(texture: cellTexture)
             cell.size = Constant.defaultNodeSize
             cells.append(cell)
         }
+
+        let rightCell = InventoryCell(texture: rightCellTexture)
+        rightCell.size = Constant.defaultNodeSize
+        cells.append(rightCell)
 
         super.init(id: id,
                    texture: SKTexture(imageNamed: "game_object_none"),

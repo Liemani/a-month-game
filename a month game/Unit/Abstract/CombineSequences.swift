@@ -59,6 +59,7 @@ struct CombineSequences<Element>: Sequence, IteratorProtocol {
                 self.currentIndex += 1
             }
         }
+
         return nil
     }
 

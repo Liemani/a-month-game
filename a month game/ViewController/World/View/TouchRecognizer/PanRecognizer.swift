@@ -76,7 +76,7 @@ extension PanRecognizer: TouchRecognizer {
         self.cPoint = self.lmiTouch!.location(in: self.scene)
         let delta = self.cPoint - self.pPoint
 
-        self.character.position -= delta
+        self.character.position -= delta * self.character.speedModifier
     }
 
     func ended() {

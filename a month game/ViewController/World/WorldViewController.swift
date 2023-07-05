@@ -41,7 +41,8 @@ class WorldViewController: UIViewController {
         TouchHandlerContainer.set(chunkContainer: scene.chunkContainer,
                                   invContainer: scene.invContainer)
 
-        GameObjectManager.set(character: scene.character,
+        GameObjectManager.set(scene: scene,
+                              character: scene.character,
                               chunkContainer: scene.chunkContainer,
                               invContainer: scene.invContainer,
                               accessibleGOTracker: scene.accessibleGOTracker)

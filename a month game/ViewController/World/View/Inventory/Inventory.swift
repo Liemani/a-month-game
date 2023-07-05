@@ -24,22 +24,26 @@ class InventoryCell: SKSpriteNode {
         return InventoryCoordinate(inventory.id, index)
     }
 
+    var isEmpty: Bool { self.children.isEmpty }
+
 }
 
 protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Item
     associatedtype Coord
+    associatedtype Items
 
     func isValid(_ coord: Coord) -> Bool
     func contains(_ item: Item) -> Bool
 
-    func item(at coord: Coord) -> Item?
+    func items(at coord: Coord) -> Items?
 
-    func itemAtLocation(of touch: UITouch) -> Item?
+    func itemsAtLocation(of touch: UITouch) -> Items?
     func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
+    func remove(_ item: Item)
 
 }
 
@@ -50,6 +54,8 @@ class Inventory: SKSpriteNode {
     var cellCount: Int
     let cellWidth: Double
     let cellSpacing: Double
+
+    var cells: [InventoryCell] { self.children as! [InventoryCell] }
 
     init(id: Int,
          texture: SKTexture,
@@ -101,8 +107,8 @@ class Inventory: SKSpriteNode {
     }
 
     var emptyCoord: Int? {
-        for (index, cell) in self.children.enumerated() {
-            if cell.children.first == nil {
+        for (index, cell) in self.cells.enumerated() {
+            if cell.isEmpty {
                 return index
             }
         }
@@ -118,6 +124,18 @@ class Inventory: SKSpriteNode {
         return nil
     }
 
+    var space: Int {
+        var space = 0
+
+        for cell in self.cells {
+            if cell.isEmpty {
+                space += 1
+            }
+        }
+
+        return space
+    }
+
 }
 
 extension Inventory: InventoryProtocol {
@@ -130,18 +148,27 @@ extension Inventory: InventoryProtocol {
         return item.invCoord!.id == self.id
     }
 
-    func item(at coord: Int) -> GameObject? {
+    func items(at coord: Int) -> [GameObject]? {
         let cell = self.children[coord]
 
-        return cell.children.first as! GameObject?
+        if cell.children.count != 0 {
+            return cell.children as! [GameObject]?
+        } else {
+            return nil
+        }
     }
 
-    func itemAtLocation(of touch: UITouch) -> GameObject? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         for cell in self.children {
-            if let go = cell.children.first as! GameObject?, go.isBeing(touched: touch) {
-                    return go
+            if cell.isBeing(touched: touch) {
+                if cell.children.count != 0 {
+                    return cell.children as! [GameObject]?
+                } else {
+                    return nil
+                }
             }
         }
+
         return nil
     }
 
@@ -161,34 +188,50 @@ extension Inventory: InventoryProtocol {
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
+    func remove(_ item: GameObject) {
+        if let activatedGO = TouchHandlerContainer.default.activatedGO,
+           item == activatedGO {
+            TouchHandlerContainer.default.activatedGO = nil
+        }
+
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+        item.removeFromParent()
+    }
+
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return InventoryIterator(self)
     }
+
 }
 
 struct InventoryIterator: IteratorProtocol {
 
     let inv: Inventory
     var index: Int
+    var goIterator: IndexingIterator<[GameObject]>?
 
     init(_ inv: Inventory) {
         self.inv = inv
         self.index = 0
+
+        self.goIterator = self.inv.items(at: index)?.makeIterator()
     }
 
     mutating func next() -> GameObject? {
-        while index < self.inv.cellCount {
-//            if let go = self.inv.children[index].children.first {
-
-            if let go = self.inv.item(at: index) {
-                index += 1
-
+        while true {
+            if let go = self.goIterator?.next() {
                 return go
             }
 
             index += 1
+
+            if index == self.inv.cellCount {
+                return nil
+            }
+
+            self.goIterator = self.inv.items(at: index)?.makeIterator()
         }
-        return nil
     }
 
 }

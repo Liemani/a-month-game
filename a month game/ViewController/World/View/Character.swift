@@ -33,6 +33,8 @@ class Character: SKShapeNode {
 
     var velocityVector: CGVector
 
+    var speedModifier: Double
+
     private var accessibleRange: Int { Constant.characterAccessibleRange }
     var accessibleFrame: CGRect {
         let side = Constant.tileWidth * Double(self.accessibleRange * 2 + 1)
@@ -48,6 +50,7 @@ class Character: SKShapeNode {
         self.chunkChunkCoord = self.data.chunkCoord
         self.chunkChunkCoord.address.tile.rawCoord = Coordinate()
         self.velocityVector = CGVector()
+        self.speedModifier = 1.0
 
         super.init()
 

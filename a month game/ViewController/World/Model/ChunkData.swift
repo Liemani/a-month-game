@@ -7,54 +7,56 @@
 
 import Foundation
 
-class TileGameObjects: Sequence {
-
-    var gos: [GameObject]
-
-    var count: Int { self.gos.count }
-
-    init(go: GameObject) {
-        self.gos = [go]
-    }
-
-    func append(_ go: GameObject) {
-        self.gos.append(go)
-    }
-
-    func remove(_ go: GameObject) {
-        self.gos.removeAll { $0.id == go.id }
-    }
-
-    func makeIterator() -> some IteratorProtocol<GameObject> {
-        return self.gos.makeIterator()
-    }
-
-    subscript(index: Int) -> GameObject {
-        get { self.gos[index] }
-        set { self.gos[index] = newValue }
-    }
-
-}
+//class TileGameObjects: Sequence {
+//
+//    typealias Element = GameObject
+//
+//    var gos: [GameObject]
+//
+//    var count: Int { self.gos.count }
+//
+//    init(go: GameObject) {
+//        self.gos = [go]
+//    }
+//
+//    func append(_ go: GameObject) {
+//        self.gos.append(go)
+//    }
+//
+//    func remove(_ go: GameObject) {
+//        self.gos.removeAll { $0.id == go.id }
+//    }
+//
+//    func makeIterator() -> some IteratorProtocol<GameObject> {
+//        return self.gos.makeIterator()
+//    }
+//
+//    subscript(index: Int) -> GameObject {
+//        get { self.gos[index] }
+//        set { self.gos[index] = newValue }
+//    }
+//
+//}
 
 struct ChunkData {
 
-    var gos: [UInt8: TileGameObjects]
+    var gos: [UInt8: [GameObject]]
 
     init() {
         self.gos = [:]
     }
 
-    func tileGOs(tileAddr: UInt8) -> TileGameObjects? {
+    func tileGOs(tileAddr: UInt8) -> [GameObject]? {
         return self.gos[tileAddr]
     }
 
     mutating func add(_ go: GameObject) {
         let goTileAddr = go.chunkCoord!.address.tile.value
 
-        if let tileGOs = self.gos[goTileAddr] {
-            tileGOs.append(go)
+        if self.gos[goTileAddr] == nil {
+            self.gos[goTileAddr] = [go]
         } else {
-            self.gos[goTileAddr] = TileGameObjects(go: go)
+            self.gos[goTileAddr]!.append(go)
         }
     }
 
@@ -65,10 +67,10 @@ struct ChunkData {
             return
         }
 
-        if tileGOs.count == 1 {
-            self.gos[goTileAddr] = nil
+        if tileGOs.count != 1 {
+            self.gos[goTileAddr]!.removeAll { $0 == go }
         } else {
-            tileGOs.remove(go)
+            self.gos[goTileAddr] = nil
         }
     }
 

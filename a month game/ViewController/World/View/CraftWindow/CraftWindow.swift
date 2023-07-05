@@ -18,7 +18,7 @@ class CraftObject: SKSpriteNode {
         self.goType = goType
         self.consumeTargets = []
 
-        super.init(texture: goType.texture, color: .white, size: Constant.defaultNodeSize)
+        super.init(texture: goType.texture, color: .white, size: Constant.gameObjectSize)
 
         self.zPosition = Constant.ZPosition.gameObject
     }
@@ -39,7 +39,7 @@ class CraftObject: SKSpriteNode {
         self.alpha = 1.0
 
         for go in self.consumeTargets {
-            go.removeHIghlight()
+            go.removeHighlight()
         }
     }
 

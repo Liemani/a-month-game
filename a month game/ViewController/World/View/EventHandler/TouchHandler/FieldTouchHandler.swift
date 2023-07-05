@@ -10,12 +10,14 @@ import SpriteKit
 
 class FieldTouchHandler {
 
+    var invContainer: InventoryContainer
     var chunkContainer: ChunkContainer
 
     var touch: UITouch!
     var bChunkCoord: ChunkCoordinate!
 
-    init(chunkContainer: ChunkContainer) {
+    init(invContainer: InventoryContainer, chunkContainer: ChunkContainer) {
+        self.invContainer = invContainer
         self.chunkContainer = chunkContainer
     }
 
@@ -47,6 +49,12 @@ extension FieldTouchHandler: TouchEventHandler {
             activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil
             self.complete()
+
+            return
+        }
+
+        if self.invContainer.is(equiping: .stoneShovel) {
+            GameObjectManager.default.new(type: .dirtTile, chunkCoord: chunkCoord)
 
             return
         }
