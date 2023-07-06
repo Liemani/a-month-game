@@ -91,6 +91,15 @@ class GameObjectInteractionHandlerManager {
             GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
             GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
         },
+        .weed: { handlerManager, go in
+            guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
+                  handlerManager.invContainer.is(equiping: .sickle) else {
+                return
+            }
+
+            GameObjectManager.default.new(type: .weedLeaves, invCoord: emptyInvCoord)
+            GameObjectManager.default.remove(go)
+        }
     ]
 
     let goToGOHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject, GameObject) -> Void] = [

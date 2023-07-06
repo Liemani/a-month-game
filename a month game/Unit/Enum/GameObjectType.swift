@@ -36,7 +36,8 @@ enum GameObjectType: Int, CaseIterable {
     case dirt
     case sand
     case clay
-    case leaves
+    case treeLeaves
+    case weedLeaves
     case woodStick
     case woodLog
     case treeOakSeed
@@ -44,6 +45,7 @@ enum GameObjectType: Int, CaseIterable {
     case stoneAxe
     case stoneShovel
     case stonePickaxe
+    case sickle
     case leafBag
 
     init?(from goMO: GameObjectMO) {
@@ -68,7 +70,8 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_dirt", 1.0, 0, 1, false, true),
         ("game_object_sand", 1.0, 0, 1, false, true),
         ("game_object_clay", 1.0, 0, 1, false, true),
-        ("game_object_leaves", 1.0, 0, 1, false, true),
+        ("game_object_tree_leaves", 1.0, 0, 1, false, true),
+        ("game_object_weed_leaves", 1.0, 0, 1, false, true),
         ("game_object_wood_stick", 1.0, 0, 1, false, true),
         ("game_object_wood_log", 1.0, 0, 1, false, true),
         ("game_object_tree_oak_seed", 1.0, 0, 1, false, true),
@@ -76,6 +79,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_stone_axe", 1.0, 0, 1, false, true),
         ("game_object_stone_shovel", 1.0, 0, 1, false, true),
         ("game_object_stone_pickaxe", 1.0, 0, 1, false, true),
+        ("game_object_sickle", 1.0, 0, 1, false, true),
         ("game_object_leaf_bag", 1.0, 2, 1, false, true),
     ]
 

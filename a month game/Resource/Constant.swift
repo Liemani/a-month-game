@@ -118,6 +118,8 @@ struct Constant {
         .stoneAxe: [.stone: 1, .woodStick: 1],
         .stonePickaxe: [.stone: 1, .woodStick: 1],
         .stoneShovel: [.stone: 1, .woodStick: 1],
+        .sickle: [.stone: 1, .woodStick: 1],
+        .leafBag: [.weedLeaves: 3],
     ]
 
     // MARK: - UserDefaults key
