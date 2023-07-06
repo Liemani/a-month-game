@@ -18,7 +18,14 @@ class CraftObject: SKSpriteNode {
         self.goType = goType
         self.consumeTargets = []
 
-        super.init(texture: goType.texture, color: .white, size: Constant.gameObjectSize)
+        super.init(texture: goType.textures[0], color: .white, size: Constant.gameObjectSize)
+
+        if goType.layerCount == 2 {
+            let cover = SKSpriteNode(texture: goType.textures[1])
+            cover.size = Constant.coverSize
+            cover.zPosition = Constant.ZPosition.gameObjectCover
+            self.addChild(cover)
+        }
 
         self.zPosition = Constant.ZPosition.gameObject
     }
@@ -43,15 +50,32 @@ class CraftObject: SKSpriteNode {
         }
     }
 
-    func update(goType: GameObjectType, consumeTargets: [GameObject]) {
+    func update(type goType: GameObjectType, consumeTargets: [GameObject]) {
         self.goType = goType
-        self.texture = goType.texture
+
+        self.texture = goType.textures[0]
+
+        if goType.layerCount == 2 {
+            if self.children.count == 1 {
+                let cover = self.children[0] as! SKSpriteNode
+                cover.texture = goType.textures[1]
+            } else {
+                let cover = SKSpriteNode(texture: goType.textures[1])
+                cover.size = Constant.coverSize
+                cover.zPosition = Constant.ZPosition.gameObjectCover
+                self.addChild(cover)
+            }
+        } else {
+            self.removeAllChildren()
+        }
+
         self.consumeTargets = consumeTargets
     }
 
     func clear() {
         self.goType = .none
-        self.texture = self.goType.texture
+        self.removeAllChildren()
+        self.texture = self.goType.textures[0]
         self.consumeTargets.removeAll()
     }
 
@@ -86,7 +110,7 @@ class CraftCell: SKSpriteNode {
     }
 
     func update(type goType: GameObjectType, consumeTargets: [GameObject]) {
-        self.craftObject.update(goType: goType, consumeTargets: consumeTargets)
+        self.craftObject.update(type: goType, consumeTargets: consumeTargets)
         if goType == .none {
             self.deactivate()
         } else {

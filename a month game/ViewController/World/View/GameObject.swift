@@ -30,12 +30,20 @@ class GameObject: SKSpriteNode {
     init(from goData: GameObjectData) {
         self.data = goData
 
-        let texture = goData.type.texture
+        let texture = goData.type.textures[0]
+
         let size = goData.type.isTile || !goData.type.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize
 
         super.init(texture: texture, color: .white, size: size)
+
+        if goData.type.layerCount == 2 {
+            let cover = SKSpriteNode(texture: goData.type.textures[1])
+            cover.size = Constant.coverSize
+            cover.zPosition = Constant.ZPosition.gameObjectCover
+            self.addChild(cover)
+        }
 
         self.zPosition = !self.type.isTile
             ? Constant.ZPosition.gameObject
@@ -84,7 +92,23 @@ class GameObject: SKSpriteNode {
     // MARK: -
     func set(type goType: GameObjectType) {
         self.data.set(type: goType)
-        self.texture = goType.texture
+
+        self.texture = goType.textures[0]
+
+        if goType.layerCount == 2 {
+            if self.children.count == 1 {
+                let cover = self.children[0] as! SKSpriteNode
+                cover.texture = goType.textures[1]
+            } else {
+                let cover = SKSpriteNode(texture: goType.textures[1])
+                cover.size = Constant.coverSize
+                cover.zPosition = Constant.ZPosition.gameObjectCover
+                self.addChild(cover)
+            }
+        } else {
+            self.removeAllChildren()
+        }
+
         self.size = goType.isTile || !goType.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize

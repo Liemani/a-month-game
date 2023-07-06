@@ -24,8 +24,7 @@ class MovingLayer: SKNode {
         self.chunkContainer = chunkContainer
 
         // MARK: tile
-        let resourceName = "tile_default"
-        let tileTexture = SKTexture(imageNamed: resourceName)
+        let tileTexture = SKTexture(imageNamed: Constant.ResourceName.grassTile)
         let tileDefinition = SKTileDefinition(texture: tileTexture)
         let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
         let tileSet = SKTileSet(tileGroups: [tileGroup])

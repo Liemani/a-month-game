@@ -10,10 +10,10 @@ import SpriteKit
 
 struct Constant {
 
-    static let tileTextureWidth = 16.0
+    static let tileTextureWidth = 64.0
     static let tileTextureSize = CGSize(width: tileTextureWidth, height: tileTextureWidth)
 
-    static let tileScale = 6.0
+    static let tileScale = 1.5
     static let tileWidth = tileTextureWidth * tileScale
 
     static let defaultWidth = tileWidth
@@ -22,6 +22,7 @@ struct Constant {
     static let tileSize = defaultNodeSize
 
     static let gameObjectSize = defaultNodeSize * 0.9
+    static let coverSize = defaultNodeSize * 0.9
 
     static let margin = defaultWidth / 2.0
 
@@ -52,7 +53,7 @@ struct Constant {
                                            y: defaultWidth / 2.0 + invCellSpacing)
     static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultWidth)
     static let invCellCount: Int = 5
-    static let invCellSpacing: CGFloat = tileTextureWidth
+    static let invCellSpacing: CGFloat = 16.0
 
     // MARK: craft pane
     static let craftWindowPosition = CGPoint(x: tileWidth / 2 + invCellSpacing, y: sceneSize.height / 2.0)
@@ -77,7 +78,7 @@ struct Constant {
                 static let chunkContainer = 0.0
                     static let tile = 10.0
                     static let gameObject = 20.0
-                    static let gameObjectCover = 40.0
+                        static let gameObjectCover = 20.0
             static let character = 30.0
         static let ui = 100.0
             static let characterInv = 0.0
@@ -140,6 +141,7 @@ struct Constant {
         static let craftCell = "craft_cell"
         static let bgPortal = "bg_portal"
         static let button = "button"
+        static let grassTile = "grass_tile"
     }
 
 //    static let minZoomScale = 0.3

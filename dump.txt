@@ -447,8 +447,13 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+change field touch
+dirt to clay tile will make dirt tile removing dirt
 add tree sapling
 double click -> interaction or consume
+    field GO also can be activated
+implement underground
+remove GO when put to water
 draw
     log, leaves
 create tree
