@@ -447,7 +447,21 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+fix bug
+    make impossible to move GO when the cell is possessed by another GO
+        when touch cell which has GO -> relay handle to GO
+    move game object inventory cells proper point
+    item is not entered proper coordinate
+    close inventory when the GO is moved another cell or to field
+    the field inv is belong to world layer, but it should follow GO
+if the id of inventory is not 0, inventory GO should not put
 change field touch
+add
+    sickle
+    saw
+    board
+    block
+    wood box
 dirt to clay tile will make dirt tile removing dirt
 add tree sapling
 double click -> interaction or consume

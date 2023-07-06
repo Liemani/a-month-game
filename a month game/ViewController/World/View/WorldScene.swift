@@ -82,16 +82,20 @@ class WorldScene: SKScene {
 
     func initSceneLayer() {
         let worldLayer = SKNode()
+
         worldLayer.xScale = Constant.sceneScale
         worldLayer.yScale = Constant.sceneScale
         worldLayer.position = Constant.worldLayer
         worldLayer.zPosition = Constant.ZPosition.worldLayer
+
         self.addChild(worldLayer)
         self.worldLayer = worldLayer
 
         // MARK: moving layer
         worldLayer.addChild(self.character)
         worldLayer.addChild(movingLayer)
+        movingLayer.addChild(self.invContainer.fieldInv)
+        self.invContainer.fieldInv.zPosition = Constant.ZPosition.fieldInv
 
         // MARK: ui
         let ui = SKNode()
@@ -108,6 +112,7 @@ class WorldScene: SKScene {
 
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
+        ui.addChild(self.invContainer.invInv)
 
         self.addChild(self.munuWindow)
     }

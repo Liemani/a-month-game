@@ -6,13 +6,28 @@
 //
 
 import Foundation
+import SpriteKit
 
 class GameObjectInteractionHandlerManager {
+
+    let ui: SKNode
+
+    let invInv: GameObjectInventory
+    let fieldInv: GameObjectInventory
 
     let invContainer: InventoryContainer
     let chunkContainer: ChunkContainer
 
-    init(invContainer: InventoryContainer, chunkContainer: ChunkContainer) {
+    init(
+        ui: SKNode,
+        invInv: GameObjectInventory,
+        fieldInv: GameObjectInventory,
+        invContainer: InventoryContainer,
+        chunkContainer: ChunkContainer
+    ) {
+        self.ui = ui
+        self.invInv = invInv
+        self.fieldInv = fieldInv
         self.invContainer = invContainer
         self.chunkContainer = chunkContainer
     }
@@ -99,7 +114,42 @@ class GameObjectInteractionHandlerManager {
 
             GameObjectManager.default.new(type: .weedLeaves, invCoord: emptyInvCoord)
             GameObjectManager.default.remove(go)
-        }
+        },
+        .leafBag: { handlerManager, go in
+            if handlerManager.invInv.id == go.id
+                && !handlerManager.invInv.isHidden {
+                handlerManager.invInv.isHidden = true
+
+                FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+                return
+            }
+
+            if handlerManager.fieldInv.id == go.id
+                && !handlerManager.fieldInv.isHidden {
+                handlerManager.fieldInv.isHidden = true
+
+                FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+                return
+            }
+
+            if go.isOnField {
+                handlerManager.fieldInv.update(go)
+                handlerManager.fieldInv.isHidden = false
+                handlerManager.fieldInv.position = go.positionInWorld
+                + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
+            } else {
+                handlerManager.invInv.update(go)
+                handlerManager.invInv.isHidden = false
+                handlerManager.invInv.position =
+                    go.convert(CGPoint(), to: handlerManager.ui)
+                    + CGPoint(x: 0,
+                              y: Constant.defaultWidth + Constant.invCellSpacing)
+            }
+
+            FrameCycleUpdateManager.default.update(with: .craftWindow)
+        },
     ]
 
     let goToGOHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject, GameObject) -> Void] = [
@@ -120,5 +170,27 @@ class GameObjectInteractionHandlerManager {
             oakSeed.set(type: .treeOak)
             GameObjectManager.default.remove(go)
         },
+        .leafBag: { handlerManager, go, targetGO in
+            var index: Int = 0
+
+            if let inv = handlerManager.invContainer.inv(id: targetGO.id) {
+                if let emptyIndex = inv.emptyCoord {
+                    index = emptyIndex
+                } else {
+                    return
+                }
+            } else {
+                let emptyIndex = WorldServiceContainer.default.invServ.emptyIndex(id: targetGO.id)
+
+                if index < targetGO.type.invSpace {
+                    index = emptyIndex
+                } else {
+                    return
+                }
+            }
+
+            let invCoord = InventoryCoordinate(targetGO.id, index)
+            GameObjectManager.default.move(go, to: invCoord)
+        }
     ]
 }

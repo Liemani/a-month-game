@@ -42,6 +42,9 @@ class WorldViewController: UIViewController {
                                   invContainer: scene.invContainer)
 
         GameObjectManager.set(scene: scene,
+                              ui: scene.ui,
+                              invInv: scene.invContainer.invInv,
+                              fieldInv: scene.invContainer.fieldInv,
                               character: scene.character,
                               chunkContainer: scene.chunkContainer,
                               invContainer: scene.invContainer,

@@ -35,11 +35,12 @@ class CharacterInventory: Inventory {
         rightCell.size = Constant.defaultNodeSize
         cells.append(rightCell)
 
-        super.init(id: id,
-                   texture: SKTexture(imageNamed: "game_object_none"),
+        super.init(texture: SKTexture(imageNamed: "game_object_none"),
                    cells: cells,
                    cellWidth: Constant.defaultWidth,
                    cellSpacing: Constant.invCellSpacing)
+
+        self.update(id: id)
 
         self.position = Constant.invWindowPosition
         self.size = CGSize()

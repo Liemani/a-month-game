@@ -79,6 +79,7 @@ struct Constant {
                     static let tile = 10.0
                     static let gameObject = 20.0
                         static let gameObjectCover = 20.0
+                static let fieldInv = 50.0
             static let character = 30.0
         static let ui = 100.0
             static let characterInv = 0.0

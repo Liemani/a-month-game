@@ -92,6 +92,7 @@
 		03EA27BC2A442B5D007BAF4F /* TouchBeganEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EA27BB2A442B5D007BAF4F /* TouchBeganEventManager.swift */; };
 		03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */; };
 		03F6CD2A2A553DF300403EAF /* GameObjectInteractionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CD292A553DF300403EAF /* GameObjectInteractionHandler.swift */; };
+		03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */; };
 		03F7A2622A39E6420061E030 /* WorldServiceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7A2612A39E6420061E030 /* WorldServiceContainer.swift */; };
 		03F7A2662A39EBCC0061E030 /* WorldDirectoryUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7A2652A39EBCC0061E030 /* WorldDirectoryUtility.swift */; };
 		03F7A26A2A3AFA8B0061E030 /* ChunkCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F7A2692A3AFA8B0061E030 /* ChunkCoordinate.swift */; };
@@ -195,6 +196,7 @@
 		03EA27BB2A442B5D007BAF4F /* TouchBeganEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchBeganEventManager.swift; sourceTree = "<group>"; };
 		03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchResponder.swift; sourceTree = "<group>"; };
 		03F6CD292A553DF300403EAF /* GameObjectInteractionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectInteractionHandler.swift; sourceTree = "<group>"; };
+		03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectInventory.swift; sourceTree = "<group>"; };
 		03F7A2612A39E6420061E030 /* WorldServiceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldServiceContainer.swift; sourceTree = "<group>"; };
 		03F7A2652A39EBCC0061E030 /* WorldDirectoryUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldDirectoryUtility.swift; sourceTree = "<group>"; };
 		03F7A2692A3AFA8B0061E030 /* ChunkCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkCoordinate.swift; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 				036FE51F2A41A73A007E66A5 /* Chunk.swift */,
 				0347BA7B2A48703900E31FA1 /* InventoryContainer.swift */,
 				03311DD12A1A3E3F0020ADB5 /* CharacterInventory.swift */,
+				03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */,
 				033C9E602A1C2D83000E1D50 /* Inventory.swift */,
 			);
 			path = Inventory;
@@ -677,6 +680,7 @@
 				03796C062A4FC9EE00462804 /* GameObjectTouchHandler.swift in Sources */,
 				03F7A2622A39E6420061E030 /* WorldServiceContainer.swift in Sources */,
 				0302612C2A3DBA530050E697 /* TapRecognizer.swift in Sources */,
+				03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */,
 				030261242A3C56E40050E697 /* MovingLayer.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,
 				03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */,

@@ -24,7 +24,7 @@ class GameObject: SKSpriteNode {
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
 
-    var positionFromSceneOrigin: CGPoint { self.position + self.parent!.position }
+    var positionInWorld: CGPoint { self.position + self.parent!.position }
 
     // MARK: - init
     init(from goData: GameObjectData) {
@@ -131,7 +131,7 @@ class GameObject: SKSpriteNode {
             return true
         }
 
-        return character.accessibleFrame.contains(self.positionFromSceneOrigin)
+        return character.accessibleFrame.contains(self.positionInWorld)
     }
 
     func delete() {

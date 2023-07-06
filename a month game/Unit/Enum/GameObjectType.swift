@@ -119,7 +119,7 @@ enum GameObjectType: Int, CaseIterable {
     var resources: [ResourceType] { GameObjectType.resources }
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
-    var invCount: Int { self.resources[self.rawValue].invCount }
+    var invSpace: Int { self.resources[self.rawValue].invCount }
     var layerCount: Int { self.resources[self.rawValue].layerCount }
     var walkSpeed: Double { self.resources[self.rawValue].walkSpeed }
     var isWalkable: Bool { self.walkSpeed != -1.0 }
