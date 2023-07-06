@@ -33,55 +33,54 @@ extension GameObjectTouchHandler: TouchEventHandler {
     }
 
     func ended() {
+        self.endedProcess()
+
+        self.complete()
+    }
+
+    private func endedProcess() {
         guard self.go.isBeing(touched: touch) else {
-            self.complete()
+            self.go.deactivate()
 
             return
         }
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
-            if self.go.isOnField {
-                GameObjectManager.default.interactToGO(activatedGO, to: go)
+            activatedGO.deactivate()
+            go.deactivate()
+
+            if activatedGO == go {
+                GameObjectManager.default.interact(go)
             } else {
-                if self.go != activatedGO {
-                    GameObjectManager.default.interactToGO(activatedGO, to: go)
-                }
+                GameObjectManager.default.interactToGO(activatedGO, to: go)
             }
 
-            activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil
-            self.complete()
 
             return
         }
 
         // no activatedGO
-        guard !self.go.isOnField else {
-            if self.go.type.isPickable {
-                GameObjectManager.default.take(go)
-            } else {
-                GameObjectManager.default.interact(go)
-            }
-
-            self.complete()
+        if self.go.isOnField
+            && !self.go.type.isPickable {
+            self.go.deactivate()
+            GameObjectManager.default.interact(go)
 
             return
         }
 
         TouchHandlerContainer.default.activatedGO = self.go
 
-        self.complete()
-        self.go.activate()
-
         return
     }
 
     func cancelled() {
+        self.go.deactivate()
+
         self.complete()
     }
 
     func complete() {
-        self.go.deactivate()
         self.touch = nil
     }
 

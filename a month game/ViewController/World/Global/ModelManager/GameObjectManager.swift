@@ -48,10 +48,9 @@ class GameObjectManager {
         self.accessibleGOTracker = accessibleGOTracker
     }
 
-    func moveToBelongField(_ go: GameObject) {
+    func addToBelongField(_ go: GameObject) {
         let characterCoord = self.character.chunkCoord.coord
 
-        self.removeFromParent(go)
         self.chunkContainer.add(go)
 
         if !go.type.isWalkable
@@ -60,8 +59,7 @@ class GameObjectManager {
         }
     }
 
-    func moveToBelongInv(_ go: GameObject) {
-        self.removeFromParent(go)
+    func addToBelongInv(_ go: GameObject) {
         self.invContainer.add(go)
     }
 
@@ -74,7 +72,7 @@ class GameObjectManager {
 
         self.removeFromParent(go)
         go.set(coord: invCoord)
-        self.moveToBelongInv(go)
+        self.addToBelongInv(go)
     }
 
     func interact(_ go: GameObject) {
@@ -88,8 +86,9 @@ class GameObjectManager {
     func interactToGO(_ go: GameObject, to targetGO: GameObject) {
         if targetGO.type.isTile,
            let targetCoord = targetGO.chunkCoord {
+            self.removeFromParent(go)
             go.set(coord: targetCoord)
-            self.moveToBelongField(go)
+            self.addToBelongField(go)
 
             return
         }
@@ -116,13 +115,13 @@ class GameObjectManager {
              chunkCoord: ChunkCoordinate) {
         for _ in 0 ..< count {
             let go = GameObject(type: goType, variant: variant, coord: chunkCoord)
-            self.moveToBelongField(go)
+            self.addToBelongField(go)
         }
     }
 
     func new(type goType: GameObjectType, variant: Int = 0, invCoord: InventoryCoordinate) {
         let go = GameObject(type: goType, variant: variant, coord: invCoord)
-        self.moveToBelongInv(go)
+        self.addToBelongInv(go)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }

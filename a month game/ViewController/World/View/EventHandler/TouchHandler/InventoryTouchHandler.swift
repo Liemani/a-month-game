@@ -40,9 +40,10 @@ extension InventoryTouchHandler: TouchEventHandler {
         }
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
+            GameObjectManager.default.removeFromParent(activatedGO)
             activatedGO.data.set(coord: self.touchedCell.invCoord)
 
-            GameObjectManager.default.moveToBelongInv(activatedGO)
+            GameObjectManager.default.addToBelongInv(activatedGO)
 
             activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil

@@ -42,9 +42,9 @@ extension FieldTouchHandler: TouchEventHandler {
         }
 
         if let activatedGO = TouchHandlerContainer.default.activatedGO {
+            GameObjectManager.default.removeFromParent(activatedGO)
             activatedGO.data.set(coord: chunkCoord)
-
-            GameObjectManager.default.moveToBelongField(activatedGO)
+            GameObjectManager.default.addToBelongField(activatedGO)
 
             activatedGO.deactivate()
             TouchHandlerContainer.default.activatedGO = nil
