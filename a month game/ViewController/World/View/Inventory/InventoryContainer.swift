@@ -83,8 +83,6 @@ class InventoryContainer {
     var space: Int {
         var space = 0
 
-        space += self.characterInv.space
-
         for inv in self.invs {
             if !inv.isHidden {
                 space += inv.space
@@ -150,10 +148,10 @@ extension InventoryContainer: InventoryProtocol {
     }
 
     func add(_ item: GameObject) {
-        let index = item.invCoord!.index
+        let invCoord = item.invCoord!
 
         for inv in self.invs {
-            if !inv.isHidden && inv.items(at: index) == nil {
+            if !inv.isHidden && inv.id == invCoord.id {
                 inv.add(item)
 
                 return

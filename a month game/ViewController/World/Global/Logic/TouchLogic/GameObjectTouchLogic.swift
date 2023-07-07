@@ -35,10 +35,6 @@ extension GameObjectTouchLogic: TouchLogic {
     }
 
     func ended() {
-        self.endedProcess()
-    }
-
-    private func endedProcess() {
         guard self.go.isBeing(touched: self.touch) else {
             self.go.deactivate()
 
@@ -50,9 +46,9 @@ extension GameObjectTouchLogic: TouchLogic {
             go.deactivate()
 
             if activatedGO == go {
-                LogicContainer.default.scene.interact(go)
+                LogicContainer.default.sceneLow.interact(go)
             } else {
-                LogicContainer.default.scene.interactToGO(activatedGO, to: go)
+                LogicContainer.default.sceneLow.interactToGO(activatedGO, to: go)
             }
 
             LogicContainer.default.touch.activatedGO = nil
@@ -64,7 +60,7 @@ extension GameObjectTouchLogic: TouchLogic {
         if self.go.isOnField
             && !self.go.type.isPickable {
             self.go.deactivate()
-            LogicContainer.default.scene.interact(go)
+            LogicContainer.default.sceneLow.interact(go)
 
             return
         }

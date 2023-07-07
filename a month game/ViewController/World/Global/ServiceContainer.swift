@@ -8,17 +8,17 @@
 import Foundation
 import CoreData
 
-final class WorldServiceContainer {
+final class ServiceContainer {
 
-    private static var _default: WorldServiceContainer?
-    static var `default`: WorldServiceContainer { self._default! }
+    private static var _default: ServiceContainer?
+    static var `default`: ServiceContainer { self._default! }
 
     static func set(worldName: String) {
         let isWorldExist = WorldDirectoryUtility.default.isExist(worldName: worldName)
 
         WorldDirectoryUtility.default.createIfNotExist(worldName: worldName)
 
-        let worldServiceContainer = WorldServiceContainer(worldName: worldName)
+        let worldServiceContainer = ServiceContainer(worldName: worldName)
         self._default = worldServiceContainer
 
         if !isWorldExist {

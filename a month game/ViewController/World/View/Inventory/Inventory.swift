@@ -110,7 +110,7 @@ class Inventory: SKSpriteNode {
 
         self.id = id
 
-        let goDatas = WorldServiceContainer.default.invServ.load(id: id)
+        let goDatas = ServiceContainer.default.invServ.load(id: id)
 
         for goData in goDatas {
             let go = GameObject(from: goData)
@@ -229,8 +229,6 @@ extension Inventory: InventoryProtocol {
     func add(_ item: GameObject) {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     func remove(_ item: GameObject) {
@@ -238,8 +236,6 @@ extension Inventory: InventoryProtocol {
            item == activatedGO {
             LogicContainer.default.touch.activatedGO = nil
         }
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
 
         item.removeFromParent()
     }

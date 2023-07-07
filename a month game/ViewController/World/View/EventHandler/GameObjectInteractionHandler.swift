@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class GameObjectInteractionHandlerManager {
+class InteractionLogic {
 
     let ui: SKNode
 
@@ -32,7 +32,7 @@ class GameObjectInteractionHandlerManager {
         self.chunkContainer = chunkContainer
     }
 
-    let goHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject) -> Void] = [
+    let go: [GameObjectType: (InteractionLogic, GameObject) -> Void] = [
         .caveCeilTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
                   handlerManager.invContainer.is(equiping: .stonePickaxe) else {
@@ -40,7 +40,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .caveHoleTile)
-            LogicContainer.default.scene.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.sceneLow.new(type: .stone, coord: emptyInvCoord)
         },
         .sandTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -49,7 +49,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .clayTile)
-            LogicContainer.default.scene.new(type: .sand, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.sceneLow.new(type: .sand, coord: emptyInvCoord)
         },
         .clayTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -58,7 +58,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .caveCeilTile)
-            LogicContainer.default.scene.new(type: .clay, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.sceneLow.new(type: .clay, coord: emptyInvCoord)
         },
         .cobblestoneTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord else {
@@ -66,7 +66,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .sandTile)
-            LogicContainer.default.scene.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.sceneLow.new(type: .stone, coord: emptyInvCoord)
         },
         .dirtTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -75,24 +75,24 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .clayTile)
-            LogicContainer.default.scene.new(type: .dirt, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.sceneLow.new(type: .dirt, coord: emptyInvCoord)
         },
         .treeOak: { handlerManager, go in
             if handlerManager.invContainer.is(equiping: .stoneAxe) {
                 let chunkCoord = go.chunkCoord!
 
-                LogicContainer.default.scene.new(type: .woodLog, chunkCoord: chunkCoord)
+                LogicContainer.default.sceneLow.new(type: .woodLog, coord: chunkCoord)
                 if go.variant == 0 {
                     LogicContainer.default.scene.new(type: .woodStick,
                                                   count: 2,
-                                                  chunkCoord: chunkCoord)
+                                                  coord: chunkCoord)
                 }
 
                 LogicContainer.default.scene.new(type: .treeOakSeed,
                                               count: 2,
-                                              chunkCoord: chunkCoord)
+                                              coord: chunkCoord)
 
-                LogicContainer.default.scene.remove(go)
+                LogicContainer.default.sceneLow.remove(go)
 
                 return
             }
@@ -103,8 +103,8 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(variant: 1)
-            LogicContainer.default.scene.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
-            LogicContainer.default.scene.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
+            LogicContainer.default.sceneLow.new(type: .woodStick, coord: handlerManager.invContainer.emptyCoord!)
+            LogicContainer.default.sceneLow.new(type: .woodStick, coord: handlerManager.invContainer.emptyCoord!)
         },
         .weed: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -112,47 +112,33 @@ class GameObjectInteractionHandlerManager {
                 return
             }
 
-            LogicContainer.default.scene.new(type: .weedLeaves, invCoord: emptyInvCoord)
-            LogicContainer.default.scene.remove(go)
+            LogicContainer.default.sceneLow.new(type: .weedLeaves, coord: emptyInvCoord)
+            LogicContainer.default.sceneLow.remove(go)
         },
         .leafBag: { handlerManager, go in
             if handlerManager.invInv.id == go.id
                 && !handlerManager.invInv.isHidden {
-                handlerManager.invInv.isHidden = true
-
-                FrameCycleUpdateManager.default.update(with: .craftWindow)
+                LogicContainer.default.sceneLow.showInvInv()
 
                 return
             }
 
             if handlerManager.fieldInv.id == go.id
                 && !handlerManager.fieldInv.isHidden {
-                handlerManager.fieldInv.isHidden = true
-
-                FrameCycleUpdateManager.default.update(with: .craftWindow)
+                LogicContainer.default.sceneLow.showFieldInv()
 
                 return
             }
 
             if go.isOnField {
-                handlerManager.fieldInv.update(go)
-                handlerManager.fieldInv.isHidden = false
-                handlerManager.fieldInv.position = go.positionInWorld
-                + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
+                LogicContainer.default.sceneLow.openFieldInv(of: go)
             } else {
-                handlerManager.invInv.update(go)
-                handlerManager.invInv.isHidden = false
-                handlerManager.invInv.position =
-                    go.convert(CGPoint(), to: handlerManager.ui)
-                    + CGPoint(x: 0,
-                              y: Constant.defaultWidth + Constant.invCellSpacing)
+                LogicContainer.default.sceneLow.openInvInv(of: go)
             }
-
-            FrameCycleUpdateManager.default.update(with: .craftWindow)
         },
     ]
 
-    let goToGOHandler: [GameObjectType: (GameObjectInteractionHandlerManager, GameObject, GameObject) -> Void] = [
+    let goToGO: [GameObjectType: (InteractionLogic, GameObject, GameObject) -> Void] = [
         .treeOakSeed: { handlerManager, go, targetGO in
             let oakSeed = targetGO
 
@@ -168,7 +154,7 @@ class GameObjectInteractionHandlerManager {
 
             clayTile.set(type: .dirtTile)
             oakSeed.set(type: .treeOak)
-            LogicContainer.default.scene.remove(go)
+            LogicContainer.default.sceneLow.remove(go)
         },
         .leafBag: { handlerManager, go, targetGO in
             var index: Int = 0
@@ -180,7 +166,7 @@ class GameObjectInteractionHandlerManager {
                     return
                 }
             } else {
-                let emptyIndex = WorldServiceContainer.default.invServ.emptyIndex(id: targetGO.id)
+                let emptyIndex = ServiceContainer.default.invServ.emptyIndex(id: targetGO.id)
 
                 if index < targetGO.type.invSpace {
                     index = emptyIndex

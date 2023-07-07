@@ -35,9 +35,7 @@ extension FieldTouchLogic: TouchLogic {
         }
 
         if let activatedGO = LogicContainer.default.touch.activatedGO {
-            LogicContainer.default.scene.removeFromParent(activatedGO)
-            activatedGO.data.set(coord: chunkCoord)
-            LogicContainer.default.scene.addToBelongField(activatedGO)
+            LogicContainer.default.sceneLow.move(activatedGO, to: chunkCoord)
 
             activatedGO.deactivate()
             LogicContainer.default.touch.activatedGO = nil
@@ -46,7 +44,7 @@ extension FieldTouchLogic: TouchLogic {
         }
 
         if LogicContainer.default.invContainer.is(equiping: .stoneShovel) {
-            LogicContainer.default.scene.new(type: .dirtTile, chunkCoord: chunkCoord)
+            LogicContainer.default.sceneLow.new(type: .dirtTile, coord: chunkCoord)
 
             return
         }

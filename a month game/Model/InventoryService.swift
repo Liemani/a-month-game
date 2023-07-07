@@ -25,7 +25,7 @@ class InventoryService {
     }
 
     func emptyIndex(id: Int) -> Int {
-        var invCoordinateMOs = WorldServiceContainer.default.invCoordDS.load(id: id)
+        var invCoordinateMOs = ServiceContainer.default.invCoordDS.load(id: id)
         invCoordinateMOs.sort { $0.index < $1.index }
         var index = 0
 
@@ -38,6 +38,11 @@ class InventoryService {
         }
 
         return index
+    }
+
+    func isEmpty(id: Int) -> Bool {
+        let goMOs = self.inventoryRepo.load(id: id)
+        return goMOs.count == 0
     }
 
 }

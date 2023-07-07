@@ -29,7 +29,7 @@ class WorldViewController: UIViewController {
         skView.showsNodeCount = true
 #endif
 
-        WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        ServiceContainer.set(worldName: Constant.Name.defaultWorld)
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
@@ -77,7 +77,7 @@ class WorldViewController: UIViewController {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        WorldServiceContainer.free()
+        ServiceContainer.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
 

@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameObjectLogic {
 
-    let goInteractionHandlerManager: GameObjectInteractionHandlerManager
+    let goInteractionHandlerManager: InteractionLogic
 
     let scene: WorldScene
     let character: Character
@@ -26,7 +26,7 @@ class GameObjectLogic {
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
-        self.goInteractionHandlerManager = GameObjectInteractionHandlerManager(
+        self.goInteractionHandlerManager = InteractionLogic(
             ui: ui,
             invInv: invInv,
             fieldInv: fieldInv,

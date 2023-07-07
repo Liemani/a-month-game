@@ -10,12 +10,12 @@ import SpriteKit
 
 class SceneLogic {
 
-    let goInteractionHandlerManager: GameObjectInteractionHandlerManager
+    let goInteractionHandlerManager: InteractionLogic
 
     let scene: WorldScene
     let character: Character
-    let chunkContainer: ChunkContainer
     let invContainer: InventoryContainer
+    let chunkContainer: ChunkContainer
     let accessibleGOTracker: AccessibleGOTracker
 
     init(scene: WorldScene,
@@ -23,10 +23,10 @@ class SceneLogic {
          invInv: GameObjectInventory,
          fieldInv: GameObjectInventory,
          character: Character,
-         chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
+         chunkContainer: ChunkContainer,
          accessibleGOTracker: AccessibleGOTracker) {
-        self.goInteractionHandlerManager = GameObjectInteractionHandlerManager(
+        self.goInteractionHandlerManager = InteractionLogic(
             ui: ui,
             invInv: invInv,
             fieldInv: fieldInv,
@@ -40,93 +40,33 @@ class SceneLogic {
         self.accessibleGOTracker = accessibleGOTracker
     }
 
-    func interact(_ go: GameObject) {
-        guard let handler = self.goInteractionHandlerManager.goHandler[go.type] else {
-            return
-        }
-
-        handler(self.goInteractionHandlerManager, go)
-    }
-
-    func interactToGO(_ go: GameObject, to targetGO: GameObject) {
-        if targetGO.type.isTile,
-           let targetCoord = targetGO.chunkCoord {
-            self.removeFromParent(go)
-            go.set(coord: targetCoord)
-            self.addToBelongField(go)
-
-            return
-        }
-
-        guard let handler = self.goInteractionHandlerManager.goToGOHandler[targetGO.type] else {
-
-            return
-        }
-
-        handler(self.goInteractionHandlerManager, go, targetGO)
-    }
-
+    // MARK: logic
     func new(type goType: GameObjectType,
              variant: Int = 0,
              count: Int = 1,
-             chunkCoord: ChunkCoordinate) {
+             coord chunkCoord: ChunkCoordinate) {
         for _ in 0 ..< count {
-            let go = GameObject(type: goType, variant: variant, coord: chunkCoord)
-            self.addToBelongField(go)
+            LogicContainer.default.sceneLow.new(type: goType,
+                                                variant: variant,
+                                                coord: chunkCoord)
         }
-    }
-
-    func new(type goType: GameObjectType, variant: Int = 0, invCoord: InventoryCoordinate) {
-        let go = GameObject(type: goType, variant: variant, coord: invCoord)
-        self.addToBelongInv(go)
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
-    }
-
-    func addToBelongField(_ go: GameObject) {
-        let characterCoord = self.character.chunkCoord.coord
-
-        self.chunkContainer.add(go)
-
-        if !go.type.isWalkable
-            && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
-            self.accessibleGOTracker.add(go)
-        }
-    }
-
-    func addToBelongInv(_ go: GameObject) {
-        self.invContainer.add(go)
-    }
-
-    func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        self.removeFromParent(go)
-        go.set(coord: chunkCoord)
-        self.addToBelongField(go)
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
-        if go.type.isInv
-            && invCoord.id != self.invContainer.characterInv.id {
+        guard !go.type.isInv
+                || invCoord.id == Constant.characterInventoryID
+                || ServiceContainer.default.invServ.isEmpty(id: go.id) else {
             return
         }
 
-        self.removeFromParent(go)
-        go.set(coord: invCoord)
-        self.addToBelongInv(go)
+        LogicContainer.default.sceneLow.move(go, to: invCoord)
     }
 
-    func removeFromParent(_ go: GameObject) {
-        if let chunk = go.parent as? Chunk {
-            chunk.remove(go)
-            self.accessibleGOTracker.remove(go)
-        } else if let inventory = go.parent?.parent as? Inventory {
-            inventory.remove(go)
-        }
-    }
-
-    func remove(_ go: GameObject) {
-        self.removeFromParent(go)
-        go.delete()
+    func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
+        // TODO: copose
+//        check inventory
+//        if inventory and open -> close
+//        move
     }
 
 }

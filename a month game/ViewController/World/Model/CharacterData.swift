@@ -20,7 +20,7 @@ struct CharacterData {
 
     // MARK: - init
     init() {
-        let worldDataRep = WorldServiceContainer.default.worldDataRepo
+        let worldDataRep = ServiceContainer.default.worldDataRepo
 
         let x = worldDataRep.load(at: .characterLocationChunkX)
         let y = worldDataRep.load(at: .characterLocationChunkY)
@@ -32,7 +32,7 @@ struct CharacterData {
     }
 
     private func update(chunkCoord: ChunkCoordinate) {
-        let worldDataRep = WorldServiceContainer.default.worldDataRepo
+        let worldDataRep = ServiceContainer.default.worldDataRepo
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)
         worldDataRep.update(value: Int(chunkCoord.y), to: .characterLocationChunkY)

@@ -447,7 +447,9 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-restore the removed invContainer, chunkContainer of filed touch logic
+I separated SceneLogic to SceneLowLogic
+    apply the difference
+if container is empty, can be put to inventory
 fix bug
     put GO to invInv and move invGO to field, than reopen -> difference window
     generated none gameobject sometimes at inventory
@@ -702,6 +704,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+restore the removed invContainer, chunkContainer of filed touch logic
 make impossible to move GO when the cell is possessed by another GO
     when touch cell which has GO -> relay handle to GO
 오브젝트 크기 적절하게 출력하도록 변경
