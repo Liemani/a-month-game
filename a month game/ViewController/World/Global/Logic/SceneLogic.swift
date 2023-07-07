@@ -40,7 +40,7 @@ class SceneLogic {
         self.accessibleGOTracker = accessibleGOTracker
     }
 
-    // MARK: logic
+    // MARK: - game object
     func new(type goType: GameObjectType,
              variant: Int = 0,
              count: Int = 1,
@@ -74,6 +74,16 @@ class SceneLogic {
 
         if go.type.isInv {
             LogicContainer.default.sceneLow.closeAnyInv(of: go.id)
+        }
+    }
+
+    // MARK: - chunk
+    func chunkContainerUpdate(direction: Direction4) {
+        LogicContainer.default.sceneLow.chunkContainerUpdate(direction: direction)
+
+        let fieldInv = self.invContainer.fieldInv
+        if fieldInv.parent == nil {
+            LogicContainer.default.sceneLow.closeFieldInv()
         }
     }
 

@@ -42,7 +42,7 @@ class SceneLowLogic {
         self.ui = ui
     }
 
-    // MARK: logic
+    // MARK: - game object
     func interact(_ go: GameObject) {
         guard let handler = self.interactionLogic.go[go.type] else {
             return
@@ -123,6 +123,7 @@ class SceneLowLogic {
         go.delete()
     }
 
+    // MARK: - inventory
     func closeAnyInv(of id: Int) {
         if let inv = self.invContainer.inv(id: id) {
             inv.isHidden = true
@@ -147,20 +148,29 @@ class SceneLowLogic {
         self.invContainer.invInv.update(go)
         self.invContainer.invInv.isHidden = false
         self.invContainer.invInv.position =
-        go.convert(CGPoint(), to: self.ui)
-        + CGPoint(x: 0,
-                  y: Constant.defaultWidth + Constant.invCellSpacing)
+            go.convert(CGPoint(), to: self.ui)
+            + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     func openFieldInv(of go: GameObject) {
-        self.invContainer.fieldInv.update(go)
-        self.invContainer.fieldInv.isHidden = false
-        self.invContainer.fieldInv.position = go.positionInWorld
-        + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
+        let chunk = go.parent as! Chunk
+        let fieldInv = self.invContainer.fieldInv
+
+        fieldInv.removeFromParent()
+        fieldInv.update(go)
+        fieldInv.isHidden = false
+        fieldInv.position = go.position
+            + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
+        chunk.addChild(fieldInv)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    // MARK: - chunk
+    func chunkContainerUpdate(direction: Direction4) {
+        chunkContainer.update(direction: direction)
     }
 
 }

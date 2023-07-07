@@ -447,23 +447,14 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-I separated SceneLogic to SceneLowLogic
-    apply the difference
-invInv must not open
+if cell touched and has GO, interact
+if field touched and has GO, interact
+inv to inv interaction
 scene logic::chunk update()
     update chunk container
     hide open field inventory if need
-if container is empty, can be put to inventory
 fix bug
-    put GO to invInv and move invGO to field, than reopen -> difference window
     generated none gameobject sometimes at inventory
-    when i put invInv.2 -> it first put charInv.2
-    move game object inventory cells proper point
-    item is not entered proper coordinate
-    close inventory when the GO is moved another cell or to field
-    the field inv is belong to world layer, but it should follow GO
-if the id of inventory is not 0, inventory GO should not put
-change field touch
 add
     sickle
     saw
@@ -491,6 +482,12 @@ menu button -> cancel all gesture
 world generator
     generate in chunk unit dynamically
     sea
+
+shallow water
+mastery
+brick
+fire
+info
 
 example code
 func isDeepWater(seed: Int, chunkCoord: ChunkCoordinate) -> Bool {
@@ -708,6 +705,19 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+if the id of inventory is not 0, inventory GO should not put
+change field touch
+bug
+    put GO to invInv and move invGO to field, than reopen -> difference window
+    when i put invInv.2 -> it first put charInv.2
+    move game object inventory cells proper point
+    item is not entered proper coordinate
+    close inventory when the GO is moved another cell or to field
+    the field inv is belong to world layer, but it should follow GO
+if container is empty, can be put to inventory
+invInv must not open
+I separated SceneLogic to SceneLowLogic
+    apply the difference
 restore the removed invContainer, chunkContainer of filed touch logic
 make impossible to move GO when the cell is possessed by another GO
     when touch cell which has GO -> relay handle to GO

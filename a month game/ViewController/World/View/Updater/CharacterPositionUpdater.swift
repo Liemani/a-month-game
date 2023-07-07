@@ -57,7 +57,7 @@ class CharacterPositionUpdater {
 
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)
-                chunkContainer.update(direction: direction)
+                LogicContainer.default.scene.chunkContainerUpdate(direction: direction)
             }
         }
 
