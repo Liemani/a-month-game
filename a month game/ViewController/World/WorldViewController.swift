@@ -29,7 +29,7 @@ class WorldViewController: UIViewController {
         skView.showsNodeCount = true
 #endif
 
-        WorldServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        ServiceContainer.set(worldName: Constant.Name.defaultWorld)
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
@@ -38,14 +38,15 @@ class WorldViewController: UIViewController {
         TouchRecognizerManager.set(scene: scene,
                                    ui: scene.ui,
                                    character: scene.character)
-        TouchHandlerContainer.set(chunkContainer: scene.chunkContainer,
-                                  invContainer: scene.invContainer)
 
-        GameObjectManager.set(scene: scene,
-                              character: scene.character,
-                              chunkContainer: scene.chunkContainer,
-                              invContainer: scene.invContainer,
-                              accessibleGOTracker: scene.accessibleGOTracker)
+        LogicContainer.set(scene: scene,
+                           ui: scene.ui,
+                           invInv: scene.invContainer.invInv,
+                           fieldInv: scene.invContainer.fieldInv,
+                           character: scene.character,
+                           chunkContainer: scene.chunkContainer,
+                           invContainer: scene.invContainer,
+                           accessibleGOTracker: scene.accessibleGOTracker)
 
         skView.presentScene(scene)
     }
@@ -76,12 +77,12 @@ class WorldViewController: UIViewController {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        WorldServiceContainer.free()
-        TouchRecognizerManager.free()
-        TouchHandlerContainer.free()
+        ServiceContainer.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
-        GameObjectManager.free()
+
+        TouchRecognizerManager.free()
+        LogicContainer.free()
     }
 
 }

@@ -49,7 +49,7 @@ protocol InventoryProtocol<Item>: Sequence {
 
 class Inventory: SKSpriteNode {
 
-    let id: Int
+    var id: Int!
 
     var cellCount: Int
     let cellWidth: Double
@@ -57,29 +57,60 @@ class Inventory: SKSpriteNode {
 
     var cells: [InventoryCell] { self.children as! [InventoryCell] }
 
-    init(id: Int,
-         texture: SKTexture,
-         cells: [InventoryCell],
+    init(texture: SKTexture,
+         cells: [InventoryCell]?,
          cellWidth: Double,
          cellSpacing: Double) {
-        self.id = id
         self.cellCount = 0
         self.cellWidth = cellWidth
         self.cellSpacing = cellSpacing
 
         super.init(texture: texture, color: .white, size: texture.size())
 
-        self.addCells(cells)
-
-        self.setUp()
+        if let cells = cells {
+            self.addCells(cells)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setUp() {
-        let goDatas = WorldServiceContainer.default.invServ.load(id: self.id)
+    func update(cellCount: Int) {
+        guard self.cellCount != cellCount else {
+            return
+        }
+
+        if self.cellCount > cellCount {
+            let removeCount = self.cellCount - cellCount
+
+            let cells = self.cells
+            for index in 0 ..< removeCount {
+                cells[index].removeFromParent()
+            }
+        } else if self.cellCount < cellCount {
+            let addCount = cellCount - self.cellCount
+
+            let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
+
+            for _ in 0 ..< addCount {
+                let cell = InventoryCell(texture: cellTexture)
+                cell.size = Constant.defaultNodeSize
+                self.addChild(cell)
+            }
+        }
+
+        self.cellCount = cellCount
+
+        self.setCellPosition()
+    }
+
+    func update(id: Int) {
+        self.clear()
+
+        self.id = id
+
+        let goDatas = ServiceContainer.default.invServ.load(id: id)
 
         for goData in goDatas {
             let go = GameObject(from: goData)
@@ -90,18 +121,32 @@ class Inventory: SKSpriteNode {
         }
     }
 
+    private func clear() {
+        for cell in self.cells {
+            if let go = cell.children.first {
+                go.removeFromParent()
+            }
+        }
+    }
+
     private func addCells(_ cells: [InventoryCell]) {
         self.cellCount += cells.count
 
+        for cell in cells {
+            self.addChild(cell)
+        }
+
+        self.setCellPosition()
+    }
+
+    private func setCellPosition() {
         let distanceOfCellsCenter = self.cellWidth + self.cellSpacing
-        let endCellOffset = distanceOfCellsCenter * Double((self.cellCount - 1) / 2)
+        let endCellOffset = distanceOfCellsCenter * Double(self.cellCount - 1) / 2.0
 
         var positionX = -endCellOffset
 
-        for index in 0..<self.cellCount {
-            let cell = cells[index]
+        for cell in self.cells {
             cell.position = CGPoint(x: positionX, y: 0)
-            self.addChild(cell)
             positionX += distanceOfCellsCenter
         }
     }
@@ -184,17 +229,13 @@ extension Inventory: InventoryProtocol {
     func add(_ item: GameObject) {
         self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     func remove(_ item: GameObject) {
-        if let activatedGO = TouchHandlerContainer.default.activatedGO,
+        if let activatedGO = LogicContainer.default.touch.activatedGO,
            item == activatedGO {
-            TouchHandlerContainer.default.activatedGO = nil
+            LogicContainer.default.touch.activatedGO = nil
         }
-
-        FrameCycleUpdateManager.default.update(with: .craftWindow)
 
         item.removeFromParent()
     }
@@ -240,38 +281,21 @@ struct InventoryIterator: IteratorProtocol {
 extension InventoryCell: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-        TouchHandlerContainer.default.invTouchHandler.began(touch: touch,
-                                                            touchedCell: self)
+        let invTouchLogic = InventoryTouchLogic(touch: touch, cell: self)
+        LogicContainer.default.touch.add(invTouchLogic)
+        invTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.moved()
+        LogicContainer.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.ended()
+        LogicContainer.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.cancelled()
+        LogicContainer.default.touch.cancelled(touch)
     }
 
 }

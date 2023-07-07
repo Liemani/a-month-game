@@ -16,9 +16,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
     case menuButton
     case menuExitButton
 
-    case accessibleGOTrackerAdd
-    case accessibleGOTrackerRemove
-
     static let eventHandlers: [(WorldScene, Event) -> Void] = [
         { scene, event in // menuButton
             scene.munuWindow.reveal()
@@ -26,18 +23,6 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
         { scene, event in // menuExitButton
             NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
-        },
-
-        { scene, event in // accessibleGOTrackerAdd
-            let go = event.sender as! GameObject
-
-            scene.accessibleGOTracker.add(go)
-        },
-
-        { scene, event in // accessibleGOTrackerRemove
-            let go = event.sender as! GameObject
-
-            scene.accessibleGOTracker.remove(go)
         },
     ]
 

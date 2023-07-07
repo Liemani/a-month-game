@@ -40,7 +40,7 @@ extension InventoryCoordinateMO {
     }
 
     func delete() {
-        WorldServiceContainer.default.moContext.delete(self)
+        ServiceContainer.default.moContext.delete(self)
     }
 
 }

@@ -45,8 +45,8 @@ class GameObjectData {
 
     // MARK: - init
     init(goType: GameObjectType, variant: Int) {
-        let id = WorldServiceContainer.default.idGeneratorServ.generate()
-        self.mo = WorldServiceContainer.default.goRepo.new(id: id, type: goType, variant: variant)
+        let id = ServiceContainer.default.idGeneratorServ.generate()
+        self.mo = ServiceContainer.default.goRepo.new(id: id, type: goType, variant: variant)
         self.type = goType
         self.variant = variant
         self._chunkCoord = nil

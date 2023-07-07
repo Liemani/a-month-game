@@ -20,7 +20,29 @@ class InventoryService {
         let goDatas = goMOs.compactMap {
             GameObjectData(from: $0)
         }
+
         return goDatas
+    }
+
+    func emptyIndex(id: Int) -> Int {
+        var invCoordinateMOs = ServiceContainer.default.invCoordDS.load(id: id)
+        invCoordinateMOs.sort { $0.index < $1.index }
+        var index = 0
+
+        for invCoordMO in invCoordinateMOs {
+            if invCoordMO.index == index {
+                index += 1
+            } else {
+                break
+            }
+        }
+
+        return index
+    }
+
+    func isEmpty(id: Int) -> Bool {
+        let goMOs = self.inventoryRepo.load(id: id)
+        return goMOs.count == 0
     }
 
 }

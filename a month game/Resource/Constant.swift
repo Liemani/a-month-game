@@ -79,6 +79,7 @@ struct Constant {
                     static let tile = 10.0
                     static let gameObject = 20.0
                         static let gameObjectCover = 20.0
+                static let fieldInv = 50.0
             static let character = 30.0
         static let ui = 100.0
             static let characterInv = 0.0
@@ -119,7 +120,7 @@ struct Constant {
         .stonePickaxe: [.stone: 1, .woodStick: 1],
         .stoneShovel: [.stone: 1, .woodStick: 1],
         .sickle: [.stone: 1, .woodStick: 1],
-        .leafBag: [.weedLeaves: 3],
+        .leafBag: [.weedLeaves: 4],
     ]
 
     // MARK: - UserDefaults key
@@ -160,5 +161,7 @@ struct Constant {
     static let characterAccessibleRange = 1
 
     static let panThreshold = tileWidth * 2.0
+
+    static let characterInventoryID = 0
 
 }

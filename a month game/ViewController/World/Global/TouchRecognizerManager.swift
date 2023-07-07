@@ -196,177 +196,199 @@ class TouchRecognizerManager {
     static func set(scene: WorldScene, ui: SKNode, character: Character) {
         self._default = TouchRecognizerManager(scene: scene, ui: ui, character: character)
     }
+
     static func free() { self._default = nil }
 
-    let scene: WorldScene
+    private let scene: WorldScene
 
-    let touchContainer: TouchContainer
-    let recognizers: [TouchRecognizer]
+    private let logic: Logic
 
-    var panRecognizer: PanRecognizer {
-        return self.recognizers[TouchRecognizerIndex.panRecognizer] as! PanRecognizer
-    }
-
-    var pinchRecognizer: PinchRecognizer {
-        return self.recognizers[TouchRecognizerIndex.pinchRecognizer] as! PinchRecognizer
-    }
+    var touchContainer: TouchContainer { self.logic.touchContainer }
+    var panRecognizer: PanRecognizer { self.logic.panRecognizer }
+    var pinchRecognizer: PinchRecognizer { self.logic.pinchRecognizer }
 
     init(scene: WorldScene, ui: SKNode, character: Character) {
         self.scene = scene
-        self.touchContainer = TouchContainer()
-        self.recognizers = [
-            TapRecognizer(scene: scene),
-            TapRecognizer(scene: scene),
-            PanRecognizer(scene: scene, ui: ui, character: character),
-            PinchRecognizer(scene: scene, ui: ui, world: scene.worldLayer),
-        ]
-    }
-
-    func recognizer(containing touch: UITouch) -> TouchRecognizer? {
-        for handler in self.recognizers {
-            if handler.lmiTouches.contains(where: { $0.touch == touch }) {
-                return handler
-            }
-        }
-
-        return nil
+        self.logic = Logic(scene: scene, ui: ui, character: character)
     }
 
     func cancelAllTouches() {
-        self.touchContainer.cancelAll()
+        self.logic.cancelAllTouches()
     }
 
 }
 
+// MARK: - logic
 extension TouchRecognizerManager {
 
-    // MARK: - touch began
+    private class Logic {
+
+        let touchContainer: TouchContainer
+        let recognizers: [TouchRecognizer]
+
+        var panRecognizer: PanRecognizer {
+            return self.recognizers[TouchRecognizerIndex.panRecognizer] as! PanRecognizer
+        }
+
+        var pinchRecognizer: PinchRecognizer {
+            return self.recognizers[TouchRecognizerIndex.pinchRecognizer] as! PinchRecognizer
+        }
+
+        // MARK: init
+        init(scene: WorldScene, ui: SKNode, character: Character) {
+            self.touchContainer = TouchContainer()
+            self.recognizers = [
+                TapRecognizer(scene: scene),
+                TapRecognizer(scene: scene),
+                PanRecognizer(scene: scene, ui: ui, character: character),
+                PinchRecognizer(scene: scene, ui: ui, world: scene.worldLayer),
+            ]
+        }
+
+        func recognizer(containing touch: UITouch) -> TouchRecognizer? {
+            for handler in self.recognizers {
+                if handler.lmiTouches.contains(where: { $0.touch == touch }) {
+                    return handler
+                }
+            }
+
+            return nil
+        }
+
+        func cancelAllTouches() {
+            self.touchContainer.cancelAll()
+        }
+
+        // MARK: - touch
+        func began(_ lmiTouch: LMITouch) {
+            self.touchContainer.add(lmiTouch: lmiTouch)
+
+            for index in TouchRecognizerIndex.tapIndices {
+                let tapRecognizer = self.recognizers[index]
+
+                guard tapRecognizer.lmiTouches.first == nil else {
+                    continue
+                }
+
+                if tapRecognizer.discriminate(lmiTouches: [lmiTouch]) {
+                    lmiTouch.recognizer = tapRecognizer
+                    tapRecognizer.began(lmiTouches: [lmiTouch])
+                }
+
+                return
+            }
+        }
+
+        func moved(_ lmiTouch: LMITouch) {
+            if let handler = lmiTouch.recognizer {
+                switch handler {
+                case is PinchRecognizer:
+                    handler.moved()
+                    return
+                case is PanRecognizer:
+                    handler.moved()
+                    return
+                default:
+                    break
+                }
+            }
+
+            if self.touchContainer.count == 2
+                && self.pinchRecognizer.discriminate(lmiTouches: self.touchContainer.lmiTouches) {
+                let lmiTouches = self.touchContainer.lmiTouches
+
+                for lmiTouch in lmiTouches {
+                    lmiTouch.cancelHandler()
+                    lmiTouch.recognizer = self.pinchRecognizer
+                }
+
+                self.pinchRecognizer.began(lmiTouches: lmiTouches)
+
+                return
+            }
+
+            if self.panRecognizer.discriminate(lmiTouches: [lmiTouch]) {
+                lmiTouch.cancelHandler()
+                lmiTouch.recognizer = self.panRecognizer
+
+                self.panRecognizer.began(lmiTouches: [lmiTouch])
+
+                return
+            }
+
+            if let recognizer = lmiTouch.recognizer {
+                recognizer.moved()
+            }
+        }
+
+        func ended(_ lmiTouch: LMITouch) {
+            guard let handler = lmiTouch.recognizer else {
+                self.touchContainer.remove(lmiTouch: lmiTouch)
+                return
+            }
+
+            for lmiTouch in handler.lmiTouches {
+                self.touchContainer.remove(lmiTouch: lmiTouch)
+            }
+
+            handler.ended()
+        }
+
+        func cancelled(_ lmiTouch: LMITouch) {
+            guard let handler = lmiTouch.recognizer else {
+                self.touchContainer.remove(lmiTouch: lmiTouch)
+                return
+            }
+
+            for lmiTouch in handler.lmiTouches {
+                self.touchContainer.remove(lmiTouch: lmiTouch)
+            }
+
+            handler.cancelled()
+        }
+
+    }
+
+}
+
+// MARK: - facade
+extension TouchRecognizerManager {
+
     func touchBegan(_ touch: UITouch) {
-        guard self.touchContainer.count < 2 else {
+        guard self.logic.touchContainer.count < 2 else {
             return
         }
 
         let lmiTouch = LMITouch(touch, scene: self.scene)
-
-        self.touchBeganHandle(lmiTouch)
+        self.logic.began(lmiTouch)
 
         lmiTouch.update()
     }
 
-    private func touchBeganHandle(_ lmiTouch: LMITouch) {
-        self.touchContainer.add(lmiTouch: lmiTouch)
-
-        for index in TouchRecognizerIndex.tapIndices {
-            let tapRecognizer = self.recognizers[index]
-
-            guard tapRecognizer.lmiTouches.first == nil else {
-                continue
-            }
-
-            if tapRecognizer.discriminate(lmiTouches: [lmiTouch]) {
-                lmiTouch.recognizer = tapRecognizer
-                tapRecognizer.began(lmiTouches: [lmiTouch])
-            }
-
-            return
-        }
-    }
-
-    // MARK: - touch moved
     func touchMoved(_ touch: UITouch) {
         guard let lmiTouch = self.touchContainer.element(touch: touch) else {
             return
         }
 
-        self.touchMovedHandle(lmiTouch)
+        self.logic.moved(lmiTouch)
 
         lmiTouch.update()
     }
 
-    private func touchMovedHandle(_ lmiTouch: LMITouch) {
-        if let handler = lmiTouch.recognizer {
-            switch handler {
-            case is PinchRecognizer:
-                handler.moved()
-                return
-            case is PanRecognizer:
-                handler.moved()
-                return
-            default:
-                break
-            }
-        }
-
-        if self.touchContainer.count == 2
-            && self.pinchRecognizer.discriminate(lmiTouches: self.touchContainer.lmiTouches) {
-            let lmiTouches = self.touchContainer.lmiTouches
-
-            for lmiTouch in lmiTouches {
-                lmiTouch.cancelHandler()
-                lmiTouch.recognizer = self.pinchRecognizer
-            }
-
-            self.pinchRecognizer.began(lmiTouches: lmiTouches)
-
-            return
-        }
-
-        if self.panRecognizer.discriminate(lmiTouches: [lmiTouch]) {
-            lmiTouch.cancelHandler()
-            lmiTouch.recognizer = self.panRecognizer
-
-            self.panRecognizer.began(lmiTouches: [lmiTouch])
-
-            return
-        }
-
-        if let recognizer = lmiTouch.recognizer {
-            recognizer.moved()
-        }
-    }
-
-    // MARK: - touch ended
     func touchEnded(_ touch: UITouch) {
         guard let lmiTouch = self.touchContainer.element(touch: touch) else {
             return
         }
 
-        self.touchEndedHandle(lmiTouch)
+        self.logic.ended(lmiTouch)
     }
 
-    private func touchEndedHandle(_ lmiTouch: LMITouch) {
-        guard let handler = lmiTouch.recognizer else {
-            self.touchContainer.remove(lmiTouch: lmiTouch)
-            return
-        }
-
-        for lmiTouch in handler.lmiTouches {
-            self.touchContainer.remove(lmiTouch: lmiTouch)
-        }
-
-        handler.ended()
-    }
-
-    // MARK: - touch cancelled
     func touchCancelled(_ touch: UITouch) {
         guard let lmiTouch = self.touchContainer.element(touch: touch) else {
             return
         }
 
-        self.touchCancelledHandle(lmiTouch)
-    }
-
-    private func touchCancelledHandle(_ lmiTouch: LMITouch) {
-        guard let handler = lmiTouch.recognizer else {
-            self.touchContainer.remove(lmiTouch: lmiTouch)
-            return
-        }
-
-        for lmiTouch in handler.lmiTouches {
-            self.touchContainer.remove(lmiTouch: lmiTouch)
-        }
-
-        handler.cancelled()
+        self.logic.cancelled(lmiTouch)
     }
 
 }

@@ -8,17 +8,17 @@
 import Foundation
 import CoreData
 
-final class WorldServiceContainer {
+final class ServiceContainer {
 
-    private static var _default: WorldServiceContainer?
-    static var `default`: WorldServiceContainer { self._default! }
+    private static var _default: ServiceContainer?
+    static var `default`: ServiceContainer { self._default! }
 
     static func set(worldName: String) {
         let isWorldExist = WorldDirectoryUtility.default.isExist(worldName: worldName)
 
         WorldDirectoryUtility.default.createIfNotExist(worldName: worldName)
 
-        let worldServiceContainer = WorldServiceContainer(worldName: worldName)
+        let worldServiceContainer = ServiceContainer(worldName: worldName)
         self._default = worldServiceContainer
 
         if !isWorldExist {
@@ -30,22 +30,22 @@ final class WorldServiceContainer {
         self._default = nil
     }
 
-    var idGeneratorServ: IDGeneratorService
-    var chunkServ: ChunkService
-    var invServ: InventoryService
+    let idGeneratorServ: IDGeneratorService
+    let chunkServ: ChunkService
+    let invServ: InventoryService
 
-    var goRepo: GameObjectRepository
-    var chunkRepo: ChunkRepository
-    var invRepo: InventoryRepository
-    var worldDataRepo: WorldDataRepository
+    let goRepo: GameObjectRepository
+    let chunkRepo: ChunkRepository
+    let invRepo: InventoryRepository
+    let worldDataRepo: WorldDataRepository
 
-    var goDS: GameObjectDataSource
-    var chunkCoordDS: ChunkCoordinateDataSource
-    var invCoordDS: InventoryCoordinateDataSource
-    var worldDataDS: WorldDataDataSource
+    let goDS: GameObjectDataSource
+    let chunkCoordDS: ChunkCoordinateDataSource
+    let invCoordDS: InventoryCoordinateDataSource
+    let worldDataDS: WorldDataDataSource
 
-    var persistentContainer: LMIPersistentContainer
-    var moContext: NSManagedObjectContext
+    let persistentContainer: LMIPersistentContainer
+    let moContext: NSManagedObjectContext
 
     init(worldName: String) {
         let worldDirURL = WorldDirectoryUtility.directoryURL(worldName: worldName)

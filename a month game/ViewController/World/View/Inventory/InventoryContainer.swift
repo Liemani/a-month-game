@@ -8,31 +8,69 @@
 import Foundation
 import SpriteKit
 
+enum InventoryIndex: Int, CaseIterable {
+
+    case characterInv
+    case invInv
+    case fieldInv
+
+}
+
 class InventoryContainer {
 
-    let characterInv: CharacterInventory
+    var invs: [Inventory]
 
-    var invInv: Inventory?
-    var fieldInv: Inventory?
-
+    var characterInv: CharacterInventory {
+        return self.invs[InventoryIndex.characterInv] as! CharacterInventory
+    }
     var leftGO: GameObject? { self.characterInv.leftGO }
     var rightGO: GameObject? { self.characterInv.rightGO }
 
+    var invInv: GameObjectInventory {
+        return self.invs[InventoryIndex.invInv] as! GameObjectInventory
+    }
+
+    var fieldInv: GameObjectInventory {
+        return self.invs[InventoryIndex.fieldInv] as! GameObjectInventory
+    }
+
     init() {
-        self.characterInv = CharacterInventory(id: 0)
+        self.invs = []
+        self.invs.reserveCapacity(InventoryIndex.allCases.count)
+
+        let characterInv = CharacterInventory(id: 0)
+        self.invs.append(characterInv)
+
+        let invInv = GameObjectInventory(texture: GameObjectType.none.textures[0],
+                                         cells: nil,
+                                         cellWidth: Constant.defaultWidth,
+                                         cellSpacing: Constant.invCellSpacing)
+        invInv.isHidden = true
+        self.invs.append(invInv)
+
+        let fieldInv = GameObjectInventory(texture: GameObjectType.none.textures[0],
+                                           cells: nil,
+                                           cellWidth: Constant.defaultWidth,
+                                           cellSpacing: Constant.invCellSpacing)
+        fieldInv.isHidden = true
+        self.invs.append(fieldInv)
+    }
+
+    func inv(id: Int) -> Inventory? {
+        for inv in self.invs {
+            if !inv.isHidden && inv.id == id {
+                return inv
+            }
+        }
+
+        return nil
     }
 
     var emptyCoord: InventoryCoordinate? {
-        if let emptyCoord = self.characterInv.emptyCoord {
-            return InventoryCoordinate(self.characterInv.id, emptyCoord)
-        }
-
-        if let emptyCoord = self.invInv?.emptyCoord {
-            return InventoryCoordinate(self.invInv!.id, emptyCoord)
-        }
-
-        if let emptyCoord = self.fieldInv?.emptyCoord {
-            return InventoryCoordinate(self.fieldInv!.id, emptyCoord)
+        for inv in self.invs {
+            if !inv.isHidden, let emptyCoord = inv.emptyCoord {
+                return InventoryCoordinate(inv.id, emptyCoord)
+            }
         }
 
         return nil
@@ -45,14 +83,10 @@ class InventoryContainer {
     var space: Int {
         var space = 0
 
-        space += self.characterInv.space
-
-        if let invInv = self.invInv {
-            space += invInv.space
-        }
-
-        if let fieldInv = self.fieldInv {
-            space += fieldInv.space
+        for inv in self.invs {
+            if !inv.isHidden {
+                space += inv.space
+            }
         }
 
         return space
@@ -63,18 +97,8 @@ class InventoryContainer {
 extension InventoryContainer: InventoryProtocol {
 
     func isValid(_ coord: InventoryCoordinate) -> Bool {
-        if self.characterInv.isValid(coord.index) {
-            return true
-        }
-
-        if let fieldInv = self.fieldInv {
-            if fieldInv.isValid(coord.index) {
-                return true
-            }
-        }
-
-        if let invInv = self.invInv {
-            if invInv.isValid(coord.index) {
+        for inv in self.invs {
+            if !inv.isHidden && inv.isValid(coord.index){
                 return true
             }
         }
@@ -91,105 +115,63 @@ extension InventoryContainer: InventoryProtocol {
     }
 
     func items(at coord: InventoryCoordinate) -> [GameObject]? {
-        if let gos = self.characterInv.items(at: coord.index) {
-            return gos
-        }
-
-        if let gos = self.fieldInv?.items(at: coord.index) {
-            return gos
-        }
-
-        if let gos = self.invInv?.items(at: coord.index) {
-            return gos
+        for inv in self.invs {
+            if !inv.isHidden,
+               let gos = inv.items(at: coord.index) {
+                return gos
+            }
         }
 
         return nil
     }
 
     func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
-        if let gos = self.characterInv.itemsAtLocation(of: touch) {
-            return gos
-        }
-
-        if let gos = self.fieldInv?.itemsAtLocation(of: touch) {
-            return gos
-        }
-
-        if let gos = self.invInv?.itemsAtLocation(of: touch) {
-            return gos
+        for inv in self.invs {
+            if !inv.isHidden,
+               let gos = inv.itemsAtLocation(of: touch) {
+                return gos
+            }
         }
 
         return nil
     }
 
     func coordAtLocation(of touch: UITouch) -> InventoryCoordinate? {
-        if let index = self.characterInv.coordAtLocation(of: touch) {
-            return InventoryCoordinate(self.characterInv.id, index)
-        }
-
-        if let index = self.fieldInv?.coordAtLocation(of: touch) {
-            return InventoryCoordinate(self.fieldInv!.id, index)
-        }
-
-        if let index = self.invInv?.coordAtLocation(of: touch) {
-            return InventoryCoordinate(self.invInv!.id, index)
+        for inv in self.invs {
+            if !inv.isHidden,
+               let index = inv.coordAtLocation(of: touch) {
+                return InventoryCoordinate(inv.id, index)
+            }
         }
 
         return nil
     }
 
     func add(_ item: GameObject) {
-        if self.characterInv.items(at: item.invCoord!.index) == nil {
-            self.characterInv.add(item)
+        let invCoord = item.invCoord!
 
-            return
-        }
+        for inv in self.invs {
+            if !inv.isHidden && inv.id == invCoord.id {
+                inv.add(item)
 
-        if let fieldInv = self.fieldInv,
-           fieldInv.items(at: item.invCoord!.index) == nil {
-            self.fieldInv!.add(item)
-
-            return
-        }
-
-        if let invInv = self.invInv ,
-           invInv.items(at: item.invCoord!.index) == nil {
-            self.invInv!.add(item)
-
-            return
+                return
+            }
         }
     }
 
     func remove(_ item: GameObject) {
-        if item.invCoord!.id == self.characterInv.id {
-            self.characterInv.remove(item)
+        let invID = item.invCoord!.id
+        for inv in self.invs {
+            if !inv.isHidden && invID == inv.id {
+                inv.remove(item)
 
-            return
-        }
-
-        if let fieldInv = self.fieldInv,
-           item.invCoord!.id == fieldInv.id {
-            fieldInv.remove(item)
-
-            return
-        }
-
-        if let invInv = self.invInv,
-           item.invCoord!.id == invInv.id {
-            invInv.remove(item)
-
-            return
+                return
+            }
         }
     }
 
     func makeIterator() -> CombineSequences<GameObject> {
-        let sequences = [
-            self.characterInv,
-            self.fieldInv,
-            self.invInv,
-        ]
-            .compactMap { $0 }
-
+        let sequences = self.invs.compactMap { !$0.isHidden ? $0 : nil }
         return CombineSequences(sequences: sequences)
     }
 
