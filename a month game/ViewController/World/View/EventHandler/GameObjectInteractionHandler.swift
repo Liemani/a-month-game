@@ -40,7 +40,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .caveHoleTile)
-            GameObjectManager.default.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
         },
         .sandTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -49,7 +49,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .clayTile)
-            GameObjectManager.default.new(type: .sand, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.new(type: .sand, variant: 0, invCoord: emptyInvCoord)
         },
         .clayTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -58,7 +58,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .caveCeilTile)
-            GameObjectManager.default.new(type: .clay, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.new(type: .clay, variant: 0, invCoord: emptyInvCoord)
         },
         .cobblestoneTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord else {
@@ -66,7 +66,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .sandTile)
-            GameObjectManager.default.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.new(type: .stone, variant: 0, invCoord: emptyInvCoord)
         },
         .dirtTile: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -75,24 +75,24 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(type: .clayTile)
-            GameObjectManager.default.new(type: .dirt, variant: 0, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.new(type: .dirt, variant: 0, invCoord: emptyInvCoord)
         },
         .treeOak: { handlerManager, go in
             if handlerManager.invContainer.is(equiping: .stoneAxe) {
                 let chunkCoord = go.chunkCoord!
 
-                GameObjectManager.default.new(type: .woodLog, chunkCoord: chunkCoord)
+                LogicContainer.default.scene.new(type: .woodLog, chunkCoord: chunkCoord)
                 if go.variant == 0 {
-                    GameObjectManager.default.new(type: .woodStick,
+                    LogicContainer.default.scene.new(type: .woodStick,
                                                   count: 2,
                                                   chunkCoord: chunkCoord)
                 }
 
-                GameObjectManager.default.new(type: .treeOakSeed,
+                LogicContainer.default.scene.new(type: .treeOakSeed,
                                               count: 2,
                                               chunkCoord: chunkCoord)
 
-                GameObjectManager.default.remove(go)
+                LogicContainer.default.scene.remove(go)
 
                 return
             }
@@ -103,8 +103,8 @@ class GameObjectInteractionHandlerManager {
             }
 
             go.set(variant: 1)
-            GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
-            GameObjectManager.default.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
+            LogicContainer.default.scene.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
+            LogicContainer.default.scene.new(type: .woodStick, variant: 0, invCoord: handlerManager.invContainer.emptyCoord!)
         },
         .weed: { handlerManager, go in
             guard let emptyInvCoord = handlerManager.invContainer.emptyCoord,
@@ -112,8 +112,8 @@ class GameObjectInteractionHandlerManager {
                 return
             }
 
-            GameObjectManager.default.new(type: .weedLeaves, invCoord: emptyInvCoord)
-            GameObjectManager.default.remove(go)
+            LogicContainer.default.scene.new(type: .weedLeaves, invCoord: emptyInvCoord)
+            LogicContainer.default.scene.remove(go)
         },
         .leafBag: { handlerManager, go in
             if handlerManager.invInv.id == go.id
@@ -168,7 +168,7 @@ class GameObjectInteractionHandlerManager {
 
             clayTile.set(type: .dirtTile)
             oakSeed.set(type: .treeOak)
-            GameObjectManager.default.remove(go)
+            LogicContainer.default.scene.remove(go)
         },
         .leafBag: { handlerManager, go, targetGO in
             var index: Int = 0
@@ -190,7 +190,7 @@ class GameObjectInteractionHandlerManager {
             }
 
             let invCoord = InventoryCoordinate(targetGO.id, index)
-            GameObjectManager.default.move(go, to: invCoord)
+            LogicContainer.default.scene.move(go, to: invCoord)
         }
     ]
 }

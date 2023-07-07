@@ -448,6 +448,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 # issue
 -
 fix bug
+    when i put invInv.2 -> it first put charInv.2
     make impossible to move GO when the cell is possessed by another GO
         when touch cell which has GO -> relay handle to GO
     move game object inventory cells proper point

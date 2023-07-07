@@ -56,11 +56,11 @@ class MovingLayer: SKNode {
 extension MovingLayer: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-            TouchHandlerContainer.default.fieldHandler.began(touch: touch)
+            LogicContainer.default.touch.fieldHandler.began(touch: touch)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+        let fieldHandler = LogicContainer.default.touch.fieldHandler
 
         guard touch == fieldHandler.touch else {
             return
@@ -70,7 +70,7 @@ extension MovingLayer: TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+        let fieldHandler = LogicContainer.default.touch.fieldHandler
 
         guard touch == fieldHandler.touch else {
             return
@@ -80,7 +80,7 @@ extension MovingLayer: TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let fieldHandler = TouchHandlerContainer.default.fieldHandler
+        let fieldHandler = LogicContainer.default.touch.fieldHandler
 
         guard touch == fieldHandler.touch else {
             return

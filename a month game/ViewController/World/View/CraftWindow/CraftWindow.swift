@@ -264,12 +264,12 @@ class CraftWindow: SKNode {
 extension CraftObject: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-        TouchHandlerContainer.default.craftTouchHandler.began(touch: touch,
+        LogicContainer.default.touch.craftTouchHandler.began(touch: touch,
                                                             craftObject: self)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.craftTouchHandler
+        let handler = LogicContainer.default.touch.craftTouchHandler
 
         guard touch == handler.touch else {
             return
@@ -279,7 +279,7 @@ extension CraftObject: TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.craftTouchHandler
+        let handler = LogicContainer.default.touch.craftTouchHandler
 
         guard touch == handler.touch else {
             return
@@ -289,7 +289,7 @@ extension CraftObject: TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.craftTouchHandler
+        let handler = LogicContainer.default.touch.craftTouchHandler
 
         guard touch == handler.touch else {
             return

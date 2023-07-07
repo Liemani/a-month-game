@@ -45,17 +45,17 @@ extension GameObjectTouchHandler: TouchEventHandler {
             return
         }
 
-        if let activatedGO = TouchHandlerContainer.default.activatedGO {
+        if let activatedGO = LogicContainer.default.touch.activatedGO {
             activatedGO.deactivate()
             go.deactivate()
 
             if activatedGO == go {
-                GameObjectManager.default.interact(go)
+                LogicContainer.default.scene.interact(go)
             } else {
-                GameObjectManager.default.interactToGO(activatedGO, to: go)
+                LogicContainer.default.scene.interactToGO(activatedGO, to: go)
             }
 
-            TouchHandlerContainer.default.activatedGO = nil
+            LogicContainer.default.touch.activatedGO = nil
 
             return
         }
@@ -64,12 +64,12 @@ extension GameObjectTouchHandler: TouchEventHandler {
         if self.go.isOnField
             && !self.go.type.isPickable {
             self.go.deactivate()
-            GameObjectManager.default.interact(go)
+            LogicContainer.default.scene.interact(go)
 
             return
         }
 
-        TouchHandlerContainer.default.activatedGO = self.go
+        LogicContainer.default.touch.activatedGO = self.go
 
         return
     }

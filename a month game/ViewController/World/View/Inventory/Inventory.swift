@@ -234,9 +234,9 @@ extension Inventory: InventoryProtocol {
     }
 
     func remove(_ item: GameObject) {
-        if let activatedGO = TouchHandlerContainer.default.activatedGO,
+        if let activatedGO = LogicContainer.default.touch.activatedGO,
            item == activatedGO {
-            TouchHandlerContainer.default.activatedGO = nil
+            LogicContainer.default.touch.activatedGO = nil
         }
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
@@ -285,12 +285,12 @@ struct InventoryIterator: IteratorProtocol {
 extension InventoryCell: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-        TouchHandlerContainer.default.invTouchHandler.began(touch: touch,
+        LogicContainer.default.touch.invTouchHandler.began(touch: touch,
                                                             touchedCell: self)
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
+        let handler = LogicContainer.default.touch.invTouchHandler
 
         guard touch == handler.touch else {
             return
@@ -300,7 +300,7 @@ extension InventoryCell: TouchResponder {
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
+        let handler = LogicContainer.default.touch.invTouchHandler
 
         guard touch == handler.touch else {
             return
@@ -310,7 +310,7 @@ extension InventoryCell: TouchResponder {
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = TouchHandlerContainer.default.invTouchHandler
+        let handler = LogicContainer.default.touch.invTouchHandler
 
         guard touch == handler.touch else {
             return

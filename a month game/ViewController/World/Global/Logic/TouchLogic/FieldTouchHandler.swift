@@ -41,20 +41,20 @@ extension FieldTouchHandler: TouchEventHandler {
             return
         }
 
-        if let activatedGO = TouchHandlerContainer.default.activatedGO {
-            GameObjectManager.default.removeFromParent(activatedGO)
+        if let activatedGO = LogicContainer.default.touch.activatedGO {
+            LogicContainer.default.scene.removeFromParent(activatedGO)
             activatedGO.data.set(coord: chunkCoord)
-            GameObjectManager.default.addToBelongField(activatedGO)
+            LogicContainer.default.scene.addToBelongField(activatedGO)
 
             activatedGO.deactivate()
-            TouchHandlerContainer.default.activatedGO = nil
+            LogicContainer.default.touch.activatedGO = nil
             self.complete()
 
             return
         }
 
         if self.invContainer.is(equiping: .stoneShovel) {
-            GameObjectManager.default.new(type: .dirtTile, chunkCoord: chunkCoord)
+            LogicContainer.default.scene.new(type: .dirtTile, chunkCoord: chunkCoord)
 
             return
         }

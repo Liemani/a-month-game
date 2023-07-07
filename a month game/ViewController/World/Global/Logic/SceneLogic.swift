@@ -1,38 +1,14 @@
 //
-//  GameObjectManager.swift
+//  SceneLogic.swift
 //  a month game
 //
-//  Created by 박정훈 on 2023/07/02.
+//  Created by 박정훈 on 2023/07/07.
 //
 
 import Foundation
 import SpriteKit
 
-class GameObjectManager {
-
-    private static var _default: GameObjectManager?
-    static var `default`: GameObjectManager { self._default! }
-
-    static func set(scene: WorldScene,
-                    ui: SKNode,
-                    invInv: GameObjectInventory,
-                    fieldInv: GameObjectInventory,
-                    character: Character,
-                    chunkContainer: ChunkContainer,
-                    invContainer: InventoryContainer,
-                    accessibleGOTracker: AccessibleGOTracker) {
-        self._default = GameObjectManager(
-            scene: scene,
-            ui: ui,
-            invInv: invInv,
-            fieldInv: fieldInv,
-            character: character,
-            chunkContainer: chunkContainer,
-            invContainer: invContainer,
-            accessibleGOTracker: accessibleGOTracker)
-    }
-
-    static func free() { self._default = nil }
+class SceneLogic {
 
     let goInteractionHandlerManager: GameObjectInteractionHandlerManager
 
@@ -57,24 +33,11 @@ class GameObjectManager {
             invContainer: invContainer,
             chunkContainer: chunkContainer)
 
-
         self.scene = scene
         self.character = character
         self.chunkContainer = chunkContainer
         self.invContainer = invContainer
         self.accessibleGOTracker = accessibleGOTracker
-    }
-
-    func take(_ go: GameObject) {
-        guard let invCoord = self.invContainer.emptyCoord else {
-            return
-        }
-
-        self.accessibleGOTracker.remove(go)
-
-        self.removeFromParent(go)
-        go.set(coord: invCoord)
-        self.addToBelongInv(go)
     }
 
     func interact(_ go: GameObject) {
@@ -96,6 +59,7 @@ class GameObjectManager {
         }
 
         guard let handler = self.goInteractionHandlerManager.goToGOHandler[targetGO.type] else {
+
             return
         }
 
@@ -159,4 +123,5 @@ class GameObjectManager {
         self.removeFromParent(go)
         go.delete()
     }
+
 }

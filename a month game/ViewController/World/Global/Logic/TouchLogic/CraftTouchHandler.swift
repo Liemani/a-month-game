@@ -46,12 +46,12 @@ extension CraftTouchHandler: TouchEventHandler {
         }
 
         for go in self.craftObject.consumeTargets {
-            GameObjectManager.default.removeFromParent(go)
+            LogicContainer.default.scene.removeFromParent(go)
             go.delete()
         }
 
         let emptyIndex = self.invContainer.emptyCoord!
-        GameObjectManager.default.new(type: self.craftObject.goType,
+        LogicContainer.default.scene.new(type: self.craftObject.goType,
                                       variant: 0,
                                       invCoord: emptyIndex)
 
