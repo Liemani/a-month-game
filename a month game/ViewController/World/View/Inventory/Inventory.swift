@@ -10,6 +10,8 @@ import SpriteKit
 
 class InventoryCell: SKSpriteNode {
 
+    var go: GameObject? { self.children.first as! GameObject? }
+
     func activate() {
         self.alpha = 0.5
     }
