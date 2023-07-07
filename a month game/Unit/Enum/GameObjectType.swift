@@ -120,9 +120,13 @@ enum GameObjectType: Int, CaseIterable {
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
     var invSpace: Int { self.resources[self.rawValue].invCount }
+    var isInv: Bool { self.invSpace != 0 }
+
     var layerCount: Int { self.resources[self.rawValue].layerCount }
+    
     var walkSpeed: Double { self.resources[self.rawValue].walkSpeed }
     var isWalkable: Bool { self.walkSpeed != -1.0 }
+
     var isPickable: Bool { self.resources[self.rawValue].isPickable }
     var isTile: Bool { self.resources[self.rawValue].isTile }
 

@@ -14,19 +14,13 @@ class CraftObject: SKSpriteNode {
 
     var consumeTargets: [GameObject]
 
-    init(goType: GameObjectType) {
-        self.goType = goType
+    init() {
+        self.goType = .none
         self.consumeTargets = []
 
-        super.init(texture: goType.textures[0], color: .white, size: Constant.gameObjectSize)
-
-        if goType.layerCount == 2 {
-            let cover = SKSpriteNode(texture: goType.textures[1])
-            cover.size = Constant.coverSize
-            cover.zPosition = Constant.ZPosition.gameObjectCover
-            self.addChild(cover)
-        }
-
+        super.init(texture: GameObjectType.none.textures[0],
+                   color: .white,
+                   size: CGSize())
         self.zPosition = Constant.ZPosition.gameObject
     }
 
@@ -54,6 +48,7 @@ class CraftObject: SKSpriteNode {
         self.goType = goType
 
         self.texture = goType.textures[0]
+        self.size = Constant.gameObjectSize
 
         if goType.layerCount == 2 {
             if self.children.count == 1 {
@@ -76,6 +71,7 @@ class CraftObject: SKSpriteNode {
         self.goType = .none
         self.removeAllChildren()
         self.texture = self.goType.textures[0]
+        self.size = CGSize()
         self.consumeTargets.removeAll()
     }
 
@@ -89,16 +85,11 @@ class CraftCell: SKSpriteNode {
         super.init(texture: texture, color: .white, size: texture.size())
 
         self.deactivate()
-        self.addCraftObject()
+        self.addChild(CraftObject())
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func addCraftObject() {
-        let craftObject = CraftObject(goType: GameObjectType.none)
-        self.addChild(craftObject)
     }
 
     private func activate() {
@@ -264,38 +255,21 @@ class CraftWindow: SKNode {
 extension CraftObject: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-        LogicContainer.default.touch.craftTouchHandler.began(touch: touch,
-                                                            craftObject: self)
+        let craftTouchLogic = CraftTouchLogic(touch: touch, craftObject: self)
+        LogicContainer.default.touch.add(craftTouchLogic)
+        craftTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.craftTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.moved()
+        LogicContainer.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.craftTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.ended()
+        LogicContainer.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.craftTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.cancelled()
+        LogicContainer.default.touch.cancelled(touch)
     }
 
 }

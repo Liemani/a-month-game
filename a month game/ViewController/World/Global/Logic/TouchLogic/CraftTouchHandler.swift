@@ -1,5 +1,5 @@
 //
-//  CraftTouchHandler.swift
+//  CraftTouchLogic.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/07/02.
@@ -8,25 +8,21 @@
 import Foundation
 import SpriteKit
 
-class CraftTouchHandler {
+class CraftTouchLogic {
 
-    let invContainer: InventoryContainer
+    let touch: UITouch
+    private let craftObject: CraftObject
 
-    var touch: UITouch!
-    var craftObject: CraftObject!
-
-    init(invContainer: InventoryContainer) {
-        self.invContainer = invContainer
+    init(touch: UITouch, craftObject: CraftObject) {
+        self.touch = touch
+        self.craftObject = craftObject
     }
 
 }
 
-extension CraftTouchHandler: TouchEventHandler {
+extension CraftTouchLogic: TouchLogic {
 
-    func began(touch: UITouch, craftObject: CraftObject) {
-        self.touch = touch
-        self.craftObject = craftObject
-
+    func began() {
         craftObject.activate()
     }
 
@@ -50,7 +46,7 @@ extension CraftTouchHandler: TouchEventHandler {
             go.delete()
         }
 
-        let emptyIndex = self.invContainer.emptyCoord!
+        let emptyIndex = LogicContainer.default.invContainer.emptyCoord!
         LogicContainer.default.scene.new(type: self.craftObject.goType,
                                       variant: 0,
                                       invCoord: emptyIndex)
@@ -64,7 +60,6 @@ extension CraftTouchHandler: TouchEventHandler {
 
     func complete() {
         craftObject.deactivate()
-        self.touch = nil
     }
 
 }

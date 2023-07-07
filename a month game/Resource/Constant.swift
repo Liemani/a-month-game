@@ -162,4 +162,6 @@ struct Constant {
 
     static let panThreshold = tileWidth * 2.0
 
+    static let characterInventoryID = 0
+
 }

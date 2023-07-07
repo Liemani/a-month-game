@@ -105,6 +105,11 @@ class SceneLogic {
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
+        if go.type.isInv
+            && invCoord.id != self.invContainer.characterInv.id {
+            return
+        }
+
         self.removeFromParent(go)
         go.set(coord: invCoord)
         self.addToBelongInv(go)

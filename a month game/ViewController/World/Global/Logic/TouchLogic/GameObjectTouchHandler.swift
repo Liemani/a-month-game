@@ -1,5 +1,5 @@
 //
-//  GameObjectTouchHandler.swift
+//  GameObjectTouchLogic.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/07/01.
@@ -8,24 +8,26 @@
 import Foundation
 import SpriteKit
 
-class GameObjectTouchHandler {
+class GameObjectTouchLogic {
 
-    var touch: UITouch!
-    private var go: GameObject!
+    let touch: UITouch
+    private let go: GameObject
+
+    init(touch: UITouch, go: GameObject) {
+        self.touch = touch
+        self.go = go
+    }
 
 }
 
-extension GameObjectTouchHandler: TouchEventHandler {
+extension GameObjectTouchLogic: TouchLogic {
 
-    func began(touch: UITouch, go: GameObject) {
-        self.touch = touch
-        self.go = go
-
+    func began() {
         self.go.activate()
     }
 
     func moved() {
-        if self.go.isBeing(touched: touch) {
+        if self.go.isBeing(touched: self.touch) {
             self.go.activate()
         } else {
             self.go.deactivate()
@@ -34,12 +36,10 @@ extension GameObjectTouchHandler: TouchEventHandler {
 
     func ended() {
         self.endedProcess()
-
-        self.complete()
     }
 
     private func endedProcess() {
-        guard self.go.isBeing(touched: touch) else {
+        guard self.go.isBeing(touched: self.touch) else {
             self.go.deactivate()
 
             return
@@ -76,12 +76,6 @@ extension GameObjectTouchHandler: TouchEventHandler {
 
     func cancelled() {
         self.go.deactivate()
-
-        self.complete()
-    }
-
-    func complete() {
-        self.touch = nil
     }
 
 }

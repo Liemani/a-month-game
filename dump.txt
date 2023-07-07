@@ -447,10 +447,11 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+restore the removed invContainer, chunkContainer of filed touch logic
 fix bug
+    put GO to invInv and move invGO to field, than reopen -> difference window
+    generated none gameobject sometimes at inventory
     when i put invInv.2 -> it first put charInv.2
-    make impossible to move GO when the cell is possessed by another GO
-        when touch cell which has GO -> relay handle to GO
     move game object inventory cells proper point
     item is not entered proper coordinate
     close inventory when the GO is moved another cell or to field
@@ -701,6 +702,8 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+make impossible to move GO when the cell is possessed by another GO
+    when touch cell which has GO -> relay handle to GO
 오브젝트 크기 적절하게 출력하도록 변경
 왼손 오른손, 인벤토리 다시 그리기?
 WorldScene 에서 menu layer 추가

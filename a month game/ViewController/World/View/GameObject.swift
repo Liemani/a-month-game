@@ -144,37 +144,21 @@ class GameObject: SKSpriteNode {
 extension GameObject: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-            LogicContainer.default.touch.goHandler.began(touch: touch, go: self)
+        let goTouchLogic = GameObjectTouchLogic(touch: touch, go: self)
+        LogicContainer.default.touch.add(goTouchLogic)
+        goTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.goHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.moved()
+        LogicContainer.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.goHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.ended()
+        LogicContainer.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.goHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.cancelled()
+        LogicContainer.default.touch.cancelled(touch)
     }
 
 //     MARK: - interact

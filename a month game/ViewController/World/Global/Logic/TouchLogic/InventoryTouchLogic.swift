@@ -10,70 +10,65 @@ import SpriteKit
 
 class InventoryTouchLogic {
 
+    var touch: UITouch { self.logic.touch }
     private let logic: Logic
 
-    var touch: UITouch { self.logic.touch }
-
-    init() {
-        self.logic = Logic()
+    init(touch: UITouch, cell: InventoryCell) {
+        self.logic = Logic(touch: touch, cell: cell)
     }
 
 }
 
 // MARK: - logic
-extension InventoryTouchLogic {
+fileprivate class Logic: TouchLogic {
 
-    private class Logic: TouchEventHandler {
+    let touch: UITouch
+    private let cell: InventoryCell
 
-        var touch: UITouch!
-        var touchedCell: InventoryCell!
+    init(touch: UITouch, cell: InventoryCell) {
+        self.touch = touch
+        self.cell = cell
+    }
 
-        func began(touch: UITouch, touchedCell: InventoryCell) {
-            self.touch = touch
-            self.touchedCell = touchedCell
+    func began() {
+        self.cell.activate()
+    }
 
-            touchedCell.activate()
+    func moved() {
+        if self.cell.isBeing(touched: self.touch) {
+            self.cell.activate()
+        } else {
+            self.cell.deactivate()
+        }
+    }
+
+    func ended() {
+        guard self.cell.isBeing(touched: self.touch) else {
+            return
         }
 
-        func moved() {
-            if self.touchedCell.isBeing(touched: self.touch) {
-                self.touchedCell.activate()
-            } else {
-                self.touchedCell.deactivate()
-            }
-        }
-
-        func ended() {
-            guard self.touchedCell.isBeing(touched: self.touch) else {
-                return
-            }
-
-            if let activatedGO = LogicContainer.default.touch.activatedGO,
-               touchedCell.isEmpty {
-                LogicContainer.default.scene.move(activatedGO,
-                                                  to: self.touchedCell.invCoord)
-            }
-
+        if let activatedGO = LogicContainer.default.touch.activatedGO,
+           self.cell.isEmpty {
             LogicContainer.default.touch.freeActivatedGO()
+            LogicContainer.default.scene.move(activatedGO,
+                                              to: self.cell.invCoord)
         }
+    }
 
-        func cancelled() {
-        }
+    func cancelled() {
+    }
 
-        func complete() {
-            self.touch = nil
-            self.touchedCell.deactivate()
-        }
-
+    func complete() {
+        self.cell.deactivate()
     }
 
 }
 
 // MARK: - facade
-extension InventoryTouchLogic: TouchEventHandler {
+extension InventoryTouchLogic: TouchLogic {
 
-    func began(touch: UITouch, touchedCell: InventoryCell) {
-        self.logic.began(touch: touch, touchedCell: touchedCell)
+    func began() {
+        self.logic.began()
     }
 
     func moved() {

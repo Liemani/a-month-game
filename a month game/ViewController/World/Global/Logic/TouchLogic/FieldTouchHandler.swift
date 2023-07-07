@@ -1,5 +1,5 @@
 //
-//  FieldTouchHandler.swift
+//  FieldTouchLogic.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/07/01.
@@ -8,36 +8,29 @@
 import Foundation
 import SpriteKit
 
-class FieldTouchHandler {
+class FieldTouchLogic {
 
-    var invContainer: InventoryContainer
-    var chunkContainer: ChunkContainer
+    let touch: UITouch
+    private let bChunkCoord: ChunkCoordinate
 
-    var touch: UITouch!
-    var bChunkCoord: ChunkCoordinate!
-
-    init(invContainer: InventoryContainer, chunkContainer: ChunkContainer) {
-        self.invContainer = invContainer
-        self.chunkContainer = chunkContainer
+    init(touch: UITouch) {
+        self.touch = touch
+        self.bChunkCoord = LogicContainer.default.chunkContainer.coordAtLocation(of: touch)!
     }
 
 }
 
-extension FieldTouchHandler: TouchEventHandler {
+extension FieldTouchLogic: TouchLogic {
 
-    func began(touch: UITouch) {
-        self.touch = touch
-        self.bChunkCoord = self.chunkContainer.coordAtLocation(of: touch)
+    func began() {
     }
 
     func moved() {
     }
 
     func ended() {
-        let chunkCoord = self.chunkContainer.coordAtLocation(of: self.touch)!
+        let chunkCoord = LogicContainer.default.chunkContainer.coordAtLocation(of: self.touch)!
         guard chunkCoord == self.bChunkCoord else {
-            self.complete()
-
             return
         }
 
@@ -48,28 +41,20 @@ extension FieldTouchHandler: TouchEventHandler {
 
             activatedGO.deactivate()
             LogicContainer.default.touch.activatedGO = nil
-            self.complete()
 
             return
         }
 
-        if self.invContainer.is(equiping: .stoneShovel) {
+        if LogicContainer.default.invContainer.is(equiping: .stoneShovel) {
             LogicContainer.default.scene.new(type: .dirtTile, chunkCoord: chunkCoord)
 
             return
         }
 
-        self.complete()
-
         return
     }
 
     func cancelled() {
-        self.complete()
-    }
-
-    func complete() {
-        self.touch = nil
     }
 
 }

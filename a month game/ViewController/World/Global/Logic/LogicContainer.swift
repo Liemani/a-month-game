@@ -35,8 +35,10 @@ class LogicContainer {
         self._default = nil
     }
 
-    let touch: TouchLogic
+    let touch: TouchLogicContainer
     let scene: SceneLogic
+    let invContainer: InventoryContainerLogic
+    let chunkContainer: ChunkContainerLogic
     let go: GameObjectLogic
 
     init(scene: WorldScene,
@@ -47,8 +49,7 @@ class LogicContainer {
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
-        self.touch = TouchLogic(chunkContainer: chunkContainer,
-                                     invContainer: invContainer)
+        self.touch = TouchLogicContainer()
         self.scene = SceneLogic(scene: scene,
                                      ui: ui,
                                      invInv: invContainer.invInv,
@@ -57,6 +58,8 @@ class LogicContainer {
                                      chunkContainer: chunkContainer,
                                      invContainer: invContainer,
                                      accessibleGOTracker: accessibleGOTracker)
+        self.invContainer = InventoryContainerLogic(invContainer: invContainer)
+        self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
         self.go = GameObjectLogic(scene: scene,
                                        ui: ui,
                                        invInv: invContainer.invInv,

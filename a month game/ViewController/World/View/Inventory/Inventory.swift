@@ -285,38 +285,21 @@ struct InventoryIterator: IteratorProtocol {
 extension InventoryCell: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
-        LogicContainer.default.touch.invTouchHandler.began(touch: touch,
-                                                            touchedCell: self)
+        let invTouchLogic = InventoryTouchLogic(touch: touch, cell: self)
+        LogicContainer.default.touch.add(invTouchLogic)
+        invTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.moved()
+        LogicContainer.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.ended()
+        LogicContainer.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        let handler = LogicContainer.default.touch.invTouchHandler
-
-        guard touch == handler.touch else {
-            return
-        }
-
-        handler.cancelled()
+        LogicContainer.default.touch.cancelled(touch)
     }
 
 }
