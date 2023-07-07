@@ -13,14 +13,19 @@ class TouchLogic {
 
     let goHandler: GameObjectTouchHandler
     let fieldHandler: FieldTouchHandler
-    let invTouchHandler: InventoryTouchHandler
+    let invTouchHandler: InventoryTouchLogic
     let craftTouchHandler: CraftTouchHandler
 
     init(chunkContainer: ChunkContainer, invContainer: InventoryContainer) {
         self.goHandler = GameObjectTouchHandler()
         self.fieldHandler = FieldTouchHandler(invContainer: invContainer, chunkContainer: chunkContainer)
-        self.invTouchHandler = InventoryTouchHandler()
+        self.invTouchHandler = InventoryTouchLogic()
         self.craftTouchHandler = CraftTouchHandler(invContainer: invContainer)
+    }
+
+    func freeActivatedGO() {
+        self.activatedGO!.deactivate()
+        self.activatedGO = nil
     }
 
 }

@@ -50,7 +50,7 @@
 		03796C062A4FC9EE00462804 /* GameObjectTouchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C052A4FC9EE00462804 /* GameObjectTouchHandler.swift */; };
 		03796C082A4FCAD800462804 /* TouchLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C072A4FCAD800462804 /* TouchLogic.swift */; };
 		03796C0A2A50083E00462804 /* FieldTouchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C092A50083E00462804 /* FieldTouchHandler.swift */; };
-		03796C0C2A501C6100462804 /* InventoryTouchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C0B2A501C6100462804 /* InventoryTouchHandler.swift */; };
+		03796C0C2A501C6100462804 /* InventoryTouchLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C0B2A501C6100462804 /* InventoryTouchLogic.swift */; };
 		03796C112A513C7D00462804 /* CraftTouchHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C102A513C7D00462804 /* CraftTouchHandler.swift */; };
 		03796C142A516AAA00462804 /* GameObjectLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C132A516AAA00462804 /* GameObjectLogic.swift */; };
 		037E3F462A1CDFEC008A50CA /* TileType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037E3F452A1CDFEC008A50CA /* TileType.swift */; };
@@ -155,7 +155,7 @@
 		03796C052A4FC9EE00462804 /* GameObjectTouchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectTouchHandler.swift; sourceTree = "<group>"; };
 		03796C072A4FCAD800462804 /* TouchLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchLogic.swift; sourceTree = "<group>"; };
 		03796C092A50083E00462804 /* FieldTouchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTouchHandler.swift; sourceTree = "<group>"; };
-		03796C0B2A501C6100462804 /* InventoryTouchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTouchHandler.swift; sourceTree = "<group>"; };
+		03796C0B2A501C6100462804 /* InventoryTouchLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTouchLogic.swift; sourceTree = "<group>"; };
 		03796C102A513C7D00462804 /* CraftTouchHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftTouchHandler.swift; sourceTree = "<group>"; };
 		03796C132A516AAA00462804 /* GameObjectLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectLogic.swift; sourceTree = "<group>"; };
 		037E3F452A1CDFEC008A50CA /* TileType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileType.swift; sourceTree = "<group>"; };
@@ -538,7 +538,7 @@
 				03796C072A4FCAD800462804 /* TouchLogic.swift */,
 				03796C052A4FC9EE00462804 /* GameObjectTouchHandler.swift */,
 				03796C092A50083E00462804 /* FieldTouchHandler.swift */,
-				03796C0B2A501C6100462804 /* InventoryTouchHandler.swift */,
+				03796C0B2A501C6100462804 /* InventoryTouchLogic.swift */,
 				03796C102A513C7D00462804 /* CraftTouchHandler.swift */,
 			);
 			path = TouchLogic;
@@ -736,7 +736,7 @@
 				031D57562A076DC8007EF383 /* CharacterData.swift in Sources */,
 				033D68F02A3EE5DD005D3CB0 /* ChunkService.swift in Sources */,
 				03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */,
-				03796C0C2A501C6100462804 /* InventoryTouchHandler.swift in Sources */,
+				03796C0C2A501C6100462804 /* InventoryTouchLogic.swift in Sources */,
 				03C65E2D2A46C4FA0042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift in Sources */,
 				03796C112A513C7D00462804 /* CraftTouchHandler.swift in Sources */,
 				0392E9302A3B3E8E001C22C4 /* WorldGenerator.swift in Sources */,
