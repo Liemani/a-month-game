@@ -118,15 +118,20 @@ class InteractionLogic {
         .leafBag: { handlerManager, go in
             if handlerManager.invInv.id == go.id
                 && !handlerManager.invInv.isHidden {
-                LogicContainer.default.sceneLow.showInvInv()
+                LogicContainer.default.sceneLow.closeInvInv()
 
                 return
             }
 
             if handlerManager.fieldInv.id == go.id
                 && !handlerManager.fieldInv.isHidden {
-                LogicContainer.default.sceneLow.showFieldInv()
+                LogicContainer.default.sceneLow.closeFieldInv()
 
+                return
+            }
+
+            if let invCoord = go.invCoord,
+                  invCoord.id != Constant.characterInventoryID {
                 return
             }
 

@@ -123,13 +123,21 @@ class SceneLowLogic {
         go.delete()
     }
 
-    func showInvInv() {
+    func closeAnyInv(of id: Int) {
+        if let inv = self.invContainer.inv(id: id) {
+            inv.isHidden = true
+
+            FrameCycleUpdateManager.default.update(with: .craftWindow)
+        }
+    }
+
+    func closeInvInv() {
         self.invContainer.invInv.isHidden = true
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
-    func showFieldInv() {
+    func closeFieldInv() {
         self.invContainer.fieldInv.isHidden = true
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)

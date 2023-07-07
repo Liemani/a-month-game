@@ -35,7 +35,7 @@ extension FieldTouchLogic: TouchLogic {
         }
 
         if let activatedGO = LogicContainer.default.touch.activatedGO {
-            LogicContainer.default.sceneLow.move(activatedGO, to: chunkCoord)
+            LogicContainer.default.scene.move(activatedGO, to: chunkCoord)
 
             activatedGO.deactivate()
             LogicContainer.default.touch.activatedGO = nil

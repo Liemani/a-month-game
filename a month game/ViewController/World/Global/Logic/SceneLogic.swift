@@ -53,20 +53,28 @@ class SceneLogic {
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
-        guard !go.type.isInv
-                || invCoord.id == Constant.characterInventoryID
+        if !go.type.isInv {
+            LogicContainer.default.sceneLow.move(go, to: invCoord)
+
+            return
+        }
+
+        guard invCoord.id == Constant.characterInventoryID
                 || ServiceContainer.default.invServ.isEmpty(id: go.id) else {
             return
         }
 
         LogicContainer.default.sceneLow.move(go, to: invCoord)
+
+        LogicContainer.default.sceneLow.closeAnyInv(of: go.id)
     }
 
     func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        // TODO: copose
-//        check inventory
-//        if inventory and open -> close
-//        move
+        LogicContainer.default.sceneLow.move(go, to: chunkCoord)
+
+        if go.type.isInv {
+            LogicContainer.default.sceneLow.closeAnyInv(of: go.id)
+        }
     }
 
 }

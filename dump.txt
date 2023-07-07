@@ -449,6 +449,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 I separated SceneLogic to SceneLowLogic
     apply the difference
+invInv must not open
+scene logic::chunk update()
+    update chunk container
+    hide open field inventory if need
 if container is empty, can be put to inventory
 fix bug
     put GO to invInv and move invGO to field, than reopen -> difference window
