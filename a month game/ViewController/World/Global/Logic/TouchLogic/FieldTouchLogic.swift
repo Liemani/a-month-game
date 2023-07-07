@@ -30,26 +30,28 @@ extension FieldTouchLogic: TouchLogic {
 
     func ended() {
         let chunkCoord = LogicContainer.default.chunkContainer.coordAtLocation(of: self.touch)!
+
         guard chunkCoord == self.bChunkCoord else {
             return
         }
 
         if let activatedGO = LogicContainer.default.touch.activatedGO {
-            LogicContainer.default.scene.move(activatedGO, to: chunkCoord)
-
-            activatedGO.deactivate()
-            LogicContainer.default.touch.activatedGO = nil
+            if let go = LogicContainer.default.chunkContainer.item(at: chunkCoord) {
+                LogicContainer.default.touch.freeActivatedGO()
+                LogicContainer.default.go.interactToGO(activatedGO, to: go)
+            } else {
+                LogicContainer.default.touch.freeActivatedGO()
+                LogicContainer.default.scene.move(activatedGO, to: chunkCoord)
+            }
 
             return
         }
 
         if LogicContainer.default.invContainer.is(equiping: .stoneShovel) {
-            LogicContainer.default.sceneLow.new(type: .dirtTile, coord: chunkCoord)
+            LogicContainer.default.go.new(type: .dirtTile, coord: chunkCoord)
 
             return
         }
-
-        return
     }
 
     func cancelled() {

@@ -53,8 +53,7 @@ fileprivate class Logic: TouchLogic {
                 LogicContainer.default.scene.move(activatedGO, to: self.cell.invCoord)
             } else {
                 LogicContainer.default.touch.freeActivatedGO()
-                LogicContainer.default.sceneLow.interactToGO(activatedGO, to: cell.go!)
-
+                LogicContainer.default.go.interactToGO(activatedGO, to: cell.go!)
             }
         }
     }

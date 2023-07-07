@@ -10,43 +10,13 @@ import SpriteKit
 
 class SceneLogic {
 
-    let goInteractionHandlerManager: InteractionLogic
-
-    let scene: WorldScene
-    let character: Character
-    let invContainer: InventoryContainer
-    let chunkContainer: ChunkContainer
-    let accessibleGOTracker: AccessibleGOTracker
-
-    init(scene: WorldScene,
-         ui: SKNode,
-         invInv: GameObjectInventory,
-         fieldInv: GameObjectInventory,
-         character: Character,
-         invContainer: InventoryContainer,
-         chunkContainer: ChunkContainer,
-         accessibleGOTracker: AccessibleGOTracker) {
-        self.goInteractionHandlerManager = InteractionLogic(
-            ui: ui,
-            invInv: invInv,
-            fieldInv: fieldInv,
-            invContainer: invContainer,
-            chunkContainer: chunkContainer)
-
-        self.scene = scene
-        self.character = character
-        self.chunkContainer = chunkContainer
-        self.invContainer = invContainer
-        self.accessibleGOTracker = accessibleGOTracker
-    }
-
     // MARK: - game object
     func new(type goType: GameObjectType,
              variant: Int = 0,
              count: Int = 1,
              coord chunkCoord: ChunkCoordinate) {
         for _ in 0 ..< count {
-            LogicContainer.default.sceneLow.new(type: goType,
+            LogicContainer.default.go.new(type: goType,
                                                 variant: variant,
                                                 coord: chunkCoord)
         }
@@ -54,7 +24,7 @@ class SceneLogic {
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
         if !go.type.isInv {
-            LogicContainer.default.sceneLow.move(go, to: invCoord)
+            LogicContainer.default.go.move(go, to: invCoord)
 
             return
         }
@@ -64,26 +34,26 @@ class SceneLogic {
             return
         }
 
-        LogicContainer.default.sceneLow.move(go, to: invCoord)
+        LogicContainer.default.go.move(go, to: invCoord)
 
-        LogicContainer.default.sceneLow.closeAnyInv(of: go.id)
+        LogicContainer.default.invContainer.closeAnyInv(of: go.id)
     }
 
     func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        LogicContainer.default.sceneLow.move(go, to: chunkCoord)
+        LogicContainer.default.go.move(go, to: chunkCoord)
 
         if go.type.isInv {
-            LogicContainer.default.sceneLow.closeAnyInv(of: go.id)
+            LogicContainer.default.invContainer.closeAnyInv(of: go.id)
         }
     }
 
     // MARK: - chunk
     func chunkContainerUpdate(direction: Direction4) {
-        LogicContainer.default.sceneLow.chunkContainerUpdate(direction: direction)
+        LogicContainer.default.chunkContainer.chunkContainerUpdate(direction: direction)
 
-        let fieldInv = self.invContainer.fieldInv
+        let fieldInv = LogicContainer.default.invContainer.fieldInv
         if fieldInv.parent == nil {
-            LogicContainer.default.sceneLow.closeFieldInv()
+            LogicContainer.default.invContainer.closeFieldInv()
         }
     }
 

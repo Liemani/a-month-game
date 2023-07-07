@@ -46,9 +46,9 @@ extension GameObjectTouchLogic: TouchLogic {
             go.deactivate()
 
             if activatedGO == go {
-                LogicContainer.default.sceneLow.interact(go)
+                LogicContainer.default.go.interact(go)
             } else {
-                LogicContainer.default.sceneLow.interactToGO(activatedGO, to: go)
+                LogicContainer.default.go.interactToGO(activatedGO, to: go)
             }
 
             LogicContainer.default.touch.activatedGO = nil
@@ -60,7 +60,7 @@ extension GameObjectTouchLogic: TouchLogic {
         if self.go.isOnField
             && !self.go.type.isPickable {
             self.go.deactivate()
-            LogicContainer.default.sceneLow.interact(go)
+            LogicContainer.default.go.interact(go)
 
             return
         }

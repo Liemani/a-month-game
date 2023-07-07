@@ -161,26 +161,4 @@ extension GameObject: TouchResponder {
         LogicContainer.default.touch.cancelled(touch)
     }
 
-//     MARK: - interact
-//    func interact() {
-//        switch self.type {
-//        case .pineTree:
-//            guard self.parent is FieldNode else { return }
-//            guard Double.random(in: 0.0...1.0) <= 0.33 else { return }
-//
-//            let goMO = self.worldScene.worldViewController.gameObjectsModel.goMOGO.field[self]!
-//            let spareDirections = goMO.spareDirections(goMOs: self.worldScene.worldViewController.gameObjectsModel.goMOGO.goMOs)
-//            guard !spareDirections.isEmpty else { return }
-//            let coordToAdd = spareDirections[Int.random(in: 0..<spareDirections.count)]
-//            let newGOMOCoord = goMO.coord + coordToAdd
-//            let newGOMOGOCoord = GameObjectCoordinate(containerType: .field, coordinate: newGOMOCoord)
-//            self.worldScene.addGOMO(of: .branch, to: newGOMOGOCoord)
-//        case .woodWall:
-//            guard self.parent is FieldNode else { return }
-//            guard Double.random(in: 0.0...1.0) <= 0.25 else { return }
-//            self.worldScene.removeGOMO(from: self)
-//        default: break
-//        }
-//    }
-
 }

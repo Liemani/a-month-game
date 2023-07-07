@@ -447,7 +447,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-if cell touched and has GO, interact
+clay interact to cave ceil -> fill
+dirt interact to dirt tile -> fill
 if field touched and has GO, interact
 inv to inv interaction
 scene logic::chunk update()
@@ -488,6 +489,8 @@ mastery
 brick
 fire
 info
+
+optimize accessibleGOTracker::update()
 
 example code
 func isDeepWater(seed: Int, chunkCoord: ChunkCoordinate) -> Bool {
@@ -705,6 +708,7 @@ GameObject
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
 
 # finish
+if cell touched and has GO, interact
 if the id of inventory is not 0, inventory GO should not put
 change field touch
 bug
