@@ -47,6 +47,12 @@ extension FieldTouchLogic: TouchLogic {
             return
         }
 
+        if let go = LogicContainer.default.chunkContainer.item(at: chunkCoord) {
+            LogicContainer.default.go.interact(go)
+
+            return
+        }
+
         if LogicContainer.default.invContainer.is(equiping: .stoneShovel) {
             LogicContainer.default.go.new(type: .dirtTile, coord: chunkCoord)
 
