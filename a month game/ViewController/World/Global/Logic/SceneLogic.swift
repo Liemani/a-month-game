@@ -76,6 +76,13 @@ class SceneLogic {
             }
     }
 
+    func containerTrasfer(_ container: GameObject, to target: GameObject) {
+        let space = LogicContainer.default.invContainer.space(of: target.id) ?? 0
+
+//        let emptySpace = target.
+
+    }
+
     // MARK: - chunk
     func chunkContainerUpdate(direction: Direction4) {
         LogicContainer.default.chunkContainer.chunkContainerUpdate(direction: direction)

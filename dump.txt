@@ -447,6 +447,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+space of inv must stored property
 inv to inv transfer
 
 shallow water

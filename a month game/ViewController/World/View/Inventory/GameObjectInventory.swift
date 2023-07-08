@@ -10,10 +10,16 @@ import SpriteKit
 
 class GameObjectInventory: Inventory {
 
-    override init(texture: SKTexture, cells: [InventoryCell]?, cellWidth: Double, cellSpacing: Double) {
-        super.init(texture: texture, cells: cells, cellWidth: cellWidth, cellSpacing: cellSpacing)
-
-        self.size = CGSize()
+    override init(id: Int? = nil,
+                  texture: SKTexture? = nil,
+                  cells: [InventoryCell]? = nil,
+                  cellWidth: Double,
+                  cellSpacing: Double) {
+        super.init(id: id,
+                   texture: texture,
+                   cells: cells,
+                   cellWidth: cellWidth,
+                   cellSpacing: cellSpacing)
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -17,6 +17,7 @@
 		0304D76F2A57FF1D0068DE99 /* SceneLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */; };
 		0304D7712A5839D20068DE99 /* CharacterLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7702A5839D20068DE99 /* CharacterLogic.swift */; };
 		0304D7732A583BE20068DE99 /* AccessibleGOTrackerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */; };
+		0304D7752A5954830068DE99 /* InventoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7742A5954830068DE99 /* InventoryData.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
 		030ABFB62A0C93AA00BAB9B8 /* TileDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */; };
 		030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */; };
@@ -125,6 +126,7 @@
 		0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLogic.swift; sourceTree = "<group>"; };
 		0304D7702A5839D20068DE99 /* CharacterLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterLogic.swift; sourceTree = "<group>"; };
 		0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleGOTrackerLogic.swift; sourceTree = "<group>"; };
+		0304D7742A5954830068DE99 /* InventoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryData.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
 		030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileDataSource.swift; sourceTree = "<group>"; };
 		030ABFBF2A0E11FB00BAB9B8 /* GameObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObject.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				034637812A238D3600370C71 /* AccessibleGOTracker.swift */,
 				031D57552A076DC8007EF383 /* CharacterData.swift */,
 				0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */,
+				0304D7742A5954830068DE99 /* InventoryData.swift */,
 				03CE3AF42A3E26FC00D95152 /* GameObjectData.swift */,
 			);
 			path = Model;
@@ -718,6 +721,7 @@
 				0304D76B2A57ED960068DE99 /* ChunkContainerLogic.swift in Sources */,
 				03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
+				0304D7752A5954830068DE99 /* InventoryData.swift in Sources */,
 				03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,

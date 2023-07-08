@@ -7,38 +7,7 @@
 
 import Foundation
 
-//class TileGameObjects: Sequence {
-//
-//    typealias Element = GameObject
-//
-//    var gos: [GameObject]
-//
-//    var count: Int { self.gos.count }
-//
-//    init(go: GameObject) {
-//        self.gos = [go]
-//    }
-//
-//    func append(_ go: GameObject) {
-//        self.gos.append(go)
-//    }
-//
-//    func remove(_ go: GameObject) {
-//        self.gos.removeAll { $0.id == go.id }
-//    }
-//
-//    func makeIterator() -> some IteratorProtocol<GameObject> {
-//        return self.gos.makeIterator()
-//    }
-//
-//    subscript(index: Int) -> GameObject {
-//        get { self.gos[index] }
-//        set { self.gos[index] = newValue }
-//    }
-//
-//}
-
-struct ChunkData {
+class ChunkData {
 
     var gos: [UInt8: [GameObject]]
 
@@ -50,7 +19,7 @@ struct ChunkData {
         return self.gos[tileAddr]
     }
 
-    mutating func add(_ go: GameObject) {
+    func add(_ go: GameObject) {
         let goTileAddr = go.chunkCoord!.address.tile.value
 
         if self.gos[goTileAddr] == nil {
@@ -60,7 +29,7 @@ struct ChunkData {
         }
     }
 
-    mutating func remove(_ go: GameObject) {
+    func remove(_ go: GameObject) {
         let goTileAddr = go.chunkCoord!.address.tile.value
 
         guard let tileGOs = self.gos[goTileAddr] else {
@@ -74,7 +43,7 @@ struct ChunkData {
         }
     }
 
-    mutating func removeAll() {
+    func removeAll() {
         self.gos.removeAll()
     }
 

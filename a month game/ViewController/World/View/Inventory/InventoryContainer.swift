@@ -41,16 +41,12 @@ class InventoryContainer {
         let characterInv = CharacterInventory(id: 0)
         self.invs.append(characterInv)
 
-        let invInv = GameObjectInventory(texture: GameObjectType.none.textures[0],
-                                         cells: nil,
-                                         cellWidth: Constant.defaultWidth,
+        let invInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
                                          cellSpacing: Constant.invCellSpacing)
         invInv.isHidden = true
         self.invs.append(invInv)
 
-        let fieldInv = GameObjectInventory(texture: GameObjectType.none.textures[0],
-                                           cells: nil,
-                                           cellWidth: Constant.defaultWidth,
+        let fieldInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
                                            cellSpacing: Constant.invCellSpacing)
         fieldInv.isHidden = true
         self.invs.append(fieldInv)
@@ -69,7 +65,7 @@ class InventoryContainer {
     var emptyCoord: InventoryCoordinate? {
         for inv in self.invs {
             if !inv.isHidden, let emptyCoord = inv.emptyCoord {
-                return InventoryCoordinate(inv.id, emptyCoord)
+                return InventoryCoordinate(inv.id!, emptyCoord)
             }
         }
 
@@ -140,7 +136,7 @@ extension InventoryContainer: InventoryProtocol {
         for inv in self.invs {
             if !inv.isHidden,
                let index = inv.coordAtLocation(of: touch) {
-                return InventoryCoordinate(inv.id, index)
+                return InventoryCoordinate(inv.id!, index)
             }
         }
 

@@ -16,6 +16,9 @@ class InventoryContainerLogic {
     }
 
     var space: Int { self.invContainer.space }
+    func space(of id: Int) -> Int? {
+        return self.inv(id: id)?.space
+    }
 
     var characterInv: CharacterInventory { self.invContainer.characterInv }
     var invInv: GameObjectInventory { self.invContainer.invInv }
