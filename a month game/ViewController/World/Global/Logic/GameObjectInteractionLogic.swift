@@ -64,6 +64,15 @@ class InteractionLogic {
             LogicContainer.default.go.remove(go)
             LogicContainer.default.go.new(type: .weedLeaves, coord: emptyInvCoord)
         },
+        .vine: { handlerManager, go in
+            guard LogicContainer.default.invContainer.is(equiping: .sickle),
+                  let emptyInvCoord = LogicContainer.default.invContainer.emptyCoord else {
+                return
+            }
+
+            LogicContainer.default.go.remove(go)
+            LogicContainer.default.go.new(type: .vineStem, coord: emptyInvCoord)
+        },
         .treeOak: { handlerManager, go in
             if LogicContainer.default.invContainer.is(equiping: .stoneAxe) {
                 let chunkCoord = go.chunkCoord!
@@ -96,33 +105,6 @@ class InteractionLogic {
 
             emptyCoord = LogicContainer.default.invContainer.emptyCoord!
             LogicContainer.default.go.new(type: .woodStick, coord: emptyCoord)
-        },
-        .leafBag: { handlerManager, go in
-            let invInv = LogicContainer.default.invContainer.invInv
-            let fieldInv = LogicContainer.default.invContainer.fieldInv
-
-            if go.id == invInv.id && !invInv.isHidden {
-                LogicContainer.default.invContainer.closeInvInv()
-
-                return
-            }
-
-            if go.id == fieldInv.id && !fieldInv.isHidden {
-                LogicContainer.default.invContainer.closeFieldInv()
-
-                return
-            }
-
-            if let invCoord = go.invCoord,
-                  invCoord.id != Constant.characterInventoryID {
-                return
-            }
-
-            if go.isOnField {
-                LogicContainer.default.invContainer.openFieldInv(of: go)
-            } else {
-                LogicContainer.default.invContainer.openInvInv(of: go)
-            }
         },
     ]
 

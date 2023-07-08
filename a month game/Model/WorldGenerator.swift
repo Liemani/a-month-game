@@ -38,8 +38,9 @@ final class WorldGenerator {
             self.generateTerrain(x, 0)
         }
 
-        self.newSquare(goType: .treeOak, x: 0, y: 5, width: 3, height: 4)
+        self.newSquare(goType: .treeOak, x: 0, y: 5, width: 5, height: 5)
         self.newSquare(goType: .weed, x: 5, y: 5, width: 5, height: 5)
+        self.newSquare(goType: .vine, x: 0, y: 10, width: 5, height: 5)
 
         try! ServiceContainer.default.moContext.save()
     }

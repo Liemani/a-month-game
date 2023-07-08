@@ -17,11 +17,13 @@ class GameObjectLogic {
     }
     
     func interact(_ go: GameObject) {
-        guard let handler = self.interactionLogic.go[go.type] else {
-            return
+        if let handler = self.interactionLogic.go[go.type] {
+            handler(self.interactionLogic, go)
         }
 
-        handler(self.interactionLogic, go)
+        if go.type.isInv {
+            LogicContainer.default.scene.containerInteract(go)
+        }
     }
 
     func interactToGO(_ go: GameObject, to target: GameObject) {

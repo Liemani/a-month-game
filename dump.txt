@@ -447,15 +447,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-clay interact to cave ceil -> clay tile
-sand interact to clay tile -> sand tile
-dirt interact to clay tile -> dirt tile
-vine basket
-    vine
-inv to inv interaction
-scene logic::chunk update()
-    update chunk container
-    hide open field inventory if need
+inv to inv transfer
+
+shallow water
+
 fix bug
     generated none gameobject sometimes at inventory
 add
@@ -486,7 +481,6 @@ world generator
     generate in chunk unit dynamically
     sea
 
-shallow water
 mastery
 brick
 fire
@@ -695,21 +689,26 @@ GameObject
     1 도끼: 나무와 상호작용하여 log 를 얻는다
     1 망치: 건물을 부순다
 
-5 광고 추가하기
-    화면 상단 일부
-    깃에 올릴 것이므로 id 정보는 뺀 상태로 완성하기
-
-3 앱 아이콘 만들고 적용하기
-
 건설
     건설할 오브젝트를 드래그하여 캐릭터 주변에 드래그하면 회색으로 건설될 예정 모습을 보여준다
     드래그를 때면 건설이 되며 재료가 차감된다
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
+# finish
+vine basket
+    vine
+3 앱 아이콘 만들고 적용하기
+5 광고 추가하기
+    화면 상단 일부
+    깃에 올릴 것이므로 id 정보는 뺀 상태로 완성하기
 스플래쉬 뷰?
     2 안드로이드에서 스플래쉬 뷰라고 불리는 초기 로딩 화면 설정하기
-
-# finish
+scene logic::chunk update()
+    update chunk container
+    hide open field inventory if need
+clay interact to cave ceil -> clay tile
+sand interact to clay tile -> sand tile
+dirt interact to clay tile -> dirt tile
 if field touched and has GO, interact
 if cell touched and has GO, interact
 if the id of inventory is not 0, inventory GO should not put

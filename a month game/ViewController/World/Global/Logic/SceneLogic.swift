@@ -47,6 +47,35 @@ class SceneLogic {
         }
     }
 
+    // MARK: - inventory
+    func containerInteract(_ container: GameObject) {
+            let invInv = LogicContainer.default.invContainer.invInv
+            let fieldInv = LogicContainer.default.invContainer.fieldInv
+
+            if container.id == invInv.id && !invInv.isHidden {
+                LogicContainer.default.invContainer.closeInvInv()
+
+                return
+            }
+
+            if container.id == fieldInv.id && !fieldInv.isHidden {
+                LogicContainer.default.invContainer.closeFieldInv()
+
+                return
+            }
+
+            if let invCoord = container.invCoord,
+                  invCoord.id != Constant.characterInventoryID {
+                return
+            }
+
+            if container.isOnField {
+                LogicContainer.default.invContainer.openFieldInv(of: container)
+            } else {
+                LogicContainer.default.invContainer.openInvInv(of: container)
+            }
+    }
+
     // MARK: - chunk
     func chunkContainerUpdate(direction: Direction4) {
         LogicContainer.default.chunkContainer.chunkContainerUpdate(direction: direction)
