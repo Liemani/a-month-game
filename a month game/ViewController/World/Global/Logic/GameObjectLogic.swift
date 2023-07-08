@@ -25,18 +25,15 @@ class GameObjectLogic {
     }
 
     func interactToGO(_ go: GameObject, to target: GameObject) {
-        if target.type.isTile,
+        if let handler = self.interactionLogic.goToGO[target.type] {
+            handler(self.interactionLogic, go, target)
+        }
+
+        if go.isExist,
+           target.type.isTile,
            let targetCoord = target.chunkCoord {
             self.move(go, to: targetCoord)
-
-            return
         }
-
-        guard let handler = self.interactionLogic.goToGO[target.type] else {
-            return
-        }
-
-        handler(self.interactionLogic, go, target)
     }
 
     func new(type goType: GameObjectType, variant: Int = 0, coord chunkCoord: ChunkCoordinate) {

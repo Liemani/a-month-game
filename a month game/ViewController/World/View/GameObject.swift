@@ -21,6 +21,8 @@ class GameObject: SKSpriteNode {
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
 
+    var isExist: Bool { self.parent != nil }
+
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
 

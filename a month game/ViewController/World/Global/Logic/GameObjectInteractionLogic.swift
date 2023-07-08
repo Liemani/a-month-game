@@ -12,7 +12,7 @@ class InteractionLogic {
 
     let go: [GameObjectType: (InteractionLogic, GameObject) -> Void] = [
         .caveCeilTile: { handlerManager, go in
-            guard LogicContainer.default.invContainer.is(equiping: .stoneAxe),
+            guard LogicContainer.default.invContainer.is(equiping: .stonePickaxe),
                   let emptyInvCoord = LogicContainer.default.invContainer.emptyCoord else {
                 return
             }
@@ -165,6 +165,42 @@ class InteractionLogic {
 
             let invCoord = InventoryCoordinate(target.id, index)
             LogicContainer.default.scene.move(go, to: invCoord)
-        }
+        },
+        .caveCeilTile: { handlerManager, go, target in
+            guard go.type == .clay else { return }
+
+            LogicContainer.default.go.remove(go)
+            target.set(type: .clayTile)
+        },
+        .clayTile: { handlerManager, go, target in
+            if go.type == .sand {
+                LogicContainer.default.go.remove(go)
+                target.set(type: .sandTile)
+
+                return
+            }
+
+            if go.type == .dirt {
+                LogicContainer.default.go.remove(go)
+                target.set(type: .dirtTile)
+
+                return
+            }
+        },
+        .sandTile: { handlerManager, go, target in
+            guard go.type == .stone else { return }
+
+            LogicContainer.default.go.remove(go)
+            target.set(type: .cobblestoneTile)
+        },
+        .caveHoleTile: { handlerManager, go, target in
+            guard go.type == .stone else { return }
+
+            LogicContainer.default.go.remove(go)
+            target.set(type: .caveCeilTile)
+        },
+        .waterTile: { handlerManager, go, target in
+            LogicContainer.default.go.remove(go)
+        },
     ]
 }

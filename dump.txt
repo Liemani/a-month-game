@@ -451,6 +451,7 @@ clay interact to cave ceil -> clay tile
 sand interact to clay tile -> sand tile
 dirt interact to clay tile -> dirt tile
 vine basket
+    vine
 inv to inv interaction
 scene logic::chunk update()
     update chunk container
@@ -464,7 +465,7 @@ add
     block
     wood box
 dirt to clay tile will make dirt tile removing dirt
-add tree sapling
+add oak tree sapling
 double click -> interaction or consume
     field GO also can be activated
 implement underground
