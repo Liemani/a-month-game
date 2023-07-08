@@ -13,7 +13,7 @@ enum GameObjectType: Int, CaseIterable {
     typealias ResourceType = (
         resourceName: String,
         walkSpeed: Double,
-        invCount: Int,
+        invCapacity: Int,
         layerCount: Int,
         isTile: Bool,
         isPickable: Bool
@@ -125,8 +125,8 @@ enum GameObjectType: Int, CaseIterable {
     var resources: [ResourceType] { GameObjectType.resources }
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
-    var invSpace: Int { self.resources[self.rawValue].invCount }
-    var isInv: Bool { self.invSpace != 0 }
+    var invCapacity: Int { self.resources[self.rawValue].invCapacity }
+    var isInv: Bool { self.invCapacity != 0 }
 
     var layerCount: Int { self.resources[self.rawValue].layerCount }
     

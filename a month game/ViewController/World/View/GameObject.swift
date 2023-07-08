@@ -39,6 +39,8 @@ class GameObject: SKSpriteNode {
             : Constant.gameObjectSize
 
         super.init(texture: texture, color: .white, size: size)
+        
+        self.data.go = self
 
         if goData.type.layerCount == 2 {
             let cover = SKSpriteNode(texture: goData.type.textures[1])

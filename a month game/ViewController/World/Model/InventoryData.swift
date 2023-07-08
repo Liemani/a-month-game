@@ -7,52 +7,76 @@
 
 import Foundation
 
-class InventoryData: Sequence {
+class InventoryData {
 
-    private var gos: [Int: GameObjectData]
+    weak var inv: Inventory?
+
+    private var goDatas: [Int: GameObjectData]
 
     var id: Int!
 
-    var count: Int!
+    var capacity: Int
+    var count: Int { self.goDatas.count }
+    var space: Int { self.capacity - self.count }
 
     init() {
-        self.gos = [:]
+        self.goDatas = [:]
+
+        self.capacity = 0
     }
 
-    init(id: Int) {
-        self.gos = [:]
+    init(id: Int, capacity: Int) {
+        self.goDatas = [:]
+
+        self.capacity = capacity
 
         self.update(id: id)
     }
 
+    var emptyCoord: InventoryCoordinate? {
+        for index in 0 ..< self.capacity {
+            if self.goDatas[index] == nil {
+                return InventoryCoordinate(self.id, index)
+            }
+        }
+
+        return nil
+    }
+
     func goData(at index: Int) -> GameObjectData? {
-        return self.gos[index]
+        return self.goDatas[index]
     }
 
     func update(id: Int) {
-        self.gos.removeAll()
-
+        self.goDatas.removeAll()
+        
         self.id = id
 
         let goDatas = ServiceContainer.default.invServ.load(id: id)
 
         for goData in goDatas {
-            self.gos[goData.invCoord!.index] = goData
+            self.goDatas[goData.invCoord!.index] = goData
         }
+    }
 
-        self.count = goDatas.count
+    func clear() {
+        self.goDatas.removeAll()
     }
 
     func add(_ goData: GameObjectData) {
-        self.gos[goData.invCoord!.index] = goData
+        self.goDatas[goData.invCoord!.index] = goData
     }
 
     func remove(_ goData: GameObjectData) {
-        self.gos[goData.invCoord!.index] = nil
+        self.goDatas[goData.invCoord!.index] = nil
     }
 
+}
+
+extension InventoryData: Sequence {
+
     func makeIterator() -> some IteratorProtocol<GameObjectData> {
-        return self.gos.values.makeIterator()
+        return self.goDatas.values.makeIterator()
     }
     
 }

@@ -54,36 +54,43 @@ class Inventory: SKSpriteNode {
     var data: InventoryData
 
     var id: Int? { self.data.id }
-    var capacity: Int
+
+    var capacity: Int { self.data.capacity }
     var count: Int { self.data.count }
-    var space: Int { self.capacity - self.count }
+    var space: Int { self.data.space }
 
     let cellWidth: Double
     let cellSpacing: Double
 
     var cells: [InventoryCell] { self.children as! [InventoryCell] }
 
-    init(id: Int? = nil,
-         texture: SKTexture? = nil,
-         cells: [InventoryCell]? = nil,
+    init(id: Int,
+         cells: [InventoryCell],
          cellWidth: Double,
          cellSpacing: Double) {
-        self.data = InventoryData()
-
-        self.capacity = cells?.count ?? 0
+        self.data = InventoryData(id: id, capacity: cells.count)
 
         self.cellWidth = cellWidth
         self.cellSpacing = cellSpacing
 
-        super.init(texture: texture, color: .white, size: texture?.size() ?? CGSize())
+        super.init(texture: nil, color: .white, size: CGSize())
 
-        if let cells = cells {
-            self.addCells(cells)
-        }
+        self.data.inv = self
 
-        if let id = id {
-            self.update(id: id)
-        }
+        self.addCells(cells)
+        self.synchronizeData()
+    }
+
+    init(cellWidth: Double,
+         cellSpacing: Double) {
+        self.data = InventoryData()
+
+        self.cellWidth = cellWidth
+        self.cellSpacing = cellSpacing
+
+        super.init(texture: nil, color: .white, size: CGSize())
+
+        self.data.inv = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -91,10 +98,6 @@ class Inventory: SKSpriteNode {
     }
 
     func update(cellCount: Int) {
-        guard self.capacity != cellCount else {
-            return
-        }
-
         if self.capacity > cellCount {
             let removeCount = self.capacity - cellCount
 
@@ -114,9 +117,18 @@ class Inventory: SKSpriteNode {
             }
         }
 
-        self.capacity = cellCount
+        self.data.capacity = cellCount
 
         self.setCellPosition()
+    }
+
+    func synchronizeData() {
+        self.clear()
+
+        for goData in self.data {
+            let go = GameObject(from: goData)
+            self.add(go)
+        }
     }
 
     func update(id: Int) {

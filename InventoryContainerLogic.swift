@@ -28,6 +28,14 @@ class InventoryContainerLogic {
         return self.invContainer.is(equiping: goType)
     }
 
+    func invData(id: Int, capacity: Int) -> InventoryData {
+        if let inv = LogicContainer.default.invContainer.inv(id: id) {
+            return inv.data
+        } else {
+            return InventoryData(id: id, capacity: capacity)
+        }
+    }
+
     func inv(id: Int) -> Inventory? {
         self.invContainer.inv(id: id)
     }
@@ -51,10 +59,9 @@ class InventoryContainerLogic {
     }
 
     func openInvInv(of go: GameObject) {
-        self.invContainer.invInv.update(go)
-        self.invContainer.invInv.isHidden = false
+        self.invContainer.invInv.reveal(with: go)
         self.invContainer.invInv.position =
-        go.convert(CGPoint(), to: self.invContainer.characterInv.parent!)
+            go.convert(CGPoint(), to: self.invContainer.characterInv.parent!)
             + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
@@ -64,8 +71,7 @@ class InventoryContainerLogic {
         let chunk = go.parent as! Chunk
         let fieldInv = self.invContainer.fieldInv
 
-        fieldInv.update(go)
-        fieldInv.isHidden = false
+        fieldInv.reveal(with: go)
         fieldInv.position = go.position
             + CGPoint(x: 0, y: Constant.defaultWidth + Constant.invCellSpacing)
 
@@ -76,13 +82,13 @@ class InventoryContainerLogic {
     }
 
     func closeInvInv() {
-        self.invContainer.invInv.isHidden = true
+        self.invContainer.invInv.hide()
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
     func closeFieldInv() {
-        self.invContainer.fieldInv.isHidden = true
+        self.invContainer.fieldInv.hide()
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }

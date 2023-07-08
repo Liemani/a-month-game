@@ -126,28 +126,6 @@ class InteractionLogic {
             oakSeed.set(type: .treeOak)
             LogicContainer.default.go.remove(go)
         },
-        .leafBag: { handlerManager, go, target in
-            var index: Int = 0
-
-            if let inv = LogicContainer.default.invContainer.inv(id: target.id) {
-                if let emptyIndex = inv.emptyCoord {
-                    index = emptyIndex
-                } else {
-                    return
-                }
-            } else {
-                let emptyIndex = ServiceContainer.default.invServ.emptyIndex(id: target.id)
-
-                if index < target.type.invSpace {
-                    index = emptyIndex
-                } else {
-                    return
-                }
-            }
-
-            let invCoord = InventoryCoordinate(target.id, index)
-            LogicContainer.default.scene.move(go, to: invCoord)
-        },
         .caveCeilTile: { handlerManager, go, target in
             guard go.type == .clay else { return }
 

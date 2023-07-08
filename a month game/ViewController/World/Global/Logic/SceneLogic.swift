@@ -49,38 +49,84 @@ class SceneLogic {
 
     // MARK: - inventory
     func containerInteract(_ container: GameObject) {
-            let invInv = LogicContainer.default.invContainer.invInv
-            let fieldInv = LogicContainer.default.invContainer.fieldInv
+        let invInv = LogicContainer.default.invContainer.invInv
+        let fieldInv = LogicContainer.default.invContainer.fieldInv
 
-            if container.id == invInv.id && !invInv.isHidden {
-                LogicContainer.default.invContainer.closeInvInv()
+        if container.id == invInv.id && !invInv.isHidden {
+            LogicContainer.default.invContainer.closeInvInv()
 
-                return
-            }
+            return
+        }
 
-            if container.id == fieldInv.id && !fieldInv.isHidden {
-                LogicContainer.default.invContainer.closeFieldInv()
+        if container.id == fieldInv.id && !fieldInv.isHidden {
+            LogicContainer.default.invContainer.closeFieldInv()
 
-                return
-            }
+            return
+        }
 
-            if let invCoord = container.invCoord,
-                  invCoord.id != Constant.characterInventoryID {
-                return
-            }
+        if let invCoord = container.invCoord,
+           invCoord.id != Constant.characterInventoryID {
+            return
+        }
 
-            if container.isOnField {
-                LogicContainer.default.invContainer.openFieldInv(of: container)
-            } else {
-                LogicContainer.default.invContainer.openInvInv(of: container)
-            }
+        if container.isOnField {
+            LogicContainer.default.invContainer.openFieldInv(of: container)
+        } else {
+            LogicContainer.default.invContainer.openInvInv(of: container)
+        }
     }
 
-    func containerTrasfer(_ container: GameObject, to target: GameObject) {
-        let space = LogicContainer.default.invContainer.space(of: target.id) ?? 0
+    func gameObjectInteractContainer(_ go: GameObject, to container: GameObject) {
+        var index: Int = 0
 
-//        let emptySpace = target.
+        if let inv = LogicContainer.default.invContainer.inv(id: container.id) {
+            if let emptyIndex = inv.emptyCoord {
+                index = emptyIndex
+            } else {
+                return
+            }
+        } else {
+            index = ServiceContainer.default.invServ.emptyIndex(id: container.id)
 
+            guard index < container.type.invCapacity else {
+                return
+            }
+        }
+
+        let invCoord = InventoryCoordinate(container.id, index)
+        LogicContainer.default.scene.move(go, to: invCoord)
+    }
+
+    func containerTransfer(_ source: GameObject, to dest: GameObject) {
+        let sourceInvData = LogicContainer.default.invContainer.invData(
+            id: source.id,
+            capacity: source.type.invCapacity)
+
+        let destInvData = LogicContainer.default.invContainer.invData(
+            id: dest.id,
+            capacity: dest.type.invCapacity)
+
+        let transferCount = min(sourceInvData.count, destInvData.space)
+
+        var count = 0
+
+        for goData in sourceInvData {
+            if count == transferCount {
+                break
+            }
+
+            LogicContainer.default.go.move(goData, to: destInvData)
+
+            count += 1
+        }
+
+        if let sourceInv = sourceInvData.inv {
+            sourceInv.synchronizeData()
+        }
+
+        if let destInv = destInvData.inv {
+            destInv.synchronizeData()
+        }
     }
 
     // MARK: - chunk

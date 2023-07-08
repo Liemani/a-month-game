@@ -31,10 +31,22 @@ class GameObjectLogic {
             handler(self.interactionLogic, go, target)
         }
 
+        if target.type.isInv {
+            if go.type.isInv {
+                LogicContainer.default.scene.containerTransfer(go, to: target)
+            } else {
+                LogicContainer.default.scene.gameObjectInteractContainer(go, to: target)
+            }
+
+            return
+        }
+
         if go.isExist,
            target.type.isTile,
            let targetCoord = target.chunkCoord {
             self.move(go, to: targetCoord)
+
+            return
         }
     }
 
@@ -48,6 +60,18 @@ class GameObjectLogic {
         LogicContainer.default.invContainer.add(go)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    /// suppose goData was in the inventory
+    /// suppose invData always has empty space
+    func move(_ goData: GameObjectData, to invData: InventoryData) {
+        if let sourceInvData = LogicContainer.default.invContainer.inv(id: goData.invCoord!.id)?.data {
+            sourceInvData.remove(goData)
+        }
+
+        goData.set(coord: invData.emptyCoord!)
+
+        invData.add(goData)
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
