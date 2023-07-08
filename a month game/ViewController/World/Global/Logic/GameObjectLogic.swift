@@ -10,34 +10,96 @@ import SpriteKit
 
 class GameObjectLogic {
 
-    let goInteractionHandlerManager: InteractionLogic
+    private let interactionLogic: InteractionLogic
 
-    let scene: WorldScene
-    let character: Character
-    let chunkContainer: ChunkContainer
-    let invContainer: InventoryContainer
-    let accessibleGOTracker: AccessibleGOTracker
-
-    init(scene: WorldScene,
-         ui: SKNode,
-         invInv: GameObjectInventory,
-         fieldInv: GameObjectInventory,
-         character: Character,
-         chunkContainer: ChunkContainer,
-         invContainer: InventoryContainer,
-         accessibleGOTracker: AccessibleGOTracker) {
-        self.goInteractionHandlerManager = InteractionLogic(
-            ui: ui,
-            invInv: invInv,
-            fieldInv: fieldInv,
-            invContainer: invContainer,
-            chunkContainer: chunkContainer)
-
-        self.scene = scene
-        self.character = character
-        self.chunkContainer = chunkContainer
-        self.invContainer = invContainer
-        self.accessibleGOTracker = accessibleGOTracker
+    init() {
+        self.interactionLogic = InteractionLogic()
     }
     
+    func interact(_ go: GameObject) {
+        if let handler = self.interactionLogic.go[go.type] {
+            handler(self.interactionLogic, go)
+        }
+
+        if go.type.isInv {
+            LogicContainer.default.scene.containerInteract(go)
+        }
+    }
+
+    func interactToGO(_ go: GameObject, to target: GameObject) {
+        if let handler = self.interactionLogic.goToGO[target.type] {
+            handler(self.interactionLogic, go, target)
+        }
+
+        if target.type.isInv {
+            if go.type.isInv {
+                LogicContainer.default.scene.containerTransfer(go, to: target)
+            } else {
+                LogicContainer.default.scene.gameObjectInteractContainer(go, to: target)
+            }
+
+            return
+        }
+
+        if go.isExist,
+           target.type.isTile,
+           let targetCoord = target.chunkCoord {
+            self.move(go, to: targetCoord)
+
+            return
+        }
+    }
+
+    func new(type goType: GameObjectType, variant: Int = 0, coord chunkCoord: ChunkCoordinate) {
+        let go = GameObject(type: goType, variant: variant, coord: chunkCoord)
+        LogicContainer.default.chunkContainer.add(go)
+    }
+
+    func new(type goType: GameObjectType, variant: Int = 0, coord invCoord: InventoryCoordinate) {
+        let go = GameObject(type: goType, variant: variant, coord: invCoord)
+        LogicContainer.default.invContainer.add(go)
+
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    /// suppose goData was in the inventory
+    /// suppose invData always has empty space
+    func move(_ goData: GameObjectData, to invData: InventoryData) {
+        if let sourceInvData = LogicContainer.default.invContainer.inv(id: goData.invCoord!.id)?.data {
+            sourceInvData.remove(goData)
+        }
+
+        goData.set(coord: invData.emptyCoord!)
+
+        invData.add(goData)
+    }
+
+    func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
+        self.removeFromParent(go)
+        go.set(coord: invCoord)
+        LogicContainer.default.invContainer.add(go)
+    }
+
+    func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
+        self.removeFromParent(go)
+        go.set(coord: chunkCoord)
+        LogicContainer.default.chunkContainer.add(go)
+    }
+
+    func removeFromParent(_ go: GameObject) {
+        if let chunk = go.parent as? Chunk {
+            chunk.remove(go)
+            LogicContainer.default.accessibleGOTracker.remove(go)
+        } else if let inventory = go.parent?.parent as? Inventory {
+            inventory.remove(go)
+
+            FrameCycleUpdateManager.default.update(with: .craftWindow)
+        }
+    }
+
+    func remove(_ go: GameObject) {
+        self.removeFromParent(go)
+        go.delete()
+    }
+
 }

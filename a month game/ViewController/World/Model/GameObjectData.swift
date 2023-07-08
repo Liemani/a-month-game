@@ -9,6 +9,7 @@ import Foundation
 
 class GameObjectData {
 
+    weak var go: GameObject?
     private var mo: GameObjectMO
 
     var id: Int { Int(self.mo.id) }

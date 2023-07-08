@@ -13,7 +13,7 @@ enum GameObjectType: Int, CaseIterable {
     typealias ResourceType = (
         resourceName: String,
         walkSpeed: Double,
-        invCount: Int,
+        invCapacity: Int,
         layerCount: Int,
         isTile: Bool,
         isPickable: Bool
@@ -29,6 +29,7 @@ enum GameObjectType: Int, CaseIterable {
     case dirtTile
     case woodFloorTile
     case weed
+    case vine
     case treeOak
     case pineTree
     case woodWall
@@ -38,6 +39,7 @@ enum GameObjectType: Int, CaseIterable {
     case clay
     case treeLeaves
     case weedLeaves
+    case vineStem
     case woodStick
     case woodLog
     case treeOakSeed
@@ -47,6 +49,7 @@ enum GameObjectType: Int, CaseIterable {
     case stonePickaxe
     case sickle
     case leafBag
+    case vineBasket
 
     init?(from goMO: GameObjectMO) {
         self.init(rawValue: goMO.type)
@@ -63,6 +66,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_dirt_tile", 1.0, 0, 1, true, false),
         ("game_object_wood_floor_tile", 1.0, 0, 1, true, false),
         ("game_object_weed", 0.75, 0, 2, false, false),
+        ("game_object_vine", 0.50, 0, 1, false, false),
         ("game_object_tree_oak", -1.0, 0, 1, false, false),
         ("game_object_pine_tree", -1.0, 0, 1, false, false),
         ("game_object_wood_wall", -1.0, 0, 1, false, false),
@@ -72,6 +76,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_clay", 1.0, 0, 1, false, true),
         ("game_object_tree_leaves", 1.0, 0, 1, false, true),
         ("game_object_weed_leaves", 1.0, 0, 1, false, true),
+        ("game_object_vine_stem", 1.0, 0, 1, false, true),
         ("game_object_wood_stick", 1.0, 0, 1, false, true),
         ("game_object_wood_log", 1.0, 0, 1, false, true),
         ("game_object_tree_oak_seed", 1.0, 0, 1, false, true),
@@ -81,6 +86,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_stone_pickaxe", 1.0, 0, 1, false, true),
         ("game_object_sickle", 1.0, 0, 1, false, true),
         ("game_object_leaf_bag", 1.0, 2, 1, false, true),
+        ("game_object_vine_basket", 1.0, 3, 1, false, true),
     ]
 
     private static let textures: [[SKTexture]] = ({
@@ -119,8 +125,8 @@ enum GameObjectType: Int, CaseIterable {
     var resources: [ResourceType] { GameObjectType.resources }
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
-    var invSpace: Int { self.resources[self.rawValue].invCount }
-    var isInv: Bool { self.invSpace != 0 }
+    var invCapacity: Int { self.resources[self.rawValue].invCapacity }
+    var isInv: Bool { self.invCapacity != 0 }
 
     var layerCount: Int { self.resources[self.rawValue].layerCount }
     

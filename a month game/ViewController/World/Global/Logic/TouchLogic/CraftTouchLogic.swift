@@ -42,12 +42,12 @@ extension CraftTouchLogic: TouchLogic {
         }
 
         for go in self.craftObject.consumeTargets {
-            LogicContainer.default.sceneLow.removeFromParent(go)
+            LogicContainer.default.go.removeFromParent(go)
             go.delete()
         }
 
         let emptyCoord = LogicContainer.default.invContainer.emptyCoord!
-        LogicContainer.default.sceneLow.new(type: self.craftObject.goType,
+        LogicContainer.default.go.new(type: self.craftObject.goType,
                                             coord: emptyCoord)
 
         self.complete()

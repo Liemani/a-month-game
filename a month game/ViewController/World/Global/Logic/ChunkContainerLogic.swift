@@ -19,5 +19,28 @@ class ChunkContainerLogic {
     func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
         return self.chunkContainer.coordAtLocation(of: touch)
     }
+    
+    func chunkContainerUpdate(direction: Direction4) {
+        chunkContainer.update(direction: direction)
+    }
+
+    func item(at chunkCoord: ChunkCoordinate) -> GameObject? {
+        return self.chunkContainer.items(at: chunkCoord)?.first
+    }
+
+    func items(at chunkCoord: ChunkCoordinate) -> [GameObject]? {
+        self.chunkContainer.items(at: chunkCoord)
+    }
+
+    func add(_ go: GameObject) {
+        let characterCoord = LogicContainer.default.character.chunkCoord.coord
+
+        self.chunkContainer.add(go)
+
+        if !go.type.isWalkable
+            && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
+            LogicContainer.default.accessibleGOTracker.add(go)
+        }
+    }
 
 }

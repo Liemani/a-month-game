@@ -10,23 +10,24 @@ import SpriteKit
 
 class GameObjectInventory: Inventory {
 
-    override init(texture: SKTexture, cells: [InventoryCell]?, cellWidth: Double, cellSpacing: Double) {
-        super.init(texture: texture, cells: cells, cellWidth: cellWidth, cellSpacing: cellSpacing)
-
-        self.size = CGSize()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func update(_ go: GameObject) {
-        guard self.id != go.id else {
-            return
+    func update(with go: GameObject) {
+        if self.capacity != go.type.invCapacity {
+            self.update(cellCount: go.type.invCapacity)
         }
 
-        self.update(cellCount: go.type.invSpace)
         self.update(id: go.id)
+    }
+
+    func hide() {
+        self.data.clear()
+
+        self.isHidden = true
+    }
+
+    func reveal(with go: GameObject) {
+        self.update(with: go)
+
+        self.isHidden = false
     }
 
 }

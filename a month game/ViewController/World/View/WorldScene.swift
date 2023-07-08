@@ -94,7 +94,6 @@ class WorldScene: SKScene {
         // MARK: moving layer
         worldLayer.addChild(self.character)
         worldLayer.addChild(movingLayer)
-        movingLayer.addChild(self.invContainer.fieldInv)
         self.invContainer.fieldInv.zPosition = Constant.ZPosition.fieldInv
 
         // MARK: ui

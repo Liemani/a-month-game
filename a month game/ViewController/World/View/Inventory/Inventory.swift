@@ -10,6 +10,8 @@ import SpriteKit
 
 class InventoryCell: SKSpriteNode {
 
+    var go: GameObject? { self.children.first as! GameObject? }
+
     func activate() {
         self.alpha = 0.5
     }
@@ -21,7 +23,7 @@ class InventoryCell: SKSpriteNode {
     var invCoord: InventoryCoordinate {
         let inventory = self.parent as! Inventory
         let index = inventory.coordAtLocation(of: self)!
-        return InventoryCoordinate(inventory.id, index)
+        return InventoryCoordinate(inventory.id!, index)
     }
 
     var isEmpty: Bool { self.children.isEmpty }
@@ -49,27 +51,46 @@ protocol InventoryProtocol<Item>: Sequence {
 
 class Inventory: SKSpriteNode {
 
-    var id: Int!
+    var data: InventoryData
 
-    var cellCount: Int
+    var id: Int? { self.data.id }
+
+    var capacity: Int { self.data.capacity }
+    var count: Int { self.data.count }
+    var space: Int { self.data.space }
+
     let cellWidth: Double
     let cellSpacing: Double
 
     var cells: [InventoryCell] { self.children as! [InventoryCell] }
 
-    init(texture: SKTexture,
-         cells: [InventoryCell]?,
+    init(id: Int,
+         cells: [InventoryCell],
          cellWidth: Double,
          cellSpacing: Double) {
-        self.cellCount = 0
+        self.data = InventoryData(id: id, capacity: cells.count)
+
         self.cellWidth = cellWidth
         self.cellSpacing = cellSpacing
 
-        super.init(texture: texture, color: .white, size: texture.size())
+        super.init(texture: nil, color: .white, size: CGSize())
 
-        if let cells = cells {
-            self.addCells(cells)
-        }
+        self.data.inv = self
+
+        self.addCells(cells)
+        self.synchronizeData()
+    }
+
+    init(cellWidth: Double,
+         cellSpacing: Double) {
+        self.data = InventoryData()
+
+        self.cellWidth = cellWidth
+        self.cellSpacing = cellSpacing
+
+        super.init(texture: nil, color: .white, size: CGSize())
+
+        self.data.inv = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,19 +98,15 @@ class Inventory: SKSpriteNode {
     }
 
     func update(cellCount: Int) {
-        guard self.cellCount != cellCount else {
-            return
-        }
-
-        if self.cellCount > cellCount {
-            let removeCount = self.cellCount - cellCount
+        if self.capacity > cellCount {
+            let removeCount = self.capacity - cellCount
 
             let cells = self.cells
             for index in 0 ..< removeCount {
                 cells[index].removeFromParent()
             }
-        } else if self.cellCount < cellCount {
-            let addCount = cellCount - self.cellCount
+        } else if self.capacity < cellCount {
+            let addCount = cellCount - self.capacity
 
             let cellTexture = SKTexture(imageNamed: Constant.ResourceName.inventoryCell)
 
@@ -100,19 +117,26 @@ class Inventory: SKSpriteNode {
             }
         }
 
-        self.cellCount = cellCount
+        self.data.capacity = cellCount
 
         self.setCellPosition()
+    }
+
+    func synchronizeData() {
+        self.clear()
+
+        for goData in self.data {
+            let go = GameObject(from: goData)
+            self.add(go)
+        }
     }
 
     func update(id: Int) {
         self.clear()
 
-        self.id = id
+        self.data.update(id: id)
 
-        let goDatas = ServiceContainer.default.invServ.load(id: id)
-
-        for goData in goDatas {
+        for goData in self.data {
             let go = GameObject(from: goData)
             let index = go.invCoord!.index
             if self.isValid(index) {
@@ -130,8 +154,6 @@ class Inventory: SKSpriteNode {
     }
 
     private func addCells(_ cells: [InventoryCell]) {
-        self.cellCount += cells.count
-
         for cell in cells {
             self.addChild(cell)
         }
@@ -141,7 +163,7 @@ class Inventory: SKSpriteNode {
 
     private func setCellPosition() {
         let distanceOfCellsCenter = self.cellWidth + self.cellSpacing
-        let endCellOffset = distanceOfCellsCenter * Double(self.cellCount - 1) / 2.0
+        let endCellOffset = distanceOfCellsCenter * Double(self.capacity - 1) / 2.0
 
         var positionX = -endCellOffset
 
@@ -169,24 +191,12 @@ class Inventory: SKSpriteNode {
         return nil
     }
 
-    var space: Int {
-        var space = 0
-
-        for cell in self.cells {
-            if cell.isEmpty {
-                space += 1
-            }
-        }
-
-        return space
-    }
-
 }
 
 extension Inventory: InventoryProtocol {
 
     func isValid(_ coord: Int) -> Bool {
-        return 0 <= coord && coord < self.cellCount
+        return 0 <= coord && coord < self.capacity
     }
 
     func contains(_ item: GameObject) -> Bool {
@@ -194,6 +204,10 @@ extension Inventory: InventoryProtocol {
     }
 
     func items(at coord: Int) -> [GameObject]? {
+        guard !self.isValid(coord) else {
+            return nil
+        }
+
         let cell = self.children[coord]
 
         if cell.children.count != 0 {
@@ -227,17 +241,16 @@ extension Inventory: InventoryProtocol {
     }
 
     func add(_ item: GameObject) {
-        self.children[item.invCoord!.index].addChild(item)
         item.position = CGPoint()
+        self.children[item.invCoord!.index].addChild(item)
+
+        self.data.add(item.data)
     }
 
     func remove(_ item: GameObject) {
-        if let activatedGO = LogicContainer.default.touch.activatedGO,
-           item == activatedGO {
-            LogicContainer.default.touch.activatedGO = nil
-        }
-
         item.removeFromParent()
+
+        self.data.remove(item.data)
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
@@ -267,7 +280,7 @@ struct InventoryIterator: IteratorProtocol {
 
             index += 1
 
-            if index == self.inv.cellCount {
+            if index == self.inv.capacity {
                 return nil
             }
 

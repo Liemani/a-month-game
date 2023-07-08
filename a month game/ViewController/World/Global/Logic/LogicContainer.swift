@@ -37,9 +37,13 @@ class LogicContainer {
 
     let touch: TouchLogicContainer
     let scene: SceneLogic
-    let sceneLow: SceneLowLogic
+
+    let character: CharacterLogic
+
     let invContainer: InventoryContainerLogic
     let chunkContainer: ChunkContainerLogic
+    let accessibleGOTracker: AccessibleGOTrackerLogic
+
     let go: GameObjectLogic
 
     init(scene: WorldScene,
@@ -51,33 +55,15 @@ class LogicContainer {
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
         self.touch = TouchLogicContainer()
-        self.scene = SceneLogic(scene: scene,
-                                ui: ui,
-                                invInv: invContainer.invInv,
-                                fieldInv: invContainer.fieldInv,
-                                character: character,
-                                invContainer: invContainer,
-                                chunkContainer: chunkContainer,
-                                accessibleGOTracker: accessibleGOTracker)
-        self.sceneLow = SceneLowLogic(
-            scene: scene,
-            ui: ui,
-            invInv: invContainer.invInv,
-            fieldInv: invContainer.fieldInv,
-            character: character,
-            invContainer: invContainer,
-            chunkContainer: chunkContainer,
-            accessibleGOTracker: accessibleGOTracker)
+        self.scene = SceneLogic()
+
+        self.character = CharacterLogic(character: character)
+
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
         self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
-        self.go = GameObjectLogic(scene: scene,
-                                       ui: ui,
-                                       invInv: invContainer.invInv,
-                                       fieldInv: invContainer.fieldInv,
-                                       character: character,
-                                       chunkContainer: chunkContainer,
-                                       invContainer: invContainer,
-                                       accessibleGOTracker: accessibleGOTracker)
+        self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
+
+        self.go = GameObjectLogic()
     }
 
 }
