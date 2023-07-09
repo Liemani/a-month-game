@@ -28,8 +28,10 @@ class WorldViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
 #endif
+        
+        WorldGenerator.generate(worldName: Constant.Name.defaultWorld)
 
-        ServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        Services.set(worldName: Constant.Name.defaultWorld)
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
@@ -52,7 +54,7 @@ class WorldViewController: UIViewController {
     }
 
     deinit {
-        ServiceContainer.free()
+        Services.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
 

@@ -10,10 +10,10 @@ import CoreData
 
 class InventoryCoordinateDataSource {
 
-    private var moContext: NSManagedObjectContext
+    private let moContext: NSManagedObjectContext
 
-    init(_ persistentContainer: LMIPersistentContainer) {
-        self.moContext = persistentContainer.viewContext
+    init(_ moContext: NSManagedObjectContext) {
+        self.moContext = moContext
     }
 
     func new() -> InventoryCoordinateMO {
@@ -40,7 +40,7 @@ extension InventoryCoordinateMO {
     }
 
     func delete() {
-        ServiceContainer.default.moContext.delete(self)
+        Services.default.moContext.delete(self)
     }
 
 }

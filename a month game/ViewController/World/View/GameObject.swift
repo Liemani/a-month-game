@@ -89,7 +89,9 @@ class GameObject: SKSpriteNode {
     }
 
     func removeQualityBox() {
-        self.children[0].removeFromParent()
+        if !self.children.isEmpty {
+            self.children[0].removeFromParent()
+        }
     }
 
     convenience init(type goType: GameObjectType,

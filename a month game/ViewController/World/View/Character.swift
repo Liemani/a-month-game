@@ -10,7 +10,7 @@ import SpriteKit
 
 class Character: SKShapeNode {
 
-    var data: CharacterData
+    let data: CharacterData
 
     var chunkCoord: ChunkCoordinate { self.data.chunkCoord }
 

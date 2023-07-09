@@ -34,7 +34,7 @@ class SceneLogic {
         }
 
         guard invCoord.id == Constant.characterInventoryID
-                || ServiceContainer.default.invServ.isEmpty(id: go.id) else {
+                || Services.default.invServ.isEmpty(id: go.id) else {
             return
         }
 
@@ -90,7 +90,7 @@ class SceneLogic {
                 return
             }
         } else {
-            index = ServiceContainer.default.invServ.emptyIndex(id: container.id)
+            index = Services.default.invServ.emptyIndex(id: container.id)
 
             guard index < container.type.invCapacity else {
                 return

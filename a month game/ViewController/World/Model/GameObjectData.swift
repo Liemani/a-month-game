@@ -70,12 +70,12 @@ class GameObjectData {
          variant: Int,
          quality: Double,
          state: GameObjectState) {
-        let id = ServiceContainer.default.idGeneratorServ.generate()
-        self.mo = ServiceContainer.default.goRepo.new(id: id,
-                                                      type: goType,
-                                                      variant: variant,
-                                                      quality: quality,
-                                                      state: state)
+        let id = Services.default.idGeneratorServ.generate()
+        self.mo = Services.default.goRepo.new(id: id,
+                                              type: goType,
+                                              variant: variant,
+                                              quality: quality,
+                                              state: state)
 
         self.type = goType
         self.variant = variant

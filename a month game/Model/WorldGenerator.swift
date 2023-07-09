@@ -9,14 +9,21 @@ import Foundation
 
 final class WorldGenerator {
 
-    static func generate() {
-        let worldGenerator = WorldGenerator()
-        worldGenerator.generateWorldData()
-        worldGenerator.generateGOMOs()
+    static func generate(worldName: String) {
+        FileUtility.default.createCharacterDirIfNotExist()
+
+        if (!FileUtility.default.isWorldDirExist(worldName: worldName)) {
+            Services.set(worldName: worldName)
+
+            let worldGenerator = WorldGenerator()
+            worldGenerator.generateWorldData(worldName: worldName)
+            worldGenerator.generateGOMOs()
+        }
     }
 
-    private func generateWorldData() {
-        let worldDataRepo = ServiceContainer.default.worldDataRepo
+    private func generateWorldData(worldName: String) {
+        let worldDataRepo = Services.default.worldDataRepo
+
         worldDataRepo.update(value: Constant.initialNextID, to: .nextID)
         worldDataRepo.update(value: 0, to: .characterLocationChunkX)
         worldDataRepo.update(value: 0, to: .characterLocationChunkY)
@@ -42,7 +49,7 @@ final class WorldGenerator {
         self.newSquare(goType: .weed, x: 5, y: 5, width: 5, height: 5)
         self.newSquare(goType: .vine, x: 0, y: 10, width: 5, height: 5)
 
-        try! ServiceContainer.default.moContext.save()
+        try! Services.default.moContext.save()
     }
 
     func newSquare(goType: GameObjectType, x: Int, y: Int, width: Int, height: Int) {
@@ -64,8 +71,8 @@ final class WorldGenerator {
     }
 
     private func new(type goType: GameObjectType, x: Int, y: Int) {
-        let id = ServiceContainer.default.idGeneratorServ.generate()
-        let goMO = ServiceContainer.default.goRepo.new(id: id,
+        let id = Services.default.idGeneratorServ.generate()
+        let goMO = Services.default.goRepo.new(id: id,
                                                        type: goType,
                                                        variant: 0,
                                                        quality: 0.0,

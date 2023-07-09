@@ -27,47 +27,6 @@ extension Array {
 
 }
 
-// TODO: move to GameObject
-//// MARK: - GameObjectMO
-//extension GameObjectMO {
-//
-//    /// - Returns: Return value is bit flag describing Nth space of clockwise order is possessed.
-//    func spareDirections(goMOs: any Sequence<GameObjectMO>) -> [Coordinate<Int>] {
-//        var filledSpaceFlags: UInt8 = 0
-//
-//        let spaceShiftTable: [UInt8] = Constant.spaceShiftTable
-//
-//        let coord = self.coord
-//
-//        for goMO in goMOs {
-//            let goMO = goMO as! GameObjectMO
-//            let goMOCoord = goMO.coord
-//            if coord.isAdjacent(to: goMOCoord) {
-//                let deltaX = goMOCoord.x - coord.x
-//                let deltaY = goMOCoord.y - coord.y
-//                let deltaCoord = Coordinate(deltaX, deltaY)
-//                guard let direction = Direction9(coord: deltaCoord) else {
-//                    continue
-//                }
-//                filledSpaceFlags |= 0x1 << direction.rawValue
-//            }
-//        }
-//
-//        let coordVectorTable = Constant.coordVectorTable
-//
-//        var spareSpaces: [Coordinate<Int>] = []
-//
-//        for index in 0..<8 {
-//            if (filledSpaceFlags >> index) & 0x1 == 0x0 {
-//                spareSpaces.append(coordVectorTable[index])
-//            }
-//        }
-//
-//        return spareSpaces
-//    }
-//
-//}
-
 // MARK: - SKNode
 extension SKNode {
 

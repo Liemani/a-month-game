@@ -169,7 +169,7 @@ class WorldScene: SKScene {
     }
 
     func updateData() {
-        let moContext = ServiceContainer.default.moContext
+        let moContext = Services.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
         }

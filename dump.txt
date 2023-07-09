@@ -447,21 +447,12 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-quality
-    apply LogicContainer.default.go.new()
-    apply go.set(type)
-    apply LogicContainer.default.scene.new()
+mastery system
 
-inventory logic::move() -> inventory data logic::move()
-
-chunk data logic::move()
-chunk data::synchronizeData()
+display expected quality to craft object
 
 bug
     if i interact water with container, the contents will be dagling
-    craft system not working
-
-mastery
 
 fire
 potery
@@ -713,6 +704,14 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+fix craft system not working
+chunk data logic::move()
+chunk data::synchronizeData()
+inventory logic::move() -> inventory data logic::move()
+quality
+    apply LogicContainer.default.go.new()
+    apply go.set(type)
+    apply LogicContainer.default.scene.new()
 space of inv must stored property
 inv to inv transfer
 bug

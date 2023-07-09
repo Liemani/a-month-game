@@ -10,14 +10,10 @@ import CoreData
 
 final class GameObjectDataSource {
 
-    private let persistentContainer: LMIPersistentContainer
+    private let moContext: NSManagedObjectContext
 
-    init(_ persistentContainer: LMIPersistentContainer) {
-        self.persistentContainer = persistentContainer
-    }
-
-    private var moContext: NSManagedObjectContext {
-        return self.persistentContainer.viewContext
+    init(_ moContext: NSManagedObjectContext) {
+        self.moContext = moContext
     }
 
     func new() -> GameObjectMO {

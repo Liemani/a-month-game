@@ -104,14 +104,18 @@ struct Constant {
 
         // MARK: file name
         static let tileMapFile = "tileMap.dat"
+        static let masteryDataModelFile = "masteryDataModel.sqlite"
         static let worldDataModelFile = "worldDataModel.sqlite"
         static let worldDataFile = "worldData.dat"
 
         // MARK: data model name
         static let worldDataModel = "WorldDataModel"
         static let gameObjectEntity = "GameObjectMO"
-        static let chunkCoordinateEntity = "ChunkCoordinateMO"
         static let invCoordinateEntity = "InventoryCoordinateMO"
+        static let chunkCoordinateEntity = "ChunkCoordinateMO"
+        static let interactionMasteryEntity = "InteractionMasteryMO"
+        static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
+        static let craftMasteryEntity = "craftMasteryMO"
     }
 
     // MARK: - recipe

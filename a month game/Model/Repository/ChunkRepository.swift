@@ -10,17 +10,17 @@ import CoreData
 
 class ChunkRepository {
 
-    private let goDataSource: GameObjectDataSource
-    private let chunkCoordDataSource: ChunkCoordinateDataSource
+    private let goDS: GameObjectDataSource
+    private let chunkCoordDS: ChunkCoordinateDataSource
 
-    init(goDataSource: GameObjectDataSource,
-         chunkCoordDataSource: ChunkCoordinateDataSource) {
-        self.goDataSource = goDataSource
-        self.chunkCoordDataSource = chunkCoordDataSource
+    init(goDS: GameObjectDataSource,
+         chunkCoordDS: ChunkCoordinateDataSource) {
+        self.goDS = goDS
+        self.chunkCoordDS = chunkCoordDS
     }
 
     func load(at chunkCoord: ChunkCoordinate) -> [GameObjectMO] {
-        let chunkCoordMOs = self.chunkCoordDataSource.load(at: chunkCoord)
+        let chunkCoordMOs = self.chunkCoordDS.load(at: chunkCoord)
         let goMOs = chunkCoordMOs.compactMap { chunkCoordMO -> GameObjectMO? in
             return chunkCoordMO.gameObjectMO
         }

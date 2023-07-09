@@ -28,7 +28,7 @@ enum PortalEventType: Int, CaseIterable, EventType {
         },
 
         { scene, event in // resetYesButton
-            WorldDirectoryUtility.default.remove(worldName: Constant.Name.defaultWorld)
+            FileUtility.default.remove(worldName: Constant.Name.defaultWorld)
             scene.resetWindow.hide()
         },
 

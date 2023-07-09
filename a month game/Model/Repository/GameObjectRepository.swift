@@ -10,17 +10,16 @@ import CoreData
 
 class GameObjectRepository {
 
-    private var goDataSource: GameObjectDataSource
-    private var chunkCoordDataSource: ChunkCoordinateDataSource
-    private var invCoordDataSource: InventoryCoordinateDataSource
+    private let goDS: GameObjectDataSource
+    private let chunkCoordDS: ChunkCoordinateDataSource
+    private let invCoordDS: InventoryCoordinateDataSource
 
-
-    init(goDataSource: GameObjectDataSource,
-         chunkCoordDataSource: ChunkCoordinateDataSource,
-         invCoordDataSource: InventoryCoordinateDataSource) {
-        self.goDataSource = goDataSource
-        self.chunkCoordDataSource = chunkCoordDataSource
-        self.invCoordDataSource = invCoordDataSource
+    init(goDS: GameObjectDataSource,
+         chunkCoordDS: ChunkCoordinateDataSource,
+         invCoordDS: InventoryCoordinateDataSource) {
+        self.goDS = goDS
+        self.chunkCoordDS = chunkCoordDS
+        self.invCoordDS = invCoordDS
     }
 
     func new(id: Int,
@@ -28,7 +27,7 @@ class GameObjectRepository {
              variant: Int,
              quality: Double,
              state: GameObjectState) -> GameObjectMO {
-        let goMO = self.goDataSource.new()
+        let goMO = self.goDS.new()
 
         goMO.id = Int32(id)
         goMO.typeID = Int32((variant << 16) | type.rawValue)
@@ -65,7 +64,7 @@ extension GameObjectMO {
         if let chunkCoordMO = self.chunkCoord {
             chunkCoordMO.update(chunkCoord)
         } else {
-            let chunkCoordMO = ServiceContainer.default.chunkCoordDS.new()
+            let chunkCoordMO = Services.default.chunkCoordDS.new()
             chunkCoordMO.update(chunkCoord)
             chunkCoordMO.gameObjectMO = self
             self.chunkCoord = chunkCoordMO
@@ -80,7 +79,7 @@ extension GameObjectMO {
         if let invCoordMO = self.invCoord {
             invCoordMO.update(invCoord)
         } else {
-            let invCoordMO = ServiceContainer.default.invCoordDS.new()
+            let invCoordMO = Services.default.invCoordDS.new()
             invCoordMO.update(invCoord)
             invCoordMO.gameObjectMO = self
             self.invCoord = invCoordMO
@@ -92,7 +91,7 @@ extension GameObjectMO {
     }
 
     func delete() {
-        ServiceContainer.default.persistentContainer.viewContext.delete(self)
+        Services.default.persistentContainer.viewContext.delete(self)
     }
 
 }
