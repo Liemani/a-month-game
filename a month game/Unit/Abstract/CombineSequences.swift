@@ -38,7 +38,7 @@ import Foundation
 //    }
 //}
 
-struct CombineSequences<Element>: Sequence, IteratorProtocol {
+class CombineSequences<Element>: Sequence, IteratorProtocol {
 
     private var iterators: [any IteratorProtocol<Element>]
     private var currentIndex: Int = 0
@@ -51,7 +51,7 @@ struct CombineSequences<Element>: Sequence, IteratorProtocol {
         }
     }
 
-    mutating func next() -> Element? {
+    func next() -> Element? {
         while self.currentIndex < self.iterators.count {
             if let nextElement = iterators[self.currentIndex].next() {
                 return nextElement

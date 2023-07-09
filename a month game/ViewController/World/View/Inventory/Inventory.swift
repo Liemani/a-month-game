@@ -259,33 +259,16 @@ extension Inventory: InventoryProtocol {
 
 }
 
-struct InventoryIterator: IteratorProtocol {
+class InventoryIterator: IteratorProtocol {
 
-    let inv: Inventory
-    var index: Int
-    var goIterator: IndexingIterator<[GameObject]>?
+    var iterator: any IteratorProtocol<GameObjectData>
 
     init(_ inv: Inventory) {
-        self.inv = inv
-        self.index = 0
-
-        self.goIterator = self.inv.items(at: index)?.makeIterator()
+        self.iterator = inv.data.makeIterator()
     }
 
-    mutating func next() -> GameObject? {
-        while true {
-            if let go = self.goIterator?.next() {
-                return go
-            }
-
-            index += 1
-
-            if index == self.inv.capacity {
-                return nil
-            }
-
-            self.goIterator = self.inv.items(at: index)?.makeIterator()
-        }
+    func next() -> GameObject? {
+        return self.iterator.next()?.go
     }
 
 }
