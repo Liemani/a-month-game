@@ -1,5 +1,5 @@
 //
-//  LogicContainer.swift
+//  Logics.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/07/07.
@@ -8,10 +8,10 @@
 import Foundation
 import SpriteKit
 
-class LogicContainer {
+class Logics {
 
-    private static var _default: LogicContainer?
-    static var `default`: LogicContainer { self._default! }
+    private static var _default: Logics?
+    static var `default`: Logics { self._default! }
 
     static func set(scene: WorldScene,
                     ui: SKNode,
@@ -21,7 +21,7 @@ class LogicContainer {
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
-        self._default = LogicContainer(scene: scene,
+        self._default = Logics(scene: scene,
                                        ui: ui,
                                        invInv: invInv,
                                        fieldInv: fieldInv,
@@ -35,7 +35,7 @@ class LogicContainer {
         self._default = nil
     }
 
-    let touch: TouchLogicContainer
+    let touch: TouchLogics
     let scene: SceneLogic
 
     let character: CharacterLogic
@@ -54,7 +54,7 @@ class LogicContainer {
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
-        self.touch = TouchLogicContainer()
+        self.touch = TouchLogics()
         self.scene = SceneLogic()
 
         self.character = CharacterLogic(character: character)

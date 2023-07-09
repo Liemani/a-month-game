@@ -15,7 +15,7 @@ class FieldTouchLogic {
 
     init(touch: UITouch) {
         self.touch = touch
-        self.bChunkCoord = LogicContainer.default.chunkContainer.coordAtLocation(of: touch)!
+        self.bChunkCoord = Logics.default.chunkContainer.coordAtLocation(of: touch)!
     }
 
 }
@@ -29,32 +29,33 @@ extension FieldTouchLogic: TouchLogic {
     }
 
     func ended() {
-        let chunkCoord = LogicContainer.default.chunkContainer.coordAtLocation(of: self.touch)!
+        let chunkCoord = Logics.default.chunkContainer.coordAtLocation(of: self.touch)!
 
         guard chunkCoord == self.bChunkCoord else {
             return
         }
 
-        if let activatedGO = LogicContainer.default.touch.activatedGO {
-            if let go = LogicContainer.default.chunkContainer.item(at: chunkCoord) {
-                LogicContainer.default.touch.freeActivatedGO()
-                LogicContainer.default.go.interactToGO(activatedGO, to: go)
+        if let activatedGO = Logics.default.touch.activatedGO {
+            if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
+                Logics.default.touch.freeActivatedGO()
+                Logics.default.go.interactToGO(activatedGO, to: go)
             } else {
-                LogicContainer.default.touch.freeActivatedGO()
-                LogicContainer.default.scene.move(activatedGO, to: chunkCoord)
+                Logics.default.touch.freeActivatedGO()
+                Logics.default.scene.move(activatedGO, to: chunkCoord)
             }
 
             return
         }
 
-        if let go = LogicContainer.default.chunkContainer.item(at: chunkCoord) {
-            LogicContainer.default.go.interact(go)
+        if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
+            Logics.default.go.interact(go)
 
             return
         }
 
-        if LogicContainer.default.invContainer.is(equiping: .stoneShovel) {
-            LogicContainer.default.go.new(type: .dirtTile, coord: chunkCoord)
+        if Logics.default.invContainer.is(equiping: .shovel) {
+            Logics.default.go.new(type: .dirtTile,
+                                          coord: chunkCoord)
 
             return
         }

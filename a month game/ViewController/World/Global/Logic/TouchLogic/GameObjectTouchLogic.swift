@@ -44,20 +44,20 @@ extension GameObjectTouchLogic: TouchLogic {
         var go = go
 
         if go.type.isTile {
-            go = LogicContainer.default.chunkContainer.items(at: go.chunkCoord!)!.last!
+            go = Logics.default.chunkContainer.items(at: go.chunkCoord!)!.last!
         }
 
-        if let activatedGO = LogicContainer.default.touch.activatedGO {
+        if let activatedGO = Logics.default.touch.activatedGO {
             activatedGO.deactivate()
             go.deactivate()
 
             if activatedGO == go {
-                LogicContainer.default.go.interact(go)
+                Logics.default.go.interact(go)
             } else {
-                LogicContainer.default.go.interactToGO(activatedGO, to: go)
+                Logics.default.go.interactToGO(activatedGO, to: go)
             }
 
-            LogicContainer.default.touch.activatedGO = nil
+            Logics.default.touch.activatedGO = nil
 
             return
         }
@@ -66,12 +66,12 @@ extension GameObjectTouchLogic: TouchLogic {
         if go.isOnField
             && !go.type.isPickable {
             go.deactivate()
-            LogicContainer.default.go.interact(go)
+            Logics.default.go.interact(go)
 
             return
         }
 
-        LogicContainer.default.touch.activatedGO = self.go
+        Logics.default.touch.activatedGO = self.go
 
         return
     }

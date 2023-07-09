@@ -19,7 +19,7 @@ protocol TouchLogic {
 
 }
 
-class TouchLogicContainer {
+class TouchLogics {
 
     private var logics: [UITouch: TouchLogic]
     var activatedGO: GameObject?

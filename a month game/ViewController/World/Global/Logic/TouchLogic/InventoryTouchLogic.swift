@@ -47,13 +47,13 @@ fileprivate class Logic: TouchLogic {
             return
         }
 
-        if let activatedGO = LogicContainer.default.touch.activatedGO {
+        if let activatedGO = Logics.default.touch.activatedGO {
             if self.cell.isEmpty {
-                LogicContainer.default.touch.freeActivatedGO()
-                LogicContainer.default.scene.move(activatedGO, to: self.cell.invCoord)
+                Logics.default.touch.freeActivatedGO()
+                Logics.default.scene.move(activatedGO, to: self.cell.invCoord)
             } else {
-                LogicContainer.default.touch.freeActivatedGO()
-                LogicContainer.default.go.interactToGO(activatedGO, to: cell.go!)
+                Logics.default.touch.freeActivatedGO()
+                Logics.default.go.interactToGO(activatedGO, to: cell.go!)
             }
         }
     }

@@ -39,7 +39,7 @@ class WorldViewController: UIViewController {
                                    ui: scene.ui,
                                    character: scene.character)
 
-        LogicContainer.set(scene: scene,
+        Logics.set(scene: scene,
                            ui: scene.ui,
                            invInv: scene.invContainer.invInv,
                            fieldInv: scene.invContainer.fieldInv,
@@ -82,7 +82,7 @@ class WorldViewController: UIViewController {
         FrameCycleUpdateManager.free()
 
         TouchRecognizerManager.free()
-        LogicContainer.free()
+        Logics.free()
     }
 
 }

@@ -17,6 +17,8 @@ class GameObject: SKSpriteNode {
     var type: GameObjectType { self.data.type }
     var variant: Int { self.data.variant }
 
+    var quality: Double { self.data.quality }
+
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
@@ -54,20 +56,31 @@ class GameObject: SKSpriteNode {
             : Constant.ZPosition.tile
     }
 
-    convenience init(type goType: GameObjectType, variant: Int) {
-        let goData = GameObjectData(goType: goType, variant: variant)
-        self.init(from: goData)
-    }
-
-    convenience init(type goType: GameObjectType, variant: Int, coord chunkCoord: ChunkCoordinate) {
-        let goData = GameObjectData(goType: goType, variant: variant)
+    convenience init(type goType: GameObjectType,
+                     variant: Int,
+                     quality: Double,
+                     state: GameObjectState,
+                     coord chunkCoord: ChunkCoordinate) {
+        let goData = GameObjectData(goType: goType,
+                                    variant: variant,
+                                    quality: quality,
+                                    state: state)
         goData.set(coord: chunkCoord)
+
         self.init(from: goData)
     }
 
-    convenience init(type goType: GameObjectType, variant: Int, coord invCoord: InventoryCoordinate) {
-        let goData = GameObjectData(goType: goType, variant: variant)
+    convenience init(type goType: GameObjectType,
+                     variant: Int,
+                     quality: Double,
+                     state: GameObjectState,
+                     coord invCoord: InventoryCoordinate) {
+        let goData = GameObjectData(goType: goType,
+                                    variant: variant,
+                                    quality: quality,
+                                    state: state)
         goData.set(coord: invCoord)
+
         self.init(from: goData)
     }
 
@@ -122,6 +135,10 @@ class GameObject: SKSpriteNode {
         self.data.set(variant: variant)
     }
 
+    func set(quality: Double) {
+        self.data.quality = quality
+    }
+
     func set(coord chunkCoord: ChunkCoordinate) {
         self.data.set(coord: chunkCoord)
     }
@@ -149,20 +166,20 @@ extension GameObject: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
         let goTouchLogic = GameObjectTouchLogic(touch: touch, go: self)
-        LogicContainer.default.touch.add(goTouchLogic)
+        Logics.default.touch.add(goTouchLogic)
         goTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
+        Logics.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
+        Logics.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+        Logics.default.touch.cancelled(touch)
     }
 
 }

@@ -41,14 +41,18 @@ extension CraftTouchLogic: TouchLogic {
             return
         }
 
-        for go in self.craftObject.consumeTargets {
-            LogicContainer.default.go.removeFromParent(go)
-            go.delete()
+        let consumeTargets = self.craftObject.consumeTargets
+        var sum = 0.0
+
+        for go in consumeTargets {
+            Logics.default.go.remove(go)
+            sum += go.quality
         }
 
-        let emptyCoord = LogicContainer.default.invContainer.emptyCoord!
-        LogicContainer.default.go.new(type: self.craftObject.goType,
-                                            coord: emptyCoord)
+        let emptyCoord = Logics.default.invContainer.emptyCoord!
+        Logics.default.go.new(type: self.craftObject.goType,
+                                      quality: sum / Double(consumeTargets.count),
+                                      coord: emptyCoord)
 
         self.complete()
     }

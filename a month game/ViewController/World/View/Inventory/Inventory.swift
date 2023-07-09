@@ -278,20 +278,20 @@ extension InventoryCell: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
         let invTouchLogic = InventoryTouchLogic(touch: touch, cell: self)
-        LogicContainer.default.touch.add(invTouchLogic)
+        Logics.default.touch.add(invTouchLogic)
         invTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
+        Logics.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
+        Logics.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+        Logics.default.touch.cancelled(touch)
     }
 
 }

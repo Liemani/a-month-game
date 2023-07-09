@@ -76,6 +76,18 @@ class InventoryContainer {
         return self.leftGO?.type == goType || self.rightGO?.type == goType
     }
 
+    func go(equiping goType: GameObjectType) -> GameObject? {
+        if self.rightGO?.type == goType {
+            return self.rightGO
+        }
+
+        if self.leftGO?.type == goType {
+            return self.leftGO
+        }
+
+        return nil
+    }
+
     var space: Int {
         var space = 0
 

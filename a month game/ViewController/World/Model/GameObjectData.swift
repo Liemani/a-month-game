@@ -7,23 +7,44 @@
 
 import Foundation
 
+struct GameObjectState: OptionSet {
+
+    let rawValue: Int16
+
+}
+
 class GameObjectData {
 
     weak var go: GameObject?
     private var mo: GameObjectMO
 
     var id: Int { Int(self.mo.id) }
-    var type: GameObjectType
-    var variant: Int
 
+    var type: GameObjectType
     func set(type goType: GameObjectType) {
         self.mo.update(to: goType)
         self.type = goType
     }
 
+    var variant: Int
     func set(variant: Int) {
         self.mo.update(to: variant)
         self.variant = variant
+    }
+
+    var quality: Double {
+        get { self.mo.quality }
+        set { self.mo.quality = newValue }
+    }
+
+    var state: GameObjectState
+    func insert(state: GameObjectState) {
+        self.state.insert(state)
+        self.mo.update(to: state)
+    }
+    func remove(state: GameObjectState) {
+        self.state.remove(state)
+        self.mo.update(to: state)
     }
 
     private var _chunkCoord: ChunkCoordinate?
@@ -45,11 +66,22 @@ class GameObjectData {
     }
 
     // MARK: - init
-    init(goType: GameObjectType, variant: Int) {
+    init(goType: GameObjectType,
+         variant: Int,
+         quality: Double,
+         state: GameObjectState) {
         let id = ServiceContainer.default.idGeneratorServ.generate()
-        self.mo = ServiceContainer.default.goRepo.new(id: id, type: goType, variant: variant)
+        self.mo = ServiceContainer.default.goRepo.new(id: id,
+                                                      type: goType,
+                                                      variant: variant,
+                                                      quality: quality,
+                                                      state: state)
+
         self.type = goType
         self.variant = variant
+
+        self.state = state
+
         self._chunkCoord = nil
         self._invCoord = nil
     }
@@ -62,6 +94,8 @@ class GameObjectData {
         self.mo = goMO
         self.type = goType
         self.variant = goMO.variant
+
+        self.state = GameObjectState(rawValue: goMO.state)
 
         self._chunkCoord = nil
         self._invCoord = nil

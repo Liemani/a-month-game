@@ -57,20 +57,20 @@ extension MovingLayer: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
         let fieldTouchLogic = FieldTouchLogic(touch: touch)
-        LogicContainer.default.touch.add(fieldTouchLogic)
+        Logics.default.touch.add(fieldTouchLogic)
         fieldTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
+        Logics.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
+        Logics.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+        Logics.default.touch.cancelled(touch)
     }
 
 }

@@ -256,20 +256,20 @@ extension CraftObject: TouchResponder {
 
     func touchBegan(_ touch: UITouch) {
         let craftTouchLogic = CraftTouchLogic(touch: touch, craftObject: self)
-        LogicContainer.default.touch.add(craftTouchLogic)
+        Logics.default.touch.add(craftTouchLogic)
         craftTouchLogic.began()
     }
 
     func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
+        Logics.default.touch.moved(touch)
     }
 
     func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
+        Logics.default.touch.ended(touch)
     }
 
     func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+        Logics.default.touch.cancelled(touch)
     }
 
 }

@@ -119,9 +119,9 @@ struct Constant {
         .woodWall: [.woodStick: 4],
 
         // MARK: tool
-        .stoneAxe: [.stone: 1, .woodStick: 1],
-        .stonePickaxe: [.stone: 1, .woodStick: 1],
-        .stoneShovel: [.stone: 1, .woodStick: 1],
+        .axe: [.stone: 1, .woodStick: 1],
+        .pickaxe: [.stone: 1, .woodStick: 1],
+        .shovel: [.stone: 1, .woodStick: 1],
         .sickle: [.stone: 1, .woodStick: 1],
 
         // MARK: container

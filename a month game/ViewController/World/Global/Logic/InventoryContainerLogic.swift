@@ -28,8 +28,12 @@ class InventoryContainerLogic {
         return self.invContainer.is(equiping: goType)
     }
 
+    func go(equiping goType: GameObjectType) -> GameObject? {
+        self.invContainer.go(equiping: goType)
+    }
+
     func invData(id: Int, capacity: Int) -> InventoryData {
-        if let inv = LogicContainer.default.invContainer.inv(id: id) {
+        if let inv = Logics.default.invContainer.inv(id: id) {
             return inv.data
         } else {
             return InventoryData(id: id, capacity: capacity)

@@ -447,16 +447,30 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+quality
+    apply LogicContainer.default.go.new()
+    apply go.set(type)
+    apply LogicContainer.default.scene.new()
+
+inventory logic::move() -> inventory data logic::move()
+
+chunk data logic::move()
+chunk data::synchronizeData()
+
 bug
-    when transfer from close container -> the source container don't redraw
-    when transfer to close container -> empty coord always first cell
-space of inv must stored property
-inv to inv transfer
+    if i interact water with container, the contents will be dagling
+    craft system not working
+
+mastery
+
+fire
+potery
 
 shallow water
 
-fix bug
-    generated none gameobject sometimes at inventory
+container
+    another image for empty, normal, full
+
 add
     sickle
     saw
@@ -699,6 +713,12 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+space of inv must stored property
+inv to inv transfer
+bug
+    when transfer from close container -> the source container don't redraw
+    when transfer to close container -> empty coord always first cell
+    not interact? when from cell to container
 vine basket
     vine
 3 앱 아이콘 만들고 적용하기
