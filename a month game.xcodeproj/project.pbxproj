@@ -47,6 +47,7 @@
 		0347BA7A2A481C4100E31FA1 /* InventoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA792A481C4100E31FA1 /* InventoryService.swift */; };
 		0347BA7C2A48703900E31FA1 /* InventoryContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA7B2A48703900E31FA1 /* InventoryContainer.swift */; };
 		0347BA7E2A49BB8F00E31FA1 /* ChunkData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */; };
+		034A07352A5ABC2A0034D657 /* GameObjectDataLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034A07342A5ABC2A0034D657 /* GameObjectDataLogic.swift */; };
 		035393852A4AA95800594612 /* CharacterPositionUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035393842A4AA95800594612 /* CharacterPositionUpdater.swift */; };
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkContainer.swift */; };
@@ -156,6 +157,7 @@
 		0347BA792A481C4100E31FA1 /* InventoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryService.swift; sourceTree = "<group>"; };
 		0347BA7B2A48703900E31FA1 /* InventoryContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryContainer.swift; sourceTree = "<group>"; };
 		0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkData.swift; sourceTree = "<group>"; };
+		034A07342A5ABC2A0034D657 /* GameObjectDataLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectDataLogic.swift; sourceTree = "<group>"; };
 		035393842A4AA95800594612 /* CharacterPositionUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterPositionUpdater.swift; sourceTree = "<group>"; };
 		036FE51F2A41A73A007E66A5 /* Chunk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chunk.swift; sourceTree = "<group>"; };
 		036FE5212A429E8D007E66A5 /* ChunkContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainer.swift; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */,
 				0304D76A2A57ED960068DE99 /* ChunkContainerLogic.swift */,
 				03796C132A516AAA00462804 /* GameObjectLogic.swift */,
+				034A07342A5ABC2A0034D657 /* GameObjectDataLogic.swift */,
 				0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */,
 				0304D7702A5839D20068DE99 /* CharacterLogic.swift */,
 				03F6CD292A553DF300403EAF /* InteractionLogic.swift */,
@@ -722,6 +725,7 @@
 				03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
 				0304D7752A5954830068DE99 /* InventoryData.swift in Sources */,
+				034A07352A5ABC2A0034D657 /* GameObjectDataLogic.swift in Sources */,
 				03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,

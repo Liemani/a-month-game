@@ -37,7 +37,7 @@ class PortalViewController: UIViewController {
         self.skView.presentScene(portalScene)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
+    deinit {
         PortalEventManager.free()
     }
 

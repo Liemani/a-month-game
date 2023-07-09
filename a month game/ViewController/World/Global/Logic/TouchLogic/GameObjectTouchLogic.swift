@@ -41,6 +41,10 @@ extension GameObjectTouchLogic: TouchLogic {
             return
         }
 
+#if DEBUG
+        print(go.debugDescription)
+#endif
+
         var go = go
 
         if go.type.isTile {

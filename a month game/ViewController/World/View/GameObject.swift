@@ -41,8 +41,12 @@ class GameObject: SKSpriteNode {
             : Constant.gameObjectSize
 
         super.init(texture: texture, color: .white, size: size)
-        
+
         self.data.go = self
+
+        if self.isInInv {
+            self.addQualityBox()
+        }
 
         if goData.type.layerCount == 2 {
             let cover = SKSpriteNode(texture: goData.type.textures[1])
@@ -54,6 +58,38 @@ class GameObject: SKSpriteNode {
         self.zPosition = !self.type.isTile
             ? Constant.ZPosition.gameObject
             : Constant.ZPosition.tile
+    }
+
+    func addQualityBox() {
+        guard self.children.first == nil else {
+            return
+        }
+
+        let qualityBox = SKShapeNode(rect: CGRect(x: 0.0, y: 0.0, width: 35.0, height: 15.0))
+        qualityBox.position = CGPoint(x: 5.0, y: 25.0)
+        qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
+        qualityBox.fillColor = .black
+        qualityBox.strokeColor = .black
+        qualityBox.alpha = 0.5
+        self.addChild(qualityBox)
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        let qualityString = formatter.string(from: self.quality as NSNumber)!
+
+        let qualityLabel = SKLabelNode(text: qualityString)
+        qualityLabel.fontName = "Helvetica-Bold"
+        qualityLabel.fontSize = 12.0
+        qualityLabel.position = CGPoint(x: 34.0, y: 1.0)
+        qualityLabel.zPosition = 10.0
+        qualityLabel.horizontalAlignmentMode = .right
+        qualityBox.addChild(qualityLabel)
+    }
+
+    func removeQualityBox() {
+        self.children[0].removeFromParent()
     }
 
     convenience init(type goType: GameObjectType,
@@ -180,6 +216,24 @@ extension GameObject: TouchResponder {
 
     func touchCancelled(_ touch: UITouch) {
         Logics.default.touch.cancelled(touch)
+    }
+
+}
+
+extension GameObject {
+
+    override var debugDescription: String {
+        var description = "(id: \(self.id), typeID: \(self.type), variation: \(self.variant), quality: \(self.quality), state: \(self.data.state)"
+
+        if let chunkCoord = self.chunkCoord {
+            description += ", coord: \(chunkCoord))"
+        }
+
+        if let invCoord = self.invCoord {
+            description += ", coord: \(invCoord))"
+        }
+
+        return description
     }
 
 }

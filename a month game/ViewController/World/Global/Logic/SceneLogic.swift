@@ -119,7 +119,7 @@ class SceneLogic {
                 break
             }
 
-            Logics.default.go.move(goData, to: destInvData)
+            Logics.default.goData.move(goData, to: destInvData)
 
             count += 1
         }

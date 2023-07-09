@@ -78,6 +78,7 @@ struct Constant {
                 static let chunkContainer = 0.0
                     static let tile = 10.0
                     static let gameObject = 20.0
+                        static let gameObjectQualityLabel = 30.0
                         static let gameObjectCover = 20.0
                 static let fieldInv = 50.0
             static let character = 30.0

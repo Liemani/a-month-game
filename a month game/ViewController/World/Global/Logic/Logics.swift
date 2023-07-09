@@ -45,6 +45,7 @@ class Logics {
     let accessibleGOTracker: AccessibleGOTrackerLogic
 
     let go: GameObjectLogic
+    let goData: GameObjectDataLogic
 
     init(scene: WorldScene,
          ui: SKNode,
@@ -64,6 +65,7 @@ class Logics {
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
         self.go = GameObjectLogic()
+        self.goData = GameObjectDataLogic()
     }
 
 }

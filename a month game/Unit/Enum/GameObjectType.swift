@@ -37,7 +37,6 @@ enum GameObjectType: Int, CaseIterable {
     case dirt
     case sand
     case clay
-    case treeLeaves
     case weedLeaves
     case vineStem
     case woodStick
@@ -74,7 +73,6 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_dirt", 1.0, 0, 1, false, true),
         ("game_object_sand", 1.0, 0, 1, false, true),
         ("game_object_clay", 1.0, 0, 1, false, true),
-        ("game_object_tree_leaves", 1.0, 0, 1, false, true),
         ("game_object_weed_leaves", 1.0, 0, 1, false, true),
         ("game_object_vine_stem", 1.0, 0, 1, false, true),
         ("game_object_wood_stick", 1.0, 0, 1, false, true),

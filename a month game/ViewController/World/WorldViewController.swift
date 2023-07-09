@@ -51,6 +51,15 @@ class WorldViewController: UIViewController {
         skView.presentScene(scene)
     }
 
+    deinit {
+        ServiceContainer.free()
+        WorldEventManager.free()
+        FrameCycleUpdateManager.free()
+
+        TouchRecognizerManager.free()
+        Logics.free()
+    }
+
     // MARK: - transition
     @objc func requestPresentPortalSceneViewController() {
         let portalSceneViewController = storyboard!.instantiateViewController(identifier: "PortalSceneViewController") as! PortalViewController
@@ -74,15 +83,6 @@ class WorldViewController: UIViewController {
 
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .all
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        ServiceContainer.free()
-        WorldEventManager.free()
-        FrameCycleUpdateManager.free()
-
-        TouchRecognizerManager.free()
-        Logics.free()
     }
 
 }

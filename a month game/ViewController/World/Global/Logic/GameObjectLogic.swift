@@ -78,25 +78,17 @@ class GameObjectLogic {
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
-    /// suppose goData was in the inventory
-    /// suppose invData always has empty space
-    func move(_ goData: GameObjectData, to invData: InventoryData) {
-        if let sourceInvData = Logics.default.invContainer.inv(id: goData.invCoord!.id)?.data {
-            sourceInvData.remove(goData)
-        }
-
-        goData.set(coord: invData.emptyCoord!)
-
-        invData.add(goData)
-    }
-
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
+        go.addQualityBox()
+
         self.removeFromParent(go)
         go.set(coord: invCoord)
         Logics.default.invContainer.add(go)
     }
 
     func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
+        go.removeQualityBox()
+
         self.removeFromParent(go)
         go.set(coord: chunkCoord)
         Logics.default.chunkContainer.add(go)
