@@ -119,6 +119,7 @@
 		03FEA1BF2A5B066D00AF4DDB /* CraftMasteryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1BE2A5B066C00AF4DDB /* CraftMasteryRepository.swift */; };
 		03FEA1C12A5BC46000AF4DDB /* MasteryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1C02A5BC46000AF4DDB /* MasteryTable.swift */; };
 		03FEA1C32A5BC9D300AF4DDB /* MasteryLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */; };
+		03FEA1E82A5BF00600AF4DDB /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1E72A5BF00600AF4DDB /* Particle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -246,6 +247,7 @@
 		03FEA1BE2A5B066C00AF4DDB /* CraftMasteryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftMasteryRepository.swift; sourceTree = "<group>"; };
 		03FEA1C02A5BC46000AF4DDB /* MasteryTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryTable.swift; sourceTree = "<group>"; };
 		03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryLogic.swift; sourceTree = "<group>"; };
+		03FEA1E72A5BF00600AF4DDB /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +528,7 @@
 		038330A02A02850A008DEA10 /* a month game */ = {
 			isa = PBXGroup;
 			children = (
+				03FEA1E72A5BF00600AF4DDB /* Particle.swift */,
 				038330A12A02850A008DEA10 /* AppDelegate.swift */,
 				033D69042A413D92005D3CB0 /* ViewController */,
 				033D68FE2A413AD7005D3CB0 /* Model */,
@@ -779,6 +782,7 @@
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
 				0304D7752A5954830068DE99 /* InventoryData.swift in Sources */,
 				034A07352A5ABC2A0034D657 /* GameObjectDataLogic.swift in Sources */,
+				03FEA1E82A5BF00600AF4DDB /* Particle.swift in Sources */,
 				03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */,
 				03FEA1AB2A5ACCD100AF4DDB /* GOInteractionMasteryData.swift in Sources */,
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,

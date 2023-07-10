@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum TaskResultType: Int {
 
@@ -16,6 +17,24 @@ enum TaskResultType: Int {
 
     var exp: Int { self.rawValue }
     var qualityDiff: Double { Double(self.rawValue - 2) }
+
+
+    var color: UIColor {
+        let alpha = 0.7
+        
+        switch self {
+        case .rare:
+            return .yellow.withAlphaComponent(alpha)
+        case .common:
+            let color = 192.0 / 255.0
+//            let color = 81.5 / 255.0
+            return UIColor(red: color, green: color, blue: color, alpha: alpha)
+        case .poor:
+            return .brown.withAlphaComponent(alpha)
+        case .fail:
+            return .black.withAlphaComponent(alpha)
+        }
+    }
 
 //    case .rare:
 //    case .common:

@@ -82,6 +82,7 @@ struct Constant {
                         static let gameObjectCover = 20.0
                 static let fieldInv = 50.0
             static let character = 30.0
+                static let particle = 20.0
         static let ui = 100.0
             static let characterInv = 0.0
             static let craftCell = 0.0

@@ -50,6 +50,8 @@ class WorldViewController: UIViewController {
                            invContainer: scene.invContainer,
                            accessibleGOTracker: scene.accessibleGOTracker)
 
+        Particle.setUp()
+
         skView.presentScene(scene)
     }
 
@@ -60,6 +62,8 @@ class WorldViewController: UIViewController {
 
         TouchRecognizerManager.free()
         Logics.free()
+
+        Particle.free()
     }
 
     // MARK: - transition

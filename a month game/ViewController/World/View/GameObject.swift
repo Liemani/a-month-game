@@ -65,8 +65,10 @@ class GameObject: SKSpriteNode {
             return
         }
 
-        let qualityBox = SKShapeNode(rect: CGRect(x: 0.0, y: 0.0, width: 35.0, height: 15.0))
-        qualityBox.position = CGPoint(x: 5.0, y: 25.0)
+        let boxSize = CGSize(width: 35.0, height: 15.0)
+
+        let qualityBox = SKShapeNode(rectOf: boxSize)
+        qualityBox.position = CGPoint(x: 20.0, y: 30.0)
         qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
         qualityBox.fillColor = .black
         qualityBox.strokeColor = .black
@@ -82,7 +84,7 @@ class GameObject: SKSpriteNode {
         let qualityLabel = SKLabelNode(text: qualityString)
         qualityLabel.fontName = "Helvetica-Bold"
         qualityLabel.fontSize = 12.0
-        qualityLabel.position = CGPoint(x: 34.0, y: 1.0)
+        qualityLabel.position = CGPoint(x: boxSize.width / 2.0, y: -boxSize.height / 2.0)
         qualityLabel.zPosition = 10.0
         qualityLabel.horizontalAlignmentMode = .right
         qualityBox.addChild(qualityLabel)

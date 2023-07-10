@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 class CharacterLogic {
 
@@ -16,5 +17,9 @@ class CharacterLogic {
     }
 
     var chunkCoord: ChunkCoordinate { self.character.chunkCoord }
+
+    func addParticle(_ particle: SKShapeNode) {
+        self.character.addChild(particle)
+    }
 
 }

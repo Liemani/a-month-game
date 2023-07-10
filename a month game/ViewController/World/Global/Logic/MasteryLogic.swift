@@ -22,6 +22,8 @@ class MasteryLogic {
 
         self.masteries.updateInteraction(dstType, exp: result.exp)
 
+        Particle.flutter(result: result)
+
         return result
     }
 
@@ -33,6 +35,8 @@ class MasteryLogic {
 
         self.masteries.updateInteraction(with: srcType, to: dstType, exp: result.exp)
 
+        Particle.flutter(result: result)
+
         return result
     }
 
@@ -42,6 +46,8 @@ class MasteryLogic {
         let result = MasteryTable.result(lv: lv)
 
         self.masteries.updateCraft(dstType, exp: result.exp)
+        
+        Particle.flutter(result: result)
 
         return result
     }

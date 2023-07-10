@@ -449,13 +449,12 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 mastery system
     apply mastery system
-
-particle
-    rare gold
-    common silver
-    poor bronze
-    fail grey
-    level up red
+    particle
+        rare gold
+        common silver
+        poor bronze
+        fail grey
+        level up red
 
 character long touch
     display mastery level info
