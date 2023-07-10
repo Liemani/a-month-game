@@ -9,10 +9,13 @@ import Foundation
 
 enum TaskResultType: Int {
 
-    case rare
-    case common
-    case poor
     case fail
+    case poor
+    case common
+    case rare
+
+    var exp: Int { self.rawValue }
+    var qualityDiff: Double { Double(self.rawValue - 2) }
 
 //    case .rare:
 //    case .common:

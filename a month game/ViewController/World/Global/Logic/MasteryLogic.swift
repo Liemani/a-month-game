@@ -20,18 +20,18 @@ class MasteryLogic {
 
         let result = MasteryTable.result(lv: lv)
 
-        self.masteries.updateInteraction(dstType, exp: result.rawValue)
+        self.masteries.updateInteraction(dstType, exp: result.exp)
 
         return result
     }
 
-    func interact(from srcType: GameObjectType, to dstType: GameObjectType) -> TaskResultType {
+    func interact(with srcType: GameObjectType, to dstType: GameObjectType) -> TaskResultType {
         let key = GOInteractionMasteryDatasKey(from: srcType, to: dstType)
         let lv = self.masteries.goInteractionMasteryDatas[key]?.lv ?? 0
 
         let result = MasteryTable.result(lv: lv)
 
-        self.masteries.updateInteraction(dstType, exp: result.rawValue)
+        self.masteries.updateInteraction(with: srcType, to: dstType, exp: result.exp)
 
         return result
     }
@@ -41,7 +41,7 @@ class MasteryLogic {
 
         let result = MasteryTable.result(lv: lv)
 
-        self.masteries.updateInteraction(dstType, exp: result.rawValue)
+        self.masteries.updateCraft(dstType, exp: result.exp)
 
         return result
     }

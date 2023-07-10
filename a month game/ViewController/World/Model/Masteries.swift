@@ -64,7 +64,7 @@ class Masteries {
         interactionMasteryData.increase(exp: exp)
     }
 
-    func updateInteraction(from srcType: GameObjectType, to dstType: GameObjectType, exp: Int) {
+    func updateInteraction(with srcType: GameObjectType, to dstType: GameObjectType, exp: Int) {
         let key = GOInteractionMasteryDatasKey(from: srcType, to: dstType)
 
         if let goInteractionMasteryData = self.goInteractionMasteryDatas[key] {

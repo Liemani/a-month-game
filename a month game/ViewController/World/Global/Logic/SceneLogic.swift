@@ -11,19 +11,79 @@ import SpriteKit
 class SceneLogic {
 
     // MARK: - game object
-    func new(type goType: GameObjectType,
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
+             variant: Int = 0,
+             quality: Double = 0.0,
+             state: GameObjectState = [],
+             coord invCoord: InventoryCoordinate) {
+        guard result != .fail else { return }
+
+        let quality = max(quality + result.qualityDiff, 0)
+
+        Logics.default.go.new(type: goType,
+                              variant: variant,
+                              quality: quality,
+                              state: state,
+                              coord: invCoord)
+    }
+
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
+             variant: Int = 0,
+             quality: Double = 0.0,
+             state: GameObjectState = [],
+             coord chunkCoord: ChunkCoordinate) {
+        guard result != .fail else { return }
+
+        let quality = max(quality + result.qualityDiff, 0)
+
+        Logics.default.go.new(type: goType,
+                              variant: variant,
+                              quality: quality,
+                              state: state,
+                              coord: chunkCoord)
+    }
+
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
              variant: Int = 0,
              quality: Double = 0.0,
              state: GameObjectState = [],
              coord chunkCoord: ChunkCoordinate,
              count: Int) {
         for _ in 0 ..< count {
-            Logics.default.go.new(type: goType,
-                                  variant: variant,
-                                  quality: quality,
-                                  state: state,
-                                  coord: chunkCoord)
+            Logics.default.scene.new(result: result,
+                                     type: goType,
+                                     variant: variant,
+                                     quality: quality,
+                                     state: state,
+                                     coord: chunkCoord)
         }
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             type goType: GameObjectType) {
+        guard result != .fail else { return }
+
+        go.set(type: goType)
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             variant: Int) {
+        guard result != .fail else { return }
+
+        go.set(variant: variant)
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             quality: Double) {
+        guard result != .fail else { return }
+
+        go.set(quality: quality)
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {

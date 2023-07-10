@@ -450,10 +450,24 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 mastery system
     apply mastery system
 
-display expected quality to craft object
+particle
+    rare gold
+    common silver
+    poor bronze
+    fail grey
+    level up red
+
+character long touch
+    display mastery level info
 
 bug
+    i can't touch reset no button
     if i interact water with container, the contents will be dagling
+        remove only the items inside the container
+
+underground
+
+display expected quality to craft object
 
 fire
 potery
