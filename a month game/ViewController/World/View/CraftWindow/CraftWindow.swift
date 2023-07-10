@@ -272,4 +272,7 @@ extension CraftObject: TouchResponder {
         Logics.default.touch.cancelled(touch)
     }
 
+    func longTouched(_ touch: UITouch) {
+    }
+
 }

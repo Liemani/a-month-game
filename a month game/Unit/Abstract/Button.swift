@@ -78,6 +78,13 @@ extension Button: TouchResponder {
         self.deactivate()
     }
 
+    func longTouched(_ touch: UITouch) {
+    }
+
+}
+
+extension Button {
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touch = touches.first!
         self.touchBegan(touch)

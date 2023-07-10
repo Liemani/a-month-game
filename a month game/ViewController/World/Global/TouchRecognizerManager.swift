@@ -15,6 +15,7 @@ struct TouchPossible: OptionSet {
     static let tap = TouchPossible(rawValue: 0x1 << 0)
     static let pan = TouchPossible(rawValue: 0x1 << 1)
     static let pinch = TouchPossible(rawValue: 0x1 << 2)
+    static let longTouch = TouchPossible(rawValue: 0x1 << 3)
 
 }
 
@@ -40,6 +41,19 @@ class LMITouch {
         self.possible = TouchPossible(rawValue: rawValue)
         self.touchResponder = nil
         self.setTouchResponder(scene: scene)
+
+        let timeout = touch.timestamp + Constant.longTouchThreshold
+        WorldEventManager.default.addLongTouchTimeEvent(lmiTouch: self, timeout: timeout)
+    }
+
+    func setRecognizer(_ touchRecognizer: TouchRecognizer) {
+        self.cancelRecognizer()
+        self.recognizer = touchRecognizer
+    }
+
+    func removeLongTouchPossible() {
+        self.possible.remove(.longTouch)
+        WorldEventManager.default.removeLongTouchTimeEvent(of: self)
     }
 
     private func setTouchResponder(scene: WorldScene) {
@@ -70,9 +84,10 @@ class LMITouch {
         self.pTime = self.touch.timestamp
     }
 
-    func cancelHandler() {
-        if let handler = self.recognizer {
-            handler.cancelled()
+    func cancelRecognizer() {
+        if let recognizer = self.recognizer {
+            self.recognizer = nil
+            recognizer.cancelled()
         }
     }
 
@@ -119,7 +134,6 @@ protocol TouchRecognizer {
     func moved()
     func ended()
     func cancelled()
-    func complete()
 
 }
 
@@ -129,6 +143,7 @@ enum TouchRecognizerIndex: Int, CaseIterable {
     case tapRecognizer2
     case panRecognizer
     case pinchRecognizer
+    case longTouchRecognizer
 
     static let tapIndices: [TouchRecognizerIndex] = [
         .tapRecognizer1,
@@ -177,13 +192,18 @@ class TouchContainer {
 
     func remove(lmiTouch: LMITouch) {
         self.lmiTouches.removeAll { $0 == lmiTouch }
+
+        WorldEventManager.default.removeLongTouchTimeEvent(of: lmiTouch)
     }
 
     func cancelAll() {
         for lmiTouch in self.lmiTouches {
-            lmiTouch.recognizer!.cancelled()
-            self.lmiTouches.removeAll()
+            lmiTouch.cancelRecognizer()
+
+            WorldEventManager.default.removeLongTouchTimeEvent(of: lmiTouch)
         }
+
+        self.lmiTouches.removeAll()
     }
 
 }
@@ -204,8 +224,9 @@ class TouchRecognizerManager {
     private let logic: Logic
 
     var touchContainer: TouchContainer { self.logic.touchContainer }
-    var panRecognizer: PanRecognizer { self.logic.panRecognizer }
-    var pinchRecognizer: PinchRecognizer { self.logic.pinchRecognizer }
+    var pan: PanRecognizer { self.logic.pan }
+    var pinch: PinchRecognizer { self.logic.pinch }
+    var longTouch: LongTouchRecognizer { self.logic.longTouch}
 
     init(scene: WorldScene, ui: SKNode, character: Character) {
         self.scene = scene
@@ -226,12 +247,16 @@ extension TouchRecognizerManager {
         let touchContainer: TouchContainer
         let recognizers: [TouchRecognizer]
 
-        var panRecognizer: PanRecognizer {
+        var pan: PanRecognizer {
             return self.recognizers[TouchRecognizerIndex.panRecognizer] as! PanRecognizer
         }
 
-        var pinchRecognizer: PinchRecognizer {
+        var pinch: PinchRecognizer {
             return self.recognizers[TouchRecognizerIndex.pinchRecognizer] as! PinchRecognizer
+        }
+
+        var longTouch: LongTouchRecognizer {
+            return self.recognizers[TouchRecognizerIndex.longTouchRecognizer] as! LongTouchRecognizer
         }
 
         // MARK: init
@@ -242,6 +267,7 @@ extension TouchRecognizerManager {
                 TapRecognizer(scene: scene),
                 PanRecognizer(scene: scene, ui: ui, character: character),
                 PinchRecognizer(scene: scene, ui: ui, world: scene.worldLayer),
+                LongTouchRecognizer()
             ]
         }
 
@@ -294,24 +320,22 @@ extension TouchRecognizerManager {
             }
 
             if self.touchContainer.count == 2
-                && self.pinchRecognizer.discriminate(lmiTouches: self.touchContainer.lmiTouches) {
+                && self.pinch.discriminate(lmiTouches: self.touchContainer.lmiTouches) {
                 let lmiTouches = self.touchContainer.lmiTouches
 
-                for lmiTouch in lmiTouches {
-                    lmiTouch.cancelHandler()
-                    lmiTouch.recognizer = self.pinchRecognizer
-                }
-
-                self.pinchRecognizer.began(lmiTouches: lmiTouches)
+                self.pinch.began(lmiTouches: lmiTouches)
 
                 return
             }
 
-            if self.panRecognizer.discriminate(lmiTouches: [lmiTouch]) {
-                lmiTouch.cancelHandler()
-                lmiTouch.recognizer = self.panRecognizer
+            if self.pan.discriminate(lmiTouches: [lmiTouch]) {
+                self.pan.began(lmiTouches: [lmiTouch])
 
-                self.panRecognizer.began(lmiTouches: [lmiTouch])
+                return
+            }
+
+            if self.longTouch.discriminate(lmiTouches: [lmiTouch]) {
+                self.longTouch.began(lmiTouches: [lmiTouch])
 
                 return
             }
@@ -322,29 +346,19 @@ extension TouchRecognizerManager {
         }
 
         func ended(_ lmiTouch: LMITouch) {
-            guard let handler = lmiTouch.recognizer else {
-                self.touchContainer.remove(lmiTouch: lmiTouch)
-                return
-            }
+            self.touchContainer.remove(lmiTouch: lmiTouch)
 
-            for lmiTouch in handler.lmiTouches {
-                self.touchContainer.remove(lmiTouch: lmiTouch)
+            if let handler = lmiTouch.recognizer {
+                handler.ended()
             }
-
-            handler.ended()
         }
 
         func cancelled(_ lmiTouch: LMITouch) {
-            guard let handler = lmiTouch.recognizer else {
-                self.touchContainer.remove(lmiTouch: lmiTouch)
-                return
-            }
+            self.touchContainer.remove(lmiTouch: lmiTouch)
 
-            for lmiTouch in handler.lmiTouches {
-                self.touchContainer.remove(lmiTouch: lmiTouch)
+            if let handler = lmiTouch.recognizer {
+                handler.cancelled()
             }
-
-            handler.cancelled()
         }
 
     }

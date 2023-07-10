@@ -76,3 +76,23 @@ class Character: SKShapeNode {
     }
 
 }
+
+extension Character: TouchResponder {
+
+    func touchBegan(_ touch: UITouch) {
+    }
+
+    func touchMoved(_ touch: UITouch) {
+    }
+
+    func touchEnded(_ touch: UITouch) {
+    }
+
+    func touchCancelled(_ touch: UITouch) {
+    }
+
+    func longTouched(_ touch: UITouch) {
+        Particle.flutter(result: .rare)
+    }
+
+}

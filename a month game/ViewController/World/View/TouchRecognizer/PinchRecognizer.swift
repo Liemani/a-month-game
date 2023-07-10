@@ -97,8 +97,12 @@ extension PinchRecognizer: TouchRecognizer {
     }
 
     func began(lmiTouches: [LMITouch]) {
-        self.lmiTouches = lmiTouches
+        for lmiTouch in lmiTouches {
+            lmiTouch.setRecognizer(self)
+            lmiTouch.removeLongTouchPossible()
+        }
 
+        self.lmiTouches = lmiTouches
         self.pDistance = self.distance
     }
 

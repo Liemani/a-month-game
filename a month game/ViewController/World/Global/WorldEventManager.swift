@@ -28,6 +28,67 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
 }
 
+class TimeEvent {
+
+    let timeout: TimeInterval
+
+    init(timeout: TimeInterval) {
+        self.timeout = timeout
+    }
+
+    func shouldHandle(_ currentTime: TimeInterval) -> Bool {
+        return currentTime >= timeout
+    }
+
+    func handle() { }
+
+}
+
+class TimeEvents {
+
+    var events: [TimeEvent]
+
+    init() {
+        self.events = []
+    }
+
+    func update(_ currentTime: TimeInterval) {
+        for event in events {
+            if event.shouldHandle(currentTime) {
+                self.events.removeAll { $0 === event }
+                event.handle()
+            }
+        }
+    }
+
+    func remove(of lmiTouch: LMITouch) {
+        self.events.removeAll {
+            if let event = $0 as? LongTouchTimeEvent {
+                return event.lmiTouch === lmiTouch
+            }
+
+            return false
+        }
+    }
+
+}
+
+class LongTouchTimeEvent: TimeEvent {
+
+    let lmiTouch: LMITouch
+
+    init(lmiTouch: LMITouch, timeout: TimeInterval) {
+        self.lmiTouch = lmiTouch
+
+        super.init(timeout: timeout)
+    }
+
+    override func handle() {
+        TouchRecognizerManager.default.longTouch.began(lmiTouches: [self.lmiTouch])
+    }
+
+}
+
 class WorldEventManager: EventManager {
 
     private static var _default: WorldEventManager?
@@ -37,9 +98,11 @@ class WorldEventManager: EventManager {
     static func free() { self._default = nil }
 
     private var queue: Queue<Event>
+    private let timeEvents: TimeEvents
 
     init() {
         self.queue = Queue(size: Constant.worldEventQueueSize)
+        self.timeEvents = TimeEvents()
     }
 
     func enqueue(_ event: Event) {
@@ -48,6 +111,19 @@ class WorldEventManager: EventManager {
 
     func dequeue() -> Event? {
         return self.queue.dequeue()
+    }
+
+    func updateTimeEvent(_ currentTime: TimeInterval) {
+        self.timeEvents.update(currentTime)
+    }
+
+    func addLongTouchTimeEvent(lmiTouch: LMITouch, timeout: TimeInterval) {
+        let timeEvent = LongTouchTimeEvent(lmiTouch: lmiTouch, timeout: timeout)
+        self.timeEvents.events.append(timeEvent)
+    }
+
+    func removeLongTouchTimeEvent(of lmiTouch: LMITouch) {
+        self.timeEvents.remove(of: lmiTouch)
     }
 
 }

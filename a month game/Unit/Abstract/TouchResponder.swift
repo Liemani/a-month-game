@@ -14,5 +14,6 @@ protocol TouchResponder: SKNode {
     func touchMoved(_ touch: UITouch)
     func touchEnded(_ touch: UITouch)
     func touchCancelled(_ touch: UITouch)
+    func longTouched(_ touch: UITouch)
 
 }

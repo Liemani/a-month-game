@@ -145,7 +145,7 @@ class InteractionLogic {
 
             let result = Logics.default.mastery.interact(.treeOak)
 
-            Logics.default.scene.set(result: result, go: go, variant: 1)
+            go.set(variant: 1)
 
             for _ in 0 ..< 2 {
                 let emptyInvCoord = Logics.default.invContainer.emptyCoord!

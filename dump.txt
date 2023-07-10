@@ -454,15 +454,26 @@ mastery system
         common silver
         poor bronze
         fail grey
-        level up red
+    character long touch
+        long touch
+        display mastery level info with image
 
-character long touch
-    display mastery level info
-
-bug
+fix
     i can't touch reset no button
     if i interact water with container, the contents will be dagling
         remove only the items inside the container
+
+more bigger container
+    add saw
+    add wood board
+    add wood box -> 4
+
+barley
+
+what about
+    remember open character inventory container and open when enter world
+
+move action when craft
 
 underground
 

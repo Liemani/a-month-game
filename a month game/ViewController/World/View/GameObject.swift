@@ -65,10 +65,10 @@ class GameObject: SKSpriteNode {
             return
         }
 
-        let boxSize = CGSize(width: 35.0, height: 15.0)
+        let boxSize = Constant.Size.qualityBox
 
         let qualityBox = SKShapeNode(rectOf: boxSize)
-        qualityBox.position = CGPoint(x: 20.0, y: 30.0)
+        qualityBox.position = Constant.Position.qualityBox
         qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
         qualityBox.fillColor = .black
         qualityBox.strokeColor = .black
@@ -84,7 +84,7 @@ class GameObject: SKSpriteNode {
         let qualityLabel = SKLabelNode(text: qualityString)
         qualityLabel.fontName = "Helvetica-Bold"
         qualityLabel.fontSize = 12.0
-        qualityLabel.position = CGPoint(x: boxSize.width / 2.0, y: -boxSize.height / 2.0)
+        qualityLabel.position = Constant.Position.qualityLabel
         qualityLabel.zPosition = 10.0
         qualityLabel.horizontalAlignmentMode = .right
         qualityBox.addChild(qualityLabel)
@@ -220,6 +220,10 @@ extension GameObject: TouchResponder {
 
     func touchCancelled(_ touch: UITouch) {
         Logics.default.touch.cancelled(touch)
+    }
+
+    func longTouched(_ touch: UITouch) {
+        // TODO: display manual
     }
 
 }

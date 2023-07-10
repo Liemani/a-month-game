@@ -136,7 +136,7 @@ class WorldScene: SKScene {
         self.pTime = self.cTime
         self.cTime = currentTime
 
-        self.handleEvent()
+        self.handleEvent(currentTime)
 
         self.updateModel()
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
@@ -144,7 +144,9 @@ class WorldScene: SKScene {
         self.updateData()
     }
 
-    func handleEvent() {
+    func handleEvent(_ currentTime: TimeInterval) {
+        WorldEventManager.default.updateTimeEvent(currentTime)
+
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
             // TODO: remove argument self

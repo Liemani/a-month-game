@@ -19,6 +19,8 @@ class PanRecognizer {
         }
     }
 
+    var isHandling: Bool { self.lmiTouch != nil }
+
     private let scene: WorldScene
     private let ui: SKNode
     private let character: Character
@@ -62,11 +64,20 @@ extension PanRecognizer: TouchRecognizer {
         let deltaPosition = lmiTouch.touch.location(in: self.scene) - lmiTouch.bPosition
 
         return deltaPosition.magnitude >= Constant.tileWidth / 3.0
-
     }
 
     func began(lmiTouches: [LMITouch]) {
-        self.lmiTouch = lmiTouches[0]
+        let lmiTouch = lmiTouches[0]
+
+        if self.isHandling {
+            self.lmiTouch!.cancelRecognizer()
+        }
+
+        lmiTouch.setRecognizer(self)
+
+        lmiTouch.removeLongTouchPossible()
+
+        self.lmiTouch = lmiTouch
         self.character.velocityVector = CGVector()
         self.cPoint = self.lmiTouch!.location(in: self.scene)
     }

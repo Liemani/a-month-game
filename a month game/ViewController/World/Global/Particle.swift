@@ -12,7 +12,7 @@ class Particle {
     static var particle: SKShapeNode!
 
     static func setUp() {
-        let particle = SKShapeNode(rectOf: CGSize(width: 10.0, height: 10.0))
+        let particle = SKShapeNode(rectOf: Constant.Size.particle)
         particle.strokeColor = .black
         particle.zPosition = Constant.ZPosition.particle
 

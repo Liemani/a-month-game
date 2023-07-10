@@ -65,6 +65,19 @@ struct Constant {
     static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: worldSize.width, height: worldSize.height))
     static let moveableArea = CGRect(origin: CGPoint() + characterRadius, size: worldBorder.size - (characterRadius * 2.0))
 
+    // MARK: - size
+    struct Size {
+        static let particle = CGSize(width: 10.0, height: 10.0)
+        static let qualityBox = CGSize(width: 35.0, height: 15.0)
+    }
+
+    // MARK: - position
+    struct Position {
+        static let qualityBox = CGPoint(x: 20.0, y: 30.0)
+        static let qualityLabel = CGPoint(x: Size.qualityBox.width / 2.0,
+                                          y: -Size.qualityBox.height / 2.0)
+    }
+
     // MARK: - z position
     struct ZPosition {
         // MARK: portal scene
@@ -100,6 +113,7 @@ struct Constant {
         static let noButton = Constant.Frame.resetButton
     }
 
+    // MARK: - name
     struct Name {
         static let defaultWorld = "world000"
 
@@ -119,6 +133,18 @@ struct Constant {
         static let craftMasteryEntity = "CraftMasteryMO"
     }
 
+    // MARK: - resource name
+    struct ResourceName {
+        static let menuButton = "menu button"
+        static let inventoryCell = "inventory_cell"
+        static let inventoryCellLeftHand = "inventory_cell_left_hand"
+        static let inventoryCellRightHand = "inventory_cell_right_hand"
+        static let craftCell = "craft_cell"
+        static let bgPortal = "bg_portal"
+        static let button = "button"
+        static let grassTile = "grass_tile"
+    }
+
     // MARK: - recipe
     static let recipes: [GameObjectType: [GameObjectType: Int]] = [
         // MARK: tile
@@ -135,9 +161,6 @@ struct Constant {
         .vineBasket: [.vineStem: 4],
     ]
 
-    // MARK: - UserDefaults key
-    static let idGeneratorKey = "idGenerator"
-
     // MARK: - etc
     static let tileCountOfChunkSide: Int = 16
     static let tileMapSide: Int = tileCountOfChunkSide * 3
@@ -147,17 +170,6 @@ struct Constant {
     static let velocityFrictionRatioPerSec = 0.001
 
     static let sceneScale = 1.0
-
-    struct ResourceName {
-        static let menuButton = "menu button"
-        static let inventoryCell = "inventory_cell"
-        static let inventoryCellLeftHand = "inventory_cell_left_hand"
-        static let inventoryCellRightHand = "inventory_cell_right_hand"
-        static let craftCell = "craft_cell"
-        static let bgPortal = "bg_portal"
-        static let button = "button"
-        static let grassTile = "grass_tile"
-    }
 
 //    static let minZoomScale = 0.3
     static let minZoomScale = 0.1
@@ -175,5 +187,7 @@ struct Constant {
     static let panThreshold = tileWidth * 2.0
 
     static let characterInventoryID = 0
+
+    static let longTouchThreshold = 0.8
 
 }
