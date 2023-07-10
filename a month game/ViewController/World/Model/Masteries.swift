@@ -19,7 +19,7 @@ struct GOInteractionMasteryDatasKey: Hashable {
 
 }
 
-class MasteriesData {
+class Masteries {
 
     var interactionMasteryDatas: [GameObjectType: InteractionMasteryData]
     var goInteractionMasteryDatas: [GOInteractionMasteryDatasKey: GOInteractionMasteryData]
@@ -52,42 +52,42 @@ class MasteriesData {
         }
     }
 
-    func updateInteraction(_ dst: GameObject, expIncrement: Int32) {
-        if let interactionMasteryData = self.interactionMasteryDatas[dst.type] {
-            interactionMasteryData.increase(exp: expIncrement)
+    func updateInteraction(_ dstType: GameObjectType, exp: Int) {
+        if let interactionMasteryData = self.interactionMasteryDatas[dstType] {
+            interactionMasteryData.increase(exp: exp)
 
             return
         }
 
-        let interactionMasteryData = InteractionMasteryData(type: dst.type)
+        let interactionMasteryData = InteractionMasteryData(type: dstType)
         self.interactionMasteryDatas[interactionMasteryData.dstType] = interactionMasteryData
-        interactionMasteryData.increase(exp: expIncrement)
+        interactionMasteryData.increase(exp: exp)
     }
 
-    func updateInteraction(from src: GameObject, to dst: GameObject, expIncrement: Int32) {
-        let key = GOInteractionMasteryDatasKey(from: src.type, to: dst.type)
+    func updateInteraction(from srcType: GameObjectType, to dstType: GameObjectType, exp: Int) {
+        let key = GOInteractionMasteryDatasKey(from: srcType, to: dstType)
 
         if let goInteractionMasteryData = self.goInteractionMasteryDatas[key] {
-            goInteractionMasteryData.increase(exp: expIncrement)
+            goInteractionMasteryData.increase(exp: exp)
 
             return
         }
 
-        let goInteractionMasteryData = GOInteractionMasteryData(from: src.type, to: dst.type)
+        let goInteractionMasteryData = GOInteractionMasteryData(from: srcType, to: dstType)
         self.goInteractionMasteryDatas[key] = goInteractionMasteryData
-        goInteractionMasteryData.increase(exp: expIncrement)
+        goInteractionMasteryData.increase(exp: exp)
     }
 
-    func updateCraft(_ dst: GameObject, expIncrement: Int32) {
-        if let craftMasteryData = self.craftMasteryDatas[dst.type] {
-            craftMasteryData.increase(exp: expIncrement)
+    func updateCraft(_ dstType: GameObjectType, exp: Int) {
+        if let craftMasteryData = self.craftMasteryDatas[dstType] {
+            craftMasteryData.increase(exp: exp)
 
             return
         }
 
-        let craftMasteryData = CraftMasteryData(type: dst.type)
+        let craftMasteryData = CraftMasteryData(type: dstType)
         self.craftMasteryDatas[craftMasteryData.dstType] = craftMasteryData
-        craftMasteryData.increase(exp: expIncrement)
+        craftMasteryData.increase(exp: exp)
     }
 
 }

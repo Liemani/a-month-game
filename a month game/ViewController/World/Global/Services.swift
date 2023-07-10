@@ -54,7 +54,7 @@ final class Services {
 
         let worldDataModelName = Constant.Name.worldDataModel
         let persistentContainer = LMIPersistentContainer(name: worldDataModelName)
-        persistentContainer.setUp(to: worldDirURL)
+        persistentContainer.setUp(to: worldName)
         self.persistentContainer = persistentContainer
 
         let moContext = persistentContainer.viewContext

@@ -14,7 +14,8 @@ class GOInteractionMasteryData {
     let srcType: GameObjectType
     let dstType: GameObjectType
 
-    var exp: Int32 { self.mo.exp }
+    var lv: Int { Int(self.mo.lv) }
+    var exp: Int { Int(self.mo.exp) }
 
     init?(from goInteractionMasteryMO: GOInteractionMasteryMO) {
         guard let srcType = GameObjectType(rawValue: Int(goInteractionMasteryMO.srcTypeID)) else {
@@ -39,8 +40,13 @@ class GOInteractionMasteryData {
         self.dstType = dstType
     }
 
-    func increase(exp: Int32) {
-        self.mo.update(increment: exp)
+    func increase(exp: Int) {
+        let newExp = self.exp + exp
+
+        if newExp >= MasteryTable.table[self.lv].expForNextLv {
+            self.mo.update(lv: self.lv + 1)
+        }
+        self.mo.update(exp: newExp)
     }
 
 }

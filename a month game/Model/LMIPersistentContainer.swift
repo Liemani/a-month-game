@@ -16,8 +16,10 @@ class LMIPersistentContainer: NSPersistentContainer {
         super.init(name: name, managedObjectModel: managedObjectModel)
     }
 
-    func setUp(to worldDirURL: URL) {
-        let characterDataModelURL = worldDirURL.deletingLastPathComponent().appending(path: Constant.Name.masteryDataModelFile)
+    func setUp(to worldName: String) {
+        let characterDataModelURL = FileUtility.default.characterDirURL.appending(path: Constant.Name.masteryDataModelFile)
+
+        let worldDirURL = FileUtility.default.worldDirURL(of: worldName)
         let worldDataModelURL = worldDirURL.appending(path: Constant.Name.worldDataModelFile)
 
         let characterStoreDescription = NSPersistentStoreDescription()

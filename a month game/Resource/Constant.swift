@@ -115,7 +115,7 @@ struct Constant {
         static let chunkCoordinateEntity = "ChunkCoordinateMO"
         static let interactionMasteryEntity = "InteractionMasteryMO"
         static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
-        static let craftMasteryEntity = "craftMasteryMO"
+        static let craftMasteryEntity = "CraftMasteryMO"
     }
 
     // MARK: - recipe

@@ -110,13 +110,15 @@
 		03FEA1AD2A5ADE3500AF4DDB /* GOInteractionMasteryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1AC2A5ADE3500AF4DDB /* GOInteractionMasteryService.swift */; };
 		03FEA1AF2A5ADFA500AF4DDB /* CraftMasteryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1AE2A5ADFA500AF4DDB /* CraftMasteryService.swift */; };
 		03FEA1B12A5ADFFC00AF4DDB /* CraftMasteryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B02A5ADFFC00AF4DDB /* CraftMasteryData.swift */; };
-		03FEA1B32A5AE1B000AF4DDB /* MasteriesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B22A5AE1B000AF4DDB /* MasteriesData.swift */; };
+		03FEA1B32A5AE1B000AF4DDB /* Masteries.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B22A5AE1B000AF4DDB /* Masteries.swift */; };
 		03FEA1B52A5AF16400AF4DDB /* InteractionMasteryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B42A5AF16400AF4DDB /* InteractionMasteryData.swift */; };
 		03FEA1B72A5AF25400AF4DDB /* InteractionMasteryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B62A5AF25400AF4DDB /* InteractionMasteryDataSource.swift */; };
 		03FEA1B92A5AF42400AF4DDB /* InteractionMasteryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1B82A5AF42400AF4DDB /* InteractionMasteryService.swift */; };
 		03FEA1BB2A5B04E300AF4DDB /* InteractionMasteryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1BA2A5B04E200AF4DDB /* InteractionMasteryRepository.swift */; };
 		03FEA1BD2A5B060F00AF4DDB /* GOInteractionMasteryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1BC2A5B060F00AF4DDB /* GOInteractionMasteryRepository.swift */; };
 		03FEA1BF2A5B066D00AF4DDB /* CraftMasteryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1BE2A5B066C00AF4DDB /* CraftMasteryRepository.swift */; };
+		03FEA1C12A5BC46000AF4DDB /* MasteryTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1C02A5BC46000AF4DDB /* MasteryTable.swift */; };
+		03FEA1C32A5BC9D300AF4DDB /* MasteryLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -235,13 +237,15 @@
 		03FEA1AC2A5ADE3500AF4DDB /* GOInteractionMasteryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOInteractionMasteryService.swift; sourceTree = "<group>"; };
 		03FEA1AE2A5ADFA500AF4DDB /* CraftMasteryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftMasteryService.swift; sourceTree = "<group>"; };
 		03FEA1B02A5ADFFC00AF4DDB /* CraftMasteryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftMasteryData.swift; sourceTree = "<group>"; };
-		03FEA1B22A5AE1B000AF4DDB /* MasteriesData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteriesData.swift; sourceTree = "<group>"; };
+		03FEA1B22A5AE1B000AF4DDB /* Masteries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Masteries.swift; sourceTree = "<group>"; };
 		03FEA1B42A5AF16400AF4DDB /* InteractionMasteryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionMasteryData.swift; sourceTree = "<group>"; };
 		03FEA1B62A5AF25400AF4DDB /* InteractionMasteryDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionMasteryDataSource.swift; sourceTree = "<group>"; };
 		03FEA1B82A5AF42400AF4DDB /* InteractionMasteryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionMasteryService.swift; sourceTree = "<group>"; };
 		03FEA1BA2A5B04E200AF4DDB /* InteractionMasteryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionMasteryRepository.swift; sourceTree = "<group>"; };
 		03FEA1BC2A5B060F00AF4DDB /* GOInteractionMasteryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GOInteractionMasteryRepository.swift; sourceTree = "<group>"; };
 		03FEA1BE2A5B066C00AF4DDB /* CraftMasteryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftMasteryRepository.swift; sourceTree = "<group>"; };
+		03FEA1C02A5BC46000AF4DDB /* MasteryTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryTable.swift; sourceTree = "<group>"; };
+		03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,7 +316,7 @@
 			children = (
 				034637812A238D3600370C71 /* AccessibleGOTracker.swift */,
 				031D57552A076DC8007EF383 /* CharacterData.swift */,
-				03FEA1B22A5AE1B000AF4DDB /* MasteriesData.swift */,
+				03FEA1B22A5AE1B000AF4DDB /* Masteries.swift */,
 				0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */,
 				0304D7742A5954830068DE99 /* InventoryData.swift */,
 				03CE3AF42A3E26FC00D95152 /* GameObjectData.swift */,
@@ -408,6 +412,7 @@
 			isa = PBXGroup;
 			children = (
 				031D57512A06298F007EF383 /* Constant.swift */,
+				03FEA1C02A5BC46000AF4DDB /* MasteryTable.swift */,
 				038330AE2A02850B008DEA10 /* Assets.xcassets */,
 				030ABFC12A0E290E00BAB9B8 /* WorldDataModel.xcdatamodeld */,
 			);
@@ -592,6 +597,7 @@
 			children = (
 				03F6CD2E2A57A72500403EAF /* Logics.swift */,
 				03F6CD2B2A55495A00403EAF /* TouchLogic */,
+				03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */,
 				0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */,
 				0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */,
 				0304D76A2A57ED960068DE99 /* ChunkContainerLogic.swift */,
@@ -743,7 +749,7 @@
 				030261242A3C56E40050E697 /* MovingLayer.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,
 				03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */,
-				03FEA1B32A5AE1B000AF4DDB /* MasteriesData.swift in Sources */,
+				03FEA1B32A5AE1B000AF4DDB /* Masteries.swift in Sources */,
 				033C9E632A1C2DCA000E1D50 /* FieldNode.swift in Sources */,
 				039EEFC92A243DD900CB93C6 /* TouchContext.swift in Sources */,
 				0304D7712A5839D20068DE99 /* CharacterLogic.swift in Sources */,
@@ -784,6 +790,7 @@
 				03CE3AF32A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift in Sources */,
 				034637822A238D3600370C71 /* AccessibleGOTracker.swift in Sources */,
 				030261262A3C71FC0050E697 /* LMINode.swift in Sources */,
+				03FEA1C12A5BC46000AF4DDB /* MasteryTable.swift in Sources */,
 				03FEA1B92A5AF42400AF4DDB /* InteractionMasteryService.swift in Sources */,
 				033C9E612A1C2D83000E1D50 /* Inventory.swift in Sources */,
 				03CE3AE52A3DEBCC00D95152 /* InventoryCoordinate.swift in Sources */,
@@ -804,6 +811,7 @@
 				03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */,
 				03796C0C2A501C6100462804 /* InventoryTouchLogic.swift in Sources */,
 				03FEA1A72A5AC99700AF4DDB /* CraftMasteryDataSource.swift in Sources */,
+				03FEA1C32A5BC9D300AF4DDB /* MasteryLogic.swift in Sources */,
 				03C65E2D2A46C4FA0042BF22 /* GameObjectMoveTouchEndedWorldEventHandler.swift in Sources */,
 				03796C112A513C7D00462804 /* CraftTouchLogic.swift in Sources */,
 				0392E9302A3B3E8E001C22C4 /* WorldGenerator.swift in Sources */,

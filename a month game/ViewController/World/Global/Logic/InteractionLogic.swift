@@ -17,10 +17,27 @@ class InteractionLogic {
                 return
             }
 
+            let result = Logics.default.mastery.interact(.dirtTile)
+
             go.set(type: .clayTile)
-            Logics.default.go.new(type: .dirt,
-                                  quality: goEquiping.quality,
-                                  coord: emptyInvCoord)
+
+            switch result {
+            case .rare:
+                Logics.default.go.new(type: .dirt,
+                                      quality: goEquiping.quality + 1,
+                                      coord: emptyInvCoord)
+            case .common:
+                Logics.default.go.new(type: .dirt,
+                                      quality: goEquiping.quality,
+                                      coord: emptyInvCoord)
+            case .poor:
+                Logics.default.go.new(type: .dirt,
+                                      quality: goEquiping.quality - 1,
+                                      coord: emptyInvCoord)
+            case .fail:
+                break
+            }
+
         },
         .clayTile: { handlerManager, go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),

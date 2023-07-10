@@ -68,6 +68,8 @@ class GameObjectLogic {
              quality: Double = 0.0,
              state: GameObjectState = [],
              coord invCoord: InventoryCoordinate) {
+        let quality = max(quality, 0)
+
         let go = GameObject(type: goType,
                             variant: variant,
                             quality: quality,

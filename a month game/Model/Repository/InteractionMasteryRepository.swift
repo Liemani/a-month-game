@@ -28,8 +28,12 @@ class InteractionMasteryRepository {
 
 extension InteractionMasteryMO {
 
-    func update(increment expIncrement: Int32) {
-        self.exp += expIncrement
+    func update(lv: Int) {
+        self.lv = Int32(lv)
+    }
+
+    func update(exp: Int) {
+        self.exp = Int32(exp)
     }
 
 }

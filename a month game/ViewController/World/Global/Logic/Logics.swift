@@ -38,6 +38,8 @@ class Logics {
     let touch: TouchLogics
     let scene: SceneLogic
 
+    let mastery: MasteryLogic
+
     let character: CharacterLogic
 
     let invContainer: InventoryContainerLogic
@@ -57,6 +59,8 @@ class Logics {
          accessibleGOTracker: AccessibleGOTracker) {
         self.touch = TouchLogics()
         self.scene = SceneLogic()
+
+        self.mastery = MasteryLogic()
 
         self.character = CharacterLogic(character: character)
 

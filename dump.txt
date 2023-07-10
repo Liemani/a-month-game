@@ -448,6 +448,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 # issue
 -
 mastery system
+    apply mastery system
 
 display expected quality to craft object
 
