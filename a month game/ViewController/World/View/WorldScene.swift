@@ -30,6 +30,8 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var craftWindow: CraftWindow!
 
+    var infowindow: InfoWindow!
+
     var munuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
 
@@ -73,6 +75,9 @@ class WorldScene: SKScene {
 
         self.craftWindow = CraftWindow()
         self.craftWindow.update(gos: self.characterInv)
+
+        self.infowindow = InfoWindow()
+
         self.munuWindow = MenuWindow()
     }
 
@@ -108,6 +113,7 @@ class WorldScene: SKScene {
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
         ui.addChild(self.invContainer.invInv)
+        ui.addChild(self.infowindow)
 
         self.addChild(self.munuWindow)
     }

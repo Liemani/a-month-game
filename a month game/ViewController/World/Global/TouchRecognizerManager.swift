@@ -287,6 +287,8 @@ extension TouchRecognizerManager {
 
         // MARK: - touch
         func began(_ lmiTouch: LMITouch) {
+            Logics.default.infoWindow.hide()
+
             self.touchContainer.add(lmiTouch: lmiTouch)
 
             for index in TouchRecognizerIndex.tapIndices {

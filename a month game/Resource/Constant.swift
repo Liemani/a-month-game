@@ -100,6 +100,7 @@ struct Constant {
             static let characterInv = 0.0
             static let craftCell = 0.0
         static let munuWindow = 200.0
+        static let infoWindow = 150.0
     }
 
     // MARK: - frame
@@ -188,6 +189,6 @@ struct Constant {
 
     static let characterInventoryID = 0
 
-    static let longTouchThreshold = 0.8
+    static let longTouchThreshold = 0.5
 
 }

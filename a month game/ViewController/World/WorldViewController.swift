@@ -42,13 +42,14 @@ class WorldViewController: UIViewController {
                                    character: scene.character)
 
         Logics.set(scene: scene,
-                           ui: scene.ui,
-                           invInv: scene.invContainer.invInv,
-                           fieldInv: scene.invContainer.fieldInv,
-                           character: scene.character,
-                           chunkContainer: scene.chunkContainer,
-                           invContainer: scene.invContainer,
-                           accessibleGOTracker: scene.accessibleGOTracker)
+                   ui: scene.ui,
+                   invInv: scene.invContainer.invInv,
+                   fieldInv: scene.invContainer.fieldInv,
+                   infoWindow: scene.infowindow,
+                   character: scene.character,
+                   chunkContainer: scene.chunkContainer,
+                   invContainer: scene.invContainer,
+                   accessibleGOTracker: scene.accessibleGOTracker)
 
         Particle.setUp()
 

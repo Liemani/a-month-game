@@ -122,6 +122,7 @@
 		03FEA1E82A5BF00600AF4DDB /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1E72A5BF00600AF4DDB /* Particle.swift */; };
 		03FEA1EA2A5C0AFC00AF4DDB /* LongTouchRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1E92A5C0AFC00AF4DDB /* LongTouchRecognizer.swift */; };
 		03FEA1EC2A5C2E3D00AF4DDB /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */; };
+		03FEA1EE2A5C364200AF4DDB /* InfoWindownLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -252,6 +253,7 @@
 		03FEA1E72A5BF00600AF4DDB /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
 		03FEA1E92A5C0AFC00AF4DDB /* LongTouchRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongTouchRecognizer.swift; sourceTree = "<group>"; };
 		03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
+		03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindownLogic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -608,6 +610,7 @@
 				03F6CD2B2A55495A00403EAF /* TouchLogic */,
 				03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */,
 				0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */,
+				03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */,
 				0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */,
 				0304D76A2A57ED960068DE99 /* ChunkContainerLogic.swift */,
 				03796C132A516AAA00462804 /* GameObjectLogic.swift */,
@@ -729,6 +732,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03F6CD2F2A57A72500403EAF /* Logics.swift in Sources */,
+				03FEA1EE2A5C364200AF4DDB /* InfoWindownLogic.swift in Sources */,
 				03F6CD2A2A553DF300403EAF /* InteractionLogic.swift in Sources */,
 				033D68F42A3FF932005D3CB0 /* WorldViewModel.swift in Sources */,
 				03CE3AEF2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift in Sources */,

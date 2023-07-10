@@ -17,18 +17,20 @@ class Logics {
                     ui: SKNode,
                     invInv: GameObjectInventory,
                     fieldInv: GameObjectInventory,
+                    infoWindow: InfoWindow,
                     character: Character,
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
         self._default = Logics(scene: scene,
-                                       ui: ui,
-                                       invInv: invInv,
-                                       fieldInv: fieldInv,
-                                       character: character,
-                                       chunkContainer: chunkContainer,
-                                       invContainer: invContainer,
-                                       accessibleGOTracker: accessibleGOTracker)
+                               ui: ui,
+                               invInv: invInv,
+                               fieldInv: fieldInv,
+                               infoWindow: infoWindow,
+                               character: character,
+                               chunkContainer: chunkContainer,
+                               invContainer: invContainer,
+                               accessibleGOTracker: accessibleGOTracker)
     }
 
     static func free() {
@@ -39,6 +41,8 @@ class Logics {
     let scene: SceneLogic
 
     let mastery: MasteryLogic
+
+    let infoWindow: InfoWindowLogic
 
     let character: CharacterLogic
 
@@ -53,6 +57,7 @@ class Logics {
          ui: SKNode,
          invInv: GameObjectInventory,
          fieldInv: GameObjectInventory,
+         infoWindow: InfoWindow,
          character: Character,
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
@@ -61,6 +66,9 @@ class Logics {
         self.scene = SceneLogic()
 
         self.mastery = MasteryLogic()
+
+        self.infoWindow = InfoWindowLogic(infoWindow: infoWindow,
+                                          character: character)
 
         self.character = CharacterLogic(character: character)
 

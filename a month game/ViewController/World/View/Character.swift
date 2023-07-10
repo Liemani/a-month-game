@@ -92,7 +92,7 @@ extension Character: TouchResponder {
     }
 
     func longTouched(_ touch: UITouch) {
-        Particle.flutter(result: .rare)
+        Logics.default.infoWindow.displayCharacterInfo()
     }
 
 }
