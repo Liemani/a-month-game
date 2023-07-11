@@ -457,6 +457,7 @@ mastery system
     character long touch
         long touch
         display mastery level info with image
+    add craft
 
 fix
     i can't touch reset no button

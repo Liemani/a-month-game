@@ -38,7 +38,7 @@ class CharacterInventory: Inventory {
         super.init(id: 0,
                    cells: cells,
                    cellWidth: Constant.defaultWidth,
-                   cellSpacing: Constant.invCellSpacing)
+                   cellSpacing: Constant.defaultPadding)
 
         self.position = Constant.invWindowPosition
         self.zPosition = Constant.ZPosition.characterInv

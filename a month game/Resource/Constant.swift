@@ -21,6 +21,8 @@ struct Constant {
     static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
     static let tileSize = defaultNodeSize
 
+    static let defaultPadding: CGFloat = 16.0
+
     static let gameObjectSize = defaultNodeSize * 0.9
     static let coverSize = defaultNodeSize * 0.9
 
@@ -50,13 +52,12 @@ struct Constant {
 
     // MARK: inventory
     static let invWindowPosition = CGPoint(x: sceneCenter.x,
-                                           y: defaultWidth / 2.0 + invCellSpacing)
+                                           y: defaultWidth / 2.0 + defaultPadding)
     static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultWidth)
     static let invCellCount: Int = 5
-    static let invCellSpacing: CGFloat = 16.0
 
     // MARK: craft pane
-    static let craftWindowPosition = CGPoint(x: tileWidth / 2 + invCellSpacing, y: sceneSize.height / 2.0)
+    static let craftWindowPosition = CGPoint(x: tileWidth / 2 + defaultPadding, y: sceneSize.height / 2.0)
     static let craftWindowSize = CGSize(width: invWindowSize.height, height: invWindowSize.width)
     static let craftWindowCellCount = 5
 
@@ -69,6 +70,8 @@ struct Constant {
     struct Size {
         static let particle = CGSize(width: 10.0, height: 10.0)
         static let qualityBox = CGSize(width: 35.0, height: 15.0)
+        static let infoWindow = CGSize(width: Constant.defaultWidth * 3.0,
+                                       height: Constant.defaultWidth * 5.0)
     }
 
     // MARK: - position

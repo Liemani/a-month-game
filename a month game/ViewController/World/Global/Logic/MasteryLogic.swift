@@ -46,10 +46,34 @@ class MasteryLogic {
         let result = MasteryTable.result(lv: lv)
 
         self.masteries.updateCraft(dstType, exp: result.exp)
-        
+
         Particle.flutter(result: result)
 
         return result
+    }
+
+    var description: String {
+        var description = ""
+
+        description.append("interaction:\n")
+
+        for masteryData in self.masteries.interactionMasteryDatas.values {
+            description.append("\(masteryData.dstType): \(masteryData.lv)\n")
+        }
+
+        description.append("\ngame object interaction:\n")
+
+        for masteryData in self.masteries.goInteractionMasteryDatas.values {
+            description.append("\(masteryData.srcType) -> \(masteryData.dstType): \(masteryData.lv)\n")
+        }
+
+        description.append("\ncrarft:\n")
+
+        for masteryData in self.masteries.craftMasteryDatas.values {
+            description.append("\(masteryData.dstType): \(masteryData.lv)\n")
+        }
+
+        return description
     }
 
 }

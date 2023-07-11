@@ -130,7 +130,7 @@ class CraftWindow: SKNode {
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.craftCell)
 
         let cellWidth = Constant.defaultWidth
-        let cellSpacing = Constant.invCellSpacing
+        let cellSpacing = Constant.defaultPadding
 
         let distanceOfCellsCenter = cellWidth + cellSpacing
         let endCellOffset = distanceOfCellsCenter * Double((self.cellCount - 1) / 2)

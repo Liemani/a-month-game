@@ -24,6 +24,9 @@ class InfoWindowLogic {
         self.infoWindow.removeFromParent()
         self.character.addChild(self.infoWindow)
 
+        let content = Logics.default.mastery.description
+        self.infoWindow.setText(content)
+
         let y = self.infoWindow.path!.boundingBox.size.height / 2.0 + Constant.defaultWidth
         self.infoWindow.position = CGPoint(x: 0, y: y)
     }

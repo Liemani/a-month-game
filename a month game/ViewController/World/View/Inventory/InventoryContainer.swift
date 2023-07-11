@@ -42,12 +42,12 @@ class InventoryContainer {
         self.invs.append(characterInv)
 
         let invInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
-                                         cellSpacing: Constant.invCellSpacing)
+                                         cellSpacing: Constant.defaultPadding)
         invInv.isHidden = true
         self.invs.append(invInv)
 
         let fieldInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
-                                           cellSpacing: Constant.invCellSpacing)
+                                           cellSpacing: Constant.defaultPadding)
         fieldInv.isHidden = true
         self.invs.append(fieldInv)
     }
