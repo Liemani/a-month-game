@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Character: SKShapeNode {
+class Character: SKShapeNode, TouchResponder {
 
     let data: CharacterData
 
@@ -75,24 +75,12 @@ class Character: SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-}
-
-extension Character: TouchResponder {
-
-    func touchBegan(_ touch: UITouch) {
+    func activate() {
+        self.alpha = 0.5
     }
 
-    func touchMoved(_ touch: UITouch) {
-    }
-
-    func touchEnded(_ touch: UITouch) {
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-    }
-
-    func longTouched(_ touch: UITouch) {
-        Logics.default.infoWindow.displayCharacterInfo()
+    func deactivate() {
+        self.alpha = 1.0
     }
 
 }

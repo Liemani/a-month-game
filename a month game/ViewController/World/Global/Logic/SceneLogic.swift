@@ -10,6 +10,14 @@ import SpriteKit
 
 class SceneLogic {
 
+    let scene: WorldScene
+
+    init(scene: WorldScene) {
+        self.scene = scene
+    }
+
+    var timeInterval: Double { self.scene.timeInterval }
+
     // MARK: - game object
     func new(result: TaskResultType,
              type goType: GameObjectType,
@@ -201,6 +209,11 @@ class SceneLogic {
         if fieldInv.parent == nil {
             Logics.default.invContainer.closeFieldInv()
         }
+    }
+
+    // MARK: - etc
+    func isDescendantOfUILayer(_ node: SKNode) -> Bool {
+        return node.isDescendant(self.scene.ui)
     }
 
 }

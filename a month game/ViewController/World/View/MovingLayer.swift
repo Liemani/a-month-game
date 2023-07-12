@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class MovingLayer: SKNode {
+class MovingLayer: SKNode, TouchResponder {
 
     var chunkContainer: ChunkContainer!
 
@@ -48,32 +48,6 @@ class MovingLayer: SKNode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-}
-
-// MARK: - touch responder
-extension MovingLayer: TouchResponder {
-
-    func touchBegan(_ touch: UITouch) {
-        let fieldTouchLogic = FieldTouchLogic(touch: touch)
-        Logics.default.touch.add(fieldTouchLogic)
-        fieldTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        Logics.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        Logics.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        Logics.default.touch.cancelled(touch)
-    }
-
-    func longTouched(_ touch: UITouch) {
     }
 
 }

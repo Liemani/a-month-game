@@ -50,7 +50,11 @@ extension SKNode {
     }
 
     func isBeing(touched touch: UITouch) -> Bool {
-        return self.contains(touch.location(in: self.parent!))
+        guard let parent = self.parent else {
+            return true
+        }
+
+        return self.contains(touch.location(in: parent))
     }
 
     func isDescendant(_ node: SKNode) -> Bool {
@@ -80,6 +84,10 @@ extension CGPoint {
     // MARK: CGPoint, CGPoint
     static func + (lhs: CGPoint, rhs: CGPoint) -> CGPoint {
         return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+    }
+
+    static func += (lhs: inout CGPoint, rhs: CGPoint) {
+        lhs = lhs + rhs
     }
 
     static func - (lhs: CGPoint, rhs: CGPoint) -> CGPoint {

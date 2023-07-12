@@ -8,71 +8,55 @@
 import Foundation
 import SpriteKit
 
-final class TapRecognizer {
+final class TapRecognizer: TouchRecognizer {
 
-    var lmiTouch: LMITouch?
-    var lmiTouches: [LMITouch] {
-        if let lmiTouch = self.lmiTouch {
-            return [lmiTouch]
-        } else {
-            return []
-        }
-    }
+    var recognizerTouch: RecognizerTouch? { self.recognizerTouches.first }
 
-    var touchResponder: TouchResponder?
-
-    private let scene: WorldScene
-
-    // MARK: - init
-    init(scene: WorldScene) {
-        self.scene = scene
-    }
-
-}
-
-extension TapRecognizer: TouchRecognizer {
-
-    func discriminate(lmiTouches: [LMITouch]) -> Bool {
-        let lmiTouch = lmiTouches[0]
-
-        guard lmiTouch.possible.contains(.tap) else {
-            return false
-        }
-
-        if lmiTouch.touchResponder == nil {
-            lmiTouch.possible.remove(.tap)
-
-            return false
-        }
+    override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
+        self.recognized(recognizerTouch: recognizerTouch)
 
         return true
     }
 
-    func began(lmiTouches: [LMITouch]) {
-        let lmiTouch = lmiTouches[0]
-        self.lmiTouch = lmiTouch
+    private func recognized(recognizerTouch: RecognizerTouch) {
+        TouchManager.default.removePossible(from: recognizerTouch) {
+            $0 is TapRecognizer
+        }
 
-        self.touchResponder = lmiTouch.touchResponder
-        self.touchResponder!.touchBegan(lmiTouch.touch)
+        self.recognizerTouches.append(recognizerTouch)
     }
 
-    func moved() {
-        self.touchResponder!.touchMoved(self.lmiTouch!.touch)
+    override func free(recognizerTouch: RecognizerTouch) {
+        self.recognizerTouches.removeAll { $0 === recognizerTouch }
     }
 
-    func ended() {
-        self.touchResponder!.touchEnded(self.lmiTouch!.touch)
-        self.complete()
-    }
+    override func began() {
+        var tapLogic: TouchLogic
 
-    func cancelled() {
-        self.touchResponder!.touchCancelled(self.lmiTouch!.touch)
-        self.complete()
-    }
+        switch self.recognizerTouch!.touchResponder {
+        case let responder as Button:
+            tapLogic = ButtonTapLogic(touch: self.recognizerTouch!.touch,
+                                      button: responder)
+        case let responder as Character:
+            tapLogic = CharacterTapLogic(touch: self.recognizerTouch!.touch,
+                                         character: responder)
+        case let responder as GameObject:
+            tapLogic = GameObjectTapLogic(touch: self.recognizerTouch!.touch,
+                                                go: responder)
+        case is MovingLayer:
+            tapLogic = FieldTapLogic(touch: self.recognizerTouch!.touch)
+        case let responder as InventoryCell:
+            tapLogic = InventoryTapLogic(touch: self.recognizerTouch!.touch,
+                                         cell: responder)
+        case let responder as CraftCell:
+            tapLogic = CraftTapLogic(touch: self.recognizerTouch!.touch,
+                                     craftObject: responder.craftObject)
+        default:
+            return
+        }
 
-    func complete() {
-        self.lmiTouch = nil
-        self.touchResponder = nil
+        TouchLogics.default.add(tapLogic)
+        tapLogic.began()
     }
 
 }

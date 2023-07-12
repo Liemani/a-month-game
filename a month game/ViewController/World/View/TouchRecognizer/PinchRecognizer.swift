@@ -8,76 +8,81 @@
 import Foundation
 import SpriteKit
 
-class PinchRecognizer {
+class PinchRecognizer: TouchRecognizer {
 
-    var lmiTouches: [LMITouch]
-
-    private var scene: WorldScene
+    private var scene: SKScene
     private let ui: SKNode
-    private let world: SKNode
+
+    private var trackingRecognizerTouches: [RecognizerTouch]
 
     private var pDistance: Double
 
-    init(scene: WorldScene, ui: SKNode, world: SKNode) {
-        self.lmiTouches = []
+    init(scene: SKScene, ui: SKNode) {
+        self.trackingRecognizerTouches = []
 
         self.scene = scene
         self.ui = ui
-        self.world = world
 
         self.pDistance = 0.0
     }
 
-    var distance:Double {
-        let difference = self.lmiTouches[0].location(in: self.scene)
-            - self.lmiTouches[1].location(in: self.scene)
+    var touches: [UITouch] { self.recognizerTouches.map { $0.touch } }
+
+    var distance: Double {
+        let difference = self.recognizerTouches[0].location(in: self.scene)
+            - self.recognizerTouches[1].location(in: self.scene)
 
         return difference.magnitude
     }
 
-}
+    override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
+        if !self.trackingRecognizerTouches.contains(recognizerTouch) {
+            self.trackingRecognizerTouches.append(recognizerTouch)
+        }
 
-extension PinchRecognizer: TouchRecognizer {
-
-    func discriminate(lmiTouches: [LMITouch]) -> Bool {
-        guard lmiTouches.count == 2
-                && lmiTouches[0].possible.contains(.pinch)
-                && lmiTouches[1].possible.contains(.pinch) else {
+        guard self.trackingRecognizerTouches.count == 2 else {
             return false
         }
 
-        let currentTime = CACurrentMediaTime()
+        let cTime = CACurrentMediaTime()
 
-        guard currentTime - lmiTouches[0].bTime < 1.0
-            && !lmiTouches[0].touchedNode.isDescendant(self.ui) else {
-            lmiTouches[0].possible.remove(.pinch)
+        let touch1 = self.trackingRecognizerTouches[0]
+
+        guard cTime - touch1.bTime < 1.0
+                && !(touch1.touchResponder?.isDescendant(self.ui) ?? false) else {
+            TouchManager.default.removePossible(from: touch1,
+                                                      recognizer: self)
 
             return false
         }
 
-        guard currentTime - lmiTouches[1].bTime < 1.0
-            && !lmiTouches[1].touchedNode.isDescendant(self.ui) else {
-            lmiTouches[1].possible.remove(.pinch)
+        let touch2 = self.trackingRecognizerTouches[1]
+
+        guard cTime - touch2.bTime < 1.0
+                && !(touch2.touchResponder?.isDescendant(self.ui) ?? false) else {
+            TouchManager.default.removePossible(from: touch2,
+                                                      recognizer: self)
+
             return false
         }
 
-        var pTouch: LMITouch
-        var cTouch: LMITouch
+        var pTouch: RecognizerTouch
+        var cTouch: RecognizerTouch
 
         var pTouchPLocation: CGPoint
 
-        if lmiTouches[0].touch.timestamp == lmiTouches[1].touch.timestamp {
-            pTouch = lmiTouches[0]
-            cTouch = lmiTouches[1]
+        if self.trackingRecognizerTouches[0].touch.timestamp == self.trackingRecognizerTouches[1].touch.timestamp {
+            pTouch = self.trackingRecognizerTouches[0]
+            cTouch = self.trackingRecognizerTouches[1]
 
             pTouchPLocation = pTouch.previousLocation(in: self.scene)
         } else {
-            if lmiTouches[0].touch.timestamp < lmiTouches[1].touch.timestamp {
-                pTouch = lmiTouches[0]
-                cTouch = lmiTouches[1]
+            if self.trackingRecognizerTouches[0].touch.timestamp < self.trackingRecognizerTouches[1].touch.timestamp {
+                pTouch = self.trackingRecognizerTouches[0]
+                cTouch = self.trackingRecognizerTouches[1]
             } else {
-                pTouch = lmiTouches[1]
-                cTouch = lmiTouches[0]
+                pTouch = self.trackingRecognizerTouches[1]
+                cTouch = self.trackingRecognizerTouches[0]
             }
 
             pTouchPLocation = pTouch.location(in: self.scene)
@@ -93,43 +98,38 @@ extension PinchRecognizer: TouchRecognizer {
 
         let velocityDelta = delta / timeInterval
 
-        return 100.0 < abs(velocityDelta)
+        if 100.0 < abs(velocityDelta) {
+            self.recognized(recognizerTouches: self.trackingRecognizerTouches)
+
+            return true
+        } else {
+            return false
+        }
     }
 
-    func began(lmiTouches: [LMITouch]) {
-        for lmiTouch in lmiTouches {
-            lmiTouch.setRecognizer(self)
-            lmiTouch.removeLongTouchPossible()
+    private func recognized(recognizerTouches: [RecognizerTouch]) {
+        for recognizerTouch in recognizerTouches {
+            TouchLogics.default.cancelled(recognizerTouch.touch)
+
+            TouchManager.default.removePossible(from: recognizerTouch) { _ in
+                true
+            }
         }
 
-        self.lmiTouches = lmiTouches
-        self.pDistance = self.distance
+        for recognizerTouch in recognizerTouches {
+            self.recognizerTouches.append(recognizerTouch)
+        }
     }
 
-    func moved() {
-        let distance = self.distance
-
-        let scaleDelta = distance / self.pDistance
-        var scale = self.world.xScale * scaleDelta
-        scale = max(Constant.minZoomScale, scale)
-        scale = min(scale, Constant.maxZoomScale)
-
-        self.world.xScale = scale
-        self.world.yScale = scale
-
-        self.pDistance = distance
+    override func free(recognizerTouch: RecognizerTouch) {
+        self.trackingRecognizerTouches.removeAll { $0 === recognizerTouch }
+        self.recognizerTouches.removeAll()
     }
 
-    func ended() {
-        self.complete()
-    }
-
-    func cancelled() {
-        self.complete()
-    }
-
-    func complete() {
-        self.lmiTouches.removeAll()
+    override func began() {
+        let touchLogic = ScenePinchLogic(touches: self.touches, scene: self.scene)
+        TouchLogics.default.add(touchLogic)
+        touchLogic.began()
     }
 
 }

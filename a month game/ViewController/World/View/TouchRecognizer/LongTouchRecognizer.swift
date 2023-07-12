@@ -8,53 +8,50 @@
 import Foundation
 import SpriteKit
 
-class LongTouchRecognizer {
-
-    var lmiTouches: [LMITouch] {
-        return []
-    }
-
+protocol TimeRecognizer {
 }
 
-extension LongTouchRecognizer: TouchRecognizer {
+class LongTouchRecognizer: TouchRecognizer, TimeRecognizer {
 
-    func discriminate(lmiTouches: [LMITouch]) -> Bool {
-        let lmiTouch = lmiTouches[0]
+    var recognizerTouch: RecognizerTouch? { self.recognizerTouches.first }
 
-        guard lmiTouch.possible.contains(.longTouch) else {
-            return false
-        }
-
-        let touchResponder = lmiTouch.touchResponder
-
-        if touchResponder == nil || !touchResponder!.isBeing(touched: lmiTouch.touch) {
-            lmiTouch.possible.remove(.tap)
+    override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
+        if let touchResponder = recognizerTouch.touchResponder,
+              !touchResponder.isBeing(touched: recognizerTouch.touch) {
+            TouchManager.default.removePossible(from: recognizerTouch,
+                                                      recognizer: self)
 
             return false
         }
 
-        let touchedDuration = lmiTouch.touch.timestamp - lmiTouch.bTime
+        let touchedDuration = CACurrentMediaTime() - recognizerTouch.bTime
 
-        return touchedDuration >= Constant.longTouchThreshold
+        if touchedDuration >= Constant.longTouchThreshold {
+            self.recognized(recognizerTouch: recognizerTouch)
+
+            return true
+        } else {
+            return false
+        }
     }
 
-    func began(lmiTouches: [LMITouch]) {
-        let lmiTouch = lmiTouches[0]
+    private func recognized(recognizerTouch: RecognizerTouch) {
+        TouchManager.default.removePossible(from: recognizerTouch) { _ in
+            true
+        }
 
-        lmiTouch.setRecognizer(self)
-
-        // remove time event
-
-        lmiTouch.touchResponder!.longTouched(lmiTouch.touch)
+        self.recognizerTouches.append(recognizerTouch)
     }
 
-    func moved() {
-    }
+    override func began() {
+        switch self.recognizerTouch!.touchResponder {
+        case is Character:
+            Logics.default.infoWindow.displayCharacterInfo()
+        default:
+            break
+        }
 
-    func ended() {
-    }
-
-    func cancelled() {
+        self.recognizerTouches.removeAll()
     }
 
 }

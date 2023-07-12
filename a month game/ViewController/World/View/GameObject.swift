@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: SKSpriteNode {
+class GameObject: SKSpriteNode, TouchResponder {
 
     var data: GameObjectData
 
@@ -197,33 +197,6 @@ class GameObject: SKSpriteNode {
 
     func delete() {
         self.data.delete()
-    }
-
-}
-
-// MARK: - touch responder
-extension GameObject: TouchResponder {
-
-    func touchBegan(_ touch: UITouch) {
-        let goTouchLogic = GameObjectTouchLogic(touch: touch, go: self)
-        Logics.default.touch.add(goTouchLogic)
-        goTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        Logics.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        Logics.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        Logics.default.touch.cancelled(touch)
-    }
-
-    func longTouched(_ touch: UITouch) {
-        // TODO: display manual
     }
 
 }

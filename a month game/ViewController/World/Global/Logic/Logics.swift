@@ -18,6 +18,7 @@ class Logics {
                     invInv: GameObjectInventory,
                     fieldInv: GameObjectInventory,
                     infoWindow: InfoWindow,
+                    world: SKNode,
                     character: Character,
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
@@ -27,6 +28,7 @@ class Logics {
                                invInv: invInv,
                                fieldInv: fieldInv,
                                infoWindow: infoWindow,
+                               world: world,
                                character: character,
                                chunkContainer: chunkContainer,
                                invContainer: invContainer,
@@ -44,6 +46,7 @@ class Logics {
 
     let infoWindow: InfoWindowLogic
 
+    let world: WorldLogic
     let character: CharacterLogic
 
     let invContainer: InventoryContainerLogic
@@ -58,18 +61,19 @@ class Logics {
          invInv: GameObjectInventory,
          fieldInv: GameObjectInventory,
          infoWindow: InfoWindow,
+         world: SKNode,
          character: Character,
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
         self.touch = TouchLogics()
-        self.scene = SceneLogic()
+        self.scene = SceneLogic(scene: scene)
 
         self.mastery = MasteryLogic()
 
-        self.infoWindow = InfoWindowLogic(infoWindow: infoWindow,
-                                          character: character)
+        self.infoWindow = InfoWindowLogic(infoWindow: infoWindow)
 
+        self.world = WorldLogic(world: world)
         self.character = CharacterLogic(character: character)
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)

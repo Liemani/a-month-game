@@ -8,25 +8,25 @@
 import Foundation
 import SpriteKit
 
-class CraftTouchLogic {
+class CraftTapLogic: TouchLogic {
 
-    let touch: UITouch
+    var touch: UITouch { self.touches[0] }
+
     private let craftObject: CraftObject
 
     init(touch: UITouch, craftObject: CraftObject) {
-        self.touch = touch
         self.craftObject = craftObject
+
+        super.init()
+
+        self.touches.append(touch)
     }
 
-}
-
-extension CraftTouchLogic: TouchLogic {
-
-    func began() {
+    override func began() {
         craftObject.activate()
     }
 
-    func moved() {
+    override func moved() {
         if self.craftObject.isBeing(touched: self.touch) {
             self.craftObject.activate()
         } else {
@@ -34,7 +34,7 @@ extension CraftTouchLogic: TouchLogic {
         }
     }
 
-    func ended() {
+    override func ended() {
         guard self.craftObject.isBeing(touched: self.touch) else {
             self.complete()
 
@@ -57,7 +57,7 @@ extension CraftTouchLogic: TouchLogic {
         self.complete()
     }
 
-    func cancelled() {
+    override func cancelled() {
         self.complete()
     }
 

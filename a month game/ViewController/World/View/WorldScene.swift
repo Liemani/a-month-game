@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class WorldScene: SKScene {
+class WorldScene: SKScene, TouchResponder {
 
     var worldViewController: WorldViewController {
         return self.view!.next! as! WorldViewController
@@ -30,9 +30,9 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var craftWindow: CraftWindow!
 
-    var infowindow: InfoWindow!
+    var infoWindow: InfoWindow!
 
-    var munuWindow: MenuWindow!
+    var menuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
 
     // MARK: - init
@@ -76,9 +76,9 @@ class WorldScene: SKScene {
         self.craftWindow = CraftWindow()
         self.craftWindow.update(gos: self.characterInv)
 
-        self.infowindow = InfoWindow()
+        self.infoWindow = InfoWindow()
 
-        self.munuWindow = MenuWindow()
+        self.menuWindow = MenuWindow()
     }
 
     func initSceneLayer() {
@@ -113,9 +113,8 @@ class WorldScene: SKScene {
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
         ui.addChild(self.invContainer.invInv)
-        ui.addChild(self.infowindow)
-
-        self.addChild(self.munuWindow)
+        ui.addChild(self.infoWindow)
+        ui.addChild(self.menuWindow)
     }
 
     override func sceneDidLoad() {
@@ -142,6 +141,8 @@ class WorldScene: SKScene {
         self.pTime = self.cTime
         self.cTime = currentTime
 
+        TouchManager.default.updateTimeoutRecognizer()
+
         self.handleEvent(currentTime)
 
         self.updateModel()
@@ -151,8 +152,6 @@ class WorldScene: SKScene {
     }
 
     func handleEvent(_ currentTime: TimeInterval) {
-        WorldEventManager.default.updateTimeEvent(currentTime)
-
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
             // TODO: remove argument self
@@ -183,32 +182,31 @@ class WorldScene: SKScene {
         }
     }
 
-
 }
 
 extension WorldScene {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchBegan(touch)
+            TouchManager.default.touchBegan(touch)
         }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchMoved(touch)
+            TouchManager.default.touchMoved(touch)
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchEnded(touch)
+            TouchManager.default.touchEnded(touch)
         }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchCancelled(touch)
+            TouchManager.default.touchCancelled(touch)
         }
     }
 

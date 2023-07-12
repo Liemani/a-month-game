@@ -8,108 +8,76 @@
 import Foundation
 import SpriteKit
 
-class PanRecognizer {
+class PanRecognizer: TouchRecognizer {
 
-    var lmiTouch: LMITouch?
-    var lmiTouches: [LMITouch] {
-        if let touch = self.lmiTouch {
-            return [touch]
-        } else {
-            return []
-        }
-    }
+    var recognizerTouch: RecognizerTouch? { self.recognizerTouches.first }
 
-    var isHandling: Bool { self.lmiTouch != nil }
+    private let scene: SKScene
 
-    private let scene: WorldScene
-    private let ui: SKNode
-    private let character: Character
-
-    private var pPoint: CGPoint!
-    private var cPoint: CGPoint!
-
-    init(scene: WorldScene, ui: SKNode, character: Character) {
+    init(scene: SKScene) {
         self.scene = scene
-        self.ui = ui
-        self.character = character
     }
 
-}
-
-extension PanRecognizer: TouchRecognizer {
-
-    func discriminate(lmiTouches: [LMITouch]) -> Bool {
-        let lmiTouch = lmiTouches[0]
-
-        guard lmiTouch.possible.contains(.pan) else {
-            return false
-        }
-
-        guard self.lmiTouch == nil else {
-            return false
-        }
-
+    override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
 //        let currentTime = CACurrentMediaTime()
 //
-//        guard currentTime - lmiTouch.bTime < 1.0
-//            && !lmiTouch.touchedNode.isDescendant(self.ui) else {
-        guard !lmiTouch.touchedNode.isDescendant(self.ui) else {
-            lmiTouch.possible.remove(.pan)
+//        guard currentTime - recognizerTouch.bTime < 1.0
+//            && !recognizerTouch.touchedNode.isDescendant(self.ui) else {
+//        guard !recognizerTouch.touchedNode.isDescendant(self.ui)
+//                || recognizerTouch.touchResponder === self.infoWindow else {
+//            recognizerTouch.possible.remove(.pan)
+//
+//            return false
+//        }
 
+//        return recognizerTouch.velocity(in: self.scene) >= Constant.panThreshold
+
+        let positionDelta = recognizerTouch.touch.location(in: self.scene) - recognizerTouch.bPosition
+
+        if positionDelta.magnitude >= Constant.tileWidth / 3.0 {
+            self.recognized(recognizerTouch: recognizerTouch)
+
+            return true
+        } else {
             return false
         }
-
-//        return lmiTouch.velocity(in: self.scene) >= Constant.panThreshold
-
-        let deltaPosition = lmiTouch.touch.location(in: self.scene) - lmiTouch.bPosition
-
-        return deltaPosition.magnitude >= Constant.tileWidth / 3.0
     }
 
-    func began(lmiTouches: [LMITouch]) {
-        let lmiTouch = lmiTouches[0]
-
-        if self.isHandling {
-            self.lmiTouch!.cancelRecognizer()
+    private func recognized(recognizerTouch: RecognizerTouch) {
+        if let recognizerTouch = self.recognizerTouch {
+            TouchLogics.default.cancelled(recognizerTouch.touch)
         }
 
-        lmiTouch.setRecognizer(self)
+        TouchManager.default.removePossible(from: recognizerTouch) {
+            !($0 is PinchRecognizer)
+        }
 
-        lmiTouch.removeLongTouchPossible()
-
-        self.lmiTouch = lmiTouch
-        self.character.velocityVector = CGVector()
-        self.cPoint = self.lmiTouch!.location(in: self.scene)
+        self.recognizerTouches.append(recognizerTouch)
     }
 
-    func moved() {
-        self.pPoint = self.cPoint
-        self.cPoint = self.lmiTouch!.location(in: self.scene)
-        let delta = self.cPoint - self.pPoint
-
-        self.character.position -= delta * self.character.speedModifier
+    override func free(recognizerTouch: RecognizerTouch) {
+        self.recognizerTouches.removeAll { $0 === recognizerTouch }
     }
 
-    func ended() {
-        self.setCharacterVelocity()
+    override func began() {
+        let responder = self.recognizerTouch!.touchResponder!
 
-        self.complete()
-    }
+        guard !Logics.default.scene.isDescendantOfUILayer(responder) else {
+            return
+        }
 
-    private func setCharacterVelocity() {
-        guard self.pPoint != nil else { return }
+        var panLogic: TouchLogic
 
-        let timeInterval = self.scene.timeInterval
+        switch responder {
+        case is InfoWindow:
+            panLogic = InfoWindowPanLogic(touch: self.recognizerTouch!.touch)
+        default:
+            panLogic = FieldPanLogic(touch: self.recognizerTouch!.touch,
+                                              scene: self.scene)
+        }
 
-        self.character.velocityVector = (-(self.cPoint - self.pPoint) / timeInterval).vector
-    }
-
-    func cancelled() {
-        self.complete()
-    }
-
-    func complete() {
-        self.lmiTouch = nil
+        TouchLogics.default.add(panLogic)
+        panLogic.began()
     }
 
 }

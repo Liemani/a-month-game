@@ -8,25 +8,24 @@
 import Foundation
 import SpriteKit
 
-class GameObjectTouchLogic {
+class GameObjectTapLogic: TouchLogic {
 
-    let touch: UITouch
+    var touch: UITouch { self.touches[0] }
     private let go: GameObject
 
     init(touch: UITouch, go: GameObject) {
-        self.touch = touch
         self.go = go
+
+        super.init()
+
+        self.touches.append(touch)
     }
 
-}
-
-extension GameObjectTouchLogic: TouchLogic {
-
-    func began() {
+    override func began() {
         self.go.activate()
     }
 
-    func moved() {
+    override func moved() {
         if self.go.isBeing(touched: self.touch) {
             self.go.activate()
         } else {
@@ -34,7 +33,7 @@ extension GameObjectTouchLogic: TouchLogic {
         }
     }
 
-    func ended() {
+    override func ended() {
         guard self.go.isBeing(touched: self.touch) else {
             self.go.deactivate()
 
@@ -51,7 +50,7 @@ extension GameObjectTouchLogic: TouchLogic {
             go = Logics.default.chunkContainer.items(at: go.chunkCoord!)!.last!
         }
 
-        if let activatedGO = Logics.default.touch.activatedGO {
+        if let activatedGO = TouchLogics.default.activatedGO {
             activatedGO.deactivate()
             go.deactivate()
 
@@ -61,7 +60,7 @@ extension GameObjectTouchLogic: TouchLogic {
                 Logics.default.go.interactToGO(activatedGO, to: go)
             }
 
-            Logics.default.touch.activatedGO = nil
+            TouchLogics.default.activatedGO = nil
 
             return
         }
@@ -75,12 +74,12 @@ extension GameObjectTouchLogic: TouchLogic {
             return
         }
 
-        Logics.default.touch.activatedGO = self.go
+        TouchLogics.default.activatedGO = self.go
 
         return
     }
 
-    func cancelled() {
+    override func cancelled() {
         self.go.deactivate()
     }
 

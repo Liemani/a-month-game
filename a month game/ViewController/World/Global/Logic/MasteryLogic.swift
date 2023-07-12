@@ -67,7 +67,7 @@ class MasteryLogic {
             description.append("\(masteryData.srcType) -> \(masteryData.dstType): \(masteryData.lv)\n")
         }
 
-        description.append("\ncrarft:\n")
+        description.append("\ncraft:\n")
 
         for masteryData in self.masteries.craftMasteryDatas.values {
             description.append("\(masteryData.dstType): \(masteryData.lv)\n")

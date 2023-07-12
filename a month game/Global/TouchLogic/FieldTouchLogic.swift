@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class FieldTouchLogic {
+class FieldTapLogic {
 
     let touch: UITouch
     private let bChunkCoord: ChunkCoordinate
@@ -20,7 +20,7 @@ class FieldTouchLogic {
 
 }
 
-extension FieldTouchLogic: TouchLogic {
+extension FieldTapLogic: TouchLogic {
 
     func began() {
     }

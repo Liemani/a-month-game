@@ -102,8 +102,8 @@ struct Constant {
         static let ui = 100.0
             static let characterInv = 0.0
             static let craftCell = 0.0
-        static let munuWindow = 200.0
-        static let infoWindow = 150.0
+            static let infoWindow = 50.0
+            static let menuWindow = 100.0
     }
 
     // MARK: - frame

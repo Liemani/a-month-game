@@ -9,11 +9,4 @@ import Foundation
 import SpriteKit
 
 protocol TouchResponder: SKNode {
-
-    func touchBegan(_ touch: UITouch)
-    func touchMoved(_ touch: UITouch)
-    func touchEnded(_ touch: UITouch)
-    func touchCancelled(_ touch: UITouch)
-    func longTouched(_ touch: UITouch)
-
 }

@@ -77,7 +77,7 @@ class CraftObject: SKSpriteNode {
 
 }
 
-class CraftCell: SKSpriteNode {
+class CraftCell: SKSpriteNode, TouchResponder {
 
     var craftObject: CraftObject { self.children.first as! CraftObject }
 
@@ -222,57 +222,8 @@ class CraftWindow: SKNode {
         return true
     }
 
-//    func refill(_ go: GameObjectNode) {
-//        let cell = go.parent as! CraftCell
-//        cell.addNoneGO()
-//        let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-//        self.worldScene.addGOMO(from: go, to: goCoord)
-//        self.consumeIngredient(of: go.type)
-//    }
-
-//    func consumeIngredient(of goType: GameObjectType) {
-//        let recipes = Constant.recipes
-//        let recipe = recipes[goType]!
-//        let gosToRemove = MaterialInRecipeSequence(recipe: recipe, materials: self.resources())
-//        self.worldScene.remove(from: gosToRemove)
-//    }
-//
-//    private func resources() -> some Sequence<GameObjectNode> {
-//        let resourceSequences: [any Sequence<GameObjectNode>] = [
-//            self.interactionZone.gos,
-//            self.worldScene.characterInv,
-//        ]
-//        return CombineSequence(sequences: resourceSequences)
-//    }
-
     func isCellActivated(_ cell: CraftCell) -> Bool {
         return cell.craftObject.goType != .none
-    }
-
-}
-
-// MARK: - touch responder
-extension CraftObject: TouchResponder {
-
-    func touchBegan(_ touch: UITouch) {
-        let craftTouchLogic = CraftTouchLogic(touch: touch, craftObject: self)
-        Logics.default.touch.add(craftTouchLogic)
-        craftTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        Logics.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        Logics.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        Logics.default.touch.cancelled(touch)
-    }
-
-    func longTouched(_ touch: UITouch) {
     }
 
 }

@@ -37,15 +37,22 @@ class WorldViewController: UIViewController {
 
         let scene = WorldScene(size: Constant.sceneSize)
 
-        TouchRecognizerManager.set(scene: scene,
-                                   ui: scene.ui,
-                                   character: scene.character)
+        let recognizers: [TouchRecognizer] = [
+            TapRecognizer(),
+            TapRecognizer(),
+            PanRecognizer(scene: scene),
+            PinchRecognizer(scene: scene,
+                            ui: scene.ui),
+            LongTouchRecognizer(),
+        ]
+        TouchManager.default.set(scene: scene, recognizers: recognizers)
 
         Logics.set(scene: scene,
                    ui: scene.ui,
                    invInv: scene.invContainer.invInv,
                    fieldInv: scene.invContainer.fieldInv,
-                   infoWindow: scene.infowindow,
+                   infoWindow: scene.infoWindow,
+                   world: scene.worldLayer,
                    character: scene.character,
                    chunkContainer: scene.chunkContainer,
                    invContainer: scene.invContainer,
@@ -61,7 +68,6 @@ class WorldViewController: UIViewController {
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
 
-        TouchRecognizerManager.free()
         Logics.free()
 
         Particle.free()

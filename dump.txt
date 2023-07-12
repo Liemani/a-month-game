@@ -447,6 +447,22 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+Will crash when touch world scene outside of moving layer?
+Will the PanRecognizer::began() work as intended when the responder is moving layer or
+
+Refactoring PinchRecognizer
+    recognize() will set touches
+        need idea
+
+Is it safe moving diagonally?
+
+InfoWindowLogic
+
+If view response to touch, scene will not get touch event?
+apply TouchResponder change from protocol to class
+rename FieldTapLogic -> SceneTapLogic
+rename FieldPanLogic -> ScenePanLogic
+
 mastery system
     apply mastery system
     particle
@@ -459,10 +475,15 @@ mastery system
         display mastery level info with image
     add craft
 
+move file proper location
+
 fix
     i can't touch reset no button
     if i interact water with container, the contents will be dagling
         remove only the items inside the container
+    set node name for the child of game object
+    close info window by touching close button on the top right corner of window
+    apply task result to CraftTouchLogic::ended()
 
 more bigger container
     add saw
@@ -473,6 +494,11 @@ barley
 
 what about
     remember open character inventory container and open when enter world
+
+what is the profit of the quality?
+    durability
+    strength
+    task time
 
 move action when craft
 

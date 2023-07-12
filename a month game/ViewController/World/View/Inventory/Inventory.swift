@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InventoryCell: SKSpriteNode {
+class InventoryCell: SKSpriteNode, TouchResponder {
 
     var go: GameObject? { self.children.first as! GameObject? }
 
@@ -269,32 +269,6 @@ class InventoryIterator: IteratorProtocol {
 
     func next() -> GameObject? {
         return self.iterator.next()?.go
-    }
-
-}
-
-// MARK: - touch responder
-extension InventoryCell: TouchResponder {
-
-    func touchBegan(_ touch: UITouch) {
-        let invTouchLogic = InventoryTouchLogic(touch: touch, cell: self)
-        Logics.default.touch.add(invTouchLogic)
-        invTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        Logics.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        Logics.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        Logics.default.touch.cancelled(touch)
-    }
-
-    func longTouched(_ touch: UITouch) {
     }
 
 }

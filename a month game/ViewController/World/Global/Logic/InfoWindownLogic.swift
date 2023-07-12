@@ -11,24 +11,20 @@ import SpriteKit
 class InfoWindowLogic {
 
     private let infoWindow: InfoWindow
-    private let character: Character
 
-    init(infoWindow: InfoWindow,
-         character: Character) {
+    init(infoWindow: InfoWindow) {
         self.infoWindow = infoWindow
-        self.character = character
     }
 
     func displayCharacterInfo() {
         self.infoWindow.isHidden = false
-        self.infoWindow.removeFromParent()
-        self.character.addChild(self.infoWindow)
 
         let content = Logics.default.mastery.description
         self.infoWindow.setText(content)
 
         let y = self.infoWindow.path!.boundingBox.size.height / 2.0 + Constant.defaultWidth
-        self.infoWindow.position = CGPoint(x: 0, y: y)
+        self.infoWindow.position = CGPoint(x: Constant.sceneCenter.x,
+                                           y: Constant.sceneCenter.y + y)
     }
 
     func displayGOInfo(node: SKNode) {

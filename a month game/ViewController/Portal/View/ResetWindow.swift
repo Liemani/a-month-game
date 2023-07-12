@@ -34,7 +34,6 @@ class ResetWindow: SKSpriteNode {
                                frame: Constant.Frame.yesButton,
                                text: "Yes",
                                eventType: PortalEventType.resetYesButton)
-        yesButton.isUserInteractionEnabled = true
         self.addChild(yesButton)
         self.yesButton = yesButton
 
@@ -42,7 +41,6 @@ class ResetWindow: SKSpriteNode {
                               frame: Constant.Frame.noButton,
                               text: "No",
                               eventType: PortalEventType.resetNoButton)
-        yesButton.isUserInteractionEnabled = true
         self.addChild(noButton)
         self.noButton = noButton
     }

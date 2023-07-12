@@ -72,3 +72,19 @@ class InfoWindow: SKShapeNode {
     }
 
 }
+
+extension InfoWindow: TouchResponder {
+
+    func tapBegan(_ touch: UITouch) {
+    }
+
+    func panBegan(_ touch: UITouch) {
+        let infoWindowPanLogic = InfoWindowPanLogic(touch: touch)
+        TouchLogics.default.add(infoWindowPanLogic)
+        infoWindowPanLogic.began()
+    }
+
+    func longTouched(_ touch: UITouch) {
+    }
+
+}
