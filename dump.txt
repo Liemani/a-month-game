@@ -447,19 +447,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-mastery system
-    apply mastery system
-    particle
-        rare gold
-        common silver
-        poor bronze
-        fail grey
-    character long touch
-        long touch
-        display mastery level info with image
-    add craft
-
 move file proper location
+
+Update inv if container interact to water
+close inv if container interact to water and removed
 
 fix
     i can't touch reset no button
@@ -468,6 +459,8 @@ fix
     set node name for the child of game object
     close info window by touching close button on the top right corner of window
     apply task result to CraftTouchLogic::ended()
+
+make rotate the tool used as interaction
 
 check
     Is it safe moving chunk diagonally?
@@ -743,6 +736,17 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+mastery system
+    apply mastery system
+    particle
+        rare gold
+        common silver
+        poor bronze
+        fail grey
+    character long touch
+        long touch
+        display mastery level info with image
+    add craft
 rename FieldTapLogic -> SceneTapLogic
 rename FieldPanLogic -> ScenePanLogic
 InfoWindowLogic

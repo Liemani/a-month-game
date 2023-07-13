@@ -124,7 +124,7 @@ enum GameObjectType: Int, CaseIterable {
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
     var invCapacity: Int { self.resources[self.rawValue].invCapacity }
-    var isInv: Bool { self.invCapacity != 0 }
+    var isContainer: Bool { self.invCapacity != 0 }
 
     var layerCount: Int { self.resources[self.rawValue].layerCount }
     

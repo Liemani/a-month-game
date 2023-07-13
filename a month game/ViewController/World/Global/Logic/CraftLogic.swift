@@ -14,7 +14,7 @@ class CraftLogic {
         var sum = 0.0
 
         for go in consumeTargets {
-            Logics.default.go.remove(go)
+            Logics.default.go.delete(go)
             sum += go.quality
         }
 

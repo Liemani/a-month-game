@@ -13,7 +13,6 @@ class MenuWindow: SKNode {
     override init() {
         super.init()
 
-        // TODO: move to background(have to implement new class)
         self.zPosition = Constant.ZPosition.menuWindow
 
         let backgroundButton = Button(texture: nil,

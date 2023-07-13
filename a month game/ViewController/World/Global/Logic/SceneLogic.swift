@@ -95,7 +95,7 @@ class SceneLogic {
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
-        if !go.type.isInv {
+        if !go.type.isContainer {
             Logics.default.go.move(go, to: invCoord)
 
             return
@@ -114,9 +114,17 @@ class SceneLogic {
     func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
         Logics.default.go.move(go, to: chunkCoord)
 
-        if go.type.isInv {
+        if go.type.isContainer {
             Logics.default.invContainer.closeAnyInv(of: go.id)
         }
+    }
+
+    func delete(_ go: GameObject) {
+        if go.type.isContainer {
+            Logics.default.invContainer.closeAnyInv(of: go.id)
+        }
+
+        Logics.default.go.delete(go)
     }
 
     // MARK: - inventory
