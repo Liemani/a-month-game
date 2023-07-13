@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class Character: SKShapeNode, TouchResponder {
+class Character: SKShapeNode {
 
     let data: CharacterData
 
@@ -55,7 +55,7 @@ class Character: SKShapeNode, TouchResponder {
         super.init()
 
         let path = CGMutablePath()
-        path.addArc(center: CGPoint.zero,
+        path.addArc(center: CGPoint(),
                     radius: Constant.characterRadius,
                     startAngle: 0,
                     endAngle: CGFloat.pi * 2,
@@ -81,6 +81,22 @@ class Character: SKShapeNode, TouchResponder {
 
     func deactivate() {
         self.alpha = 1.0
+    }
+
+}
+
+extension Character: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type,
+            is PanRecognizer.Type,
+            is PinchRecognizer.Type,
+            is LongTouchRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

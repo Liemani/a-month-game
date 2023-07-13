@@ -12,6 +12,14 @@ final class TapRecognizer: TouchRecognizer {
 
     var recognizerTouch: RecognizerTouch? { self.recognizerTouches.first }
 
+    override func isPossible(recognizerTouch: RecognizerTouch) -> Bool {
+        guard let responder = recognizerTouch.touchResponder else {
+            return false
+        }
+
+        return responder.isRespondable(with: TapRecognizer.self)
+    }
+
     override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
         self.recognized(recognizerTouch: recognizerTouch)
 

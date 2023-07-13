@@ -9,4 +9,7 @@ import Foundation
 import SpriteKit
 
 protocol TouchResponder: SKNode {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool
+
 }

@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: SKSpriteNode, TouchResponder {
+class GameObject: SKSpriteNode {
 
     var data: GameObjectData
 
@@ -197,6 +197,22 @@ class GameObject: SKSpriteNode, TouchResponder {
 
     func delete() {
         self.data.delete()
+    }
+
+}
+
+extension GameObject: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        case is PanRecognizer.Type,
+            is PinchRecognizer.Type:
+            return self.isOnField
+        default:
+            return false
+        }
     }
 
 }

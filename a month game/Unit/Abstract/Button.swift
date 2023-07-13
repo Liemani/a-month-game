@@ -8,11 +8,11 @@
 import Foundation
 import SpriteKit
 
-class Button: SKSpriteNode, TouchResponder {
+class Button: SKSpriteNode {
 
     let eventType: EventType
 
-    init(texture: SKTexture, frame: CGRect, text: String?, eventType: EventType) {
+    init(texture: SKTexture?, frame: CGRect, text: String?, eventType: EventType) {
         self.eventType = eventType
 
         super.init(texture: texture, color: .white, size: frame.size)
@@ -41,6 +41,19 @@ class Button: SKSpriteNode, TouchResponder {
 
     func deactivate() {
         self.alpha = 1.0
+    }
+
+}
+
+extension Button: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

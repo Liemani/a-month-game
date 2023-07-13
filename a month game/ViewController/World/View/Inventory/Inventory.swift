@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class InventoryCell: SKSpriteNode, TouchResponder {
+class InventoryCell: SKSpriteNode {
 
     var go: GameObject? { self.children.first as! GameObject? }
 
@@ -269,6 +269,19 @@ class InventoryIterator: IteratorProtocol {
 
     func next() -> GameObject? {
         return self.iterator.next()?.go
+    }
+
+}
+
+extension InventoryCell: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

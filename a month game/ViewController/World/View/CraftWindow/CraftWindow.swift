@@ -77,7 +77,7 @@ class CraftObject: SKSpriteNode {
 
 }
 
-class CraftCell: SKSpriteNode, TouchResponder {
+class CraftCell: SKSpriteNode {
 
     var craftObject: CraftObject { self.children.first as! CraftObject }
 
@@ -224,6 +224,19 @@ class CraftWindow: SKNode {
 
     func isCellActivated(_ cell: CraftCell) -> Bool {
         return cell.craftObject.goType != .none
+    }
+
+}
+
+extension CraftCell: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

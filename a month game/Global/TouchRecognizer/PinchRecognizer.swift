@@ -35,6 +35,14 @@ class PinchRecognizer: TouchRecognizer {
         return difference.magnitude
     }
 
+    override func isPossible(recognizerTouch: RecognizerTouch) -> Bool {
+        guard let responder = recognizerTouch.touchResponder else {
+            return true
+        }
+
+        return responder.isRespondable(with: PinchRecognizer.self)
+    }
+
     override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
         if !self.trackingRecognizerTouches.contains(recognizerTouch) {
             self.trackingRecognizerTouches.append(recognizerTouch)
@@ -50,8 +58,7 @@ class PinchRecognizer: TouchRecognizer {
 
         guard cTime - touch1.bTime < 1.0
                 && !(touch1.touchResponder?.isDescendant(self.ui) ?? false) else {
-            TouchManager.default.removePossible(from: touch1,
-                                                      recognizer: self)
+            TouchManager.default.removePossible(from: touch1, recognizer: self)
 
             return false
         }
@@ -60,8 +67,7 @@ class PinchRecognizer: TouchRecognizer {
 
         guard cTime - touch2.bTime < 1.0
                 && !(touch2.touchResponder?.isDescendant(self.ui) ?? false) else {
-            TouchManager.default.removePossible(from: touch2,
-                                                      recognizer: self)
+            TouchManager.default.removePossible(from: touch2, recognizer: self)
 
             return false
         }

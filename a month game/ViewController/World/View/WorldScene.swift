@@ -8,7 +8,7 @@
 import SpriteKit
 import GameplayKit
 
-class WorldScene: SKScene, TouchResponder {
+class WorldScene: SKScene {
 
     var worldViewController: WorldViewController {
         return self.view!.next! as! WorldViewController
@@ -104,10 +104,10 @@ class WorldScene: SKScene, TouchResponder {
         self.ui = ui
 
         let texture = SKTexture(imageNamed: Constant.ResourceName.menuButton)
-        let menuButton: Button = Button(texture: texture,
-                                        frame: Constant.Frame.menuButton,
-                                        text: nil,
-                                        eventType: WorldEventType.menuButton)
+        let menuButton = Button(texture: texture,
+                                frame: Constant.Frame.menuButton,
+                                text: nil,
+                                eventType: WorldEventType.menuButton)
         ui.addChild(menuButton)
 
         ui.addChild(self.characterInv)
@@ -207,6 +207,19 @@ extension WorldScene {
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             TouchManager.default.touchCancelled(touch)
+        }
+    }
+
+}
+
+extension WorldScene: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
         }
     }
 

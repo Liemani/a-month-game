@@ -16,7 +16,7 @@ class InfoWindowLogic {
         self.infoWindow = infoWindow
     }
 
-    func displayCharacterInfo() {
+    func openCharacterInfo() {
         self.infoWindow.isHidden = false
 
         let content = Logics.default.mastery.description
@@ -31,7 +31,7 @@ class InfoWindowLogic {
 
     }
 
-    func hide() {
+    func close() {
         self.infoWindow.hide()
     }
 

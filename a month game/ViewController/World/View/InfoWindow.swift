@@ -10,11 +10,37 @@ import SpriteKit
 
 class InfoWindow: SKShapeNode {
 
-    private var textLabel: SKLabelNode!
+    private let content: SKNode
+    private let label: SKLabelNode
+
+    var safeAreaSize: CGSize {
+        let cropNode = self.children[0] as! SKCropNode
+        return cropNode.maskNode!.frame.size
+    }
+
+    var contenPositionYMin: Double { self.safeAreaSize.height / 2.0 }
+    var contenPositionYMax: Double { self.contenPositionYMin + self.label.frame.height - safeAreaSize.height }
 
     override init() {
+        self.content = SKNode()
+        self.label = SKLabelNode()
+
         super.init()
 
+        self.setUp()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func setUp() {
+        self.setUpSelf()
+        self.setUpContent()
+        self.setUpCloseButton()
+    }
+
+    func setUpSelf() {
         let size = Constant.Size.infoWindow
         let origin = -size.cgPoint / 2.0
 
@@ -31,60 +57,68 @@ class InfoWindow: SKShapeNode {
         self.isHidden = true
         self.strokeColor = .black
         self.fillColor = .white
-
-        self.addContent()
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func addContent() {
+    func setUpContent() {
         let cropNode = SKCropNode()
 
         let rectSize = Constant.Size.infoWindow - Constant.defaultPadding * 2.0
+
         let maskNode = SKShapeNode(rectOf: rectSize)
         maskNode.fillColor = .black
         cropNode.maskNode = maskNode
 
         self.addChild(cropNode)
 
-        let textLabel = SKLabelNode(fontNamed: "Helvetica")
-        textLabel.numberOfLines = 0
-        textLabel.horizontalAlignmentMode = .left
-        textLabel.position = -Constant.Size.infoWindow.cgPoint / 2.0 + Constant.defaultPadding
-        textLabel.fontColor = .black
-        textLabel.fontSize = 17.0
-        textLabel.zPosition = 1.0
+        self.setUpLabel()
+        cropNode.addChild(self.content)
+        self.content.addChild(label)
+    }
 
-        self.textLabel = textLabel
+    func setUpCloseButton() {
+        let closeButton = Button(texture: nil,
+                                 frame: Constant.Frame.infoWindowCloseButton,
+                                 text: "X",
+                                 eventType: WorldEventType.infoWindowCloseButton)
+        closeButton.color = .gray
+        self.addChild(closeButton)
+    }
 
-        cropNode.addChild(textLabel)
+    func setUpLabel() {
+        let label = self.label
+
+        label.fontName = "Helvetica"
+        label.numberOfLines = 0
+        label.verticalAlignmentMode = .top
+        label.horizontalAlignmentMode = .left
+        label.position.x = -self.safeAreaSize.width / 2.0
+        label.fontColor = .black
+        label.fontSize = 17.0
+        label.zPosition = 1.0
     }
 
     func setText(_ text: String) {
-        self.textLabel.text = text
+        self.label.text = text
+
+        self.content.position.y = self.contenPositionYMin
     }
 
     func hide() {
         self.isHidden = true
-        // TODO: remove any data
+        self.label.text = nil
     }
 
 }
 
 extension InfoWindow: TouchResponder {
 
-    func tapBegan(_ touch: UITouch) {
-    }
-
-    func panBegan(_ touch: UITouch) {
-        let infoWindowPanLogic = InfoWindowPanLogic(touch: touch)
-        TouchLogics.default.add(infoWindowPanLogic)
-        infoWindowPanLogic.began()
-    }
-
-    func longTouched(_ touch: UITouch) {
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is PanRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

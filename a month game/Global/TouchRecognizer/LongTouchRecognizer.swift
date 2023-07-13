@@ -15,11 +15,17 @@ class LongTouchRecognizer: TouchRecognizer, TimeRecognizer {
 
     var recognizerTouch: RecognizerTouch? { self.recognizerTouches.first }
 
+    override func isPossible(recognizerTouch: RecognizerTouch) -> Bool {
+        guard let responder = recognizerTouch.touchResponder else {
+            return false
+        }
+
+        return responder.isRespondable(with: LongTouchRecognizer.self)
+    }
+
     override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
-        if let touchResponder = recognizerTouch.touchResponder,
-              !touchResponder.isBeing(touched: recognizerTouch.touch) {
-            TouchManager.default.removePossible(from: recognizerTouch,
-                                                      recognizer: self)
+        if !recognizerTouch.touchResponder!.isBeing(touched: recognizerTouch.touch) {
+            TouchManager.default.removePossible(from: recognizerTouch, recognizer: self)
 
             return false
         }
@@ -46,7 +52,7 @@ class LongTouchRecognizer: TouchRecognizer, TimeRecognizer {
     override func began() {
         switch self.recognizerTouch!.touchResponder {
         case is Character:
-            Logics.default.infoWindow.displayCharacterInfo()
+            Logics.default.infoWindow.openCharacterInfo()
         default:
             break
         }

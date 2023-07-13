@@ -18,6 +18,14 @@ class PanRecognizer: TouchRecognizer {
         self.scene = scene
     }
 
+    override func isPossible(recognizerTouch: RecognizerTouch) -> Bool {
+        guard let responder = recognizerTouch.touchResponder else {
+            return true
+        }
+
+        return responder.isRespondable(with: PanRecognizer.self)
+    }
+
     override func recognize(recognizerTouch: RecognizerTouch) -> Bool {
 //        let currentTime = CACurrentMediaTime()
 //
@@ -60,15 +68,9 @@ class PanRecognizer: TouchRecognizer {
     }
 
     override func began() {
-        let responder = self.recognizerTouch!.touchResponder!
-
-        guard !Logics.default.scene.isDescendantOfUILayer(responder) else {
-            return
-        }
-
         var panLogic: TouchLogic
 
-        switch responder {
+        switch self.recognizerTouch!.touchResponder! {
         case is InfoWindow:
             panLogic = InfoWindowPanLogic(touch: self.recognizerTouch!.touch)
         default:

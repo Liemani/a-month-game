@@ -108,12 +108,27 @@ struct Constant {
 
     // MARK: - frame
     struct Frame {
-        static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButton = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
-        static let enterButton = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
-        static let resetButton = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
-        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
-        static let yesButton = CGRect(origin: Constant.Frame.enterButton.origin, size: Constant.Frame.resetButton.size)
+        static let character = CGRect(
+            origin: Constant.sceneCenter,
+            size: Constant.defaultNodeSize)
+        static let menuButton = CGRect(
+            origin: Constant.menuPosition,
+            size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
+        static let infoWindowCloseButton = CGRect(
+            origin: Size.infoWindow.cgPoint / 2.0 - defaultPadding,
+            size: CGSize(width: defaultPadding, height: defaultPadding))
+        static let enterButton = CGRect(
+            origin: Constant.enterButtonNodePosition,
+            size: Constant.enterButtonNodeSize)
+        static let resetButton = CGRect(
+            origin: Constant.resetButtonNodePosition,
+            size: Constant.resetButtonNodeSize)
+        static let exitWorldButton = CGRect(
+            origin: Constant.sceneCenter,
+            size: Constant.exitWorldButtonNodeSize)
+        static let yesButton = CGRect(
+            origin: Constant.Frame.enterButton.origin,
+            size: Constant.Frame.resetButton.size)
         static let noButton = Constant.Frame.resetButton
     }
 

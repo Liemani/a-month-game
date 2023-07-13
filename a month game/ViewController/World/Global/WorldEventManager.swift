@@ -15,6 +15,7 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
     case menuButton
     case menuExitButton
+    case infoWindowCloseButton
 
     static let eventHandlers: [(WorldScene, Event) -> Void] = [
         { scene, event in // menuButton
@@ -23,6 +24,10 @@ enum WorldEventType: Int, CaseIterable, EventType {
 
         { scene, event in // menuExitButton
             NotificationCenter.default.post(name: .requestPresentPortalSceneViewController, object: nil)
+        },
+
+        { scene, event in // infoWindowExitButton
+            Logics.default.infoWindow.close()
         },
     ]
 

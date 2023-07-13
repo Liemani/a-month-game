@@ -104,6 +104,10 @@ class TouchRecognizer {
         self.recognizerTouches = []
     }
 
+    func isPossible(recognizerTouch: RecognizerTouch) -> Bool {
+        return true
+    }
+
     func recognize(recognizerTouch: RecognizerTouch) -> Bool {
         return false
     }
@@ -240,22 +244,29 @@ class TouchManager {
     // MARK: - logic
     func recognize(recognizer: TouchRecognizer,
                    recognizerTouch: RecognizerTouch) -> Bool {
-        if recognizer.recognize(recognizerTouch: recognizerTouch) {
-            TouchLogics.default.cancelled(recognizerTouch.touch)
+        guard recognizer.isPossible(recognizerTouch: recognizerTouch) else {
+            TouchManager.default.removePossible(from: recognizerTouch,
+                                                recognizer: recognizer)
 
-            if let pRecognizer = recognizerTouch.recognizer {
-                pRecognizer.free(recognizerTouch: recognizerTouch)
-            }
-
-            recognizerTouch.recognizer = recognizer
-            recognizerTouch.possible.removeAll { $0 === recognizer }
-
-            recognizerTouch.recognizer!.began()
-
-            return true
+            return false
         }
 
-        return false
+        guard recognizer.recognize(recognizerTouch: recognizerTouch) else {
+            return false
+        }
+
+        TouchLogics.default.cancelled(recognizerTouch.touch)
+
+        if let pRecognizer = recognizerTouch.recognizer {
+            pRecognizer.free(recognizerTouch: recognizerTouch)
+        }
+
+        recognizerTouch.recognizer = recognizer
+        recognizerTouch.possible.removeAll { $0 === recognizer }
+
+        recognizerTouch.recognizer!.began()
+
+        return true
     }
 
     func removePossible(from recognizerTouch: RecognizerTouch,

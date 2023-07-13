@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class MovingLayer: SKNode, TouchResponder {
+class MovingLayer: SKNode {
 
     var chunkContainer: ChunkContainer!
 
@@ -48,6 +48,21 @@ class MovingLayer: SKNode, TouchResponder {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+}
+
+extension MovingLayer: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type,
+            is PanRecognizer.Type,
+            is PinchRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }
