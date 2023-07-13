@@ -21,7 +21,7 @@ class InfoWindowLogic {
 
         self.updateCharacterInfo()
 
-        let y = self.infoWindow.frame.height / 2.0 + Constant.defaultPadding
+        let y = self.infoWindow.frame.height / 2.0 + Constant.defaultWidth
         self.infoWindow.position = CGPoint(x: Constant.sceneCenter.x,
                                            y: Constant.sceneCenter.y + y)
     }

@@ -144,6 +144,26 @@ class GameObject: SKSpriteNode {
         self.colorBlendFactor = 0.0
     }
 
+    func emphasizeUsing() {
+        guard !self.hasActions() else {
+            return
+        }
+
+        var action = SKAction.sequence([
+            SKAction.rotate(toAngle: Double.pi / 6.0, duration: 0.2),
+            SKAction.rotate(toAngle: 0, duration: 0.2),
+        ])
+
+        self.run(action)
+
+        action = SKAction.sequence([
+            SKAction.scale(to: 1.1, duration: 0.2),
+            SKAction.scale(to: 1.0, duration: 0.2),
+        ])
+
+        self.run(action)
+    }
+
     // MARK: -
     func set(type goType: GameObjectType) {
         self.data.set(type: goType)

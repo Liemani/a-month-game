@@ -17,6 +17,8 @@ class InteractionLogic {
                 return false
             }
 
+            goEquiping.emphasizeUsing()
+
             let result = Logics.default.mastery.interact(with: .shovel, to: .dirtTile)
 
             go.set(type: .clayTile)
@@ -33,6 +35,8 @@ class InteractionLogic {
                 return false
             }
 
+            goEquiping.emphasizeUsing()
+
             let result = Logics.default.mastery.interact(with: .shovel, to: .clayTile)
 
             go.set(type: .caveCeilTile)
@@ -48,6 +52,8 @@ class InteractionLogic {
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
+
+            goEquiping.emphasizeUsing()
 
             let result = Logics.default.mastery.interact(with: .pickaxe, to: .caveCeilTile)
 
@@ -79,6 +85,8 @@ class InteractionLogic {
                 return false
             }
 
+            goEquiping.emphasizeUsing()
+
             let result = Logics.default.mastery.interact(with: .shovel, to: .sandTile)
 
             go.set(type: .clayTile)
@@ -94,6 +102,8 @@ class InteractionLogic {
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
+
+            goEquiping.emphasizeUsing()
 
             let result = Logics.default.mastery.interact(with: .sickle, to: .weed)
 
@@ -111,6 +121,8 @@ class InteractionLogic {
                 return false
             }
 
+            goEquiping.emphasizeUsing()
+
             let result = Logics.default.mastery.interact(with: .sickle, to: .vine)
 
             Logics.default.go.delete(go)
@@ -123,6 +135,9 @@ class InteractionLogic {
         },
         .treeOak: { handlerManager, go in
             if let goEquiping = Logics.default.invContainer.go(equiping: .axe) {
+
+                goEquiping.emphasizeUsing()
+
                 let newQuality = (go.quality + goEquiping.quality) / 2.0
                 let chunkCoord = go.chunkCoord!
 
