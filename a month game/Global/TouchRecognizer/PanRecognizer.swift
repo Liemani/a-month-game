@@ -76,7 +76,7 @@ class PanRecognizer: TouchRecognizer {
             panLogic = InfoWindowPanLogic(touch: self.recognizerTouch!.touch,
                                           scene: self.scene)
         default:
-            panLogic = FieldPanLogic(touch: self.recognizerTouch!.touch,
+            panLogic = WorldPanLogic(touch: self.recognizerTouch!.touch,
                                      scene: self.scene)
         }
 

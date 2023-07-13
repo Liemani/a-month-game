@@ -123,6 +123,9 @@ struct Constant {
         static let resetButton = CGRect(
             origin: Constant.resetButtonNodePosition,
             size: Constant.resetButtonNodeSize)
+        static let worldMenuBackgroundButton = CGRect(
+            origin: sceneCenter,
+            size: sceneSize)
         static let exitWorldButton = CGRect(
             origin: Constant.sceneCenter,
             size: Constant.exitWorldButtonNodeSize)

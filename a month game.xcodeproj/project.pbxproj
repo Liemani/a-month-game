@@ -125,7 +125,7 @@
 		03FEA1EC2A5C2E3D00AF4DDB /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */; };
 		03FEA1EE2A5C364200AF4DDB /* InfoWindownLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */; };
 		03FEA1F02A5D2E5C00AF4DDB /* CharacterTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */; };
-		03FEA1F42A5D3B7A00AF4DDB /* FieldPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */; };
+		03FEA1F42A5D3B7A00AF4DDB /* WorldPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */; };
 		03FEA1F82A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */; };
 		03FEA1FA2A5D3E1600AF4DDB /* ButtonTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F92A5D3E1600AF4DDB /* ButtonTapLogic.swift */; };
 		03FEA1FD2A5D9A7600AF4DDB /* ScenePinchLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */; };
@@ -263,7 +263,7 @@
 		03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindownLogic.swift; sourceTree = "<group>"; };
 		03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTapLogic.swift; sourceTree = "<group>"; };
-		03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldPanLogic.swift; sourceTree = "<group>"; };
+		03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPanLogic.swift; sourceTree = "<group>"; };
 		03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindowPanLogic.swift; sourceTree = "<group>"; };
 		03FEA1F92A5D3E1600AF4DDB /* ButtonTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTapLogic.swift; sourceTree = "<group>"; };
 		03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinchLogic.swift; sourceTree = "<group>"; };
@@ -610,7 +610,7 @@
 				03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */,
 				03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */,
 				03796C092A50083E00462804 /* FieldTapLogic.swift */,
-				03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */,
+				03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */,
 				03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */,
 				03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */,
 				03796C0B2A501C6100462804 /* InventoryTapLogic.swift */,
@@ -814,7 +814,7 @@
 				038330AA2A02850A008DEA10 /* PortalViewController.swift in Sources */,
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				03C65E2B2A46B04E0042BF22 /* FrameCycleUpdateManager.swift in Sources */,
-				03FEA1F42A5D3B7A00AF4DDB /* FieldPanLogic.swift in Sources */,
+				03FEA1F42A5D3B7A00AF4DDB /* WorldPanLogic.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* GameObjectDataSource.swift in Sources */,
 				0304D76B2A57ED960068DE99 /* ChunkContainerLogic.swift in Sources */,
 				03FEA1B52A5AF16400AF4DDB /* InteractionMasteryData.swift in Sources */,
