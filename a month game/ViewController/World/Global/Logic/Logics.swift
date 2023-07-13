@@ -44,6 +44,8 @@ class Logics {
 
     let mastery: MasteryLogic
 
+    let craft: CraftLogic
+
     let infoWindow: InfoWindowLogic
 
     let world: WorldLogic
@@ -70,6 +72,8 @@ class Logics {
         self.scene = SceneLogic(scene: scene)
 
         self.mastery = MasteryLogic()
+
+        self.craft = CraftLogic()
 
         self.infoWindow = InfoWindowLogic(infoWindow: infoWindow)
 
