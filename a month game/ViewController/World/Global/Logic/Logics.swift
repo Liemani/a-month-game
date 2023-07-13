@@ -1,5 +1,5 @@
 //
-//  LogicContainer.swift
+//  Logics.swift
 //  a month game
 //
 //  Created by 박정훈 on 2023/07/07.
@@ -8,36 +8,45 @@
 import Foundation
 import SpriteKit
 
-class LogicContainer {
+class Logics {
 
-    private static var _default: LogicContainer?
-    static var `default`: LogicContainer { self._default! }
+    private static var _default: Logics?
+    static var `default`: Logics { self._default! }
 
     static func set(scene: WorldScene,
                     ui: SKNode,
                     invInv: GameObjectInventory,
                     fieldInv: GameObjectInventory,
+                    infoWindow: InfoWindow,
+                    world: SKNode,
                     character: Character,
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
-        self._default = LogicContainer(scene: scene,
-                                       ui: ui,
-                                       invInv: invInv,
-                                       fieldInv: fieldInv,
-                                       character: character,
-                                       chunkContainer: chunkContainer,
-                                       invContainer: invContainer,
-                                       accessibleGOTracker: accessibleGOTracker)
+        self._default = Logics(scene: scene,
+                               ui: ui,
+                               invInv: invInv,
+                               fieldInv: fieldInv,
+                               infoWindow: infoWindow,
+                               world: world,
+                               character: character,
+                               chunkContainer: chunkContainer,
+                               invContainer: invContainer,
+                               accessibleGOTracker: accessibleGOTracker)
     }
 
     static func free() {
         self._default = nil
     }
 
-    let touch: TouchLogicContainer
+    let touch: TouchLogics
     let scene: SceneLogic
 
+    let mastery: MasteryLogic
+
+    let infoWindow: InfoWindowLogic
+
+    let world: WorldLogic
     let character: CharacterLogic
 
     let invContainer: InventoryContainerLogic
@@ -45,18 +54,26 @@ class LogicContainer {
     let accessibleGOTracker: AccessibleGOTrackerLogic
 
     let go: GameObjectLogic
+    let goData: GameObjectDataLogic
 
     init(scene: WorldScene,
          ui: SKNode,
          invInv: GameObjectInventory,
          fieldInv: GameObjectInventory,
+         infoWindow: InfoWindow,
+         world: SKNode,
          character: Character,
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
-        self.touch = TouchLogicContainer()
-        self.scene = SceneLogic()
+        self.touch = TouchLogics()
+        self.scene = SceneLogic(scene: scene)
 
+        self.mastery = MasteryLogic()
+
+        self.infoWindow = InfoWindowLogic(infoWindow: infoWindow)
+
+        self.world = WorldLogic(world: world)
         self.character = CharacterLogic(character: character)
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
@@ -64,6 +81,7 @@ class LogicContainer {
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
         self.go = GameObjectLogic()
+        self.goData = GameObjectDataLogic()
     }
 
 }

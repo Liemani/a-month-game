@@ -28,27 +28,49 @@ class WorldViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
 #endif
+        
+        WorldGenerator.generate(worldName: Constant.Name.defaultWorld)
 
-        ServiceContainer.set(worldName: Constant.Name.defaultWorld)
+        Services.set(worldName: Constant.Name.defaultWorld)
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
         let scene = WorldScene(size: Constant.sceneSize)
 
-        TouchRecognizerManager.set(scene: scene,
-                                   ui: scene.ui,
-                                   character: scene.character)
+        let recognizers: [TouchRecognizer] = [
+            TapRecognizer(),
+            TapRecognizer(),
+            PanRecognizer(scene: scene),
+            PinchRecognizer(scene: scene,
+                            ui: scene.ui),
+            LongTouchRecognizer(),
+        ]
+        TouchManager.default.set(scene: scene, recognizers: recognizers)
 
-        LogicContainer.set(scene: scene,
-                           ui: scene.ui,
-                           invInv: scene.invContainer.invInv,
-                           fieldInv: scene.invContainer.fieldInv,
-                           character: scene.character,
-                           chunkContainer: scene.chunkContainer,
-                           invContainer: scene.invContainer,
-                           accessibleGOTracker: scene.accessibleGOTracker)
+        Logics.set(scene: scene,
+                   ui: scene.ui,
+                   invInv: scene.invContainer.invInv,
+                   fieldInv: scene.invContainer.fieldInv,
+                   infoWindow: scene.infoWindow,
+                   world: scene.worldLayer,
+                   character: scene.character,
+                   chunkContainer: scene.chunkContainer,
+                   invContainer: scene.invContainer,
+                   accessibleGOTracker: scene.accessibleGOTracker)
+
+        Particle.setUp()
 
         skView.presentScene(scene)
+    }
+
+    deinit {
+        Services.free()
+        WorldEventManager.free()
+        FrameCycleUpdateManager.free()
+
+        Logics.free()
+
+        Particle.free()
     }
 
     // MARK: - transition
@@ -74,15 +96,6 @@ class WorldViewController: UIViewController {
 
     override var preferredScreenEdgesDeferringSystemGestures: UIRectEdge {
         return .all
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        ServiceContainer.free()
-        WorldEventManager.free()
-        FrameCycleUpdateManager.free()
-
-        TouchRecognizerManager.free()
-        LogicContainer.free()
     }
 
 }

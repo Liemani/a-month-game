@@ -130,7 +130,7 @@ class CraftWindow: SKNode {
         let cellTexture = SKTexture(imageNamed: Constant.ResourceName.craftCell)
 
         let cellWidth = Constant.defaultWidth
-        let cellSpacing = Constant.invCellSpacing
+        let cellSpacing = Constant.defaultPadding
 
         let distanceOfCellsCenter = cellWidth + cellSpacing
         let endCellOffset = distanceOfCellsCenter * Double((self.cellCount - 1) / 2)
@@ -222,54 +222,21 @@ class CraftWindow: SKNode {
         return true
     }
 
-//    func refill(_ go: GameObjectNode) {
-//        let cell = go.parent as! CraftCell
-//        cell.addNoneGO()
-//        let goCoord = GameObjectCoordinate(containerType: .thirdHand, x: 0, y: 0)
-//        self.worldScene.addGOMO(from: go, to: goCoord)
-//        self.consumeIngredient(of: go.type)
-//    }
-
-//    func consumeIngredient(of goType: GameObjectType) {
-//        let recipes = Constant.recipes
-//        let recipe = recipes[goType]!
-//        let gosToRemove = MaterialInRecipeSequence(recipe: recipe, materials: self.resources())
-//        self.worldScene.remove(from: gosToRemove)
-//    }
-//
-//    private func resources() -> some Sequence<GameObjectNode> {
-//        let resourceSequences: [any Sequence<GameObjectNode>] = [
-//            self.interactionZone.gos,
-//            self.worldScene.characterInv,
-//        ]
-//        return CombineSequence(sequences: resourceSequences)
-//    }
-
     func isCellActivated(_ cell: CraftCell) -> Bool {
         return cell.craftObject.goType != .none
     }
 
 }
 
-// MARK: - touch responder
-extension CraftObject: TouchResponder {
+extension CraftCell: TouchResponder {
 
-    func touchBegan(_ touch: UITouch) {
-        let craftTouchLogic = CraftTouchLogic(touch: touch, craftObject: self)
-        LogicContainer.default.touch.add(craftTouchLogic)
-        craftTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

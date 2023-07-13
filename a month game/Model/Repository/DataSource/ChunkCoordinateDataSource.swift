@@ -10,10 +10,10 @@ import CoreData
 
 class ChunkCoordinateDataSource {
 
-    private var moContext: NSManagedObjectContext
+    private let moContext: NSManagedObjectContext
 
-    init(_ persistentContainer: LMIPersistentContainer) {
-        self.moContext = persistentContainer.viewContext
+    init(_ moContext: NSManagedObjectContext) {
+        self.moContext = moContext
     }
 
     func new() -> ChunkCoordinateMO {
@@ -24,6 +24,7 @@ class ChunkCoordinateDataSource {
 
     func load(at chunkCoord: ChunkCoordinate) -> [ChunkCoordinateMO] {
         let request = NSFetchRequest<ChunkCoordinateMO>(entityName: Constant.Name.chunkCoordinateEntity)
+
         let chunkAddress = UInt32(chunkCoord.address.chunk.value) << 8
         let nextChunkAdress = chunkAddress + 0x0100
         let arguments: [Any] = [chunkCoord.x, chunkCoord.y, chunkAddress, nextChunkAdress]
@@ -44,7 +45,7 @@ extension ChunkCoordinateMO {
     }
 
     func delete() {
-        ServiceContainer.default.moContext.delete(self)
+        Services.default.moContext.delete(self)
     }
 
 }

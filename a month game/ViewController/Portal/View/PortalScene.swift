@@ -56,14 +56,12 @@ class PortalScene: SKScene {
                                  frame: Constant.Frame.enterButton,
                                  text: "Enter World",
                                  eventType: PortalEventType.enterButton)
-        enterButton.isUserInteractionEnabled = true
         parent.addChild(enterButton)
 
         let resetButton = Button(texture: texture,
                                  frame: Constant.Frame.resetButton,
                                  text: "Reset",
                                  eventType: PortalEventType.resetButton)
-        resetButton.isUserInteractionEnabled = true
         parent.addChild(resetButton)
     }
 
@@ -79,6 +77,34 @@ class PortalScene: SKScene {
         while let event = PortalEventManager.default.dequeue() {
             let portalEventType = event.type as! PortalEventType
             portalEventType.handler(self, event)
+        }
+    }
+
+}
+
+extension PortalScene {
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchManager.default.touchBegan(touch)
+        }
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchManager.default.touchMoved(touch)
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchManager.default.touchEnded(touch)
+        }
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            TouchManager.default.touchCancelled(touch)
         }
     }
 

@@ -8,25 +8,24 @@
 import Foundation
 import SpriteKit
 
-class GameObjectTouchLogic {
+class GameObjectTapLogic: TouchLogic {
 
-    let touch: UITouch
+    var touch: UITouch { self.touches[0] }
     private let go: GameObject
 
     init(touch: UITouch, go: GameObject) {
-        self.touch = touch
         self.go = go
+
+        super.init()
+
+        self.touches.append(touch)
     }
 
-}
-
-extension GameObjectTouchLogic: TouchLogic {
-
-    func began() {
+    override func began() {
         self.go.activate()
     }
 
-    func moved() {
+    override func moved() {
         if self.go.isBeing(touched: self.touch) {
             self.go.activate()
         } else {
@@ -34,30 +33,34 @@ extension GameObjectTouchLogic: TouchLogic {
         }
     }
 
-    func ended() {
+    override func ended() {
         guard self.go.isBeing(touched: self.touch) else {
             self.go.deactivate()
 
             return
         }
 
+#if DEBUG
+        print(go.debugDescription)
+#endif
+
         var go = go
 
         if go.type.isTile {
-            go = LogicContainer.default.chunkContainer.items(at: go.chunkCoord!)!.last!
+            go = Logics.default.chunkContainer.items(at: go.chunkCoord!)!.last!
         }
 
-        if let activatedGO = LogicContainer.default.touch.activatedGO {
+        if let activatedGO = TouchLogics.default.activatedGO {
             activatedGO.deactivate()
             go.deactivate()
 
             if activatedGO == go {
-                LogicContainer.default.go.interact(go)
+                Logics.default.go.interact(go)
             } else {
-                LogicContainer.default.go.interactToGO(activatedGO, to: go)
+                Logics.default.go.interactToGO(activatedGO, to: go)
             }
 
-            LogicContainer.default.touch.activatedGO = nil
+            TouchLogics.default.activatedGO = nil
 
             return
         }
@@ -66,17 +69,17 @@ extension GameObjectTouchLogic: TouchLogic {
         if go.isOnField
             && !go.type.isPickable {
             go.deactivate()
-            LogicContainer.default.go.interact(go)
+            Logics.default.go.interact(go)
 
             return
         }
 
-        LogicContainer.default.touch.activatedGO = self.go
+        TouchLogics.default.activatedGO = self.go
 
         return
     }
 
-    func cancelled() {
+    override func cancelled() {
         self.go.deactivate()
     }
 

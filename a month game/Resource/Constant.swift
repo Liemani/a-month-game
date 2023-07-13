@@ -21,6 +21,8 @@ struct Constant {
     static let defaultNodeSize = CGSize(width: defaultWidth, height: defaultWidth)
     static let tileSize = defaultNodeSize
 
+    static let defaultPadding: CGFloat = 16.0
+
     static let gameObjectSize = defaultNodeSize * 0.9
     static let coverSize = defaultNodeSize * 0.9
 
@@ -50,13 +52,12 @@ struct Constant {
 
     // MARK: inventory
     static let invWindowPosition = CGPoint(x: sceneCenter.x,
-                                           y: defaultWidth / 2.0 + invCellSpacing)
+                                           y: defaultWidth / 2.0 + defaultPadding)
     static let invWindowSize = CGSize(width: sceneSize.width - margin * 2.0, height: defaultWidth)
     static let invCellCount: Int = 5
-    static let invCellSpacing: CGFloat = 16.0
 
     // MARK: craft pane
-    static let craftWindowPosition = CGPoint(x: tileWidth / 2 + invCellSpacing, y: sceneSize.height / 2.0)
+    static let craftWindowPosition = CGPoint(x: tileWidth / 2 + defaultPadding, y: sceneSize.height / 2.0)
     static let craftWindowSize = CGSize(width: invWindowSize.height, height: invWindowSize.width)
     static let craftWindowCellCount = 5
 
@@ -64,6 +65,21 @@ struct Constant {
     static let worldSize = tileSize * 512
     static let worldBorder = CGRect(origin: CGPoint(), size: CGSize(width: worldSize.width, height: worldSize.height))
     static let moveableArea = CGRect(origin: CGPoint() + characterRadius, size: worldBorder.size - (characterRadius * 2.0))
+
+    // MARK: - size
+    struct Size {
+        static let particle = CGSize(width: 10.0, height: 10.0)
+        static let qualityBox = CGSize(width: 35.0, height: 15.0)
+        static let infoWindow = CGSize(width: Constant.defaultWidth * 3.0,
+                                       height: Constant.defaultWidth * 5.0)
+    }
+
+    // MARK: - position
+    struct Position {
+        static let qualityBox = CGPoint(x: 20.0, y: 30.0)
+        static let qualityLabel = CGPoint(x: Size.qualityBox.width / 2.0,
+                                          y: -Size.qualityBox.height / 2.0)
+    }
 
     // MARK: - z position
     struct ZPosition {
@@ -78,70 +94,65 @@ struct Constant {
                 static let chunkContainer = 0.0
                     static let tile = 10.0
                     static let gameObject = 20.0
+                        static let gameObjectQualityLabel = 30.0
                         static let gameObjectCover = 20.0
                 static let fieldInv = 50.0
             static let character = 30.0
+                static let particle = 20.0
         static let ui = 100.0
             static let characterInv = 0.0
             static let craftCell = 0.0
-        static let munuWindow = 200.0
+            static let infoWindow = 50.0
+            static let menuWindow = 100.0
     }
 
     // MARK: - frame
     struct Frame {
-        static let character = CGRect(origin: Constant.sceneCenter, size: Constant.defaultNodeSize)
-        static let menuButton = CGRect(origin: Constant.menuPosition, size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
-        static let enterButton = CGRect(origin: Constant.enterButtonNodePosition, size: Constant.enterButtonNodeSize)
-        static let resetButton = CGRect(origin: Constant.resetButtonNodePosition, size: Constant.resetButtonNodeSize)
-        static let exitWorldButton = CGRect(origin: Constant.sceneCenter, size: Constant.exitWorldButtonNodeSize)
-        static let yesButton = CGRect(origin: Constant.Frame.enterButton.origin, size: Constant.Frame.resetButton.size)
+        static let character = CGRect(
+            origin: Constant.sceneCenter,
+            size: Constant.defaultNodeSize)
+        static let menuButton = CGRect(
+            origin: Constant.menuPosition,
+            size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
+        static let infoWindowCloseButton = CGRect(
+            origin: Size.infoWindow.cgPoint / 2.0 - defaultPadding,
+            size: CGSize(width: defaultPadding, height: defaultPadding))
+        static let enterButton = CGRect(
+            origin: Constant.enterButtonNodePosition,
+            size: Constant.enterButtonNodeSize)
+        static let resetButton = CGRect(
+            origin: Constant.resetButtonNodePosition,
+            size: Constant.resetButtonNodeSize)
+        static let exitWorldButton = CGRect(
+            origin: Constant.sceneCenter,
+            size: Constant.exitWorldButtonNodeSize)
+        static let yesButton = CGRect(
+            origin: Constant.Frame.enterButton.origin,
+            size: Constant.Frame.resetButton.size)
         static let noButton = Constant.Frame.resetButton
     }
 
+    // MARK: - name
     struct Name {
         static let defaultWorld = "world000"
 
         // MARK: file name
         static let tileMapFile = "tileMap.dat"
+        static let masteryDataModelFile = "masteryDataModel.sqlite"
         static let worldDataModelFile = "worldDataModel.sqlite"
         static let worldDataFile = "worldData.dat"
 
         // MARK: data model name
         static let worldDataModel = "WorldDataModel"
         static let gameObjectEntity = "GameObjectMO"
-        static let chunkCoordinateEntity = "ChunkCoordinateMO"
         static let invCoordinateEntity = "InventoryCoordinateMO"
+        static let chunkCoordinateEntity = "ChunkCoordinateMO"
+        static let interactionMasteryEntity = "InteractionMasteryMO"
+        static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
+        static let craftMasteryEntity = "CraftMasteryMO"
     }
 
-    // MARK: - recipe
-    static let recipes: [GameObjectType: [GameObjectType: Int]] = [
-        // MARK: tile
-        .woodWall: [.woodStick: 4],
-
-        // MARK: tool
-        .stoneAxe: [.stone: 1, .woodStick: 1],
-        .stonePickaxe: [.stone: 1, .woodStick: 1],
-        .stoneShovel: [.stone: 1, .woodStick: 1],
-        .sickle: [.stone: 1, .woodStick: 1],
-
-        // MARK: container
-        .leafBag: [.weedLeaves: 4],
-        .vineBasket: [.vineStem: 4],
-    ]
-
-    // MARK: - UserDefaults key
-    static let idGeneratorKey = "idGenerator"
-
-    // MARK: - etc
-    static let tileCountOfChunkSide: Int = 16
-    static let tileMapSide: Int = tileCountOfChunkSide * 3
-    static let chunkWidth: Double = tileWidth * Double(tileCountOfChunkSide)
-
-    static let velocityDamping = 1000.0
-    static let velocityFrictionRatioPerSec = 0.001
-
-    static let sceneScale = 1.0
-
+    // MARK: - resource name
     struct ResourceName {
         static let menuButton = "menu button"
         static let inventoryCell = "inventory_cell"
@@ -152,6 +163,32 @@ struct Constant {
         static let button = "button"
         static let grassTile = "grass_tile"
     }
+
+    // MARK: - recipe
+    static let recipes: [GameObjectType: [GameObjectType: Int]] = [
+        // MARK: tile
+        .woodWall: [.woodStick: 4],
+
+        // MARK: tool
+        .axe: [.stone: 1, .woodStick: 1],
+        .pickaxe: [.stone: 1, .woodStick: 1],
+        .shovel: [.stone: 1, .woodStick: 1],
+        .sickle: [.stone: 1, .woodStick: 1],
+
+        // MARK: container
+        .leafBag: [.weedLeaves: 4],
+        .vineBasket: [.vineStem: 4],
+    ]
+
+    // MARK: - etc
+    static let tileCountOfChunkSide: Int = 16
+    static let tileMapSide: Int = tileCountOfChunkSide * 3
+    static let chunkWidth: Double = tileWidth * Double(tileCountOfChunkSide)
+
+    static let velocityDamping = 1000.0
+    static let velocityFrictionRatioPerSec = 0.001
+
+    static let sceneScale = 1.0
 
 //    static let minZoomScale = 0.3
     static let minZoomScale = 0.1
@@ -169,5 +206,7 @@ struct Constant {
     static let panThreshold = tileWidth * 2.0
 
     static let characterInventoryID = 0
+
+    static let longTouchThreshold = 0.5
 
 }

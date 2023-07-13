@@ -10,17 +10,17 @@ import CoreData
 
 class InventoryRepository {
 
-    private var goDataSource: GameObjectDataSource
-    private var invCoordDataSource: InventoryCoordinateDataSource
+    private var goDS: GameObjectDataSource
+    private var invCoordDS: InventoryCoordinateDataSource
 
-    init(goDataSource: GameObjectDataSource,
-         invCoordDataSource: InventoryCoordinateDataSource) {
-        self.goDataSource = goDataSource
-        self.invCoordDataSource = invCoordDataSource
+    init(goDS: GameObjectDataSource,
+         invCoordDS: InventoryCoordinateDataSource) {
+        self.goDS = goDS
+        self.invCoordDS = invCoordDS
     }
 
     func load(id: Int) -> [GameObjectMO] {
-        let invCoordMOs = self.invCoordDataSource.load(id: id)
+        let invCoordMOs = self.invCoordDS.load(id: id)
         let goMOs = invCoordMOs.compactMap { invCoordMO -> GameObjectMO? in
             return invCoordMO.gameObjectMO
         }

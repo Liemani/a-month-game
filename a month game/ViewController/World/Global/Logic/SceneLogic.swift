@@ -10,56 +10,128 @@ import SpriteKit
 
 class SceneLogic {
 
+    let scene: WorldScene
+
+    init(scene: WorldScene) {
+        self.scene = scene
+    }
+
+    var timeInterval: Double { self.scene.timeInterval }
+
     // MARK: - game object
-    func new(type goType: GameObjectType,
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
              variant: Int = 0,
-             count: Int = 1,
+             quality: Double = 0.0,
+             state: GameObjectState = [],
+             coord invCoord: InventoryCoordinate) {
+        guard result != .fail else { return }
+
+        let quality = max(quality + result.qualityDiff, 0)
+
+        Logics.default.go.new(type: goType,
+                              variant: variant,
+                              quality: quality,
+                              state: state,
+                              coord: invCoord)
+    }
+
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
+             variant: Int = 0,
+             quality: Double = 0.0,
+             state: GameObjectState = [],
              coord chunkCoord: ChunkCoordinate) {
+        guard result != .fail else { return }
+
+        let quality = max(quality + result.qualityDiff, 0)
+
+        Logics.default.go.new(type: goType,
+                              variant: variant,
+                              quality: quality,
+                              state: state,
+                              coord: chunkCoord)
+    }
+
+    func new(result: TaskResultType,
+             type goType: GameObjectType,
+             variant: Int = 0,
+             quality: Double = 0.0,
+             state: GameObjectState = [],
+             coord chunkCoord: ChunkCoordinate,
+             count: Int) {
         for _ in 0 ..< count {
-            LogicContainer.default.go.new(type: goType,
-                                                variant: variant,
-                                                coord: chunkCoord)
+            Logics.default.scene.new(result: result,
+                                     type: goType,
+                                     variant: variant,
+                                     quality: quality,
+                                     state: state,
+                                     coord: chunkCoord)
         }
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             type goType: GameObjectType) {
+        guard result != .fail else { return }
+
+        go.set(type: goType)
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             variant: Int) {
+        guard result != .fail else { return }
+
+        go.set(variant: variant)
+    }
+
+    func set(result: TaskResultType,
+             go: GameObject,
+             quality: Double) {
+        guard result != .fail else { return }
+
+        go.set(quality: quality)
     }
 
     func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
         if !go.type.isInv {
-            LogicContainer.default.go.move(go, to: invCoord)
+            Logics.default.go.move(go, to: invCoord)
 
             return
         }
 
         guard invCoord.id == Constant.characterInventoryID
-                || ServiceContainer.default.invServ.isEmpty(id: go.id) else {
+                || Services.default.invServ.isEmpty(id: go.id) else {
             return
         }
 
-        LogicContainer.default.go.move(go, to: invCoord)
+        Logics.default.go.move(go, to: invCoord)
 
-        LogicContainer.default.invContainer.closeAnyInv(of: go.id)
+        Logics.default.invContainer.closeAnyInv(of: go.id)
     }
 
     func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        LogicContainer.default.go.move(go, to: chunkCoord)
+        Logics.default.go.move(go, to: chunkCoord)
 
         if go.type.isInv {
-            LogicContainer.default.invContainer.closeAnyInv(of: go.id)
+            Logics.default.invContainer.closeAnyInv(of: go.id)
         }
     }
 
     // MARK: - inventory
     func containerInteract(_ container: GameObject) {
-        let invInv = LogicContainer.default.invContainer.invInv
-        let fieldInv = LogicContainer.default.invContainer.fieldInv
+        let invInv = Logics.default.invContainer.invInv
+        let fieldInv = Logics.default.invContainer.fieldInv
 
         if container.id == invInv.id && !invInv.isHidden {
-            LogicContainer.default.invContainer.closeInvInv()
+            Logics.default.invContainer.closeInvInv()
 
             return
         }
 
         if container.id == fieldInv.id && !fieldInv.isHidden {
-            LogicContainer.default.invContainer.closeFieldInv()
+            Logics.default.invContainer.closeFieldInv()
 
             return
         }
@@ -70,23 +142,23 @@ class SceneLogic {
         }
 
         if container.isOnField {
-            LogicContainer.default.invContainer.openFieldInv(of: container)
+            Logics.default.invContainer.openFieldInv(of: container)
         } else {
-            LogicContainer.default.invContainer.openInvInv(of: container)
+            Logics.default.invContainer.openInvInv(of: container)
         }
     }
 
     func gameObjectInteractContainer(_ go: GameObject, to container: GameObject) {
         var index: Int = 0
 
-        if let inv = LogicContainer.default.invContainer.inv(id: container.id) {
+        if let inv = Logics.default.invContainer.inv(id: container.id) {
             if let emptyIndex = inv.emptyCoord {
                 index = emptyIndex
             } else {
                 return
             }
         } else {
-            index = ServiceContainer.default.invServ.emptyIndex(id: container.id)
+            index = Services.default.invServ.emptyIndex(id: container.id)
 
             guard index < container.type.invCapacity else {
                 return
@@ -94,15 +166,15 @@ class SceneLogic {
         }
 
         let invCoord = InventoryCoordinate(container.id, index)
-        LogicContainer.default.scene.move(go, to: invCoord)
+        Logics.default.scene.move(go, to: invCoord)
     }
 
     func containerTransfer(_ source: GameObject, to dest: GameObject) {
-        let sourceInvData = LogicContainer.default.invContainer.invData(
+        let sourceInvData = Logics.default.invContainer.invData(
             id: source.id,
             capacity: source.type.invCapacity)
 
-        let destInvData = LogicContainer.default.invContainer.invData(
+        let destInvData = Logics.default.invContainer.invData(
             id: dest.id,
             capacity: dest.type.invCapacity)
 
@@ -115,7 +187,7 @@ class SceneLogic {
                 break
             }
 
-            LogicContainer.default.go.move(goData, to: destInvData)
+            Logics.default.goData.move(goData, to: destInvData)
 
             count += 1
         }
@@ -131,12 +203,17 @@ class SceneLogic {
 
     // MARK: - chunk
     func chunkContainerUpdate(direction: Direction4) {
-        LogicContainer.default.chunkContainer.chunkContainerUpdate(direction: direction)
+        Logics.default.chunkContainer.chunkContainerUpdate(direction: direction)
 
-        let fieldInv = LogicContainer.default.invContainer.fieldInv
+        let fieldInv = Logics.default.invContainer.fieldInv
         if fieldInv.parent == nil {
-            LogicContainer.default.invContainer.closeFieldInv()
+            Logics.default.invContainer.closeFieldInv()
         }
+    }
+
+    // MARK: - etc
+    func isDescendantOfUILayer(_ node: SKNode) -> Bool {
+        return node.isDescendant(self.scene.ui)
     }
 
 }

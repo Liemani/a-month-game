@@ -273,25 +273,15 @@ class InventoryIterator: IteratorProtocol {
 
 }
 
-// MARK: - touch responder
 extension InventoryCell: TouchResponder {
 
-    func touchBegan(_ touch: UITouch) {
-        let invTouchLogic = InventoryTouchLogic(touch: touch, cell: self)
-        LogicContainer.default.touch.add(invTouchLogic)
-        invTouchLogic.began()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

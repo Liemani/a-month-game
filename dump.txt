@@ -447,16 +447,69 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-bug
-    when transfer from close container -> the source container don't redraw
-    when transfer to close container -> empty coord always first cell
-space of inv must stored property
-inv to inv transfer
+InfoWindowLogic
+
+info window must update when gain exp
+     update exp gauge
+
+If view response to touch, scene will not get touch event?
+rename FieldTapLogic -> SceneTapLogic
+rename FieldPanLogic -> ScenePanLogic
+
+mastery system
+    apply mastery system
+    particle
+        rare gold
+        common silver
+        poor bronze
+        fail grey
+    character long touch
+        long touch
+        display mastery level info with image
+    add craft
+
+move file proper location
+
+fix
+    i can't touch reset no button
+    if i interact water with container, the contents will be dagling
+        remove only the items inside the container
+    set node name for the child of game object
+    close info window by touching close button on the top right corner of window
+    apply task result to CraftTouchLogic::ended()
+
+check
+    Is it safe moving chunk diagonally?
+
+more bigger container
+    add saw
+    add wood board
+    add wood box -> 4
+
+barley
+
+what about
+    remember open character inventory container and open when enter world
+
+what is the profit of the quality?
+    durability
+    strength
+    task time
+
+move action when craft
+
+underground
+
+display expected quality to craft object
+
+fire
+potery
 
 shallow water
 
-fix bug
-    generated none gameobject sometimes at inventory
+container
+    another image for empty, normal, full
+
 add
     sickle
     saw
@@ -699,6 +752,20 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+fix craft system not working
+chunk data logic::move()
+chunk data::synchronizeData()
+inventory logic::move() -> inventory data logic::move()
+quality
+    apply LogicContainer.default.go.new()
+    apply go.set(type)
+    apply LogicContainer.default.scene.new()
+space of inv must stored property
+inv to inv transfer
+bug
+    when transfer from close container -> the source container don't redraw
+    when transfer to close container -> empty coord always first cell
+    not interact? when from cell to container
 vine basket
     vine
 3 앱 아이콘 만들고 적용하기

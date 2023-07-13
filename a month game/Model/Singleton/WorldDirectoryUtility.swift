@@ -7,9 +7,15 @@
 
 import Foundation
 
-class WorldDirectoryUtility {
+/// file structure
+/// application support
+///     character
+///     world
+///         world1
+///         world2
+class FileUtility {
 
-    static let `default` = WorldDirectoryUtility()
+    static let `default` = FileUtility()
 
     let fileManager: FileManager
 
@@ -17,31 +23,46 @@ class WorldDirectoryUtility {
         self.fileManager = FileManager.default
     }
 
-    static func directoryURL(worldName name: String) -> URL {
-        return FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: name)
+    var characterDirURL: URL {
+        let characterDirURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: "character")
+        return characterDirURL
     }
 
-    func isExist(worldName: String) -> Bool {
-        let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
-        return self.fileManager.fileExists(atPath: worldDirectoryURL.path)
+    func worldDirURL(of name: String) -> URL {
+        let worldDirURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: "world")
+        let currentWorldDirURL = worldDirURL.appending(path: name)
+        return currentWorldDirURL
     }
 
-    /// - Returns: true if create or false
-    func createIfNotExist(worldName: String) {
-        guard !self.isExist(worldName: worldName) else {
+    func isWorldDirExist(worldName: String) -> Bool {
+        let worldDirURL = self.worldDirURL(of: worldName)
+
+        return self.fileManager.fileExists(atPath: worldDirURL.path)
+    }
+
+    func createCharacterDirIfNotExist() {
+        let characterDirURL = self.characterDirURL
+
+        guard !self.fileManager.fileExists(atPath: characterDirURL.path) else {
             return
         }
 
-        let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
+        try! self.fileManager.createDirectory(at: characterDirURL,
+                                              withIntermediateDirectories: false)
+    }
 
-        try! self.fileManager.createDirectory(at: worldDirectoryURL, withIntermediateDirectories: true)
+    func createWorldDir(worldName: String) {
+        let worldDirURL = self.worldDirURL(of: worldName)
+
+        try! self.fileManager.createDirectory(at: worldDirURL,
+                                              withIntermediateDirectories: true)
     }
 
     func remove(worldName: String) {
-        let worldDirectoryURL = WorldDirectoryUtility.directoryURL(worldName: worldName)
+        let worldDirURL = self.worldDirURL(of: worldName)
 
-        if self.fileManager.fileExists(atPath: worldDirectoryURL.path) {
-            try! self.fileManager.removeItem(at: worldDirectoryURL)
+        if self.fileManager.fileExists(atPath: worldDirURL.path) {
+            try! self.fileManager.removeItem(at: worldDirURL)
         }
     }
 

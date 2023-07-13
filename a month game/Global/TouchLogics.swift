@@ -8,18 +8,31 @@
 import Foundation
 import SpriteKit
 
-protocol TouchLogic {
+class TouchLogic {
 
-    var touch: UITouch { get }
+    var touches: [UITouch]
 
-    func began()
-    func moved()
-    func ended()
-    func cancelled()
+    init() {
+        self.touches = []
+    }
+
+    func began() {
+    }
+
+    func moved() {
+    }
+
+    func ended() {
+    }
+
+    func cancelled() {
+    }
 
 }
 
-class TouchLogicContainer {
+class TouchLogics {
+
+    static var `default` = TouchLogics()
 
     private var logics: [UITouch: TouchLogic]
     var activatedGO: GameObject?
@@ -29,7 +42,9 @@ class TouchLogicContainer {
     }
 
     func add(_ logic: TouchLogic) {
-        self.logics[logic.touch] = logic
+        for touch in logic.touches {
+            self.logics[touch] = logic
+        }
     }
 
     func began(_ touch: UITouch) {
@@ -37,16 +52,28 @@ class TouchLogicContainer {
     }
 
     func moved(_ touch: UITouch) {
-        self.logics[touch]!.moved()
+        guard let logic = self.logics[touch] else {
+            return
+        }
+
+        logic.moved()
     }
 
     func ended(_ touch: UITouch) {
-        self.logics[touch]!.ended()
+        guard let logic = self.logics[touch] else {
+            return
+        }
+
+        logic.ended()
         self.complete(touch)
     }
 
     func cancelled(_ touch: UITouch) {
-        self.logics[touch]!.cancelled()
+        guard let logic = self.logics[touch] else {
+            return
+        }
+
+        logic.cancelled()
         self.complete(touch)
     }
 

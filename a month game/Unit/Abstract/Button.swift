@@ -10,9 +10,9 @@ import SpriteKit
 
 class Button: SKSpriteNode {
 
-    private let eventType: EventType
+    let eventType: EventType
 
-    init(texture: SKTexture, frame: CGRect, text: String?, eventType: EventType) {
+    init(texture: SKTexture?, frame: CGRect, text: String?, eventType: EventType) {
         self.eventType = eventType
 
         super.init(texture: texture, color: .white, size: frame.size)
@@ -47,55 +47,13 @@ class Button: SKSpriteNode {
 
 extension Button: TouchResponder {
 
-    func touchBegan(_ touch: UITouch) {
-        self.activate()
-    }
-
-    func touchMoved(_ touch: UITouch) {
-        if self.isBeing(touched: touch) {
-            self.activate()
-        } else {
-            self.deactivate()
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        default:
+            return false
         }
-    }
-
-    func touchEnded(_ touch: UITouch) {
-        if self.isBeing(touched: touch) {
-            let event = Event(type: self.eventType,
-                              udata: nil,
-                              sender: self)
-            event.manager.enqueue(event)
-        }
-
-        self.completeTouch(touch)
-    }
-
-    func touchCancelled(_ touch: UITouch) {
-        self.completeTouch(touch)
-    }
-
-    func completeTouch(_ touch: UITouch) {
-        self.deactivate()
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        self.touchBegan(touch)
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        self.touchMoved(touch)
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        self.touchEnded(touch)
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let touch = touches.first!
-        self.touchCancelled(touch)
     }
 
 }

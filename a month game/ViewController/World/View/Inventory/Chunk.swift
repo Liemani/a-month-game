@@ -24,7 +24,7 @@ class Chunk: SKNode {
     }
 
     func setUp(chunkCoord: ChunkCoordinate) {
-        let goDatas = ServiceContainer.default.chunkServ.load(at: chunkCoord)
+        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
 
         for goData in goDatas {
             let go = GameObject(from: goData)
@@ -40,7 +40,7 @@ class Chunk: SKNode {
         self.data.removeAll()
 
         DispatchQueue.global(qos: .userInteractive).async {
-            let goDatas = ServiceContainer.default.chunkServ.load(at: chunkCoord)
+            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
             
             DispatchQueue.main.async {
                 for goData in goDatas {

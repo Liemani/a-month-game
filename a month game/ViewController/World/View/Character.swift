@@ -10,7 +10,7 @@ import SpriteKit
 
 class Character: SKShapeNode {
 
-    var data: CharacterData
+    let data: CharacterData
 
     var chunkCoord: ChunkCoordinate { self.data.chunkCoord }
 
@@ -55,7 +55,7 @@ class Character: SKShapeNode {
         super.init()
 
         let path = CGMutablePath()
-        path.addArc(center: CGPoint.zero,
+        path.addArc(center: CGPoint(),
                     radius: Constant.characterRadius,
                     startAngle: 0,
                     endAngle: CGFloat.pi * 2,
@@ -73,6 +73,30 @@ class Character: SKShapeNode {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func activate() {
+        self.alpha = 0.5
+    }
+
+    func deactivate() {
+        self.alpha = 1.0
+    }
+
+}
+
+extension Character: TouchResponder {
+
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type,
+            is PanRecognizer.Type,
+            is PinchRecognizer.Type,
+            is LongTouchRecognizer.Type:
+            return true
+        default:
+            return false
+        }
     }
 
 }

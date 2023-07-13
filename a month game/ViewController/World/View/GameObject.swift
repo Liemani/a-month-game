@@ -17,6 +17,8 @@ class GameObject: SKSpriteNode {
     var type: GameObjectType { self.data.type }
     var variant: Int { self.data.variant }
 
+    var quality: Double { self.data.quality }
+
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
@@ -39,8 +41,12 @@ class GameObject: SKSpriteNode {
             : Constant.gameObjectSize
 
         super.init(texture: texture, color: .white, size: size)
-        
+
         self.data.go = self
+
+        if self.isInInv {
+            self.addQualityBox()
+        }
 
         if goData.type.layerCount == 2 {
             let cover = SKSpriteNode(texture: goData.type.textures[1])
@@ -54,20 +60,67 @@ class GameObject: SKSpriteNode {
             : Constant.ZPosition.tile
     }
 
-    convenience init(type goType: GameObjectType, variant: Int) {
-        let goData = GameObjectData(goType: goType, variant: variant)
-        self.init(from: goData)
+    func addQualityBox() {
+        guard self.children.first == nil else {
+            return
+        }
+
+        let boxSize = Constant.Size.qualityBox
+
+        let qualityBox = SKShapeNode(rectOf: boxSize)
+        qualityBox.position = Constant.Position.qualityBox
+        qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
+        qualityBox.fillColor = .black
+        qualityBox.strokeColor = .black
+        qualityBox.alpha = 0.5
+        self.addChild(qualityBox)
+
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 1
+        formatter.maximumFractionDigits = 1
+        let qualityString = formatter.string(from: self.quality as NSNumber)!
+
+        let qualityLabel = SKLabelNode(text: qualityString)
+        qualityLabel.fontName = "Helvetica-Bold"
+        qualityLabel.fontSize = 12.0
+        qualityLabel.position = Constant.Position.qualityLabel
+        qualityLabel.zPosition = 10.0
+        qualityLabel.horizontalAlignmentMode = .right
+        qualityBox.addChild(qualityLabel)
     }
 
-    convenience init(type goType: GameObjectType, variant: Int, coord chunkCoord: ChunkCoordinate) {
-        let goData = GameObjectData(goType: goType, variant: variant)
+    func removeQualityBox() {
+        if !self.children.isEmpty {
+            self.children[0].removeFromParent()
+        }
+    }
+
+    convenience init(type goType: GameObjectType,
+                     variant: Int,
+                     quality: Double,
+                     state: GameObjectState,
+                     coord chunkCoord: ChunkCoordinate) {
+        let goData = GameObjectData(goType: goType,
+                                    variant: variant,
+                                    quality: quality,
+                                    state: state)
         goData.set(coord: chunkCoord)
+
         self.init(from: goData)
     }
 
-    convenience init(type goType: GameObjectType, variant: Int, coord invCoord: InventoryCoordinate) {
-        let goData = GameObjectData(goType: goType, variant: variant)
+    convenience init(type goType: GameObjectType,
+                     variant: Int,
+                     quality: Double,
+                     state: GameObjectState,
+                     coord invCoord: InventoryCoordinate) {
+        let goData = GameObjectData(goType: goType,
+                                    variant: variant,
+                                    quality: quality,
+                                    state: state)
         goData.set(coord: invCoord)
+
         self.init(from: goData)
     }
 
@@ -122,6 +175,10 @@ class GameObject: SKSpriteNode {
         self.data.set(variant: variant)
     }
 
+    func set(quality: Double) {
+        self.data.quality = quality
+    }
+
     func set(coord chunkCoord: ChunkCoordinate) {
         self.data.set(coord: chunkCoord)
     }
@@ -144,25 +201,36 @@ class GameObject: SKSpriteNode {
 
 }
 
-// MARK: - touch responder
 extension GameObject: TouchResponder {
 
-    func touchBegan(_ touch: UITouch) {
-        let goTouchLogic = GameObjectTouchLogic(touch: touch, go: self)
-        LogicContainer.default.touch.add(goTouchLogic)
-        goTouchLogic.began()
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type:
+            return true
+        case is PanRecognizer.Type,
+            is PinchRecognizer.Type:
+            return self.isOnField
+        default:
+            return false
+        }
     }
 
-    func touchMoved(_ touch: UITouch) {
-        LogicContainer.default.touch.moved(touch)
-    }
+}
 
-    func touchEnded(_ touch: UITouch) {
-        LogicContainer.default.touch.ended(touch)
-    }
+extension GameObject {
 
-    func touchCancelled(_ touch: UITouch) {
-        LogicContainer.default.touch.cancelled(touch)
+    override var debugDescription: String {
+        var description = "(id: \(self.id), typeID: \(self.type), variation: \(self.variant), quality: \(self.quality), state: \(self.data.state)"
+
+        if let chunkCoord = self.chunkCoord {
+            description += ", coord: \(chunkCoord))"
+        }
+
+        if let invCoord = self.invCoord {
+            description += ", coord: \(invCoord))"
+        }
+
+        return description
     }
 
 }

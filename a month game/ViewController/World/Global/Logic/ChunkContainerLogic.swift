@@ -33,13 +33,13 @@ class ChunkContainerLogic {
     }
 
     func add(_ go: GameObject) {
-        let characterCoord = LogicContainer.default.character.chunkCoord.coord
+        let characterCoord = Logics.default.character.chunkCoord.coord
 
         self.chunkContainer.add(go)
 
         if !go.type.isWalkable
             && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
-            LogicContainer.default.accessibleGOTracker.add(go)
+            Logics.default.accessibleGOTracker.add(go)
         }
     }
 

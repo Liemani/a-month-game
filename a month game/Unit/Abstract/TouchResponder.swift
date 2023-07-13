@@ -10,9 +10,6 @@ import SpriteKit
 
 protocol TouchResponder: SKNode {
 
-    func touchBegan(_ touch: UITouch)
-    func touchMoved(_ touch: UITouch)
-    func touchEnded(_ touch: UITouch)
-    func touchCancelled(_ touch: UITouch)
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool
 
 }

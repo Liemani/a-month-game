@@ -42,12 +42,12 @@ class InventoryContainer {
         self.invs.append(characterInv)
 
         let invInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
-                                         cellSpacing: Constant.invCellSpacing)
+                                         cellSpacing: Constant.defaultPadding)
         invInv.isHidden = true
         self.invs.append(invInv)
 
         let fieldInv = GameObjectInventory(cellWidth: Constant.defaultWidth,
-                                           cellSpacing: Constant.invCellSpacing)
+                                           cellSpacing: Constant.defaultPadding)
         fieldInv.isHidden = true
         self.invs.append(fieldInv)
     }
@@ -74,6 +74,18 @@ class InventoryContainer {
 
     func `is`(equiping goType: GameObjectType) -> Bool {
         return self.leftGO?.type == goType || self.rightGO?.type == goType
+    }
+
+    func go(equiping goType: GameObjectType) -> GameObject? {
+        if self.rightGO?.type == goType {
+            return self.rightGO
+        }
+
+        if self.leftGO?.type == goType {
+            return self.leftGO
+        }
+
+        return nil
     }
 
     var space: Int {

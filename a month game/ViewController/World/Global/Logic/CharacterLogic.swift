@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SpriteKit
 
 class CharacterLogic {
 
@@ -16,5 +17,21 @@ class CharacterLogic {
     }
 
     var chunkCoord: ChunkCoordinate { self.character.chunkCoord }
+
+    func addParticle(_ particle: SKShapeNode) {
+        self.character.addChild(particle)
+    }
+
+    func resetVelocity() {
+        self.character.velocityVector = CGVector()
+    }
+
+    func applyPositionDelta(_ delta: CGPoint) {
+        self.character.position += delta * self.character.speedModifier
+    }
+
+    func setVelocity(_ vector: CGVector) {
+        self.character.velocityVector = vector
+    }
 
 }

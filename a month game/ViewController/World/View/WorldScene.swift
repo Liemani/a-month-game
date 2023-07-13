@@ -30,7 +30,9 @@ class WorldScene: SKScene {
     var ui: SKNode!
     var craftWindow: CraftWindow!
 
-    var munuWindow: MenuWindow!
+    var infoWindow: InfoWindow!
+
+    var menuWindow: MenuWindow!
     var exitWorldButtonNode: SKNode!
 
     // MARK: - init
@@ -49,10 +51,6 @@ class WorldScene: SKScene {
             movingLayer: self.movingLayer,
             chunkContainer: self.chunkContainer,
             accessibleGOTracker: self.accessibleGOTracker)
-
-#if DEBUG
-        self.debugCode()
-#endif
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,7 +75,10 @@ class WorldScene: SKScene {
 
         self.craftWindow = CraftWindow()
         self.craftWindow.update(gos: self.characterInv)
-        self.munuWindow = MenuWindow()
+
+        self.infoWindow = InfoWindow()
+
+        self.menuWindow = MenuWindow()
     }
 
     func initSceneLayer() {
@@ -103,17 +104,17 @@ class WorldScene: SKScene {
         self.ui = ui
 
         let texture = SKTexture(imageNamed: Constant.ResourceName.menuButton)
-        let menuButton: Button = Button(texture: texture,
-                                        frame: Constant.Frame.menuButton,
-                                        text: nil,
-                                        eventType: WorldEventType.menuButton)
+        let menuButton = Button(texture: texture,
+                                frame: Constant.Frame.menuButton,
+                                text: nil,
+                                eventType: WorldEventType.menuButton)
         ui.addChild(menuButton)
 
         ui.addChild(self.characterInv)
         ui.addChild(self.craftWindow)
         ui.addChild(self.invContainer.invInv)
-
-        self.addChild(self.munuWindow)
+        ui.addChild(self.infoWindow)
+        ui.addChild(self.menuWindow)
     }
 
     override func sceneDidLoad() {
@@ -140,7 +141,9 @@ class WorldScene: SKScene {
         self.pTime = self.cTime
         self.cTime = currentTime
 
-        self.handleEvent()
+        TouchManager.default.updateTimeoutRecognizer()
+
+        self.handleEvent(currentTime)
 
         self.updateModel()
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
@@ -148,7 +151,7 @@ class WorldScene: SKScene {
         self.updateData()
     }
 
-    func handleEvent() {
+    func handleEvent(_ currentTime: TimeInterval) {
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
             // TODO: remove argument self
@@ -173,12 +176,11 @@ class WorldScene: SKScene {
     }
 
     func updateData() {
-        let moContext = ServiceContainer.default.moContext
+        let moContext = Services.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
         }
     }
-
 
 }
 
@@ -186,43 +188,40 @@ extension WorldScene {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchBegan(touch)
+            TouchManager.default.touchBegan(touch)
         }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchMoved(touch)
+            TouchManager.default.touchMoved(touch)
         }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchEnded(touch)
+            TouchManager.default.touchEnded(touch)
         }
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            TouchRecognizerManager.default.touchCancelled(touch)
+            TouchManager.default.touchCancelled(touch)
         }
     }
 
 }
 
-// MARK: debug
-#if DEBUG
-extension WorldScene {
+extension WorldScene: TouchResponder {
 
-    private func debugCode() {
-        for go in self.chunkContainer {
-            print("id: \(go.id), typeID: \(go.type), coordinate: \(go.chunkCoord!)")
-        }
-
-        for go in self.characterInv {
-            print("id: \(go.id), typeID: \(go.type), coordinate: \(go.invCoord!)")
+    func isRespondable(with type: TouchRecognizer.Type) -> Bool {
+        switch type {
+        case is TapRecognizer.Type,
+            is PanRecognizer.Type:
+            return true
+        default:
+            return false
         }
     }
 
 }
-#endif

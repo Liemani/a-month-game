@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="ChunkActivatedMO" representedClassName="ChunkActivatedMO" syncable="YES" codeGenerationType="class">
-        <attribute name="location" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="x" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="y" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-    </entity>
     <entity name="ChunkCoordinateMO" representedClassName="ChunkCoordinateMO" syncable="YES" codeGenerationType="class">
         <attribute name="location" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="x" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="y" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="gameObjectMO" maxCount="1" deletionRule="Nullify" destinationEntity="GameObjectMO" inverseName="chunkCoord" inverseEntity="GameObjectMO"/>
     </entity>
+    <entity name="CraftMasteryMO" representedClassName="CraftMasteryMO" syncable="YES" codeGenerationType="class">
+        <attribute name="dstTypeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="exp" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lv" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="GameObjectMO" representedClassName="GameObjectMO" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="quality" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="state" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="typeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="chunkCoord" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="ChunkCoordinateMO" inverseName="gameObjectMO" inverseEntity="ChunkCoordinateMO"/>
         <relationship name="invCoord" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="InventoryCoordinateMO" inverseName="gameObjectMO" inverseEntity="InventoryCoordinateMO"/>
+    </entity>
+    <entity name="GOInteractionMasteryMO" representedClassName="GOInteractionMasteryMO" syncable="YES" codeGenerationType="class">
+        <attribute name="dstTypeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="exp" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lv" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="srcTypeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="InteractionMasteryMO" representedClassName="InteractionMasteryMO" syncable="YES" codeGenerationType="class">
+        <attribute name="dstTypeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="exp" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lv" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="InventoryCoordinateMO" representedClassName="InventoryCoordinateMO" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="gameObjectMO" maxCount="1" deletionRule="Nullify" destinationEntity="GameObjectMO" inverseName="invCoord" inverseEntity="GameObjectMO"/>
     </entity>
+    <configuration name="Character">
+        <memberEntity name="GOInteractionMasteryMO"/>
+        <memberEntity name="CraftMasteryMO"/>
+        <memberEntity name="InteractionMasteryMO"/>
+    </configuration>
+    <configuration name="World">
+        <memberEntity name="ChunkCoordinateMO"/>
+        <memberEntity name="GameObjectMO"/>
+        <memberEntity name="InventoryCoordinateMO"/>
+    </configuration>
 </model>

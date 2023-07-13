@@ -14,7 +14,7 @@ class MenuWindow: SKNode {
         super.init()
 
         // TODO: move to background(have to implement new class)
-        self.zPosition = Constant.ZPosition.munuWindow
+        self.zPosition = Constant.ZPosition.menuWindow
 
         let background = SKSpriteNode(color: .black, size: Constant.sceneSize)
         background.position = Constant.sceneCenter
@@ -39,7 +39,7 @@ class MenuWindow: SKNode {
     // MARK: - isHidden
     func reveal() {
         self.isHidden = false
-        TouchRecognizerManager.default.cancelAllTouches()
+        TouchManager.default.cancelAllTouches()
     }
 
     func hide() {

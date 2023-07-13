@@ -8,25 +8,25 @@
 import Foundation
 import SpriteKit
 
-class CraftTouchLogic {
+class CraftTapLogic: TouchLogic {
 
-    let touch: UITouch
+    var touch: UITouch { self.touches[0] }
+
     private let craftObject: CraftObject
 
     init(touch: UITouch, craftObject: CraftObject) {
-        self.touch = touch
         self.craftObject = craftObject
+
+        super.init()
+
+        self.touches.append(touch)
     }
 
-}
-
-extension CraftTouchLogic: TouchLogic {
-
-    func began() {
+    override func began() {
         craftObject.activate()
     }
 
-    func moved() {
+    override func moved() {
         if self.craftObject.isBeing(touched: self.touch) {
             self.craftObject.activate()
         } else {
@@ -34,26 +34,30 @@ extension CraftTouchLogic: TouchLogic {
         }
     }
 
-    func ended() {
+    override func ended() {
         guard self.craftObject.isBeing(touched: self.touch) else {
             self.complete()
 
             return
         }
 
-        for go in self.craftObject.consumeTargets {
-            LogicContainer.default.go.removeFromParent(go)
-            go.delete()
+        let consumeTargets = self.craftObject.consumeTargets
+        var sum = 0.0
+
+        for go in consumeTargets {
+            Logics.default.go.remove(go)
+            sum += go.quality
         }
 
-        let emptyCoord = LogicContainer.default.invContainer.emptyCoord!
-        LogicContainer.default.go.new(type: self.craftObject.goType,
-                                            coord: emptyCoord)
+        let emptyCoord = Logics.default.invContainer.emptyCoord!
+        Logics.default.go.new(type: self.craftObject.goType,
+                                      quality: sum / Double(consumeTargets.count),
+                                      coord: emptyCoord)
 
         self.complete()
     }
 
-    func cancelled() {
+    override func cancelled() {
         self.complete()
     }
 
