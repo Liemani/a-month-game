@@ -447,11 +447,6 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-make rotate the tool used as interaction
-
-check
-    Is it safe moving chunk diagonally?
-
 more bigger container
     add saw
     add wood board
@@ -723,6 +718,11 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+check
+    Is it safe moving chunk diagonally?
+
+make rotate the tool used as interaction
+
 move file proper location
 
 Update inv if container interact to water

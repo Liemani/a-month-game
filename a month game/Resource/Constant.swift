@@ -177,10 +177,12 @@ struct Constant {
         .pickaxe: [.stone: 1, .woodStick: 1],
         .shovel: [.stone: 1, .woodStick: 1],
         .sickle: [.stone: 1, .woodStick: 1],
+        .saw: [.stone: 1, .woodStick: 1],
 
         // MARK: container
         .leafBag: [.weedLeaves: 4],
         .vineBasket: [.vineStem: 4],
+        .woodenBox: [.woodBoard: 4],
     ]
 
     // MARK: - etc

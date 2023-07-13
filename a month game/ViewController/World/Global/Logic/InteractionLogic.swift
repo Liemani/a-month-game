@@ -19,7 +19,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .shovel, to: .dirtTile)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             go.set(type: .clayTile)
             Logics.default.scene.new(result: result,
@@ -37,7 +38,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .shovel, to: .clayTile)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             go.set(type: .caveCeilTile)
             Logics.default.scene.new(result: result,
@@ -55,7 +57,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .pickaxe, to: .caveCeilTile)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             go.set(type: .caveHoleTile)
             Logics.default.scene.new(result: result,
@@ -70,7 +73,7 @@ class InteractionLogic {
                 return false
             }
 
-            let result = Logics.default.mastery.interact(.cobblestoneTile)
+            let result = Logics.default.mastery.interact(go.type)
 
             go.set(type: .sandTile)
             Logics.default.scene.new(result: result,
@@ -87,7 +90,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .shovel, to: .sandTile)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             go.set(type: .clayTile)
             Logics.default.scene.new(result: result,
@@ -105,7 +109,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .sickle, to: .weed)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             Logics.default.go.delete(go)
             Logics.default.scene.new(result: result,
@@ -123,7 +128,8 @@ class InteractionLogic {
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: .sickle, to: .vine)
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
 
             Logics.default.go.delete(go)
             Logics.default.scene.new(result: result,
@@ -141,7 +147,8 @@ class InteractionLogic {
                 let newQuality = (go.quality + goEquiping.quality) / 2.0
                 let chunkCoord = go.chunkCoord!
 
-                let result = Logics.default.mastery.interact(with: .axe, to: .treeOak)
+                let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                             to: go.type)
 
                 Logics.default.go.delete(go)
 
@@ -172,7 +179,7 @@ class InteractionLogic {
                 return false
             }
 
-            let result = Logics.default.mastery.interact(.treeOak)
+            let result = Logics.default.mastery.interact(go.type)
 
             go.set(variant: 1)
 
@@ -184,6 +191,29 @@ class InteractionLogic {
                                          quality: go.quality / 2.0,
                                          coord: emptyInvCoord)
             }
+
+            return true
+        },
+        .woodLog: { handlerManager, go in
+            guard let goEquiping = Logics.default.invContainer.go(equiping: .saw),
+                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                return false
+            }
+
+            goEquiping.emphasizeUsing()
+
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
+
+            Logics.default.go.delete(go)
+
+            let newGOQuality = (go.quality + goEquiping.quality) / 2.0
+
+            Logics.default.scene.new(result: result,
+                                     type: .woodBoard,
+                                     quality: newGOQuality,
+                                     coord: go.chunkCoord!,
+                                     count: 2)
 
             return true
         },
@@ -205,7 +235,8 @@ class InteractionLogic {
         },
         .clayTile: { handlerManager, go, target in
             if go.type == .sand {
-                let result = Logics.default.mastery.interact(with: .sand, to: .clayTile)
+                let result = Logics.default.mastery.interact(with: target.type,
+                                                             to: go.type)
 
                 Logics.default.go.delete(go)
                 Logics.default.scene.set(result: result, go: target, type: .sandTile)
@@ -214,7 +245,8 @@ class InteractionLogic {
             }
 
             if go.type == .dirt {
-                let result = Logics.default.mastery.interact(with: .dirt, to: .clayTile)
+                let result = Logics.default.mastery.interact(with: target.type,
+                                                             to: go.type)
 
                 Logics.default.go.delete(go)
                 Logics.default.scene.set(result: result, go: target, type: .dirtTile)
@@ -227,7 +259,8 @@ class InteractionLogic {
         .caveCeilTile: { handlerManager, go, target in
             guard go.type == .clay else { return false }
 
-            let result = Logics.default.mastery.interact(with: .clay, to: .caveCeilTile)
+            let result = Logics.default.mastery.interact(with: target.type,
+                                                         to: go.type)
 
             Logics.default.go.delete(go)
             Logics.default.scene.set(result: result, go: target, type: .clayTile)
@@ -247,7 +280,8 @@ class InteractionLogic {
         .sandTile: { handlerManager, go, target in
             guard go.type == .stone else { return false }
 
-            let result = Logics.default.mastery.interact(with: .stone, to: .sandTile)
+            let result = Logics.default.mastery.interact(with: target.type,
+                                                         to: go.type)
 
             Logics.default.go.delete(go)
             Logics.default.scene.set(result: result, go: target, type: .cobblestoneTile)
@@ -268,7 +302,8 @@ class InteractionLogic {
                 return false
             }
 
-            let result = Logics.default.mastery.interact(with: .stone, to: .sandTile)
+            let result = Logics.default.mastery.interact(with: target.type,
+                                                         to: go.type)
 
             Logics.default.go.delete(go)
 
