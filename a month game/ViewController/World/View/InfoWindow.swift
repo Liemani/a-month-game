@@ -108,6 +108,21 @@ class InfoWindow: SKShapeNode {
         self.label.text = nil
     }
 
+    func scrolled(_ diff: Double) {
+        let positionY = self.content.position.y
+
+        if positionY <= self.contenPositionYMin
+            || self.contenPositionYMax <= positionY {
+            self.content.position.y += diff / 2.0
+        } else {
+            self.content.position.y += diff
+        }
+    }
+
+    func scrollEnded() {
+
+    }
+
 }
 
 extension InfoWindow: TouchResponder {

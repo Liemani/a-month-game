@@ -28,11 +28,18 @@ class InfoWindowLogic {
     }
 
     func displayGOInfo(node: SKNode) {
-
     }
 
     func close() {
         self.infoWindow.hide()
+    }
+
+    func scrolled(_ diff: Double) {
+        self.infoWindow.scrolled(diff)
+    }
+
+    func scrollEnded() {
+        self.infoWindow.scrollEnded()
     }
 
 }

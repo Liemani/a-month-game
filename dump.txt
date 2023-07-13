@@ -449,8 +449,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 InfoWindowLogic
 
+info window must update when gain exp
+     update exp gauge
+
 If view response to touch, scene will not get touch event?
-apply TouchResponder change from protocol to class
 rename FieldTapLogic -> SceneTapLogic
 rename FieldPanLogic -> ScenePanLogic
 

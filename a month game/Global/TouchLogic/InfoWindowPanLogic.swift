@@ -12,23 +12,31 @@ class InfoWindowPanLogic: TouchLogic {
 
     var touch: UITouch { self.touches[0] }
 
-    init(touch: UITouch) {
+    private let scene: SKScene
+
+    init(touch: UITouch, scene: SKScene) {
+        self.scene = scene
+
         super.init()
 
         self.touches.append(touch)
     }
 
     override func began() {
+//        reset move action
     }
 
     override func moved() {
-        print("moving")
+        let pPoint = touch.previousLocation(in: self.scene)
+        let cPoint = touch.location(in: self.scene)
+
+        let pointDeltaY = cPoint.y - pPoint.y
+
+        Logics.default.infoWindow.scrolled(pointDeltaY)
     }
 
     override func ended() {
-    }
-
-    override func cancelled() {
+        Logics.default.infoWindow.scrollEnded()
     }
 
 }

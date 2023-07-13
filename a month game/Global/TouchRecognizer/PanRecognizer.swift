@@ -52,8 +52,9 @@ class PanRecognizer: TouchRecognizer {
     }
 
     private func recognized(recognizerTouch: RecognizerTouch) {
-        if let recognizerTouch = self.recognizerTouch {
-            TouchLogics.default.cancelled(recognizerTouch.touch)
+        if let pRecognizerTouch = self.recognizerTouch {
+            TouchManager.default.recognizerCancelled(recognizer: self,
+                                                     recognizerTouch: pRecognizerTouch)
         }
 
         TouchManager.default.removePossible(from: recognizerTouch) {
@@ -72,10 +73,11 @@ class PanRecognizer: TouchRecognizer {
 
         switch self.recognizerTouch!.touchResponder! {
         case is InfoWindow:
-            panLogic = InfoWindowPanLogic(touch: self.recognizerTouch!.touch)
+            panLogic = InfoWindowPanLogic(touch: self.recognizerTouch!.touch,
+                                          scene: self.scene)
         default:
             panLogic = FieldPanLogic(touch: self.recognizerTouch!.touch,
-                                              scene: self.scene)
+                                     scene: self.scene)
         }
 
         TouchLogics.default.add(panLogic)

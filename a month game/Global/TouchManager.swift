@@ -255,10 +255,9 @@ class TouchManager {
             return false
         }
 
-        TouchLogics.default.cancelled(recognizerTouch.touch)
-
         if let pRecognizer = recognizerTouch.recognizer {
-            pRecognizer.free(recognizerTouch: recognizerTouch)
+            self.recognizerCancelled(recognizer: pRecognizer,
+                                     recognizerTouch: recognizerTouch)
         }
 
         recognizerTouch.recognizer = recognizer
@@ -306,6 +305,14 @@ class TouchManager {
         recognizerTouch.recognizer = nil
 
         TouchLogics.default.cancelled(recognizerTouch.touch)
+    }
+
+    // MARK: recognizer
+    func recognizerCancelled(recognizer: TouchRecognizer,
+                             recognizerTouch: RecognizerTouch) {
+        TouchLogics.default.cancelled(recognizerTouch.touch)
+        recognizer.free(recognizerTouch: recognizerTouch)
+        recognizerTouch.recognizer = nil
     }
 
     // MARK: - facade

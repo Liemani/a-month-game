@@ -216,7 +216,8 @@ extension WorldScene: TouchResponder {
 
     func isRespondable(with type: TouchRecognizer.Type) -> Bool {
         switch type {
-        case is TapRecognizer.Type:
+        case is TapRecognizer.Type,
+            is PanRecognizer.Type:
             return true
         default:
             return false
