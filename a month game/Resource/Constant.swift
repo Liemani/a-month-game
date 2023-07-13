@@ -123,6 +123,9 @@ struct Constant {
         static let resetButton = CGRect(
             origin: Constant.resetButtonNodePosition,
             size: Constant.resetButtonNodeSize)
+        static let worldMenuBackgroundButton = CGRect(
+            origin: sceneCenter,
+            size: sceneSize)
         static let exitWorldButton = CGRect(
             origin: Constant.sceneCenter,
             size: Constant.exitWorldButtonNodeSize)
@@ -174,10 +177,12 @@ struct Constant {
         .pickaxe: [.stone: 1, .woodStick: 1],
         .shovel: [.stone: 1, .woodStick: 1],
         .sickle: [.stone: 1, .woodStick: 1],
+        .saw: [.stone: 1, .woodStick: 1],
 
         // MARK: container
         .leafBag: [.weedLeaves: 4],
         .vineBasket: [.vineStem: 4],
+        .woodenBox: [.woodBoard: 4],
     ]
 
     // MARK: - etc

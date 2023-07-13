@@ -41,14 +41,17 @@ enum GameObjectType: Int, CaseIterable {
     case vineStem
     case woodStick
     case woodLog
+    case woodBoard
     case treeOakSeed
     case pineCone
     case axe
     case shovel
     case pickaxe
     case sickle
+    case saw
     case leafBag
     case vineBasket
+    case woodenBox
 
     init?(from goMO: GameObjectMO) {
         self.init(rawValue: goMO.type)
@@ -77,14 +80,17 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_vine_stem", 1.0, 0, 1, false, true),
         ("game_object_wood_stick", 1.0, 0, 1, false, true),
         ("game_object_wood_log", 1.0, 0, 1, false, true),
+        ("game_object_wood_board", 1.0, 0, 1, false, true),
         ("game_object_tree_oak_seed", 1.0, 0, 1, false, true),
         ("game_object_pine_cone", 1.0, 0, 1, false, true),
         ("game_object_axe", 1.0, 0, 1, false, true),
         ("game_object_shovel", 1.0, 0, 1, false, true),
         ("game_object_pickaxe", 1.0, 0, 1, false, true),
         ("game_object_sickle", 1.0, 0, 1, false, true),
+        ("game_object_saw", 1.0, 0, 1, false, true),
         ("game_object_leaf_bag", 1.0, 2, 1, false, true),
         ("game_object_vine_basket", 1.0, 3, 1, false, true),
+        ("game_object_wooden_box", 1.0, 4, 1, false, true),
     ]
 
     private static let textures: [[SKTexture]] = ({
@@ -124,7 +130,7 @@ enum GameObjectType: Int, CaseIterable {
     var textures: [SKTexture] { GameObjectType.textures[self.rawValue] }
 
     var invCapacity: Int { self.resources[self.rawValue].invCapacity }
-    var isInv: Bool { self.invCapacity != 0 }
+    var isContainer: Bool { self.invCapacity != 0 }
 
     var layerCount: Int { self.resources[self.rawValue].layerCount }
     

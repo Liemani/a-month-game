@@ -19,12 +19,16 @@ class InfoWindowLogic {
     func openCharacterInfo() {
         self.infoWindow.isHidden = false
 
-        let content = Logics.default.mastery.description
-        self.infoWindow.setText(content)
+        self.updateCharacterInfo()
 
-        let y = self.infoWindow.path!.boundingBox.size.height / 2.0 + Constant.defaultWidth
+        let y = self.infoWindow.frame.height / 2.0 + Constant.defaultWidth
         self.infoWindow.position = CGPoint(x: Constant.sceneCenter.x,
                                            y: Constant.sceneCenter.y + y)
+    }
+
+    func updateCharacterInfo() {
+        let content = Logics.default.mastery.description
+        self.infoWindow.setText(content)
     }
 
     func displayGOInfo(node: SKNode) {
@@ -39,7 +43,7 @@ class InfoWindowLogic {
     }
 
     func scrollEnded() {
-        self.infoWindow.scrollEnded()
+        self.infoWindow.moveBackToContent()
     }
 
     func removeAllActions() {

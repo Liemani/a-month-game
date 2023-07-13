@@ -13,14 +13,17 @@ class MenuWindow: SKNode {
     override init() {
         super.init()
 
-        // TODO: move to background(have to implement new class)
         self.zPosition = Constant.ZPosition.menuWindow
 
-        let background = SKSpriteNode(color: .black, size: Constant.sceneSize)
-        background.position = Constant.sceneCenter
-        background.zPosition = -1.0
-        background.alpha = 0.5
-        self.addChild(background)
+        let backgroundButton = Button(texture: nil,
+                                      frame: Constant.Frame.worldMenuBackgroundButton,
+                                      text: nil,
+                                      eventType: WorldEventType.menuBackgroundButton)
+        backgroundButton.color = .black
+        backgroundButton.zPosition = -1.0
+        backgroundButton.alpha = 0.5
+        backgroundButton.shouldActivated = false
+        self.addChild(backgroundButton)
 
         let texture = SKTexture(imageNamed: Constant.ResourceName.button)
         let exitButton = Button(texture: texture,

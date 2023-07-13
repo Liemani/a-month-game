@@ -8,7 +8,7 @@
 import Foundation
 import SpriteKit
 
-class FieldPanLogic: TouchLogic {
+class WorldPanLogic: TouchLogic {
 
     var touch: UITouch { self.touches[0] }
 

@@ -18,21 +18,25 @@ class GameObjectLogic {
     
     func interact(_ go: GameObject) {
         if let handler = self.interactionLogic.go[go.type] {
-            handler(self.interactionLogic, go)
+            if handler(self.interactionLogic, go) {
+                return
+            }
         }
 
-        if go.type.isInv {
+        if go.type.isContainer {
             Logics.default.scene.containerInteract(go)
         }
     }
 
     func interactToGO(_ go: GameObject, to target: GameObject) {
         if let handler = self.interactionLogic.goToGO[target.type] {
-            handler(self.interactionLogic, go, target)
+            if handler(self.interactionLogic, go, target) {
+                return
+            }
         }
 
-        if target.type.isInv {
-            if go.type.isInv {
+        if target.type.isContainer {
+            if go.type.isContainer {
                 Logics.default.scene.containerTransfer(go, to: target)
             } else {
                 Logics.default.scene.gameObjectInteractContainer(go, to: target)
@@ -41,8 +45,7 @@ class GameObjectLogic {
             return
         }
 
-        if go.isExist,
-           target.type.isTile,
+        if target.type.isTile,
            let targetCoord = target.chunkCoord {
             self.move(go, to: targetCoord)
 
@@ -105,7 +108,7 @@ class GameObjectLogic {
         }
     }
 
-    func remove(_ go: GameObject) {
+    func delete(_ go: GameObject) {
         self.removeFromParent(go)
         go.delete()
     }

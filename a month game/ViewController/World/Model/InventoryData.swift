@@ -19,6 +19,8 @@ class InventoryData {
     var count: Int { self.goDatas.count }
     var space: Int { self.capacity - self.count }
 
+    var isEmpty: Bool { self.count == 0 }
+
     init() {
         self.goDatas = [:]
 

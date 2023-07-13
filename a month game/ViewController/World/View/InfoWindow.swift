@@ -106,7 +106,7 @@ class InfoWindow: SKShapeNode {
     func setText(_ text: String) {
         self.label.text = text
 
-        self.content.position.y = self.contentPositionYMin
+        self.moveBackToContent()
     }
 
     func hide() {
@@ -125,7 +125,7 @@ class InfoWindow: SKShapeNode {
         }
     }
 
-    func scrollEnded() {
+    func moveBackToContent() {
         var action: SKAction
 
         if self.content.position.y < self.contentPositionYMin {

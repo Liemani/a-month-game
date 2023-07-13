@@ -51,6 +51,9 @@
 		036FE5202A41A73A007E66A5 /* Chunk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE51F2A41A73A007E66A5 /* Chunk.swift */; };
 		036FE5222A429E8D007E66A5 /* ChunkContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE5212A429E8D007E66A5 /* ChunkContainer.swift */; };
 		036FE52C2A43136B007E66A5 /* tiny_homeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */; };
+		037782F82A5FD70700E3D724 /* MasteryTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782F72A5FD70700E3D724 /* MasteryTableCell.swift */; };
+		037782FA2A5FD71A00E3D724 /* InfoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782F92A5FD71A00E3D724 /* InfoTable.swift */; };
+		037782FC2A5FE00400E3D724 /* CraftLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782FB2A5FE00400E3D724 /* CraftLogic.swift */; };
 		03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C002A4E7C1700462804 /* PinchRecognizer.swift */; };
 		03796C032A4EA92B00462804 /* PanRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C022A4EA92B00462804 /* PanRecognizer.swift */; };
 		03796C062A4FC9EE00462804 /* GameObjectTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */; };
@@ -122,7 +125,7 @@
 		03FEA1EC2A5C2E3D00AF4DDB /* InfoWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */; };
 		03FEA1EE2A5C364200AF4DDB /* InfoWindownLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */; };
 		03FEA1F02A5D2E5C00AF4DDB /* CharacterTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */; };
-		03FEA1F42A5D3B7A00AF4DDB /* FieldPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */; };
+		03FEA1F42A5D3B7A00AF4DDB /* WorldPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */; };
 		03FEA1F82A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */; };
 		03FEA1FA2A5D3E1600AF4DDB /* ButtonTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1F92A5D3E1600AF4DDB /* ButtonTapLogic.swift */; };
 		03FEA1FD2A5D9A7600AF4DDB /* ScenePinchLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */; };
@@ -185,6 +188,9 @@
 		036FE5212A429E8D007E66A5 /* ChunkContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainer.swift; sourceTree = "<group>"; };
 		036FE5292A43136B007E66A5 /* tiny_homeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tiny_homeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		036FE52B2A43136B007E66A5 /* tiny_homeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tiny_homeTests.swift; sourceTree = "<group>"; };
+		037782F72A5FD70700E3D724 /* MasteryTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryTableCell.swift; sourceTree = "<group>"; };
+		037782F92A5FD71A00E3D724 /* InfoTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTable.swift; sourceTree = "<group>"; };
+		037782FB2A5FE00400E3D724 /* CraftLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftLogic.swift; sourceTree = "<group>"; };
 		03796C002A4E7C1700462804 /* PinchRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRecognizer.swift; sourceTree = "<group>"; };
 		03796C022A4EA92B00462804 /* PanRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanRecognizer.swift; sourceTree = "<group>"; };
 		03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectTapLogic.swift; sourceTree = "<group>"; };
@@ -257,7 +263,7 @@
 		03FEA1EB2A5C2E3D00AF4DDB /* InfoWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindow.swift; sourceTree = "<group>"; };
 		03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindownLogic.swift; sourceTree = "<group>"; };
 		03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterTapLogic.swift; sourceTree = "<group>"; };
-		03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldPanLogic.swift; sourceTree = "<group>"; };
+		03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldPanLogic.swift; sourceTree = "<group>"; };
 		03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoWindowPanLogic.swift; sourceTree = "<group>"; };
 		03FEA1F92A5D3E1600AF4DDB /* ButtonTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonTapLogic.swift; sourceTree = "<group>"; };
 		03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinchLogic.swift; sourceTree = "<group>"; };
@@ -459,6 +465,8 @@
 		033D69092A41447C005D3CB0 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				037782F72A5FD70700E3D724 /* MasteryTableCell.swift */,
+				037782F92A5FD71A00E3D724 /* InfoTable.swift */,
 				03C65E212A45D32D0042BF22 /* GameObjectMoveTouchEventHandler.swift */,
 				031AA8062A24F20E0017EFCD /* LMISpriteNode.swift */,
 				030261252A3C71FC0050E697 /* LMINode.swift */,
@@ -602,7 +610,7 @@
 				03FEA1EF2A5D2E5C00AF4DDB /* CharacterTapLogic.swift */,
 				03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */,
 				03796C092A50083E00462804 /* FieldTapLogic.swift */,
-				03FEA1F32A5D3B7A00AF4DDB /* FieldPanLogic.swift */,
+				03FEA1F32A5D3B7A00AF4DDB /* WorldPanLogic.swift */,
 				03FEA1FC2A5D9A7600AF4DDB /* ScenePinchLogic.swift */,
 				03FEA1F72A5D3B9B00AF4DDB /* InfoWindowPanLogic.swift */,
 				03796C0B2A501C6100462804 /* InventoryTapLogic.swift */,
@@ -617,6 +625,7 @@
 			children = (
 				03F6CD2E2A57A72500403EAF /* Logics.swift */,
 				03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */,
+				037782FB2A5FE00400E3D724 /* CraftLogic.swift */,
 				0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */,
 				03FEA1FE2A5D9F7800AF4DDB /* WorldLogic.swift */,
 				03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */,
@@ -777,6 +786,7 @@
 				03796C062A4FC9EE00462804 /* GameObjectTapLogic.swift in Sources */,
 				03F7A2622A39E6420061E030 /* Services.swift in Sources */,
 				0302612C2A3DBA530050E697 /* TapRecognizer.swift in Sources */,
+				037782F82A5FD70700E3D724 /* MasteryTableCell.swift in Sources */,
 				03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */,
 				03FEA1BB2A5B04E300AF4DDB /* InteractionMasteryRepository.swift in Sources */,
 				030261242A3C56E40050E697 /* MovingLayer.swift in Sources */,
@@ -804,12 +814,13 @@
 				038330AA2A02850A008DEA10 /* PortalViewController.swift in Sources */,
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				03C65E2B2A46B04E0042BF22 /* FrameCycleUpdateManager.swift in Sources */,
-				03FEA1F42A5D3B7A00AF4DDB /* FieldPanLogic.swift in Sources */,
+				03FEA1F42A5D3B7A00AF4DDB /* WorldPanLogic.swift in Sources */,
 				030ABFCB2A0F2E0800BAB9B8 /* GameObjectDataSource.swift in Sources */,
 				0304D76B2A57ED960068DE99 /* ChunkContainerLogic.swift in Sources */,
 				03FEA1B52A5AF16400AF4DDB /* InteractionMasteryData.swift in Sources */,
 				03C65E1A2A446FA10042BF22 /* WorldEventManager.swift in Sources */,
 				0392E9342A3C1ABD001C22C4 /* TileRepository.swift in Sources */,
+				037782FA2A5FD71A00E3D724 /* InfoTable.swift in Sources */,
 				0304D7752A5954830068DE99 /* InventoryData.swift in Sources */,
 				034A07352A5ABC2A0034D657 /* GameObjectDataLogic.swift in Sources */,
 				03FEA1E82A5BF00600AF4DDB /* Particle.swift in Sources */,
@@ -828,6 +839,7 @@
 				030261262A3C71FC0050E697 /* LMINode.swift in Sources */,
 				03FEA1C12A5BC46000AF4DDB /* MasteryTable.swift in Sources */,
 				03FEA1B92A5AF42400AF4DDB /* InteractionMasteryService.swift in Sources */,
+				037782FC2A5FE00400E3D724 /* CraftLogic.swift in Sources */,
 				033C9E612A1C2D83000E1D50 /* Inventory.swift in Sources */,
 				03FEA1EA2A5C0AFC00AF4DDB /* LongTouchRecognizer.swift in Sources */,
 				03CE3AE52A3DEBCC00D95152 /* InventoryCoordinate.swift in Sources */,

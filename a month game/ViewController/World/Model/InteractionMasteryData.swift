@@ -37,7 +37,9 @@ class InteractionMasteryData {
 
         if newExp >= MasteryTable.table[self.lv].expForNextLv {
             self.mo.update(lv: self.lv + 1)
+            Logics.default.infoWindow.updateCharacterInfo()
         }
+        
         self.mo.update(exp: newExp)
     }
 

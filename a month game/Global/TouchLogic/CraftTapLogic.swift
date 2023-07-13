@@ -41,18 +41,7 @@ class CraftTapLogic: TouchLogic {
             return
         }
 
-        let consumeTargets = self.craftObject.consumeTargets
-        var sum = 0.0
-
-        for go in consumeTargets {
-            Logics.default.go.remove(go)
-            sum += go.quality
-        }
-
-        let emptyCoord = Logics.default.invContainer.emptyCoord!
-        Logics.default.go.new(type: self.craftObject.goType,
-                                      quality: sum / Double(consumeTargets.count),
-                                      coord: emptyCoord)
+        Logics.default.craft.craft(self.craftObject)
 
         self.complete()
     }

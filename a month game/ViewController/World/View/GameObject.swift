@@ -23,8 +23,6 @@ class GameObject: SKSpriteNode {
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
 
-    var isExist: Bool { self.parent != nil }
-
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
 
@@ -144,6 +142,26 @@ class GameObject: SKSpriteNode {
 
     func removeHighlight() {
         self.colorBlendFactor = 0.0
+    }
+
+    func emphasizeUsing() {
+        guard !self.hasActions() else {
+            return
+        }
+
+        var action = SKAction.sequence([
+            SKAction.rotate(toAngle: Double.pi / 6.0, duration: 0.2),
+            SKAction.rotate(toAngle: 0, duration: 0.2),
+        ])
+
+        self.run(action)
+
+        action = SKAction.sequence([
+            SKAction.scale(to: 1.1, duration: 0.2),
+            SKAction.scale(to: 1.0, duration: 0.2),
+        ])
+
+        self.run(action)
     }
 
     // MARK: -

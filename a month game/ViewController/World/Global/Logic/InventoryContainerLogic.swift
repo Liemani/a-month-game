@@ -97,4 +97,29 @@ class InventoryContainerLogic {
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
+    func isEmpty(_ id: Int) -> Bool {
+        if let sourceInvData = Logics.default.invContainer.inv(id: id)?.data {
+            return sourceInvData.isEmpty
+        } else {
+            let goDatas = Services.default.invServ.load(id: id)
+            return goDatas.isEmpty
+        }
+    }
+
+    func deleteAll(_ id: Int) {
+        if let sourceInvData = Logics.default.invContainer.inv(id: id)?.data {
+            for goData in sourceInvData {
+                goData.delete()
+                sourceInvData.remove(goData)
+            }
+
+            sourceInvData.inv!.synchronizeData()
+        } else {
+            let goDatas = Services.default.invServ.load(id: id)
+            for goData in goDatas {
+                goData.delete()
+            }
+        }
+    }
+
 }
