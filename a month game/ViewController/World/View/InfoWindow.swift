@@ -18,8 +18,14 @@ class InfoWindow: SKShapeNode {
         return cropNode.maskNode!.frame.size
     }
 
-    var contenPositionYMin: Double { self.safeAreaSize.height / 2.0 }
-    var contenPositionYMax: Double { self.contenPositionYMin + self.label.frame.height - safeAreaSize.height }
+    var contentPositionYMin: Double { self.safeAreaSize.height / 2.0 }
+    var contentPositionYMax: Double {
+        let positionYMin = self.contentPositionYMin
+        let positionYMax = positionYMin
+            + self.label.frame.height
+            - safeAreaSize.height
+        return max(positionYMin, positionYMax)
+    }
 
     override init() {
         self.content = SKNode()
@@ -100,7 +106,7 @@ class InfoWindow: SKShapeNode {
     func setText(_ text: String) {
         self.label.text = text
 
-        self.content.position.y = self.contenPositionYMin
+        self.content.position.y = self.contentPositionYMin
     }
 
     func hide() {
@@ -111,8 +117,8 @@ class InfoWindow: SKShapeNode {
     func scrolled(_ diff: Double) {
         let positionY = self.content.position.y
 
-        if positionY <= self.contenPositionYMin
-            || self.contenPositionYMax <= positionY {
+        if positionY <= self.contentPositionYMin
+            || self.contentPositionYMax <= positionY {
             self.content.position.y += diff / 2.0
         } else {
             self.content.position.y += diff
@@ -120,7 +126,18 @@ class InfoWindow: SKShapeNode {
     }
 
     func scrollEnded() {
+        var action: SKAction
 
+        if self.content.position.y < self.contentPositionYMin {
+            action = SKAction.moveTo(y: self.contentPositionYMin, duration: 0.1)
+        } else if self.contentPositionYMax < self.content.position.y {
+            action = SKAction.moveTo(y: self.contentPositionYMax, duration: 0.1)
+        } else {
+            return
+        }
+
+        action.timingMode = .easeOut
+        self.content.run(action)
     }
 
 }

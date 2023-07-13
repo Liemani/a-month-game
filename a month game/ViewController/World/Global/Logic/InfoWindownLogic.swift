@@ -42,4 +42,8 @@ class InfoWindowLogic {
         self.infoWindow.scrollEnded()
     }
 
+    func removeAllActions() {
+        self.infoWindow.removeAllActions()
+    }
+
 }

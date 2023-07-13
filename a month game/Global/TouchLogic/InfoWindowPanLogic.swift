@@ -23,7 +23,7 @@ class InfoWindowPanLogic: TouchLogic {
     }
 
     override func began() {
-//        reset move action
+        Logics.default.infoWindow.removeAllActions()
     }
 
     override func moved() {

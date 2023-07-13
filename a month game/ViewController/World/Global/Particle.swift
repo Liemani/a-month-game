@@ -16,7 +16,9 @@ class Particle {
         particle.strokeColor = .black
         particle.zPosition = Constant.ZPosition.particle
 
-        particle.run(SKAction.repeatForever(SKAction.moveTo(y: Constant.defaultWidth / 2.0, duration: 0.3)))
+        particle.run(SKAction.repeatForever(SKAction.moveTo(
+            y: Constant.defaultWidth / 2.0,
+            duration: 0.3)))
         particle.run(SKAction.sequence([SKAction.wait(forDuration: 0.2),
                                         SKAction.fadeOut(withDuration: 0.2),
                                         SKAction.removeFromParent()]))
