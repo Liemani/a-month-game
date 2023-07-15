@@ -446,11 +446,12 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+-
+all region has same noise
 something crash when move another chunk
 something case pinch not working
 field tap but end with outside the world? crash?
 
--
 move global/model -> world/service
 
 what about removing goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
