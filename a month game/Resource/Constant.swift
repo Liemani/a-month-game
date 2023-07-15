@@ -150,6 +150,7 @@ struct Constant {
         static let gameObjectEntity = "GameObjectMO"
         static let invCoordinateEntity = "InventoryCoordinateMO"
         static let chunkCoordinateEntity = "ChunkCoordinateMO"
+        static let chunkIsGeneratedEntity = "ChunkIsGeneratedMO"
         static let interactionMasteryEntity = "InteractionMasteryMO"
         static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
         static let craftMasteryEntity = "CraftMasteryMO"
@@ -189,6 +190,9 @@ struct Constant {
     static let tileCountOfChunkSide: Int = 16
     static let tileMapSide: Int = tileCountOfChunkSide * 3
     static let chunkWidth: Double = tileWidth * Double(tileCountOfChunkSide)
+
+    static let chunkCountOfRegionSide: Int = 16
+    static let tileCountOfRegionSide = chunkCountOfRegionSide * tileCountOfChunkSide
 
     static let velocityDamping = 1000.0
     static let velocityFrictionRatioPerSec = 0.001

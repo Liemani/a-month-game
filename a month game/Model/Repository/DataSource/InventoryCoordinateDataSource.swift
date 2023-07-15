@@ -18,12 +18,14 @@ class InventoryCoordinateDataSource {
 
     func new() -> InventoryCoordinateMO {
         let entityName = Constant.Name.invCoordinateEntity
-        let invCoordMO = NSEntityDescription.insertNewObject(forEntityName: entityName, into: self.moContext) as! InventoryCoordinateMO
+        let invCoordMO = NSEntityDescription.insertNewObject(
+            forEntityName: entityName, into: self.moContext) as! InventoryCoordinateMO
         return invCoordMO
     }
 
     func load(id: Int) -> [InventoryCoordinateMO] {
-        let request = NSFetchRequest<InventoryCoordinateMO>(entityName: Constant.Name.invCoordinateEntity)
+        let request = NSFetchRequest<InventoryCoordinateMO>(
+            entityName: Constant.Name.invCoordinateEntity)
         request.predicate = NSPredicate(format: "id == %@", argumentArray: [id])
 
         let invCoordMOs = try! self.moContext.fetch(request)

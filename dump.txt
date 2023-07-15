@@ -446,13 +446,18 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+something crash when move another chunk
+something case pinch not working
+field tap but end with outside the world? crash?
+
 -
-more bigger container
-    add saw
-    add wood board
-    add wood box -> 4
+move global/model -> world/service
+
+what about removing goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
 
 barley
+
+remove specific time last game object
 
 what about
     remember open character inventory container and open when enter world
@@ -476,33 +481,38 @@ shallow water
 container
     another image for empty, normal, full
 
-add
-    sickle
-    saw
-    board
-    block
-    wood box
-dirt to clay tile will make dirt tile removing dirt
 add oak tree sapling
-double click -> interaction or consume
-    field GO also can be activated
 implement underground
 remove GO when put to water
-draw
-    log, leaves
-create tree
-inventory in characterInv
-    add leaf bag
-만약 한 청크를 건너 뛸 정도로 빠르게 이동하면 터지지 않을까?
-    한 청크 이상을 건너는 속도는 불가능하도록 제한한다
 지상 및 지하를 미리 로딩해둔다
 타일간 상호작용 구현
 menu button -> cancel all gesture
 캐릭터 이미지 추가하기
     옆에서 보는 이미지가 좋겠다
+
 world generator
     generate in chunk unit dynamically
     sea
+
+func base(chunkCoord: ChunkCoordinate) -> Double {
+    let absY = abs(chunkCoord.y)
+
+    if absY < (Int.max >> 1) {
+        return -1.0
+    }
+
+    return (Double(absY - (Int.max >> 1)) / Double(Int.max >> 2)) - 1.0
+}
+
+add haptic
+
+한 쪽이 + 면 다른 쪽은 - 인 것은 재미 없다
+밀도가 다르다
+나는 어느 정도의 밀도를 원하는가?
+월드 끝에서 끝까지 몇 번이나 반복되면 좋겠는가?
+즉, 세세한 것은 랜덤이지만 큰 틀에서는 조절되야 한다
+
+random generator
 
 mastery
 brick
@@ -718,6 +728,27 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+draw
+    log, leaves
+create tree
+inventory in characterInv
+    add leaf bag
+만약 한 청크를 건너 뛸 정도로 빠르게 이동하면 터지지 않을까?
+    한 청크 이상을 건너는 속도는 불가능하도록 제한한다
+double click -> interaction or consume
+    field GO also can be activated
+dirt to clay tile will make dirt tile removing dirt
+add
+    sickle
+    saw
+    board
+    block
+    wood box
+more bigger container
+    add saw
+    add wood board
+    add wood box -> 4
+
 check
     Is it safe moving chunk diagonally?
 

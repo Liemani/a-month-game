@@ -54,6 +54,10 @@
 		037782F82A5FD70700E3D724 /* MasteryTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782F72A5FD70700E3D724 /* MasteryTableCell.swift */; };
 		037782FA2A5FD71A00E3D724 /* InfoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782F92A5FD71A00E3D724 /* InfoTable.swift */; };
 		037782FC2A5FE00400E3D724 /* CraftLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782FB2A5FE00400E3D724 /* CraftLogic.swift */; };
+		037782FE2A62253800E3D724 /* MapGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782FD2A62253700E3D724 /* MapGenerator.swift */; };
+		037783002A623F9500E3D724 /* ChunkIsGeneratedDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037782FF2A623F9500E3D724 /* ChunkIsGeneratedDataSource.swift */; };
+		037783022A6242A600E3D724 /* ChunkIsGeneratedRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037783012A6242A600E3D724 /* ChunkIsGeneratedRepository.swift */; };
+		037783062A625FD100E3D724 /* GameObjectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037783052A625FD100E3D724 /* GameObjectService.swift */; };
 		03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C002A4E7C1700462804 /* PinchRecognizer.swift */; };
 		03796C032A4EA92B00462804 /* PanRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C022A4EA92B00462804 /* PanRecognizer.swift */; };
 		03796C062A4FC9EE00462804 /* GameObjectTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */; };
@@ -191,6 +195,10 @@
 		037782F72A5FD70700E3D724 /* MasteryTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasteryTableCell.swift; sourceTree = "<group>"; };
 		037782F92A5FD71A00E3D724 /* InfoTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoTable.swift; sourceTree = "<group>"; };
 		037782FB2A5FE00400E3D724 /* CraftLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftLogic.swift; sourceTree = "<group>"; };
+		037782FD2A62253700E3D724 /* MapGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapGenerator.swift; sourceTree = "<group>"; };
+		037782FF2A623F9500E3D724 /* ChunkIsGeneratedDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkIsGeneratedDataSource.swift; sourceTree = "<group>"; };
+		037783012A6242A600E3D724 /* ChunkIsGeneratedRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkIsGeneratedRepository.swift; sourceTree = "<group>"; };
+		037783052A625FD100E3D724 /* GameObjectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectService.swift; sourceTree = "<group>"; };
 		03796C002A4E7C1700462804 /* PinchRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRecognizer.swift; sourceTree = "<group>"; };
 		03796C022A4EA92B00462804 /* PanRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanRecognizer.swift; sourceTree = "<group>"; };
 		03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectTapLogic.swift; sourceTree = "<group>"; };
@@ -328,6 +336,7 @@
 				0392E9352A3C1E94001C22C4 /* GameObjectRepository.swift */,
 				0347BA772A481BAB00E31FA1 /* InventoryRepository.swift */,
 				033D68FB2A4050BD005D3CB0 /* ChunkRepository.swift */,
+				037783012A6242A600E3D724 /* ChunkIsGeneratedRepository.swift */,
 				033D68FF2A413B14005D3CB0 /* DataSource */,
 			);
 			path = Repository;
@@ -370,6 +379,7 @@
 			children = (
 				0392E92F2A3B3E8E001C22C4 /* WorldGenerator.swift */,
 				033D68EF2A3EE5DD005D3CB0 /* ChunkService.swift */,
+				037783052A625FD100E3D724 /* GameObjectService.swift */,
 				03FEA1B82A5AF42400AF4DDB /* InteractionMasteryService.swift */,
 				03FEA1AC2A5ADE3500AF4DDB /* GOInteractionMasteryService.swift */,
 				03FEA1AE2A5ADFA500AF4DDB /* CraftMasteryService.swift */,
@@ -392,6 +402,7 @@
 				030ABFCA2A0F2E0800BAB9B8 /* GameObjectDataSource.swift */,
 				03CE3AF22A3E0DFD00D95152 /* InventoryCoordinateDataSource.swift */,
 				03CE3AEE2A3DFDD700D95152 /* ChunkCoordinateDataSource.swift */,
+				037782FF2A623F9500E3D724 /* ChunkIsGeneratedDataSource.swift */,
 			);
 			path = DataSource;
 			sourceTree = "<group>";
@@ -590,6 +601,7 @@
 				03F7A2612A39E6420061E030 /* Services.swift */,
 				03C65E192A446FA10042BF22 /* WorldEventManager.swift */,
 				03C65E2A2A46B04E0042BF22 /* FrameCycleUpdateManager.swift */,
+				037782FD2A62253700E3D724 /* MapGenerator.swift */,
 				03FEA1E72A5BF00600AF4DDB /* Particle.swift */,
 				03F6CD322A57AA4800403EAF /* Logic */,
 			);
@@ -786,6 +798,8 @@
 				03796C062A4FC9EE00462804 /* GameObjectTapLogic.swift in Sources */,
 				03F7A2622A39E6420061E030 /* Services.swift in Sources */,
 				0302612C2A3DBA530050E697 /* TapRecognizer.swift in Sources */,
+				037783022A6242A600E3D724 /* ChunkIsGeneratedRepository.swift in Sources */,
+				037782FE2A62253800E3D724 /* MapGenerator.swift in Sources */,
 				037782F82A5FD70700E3D724 /* MasteryTableCell.swift in Sources */,
 				03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */,
 				03FEA1BB2A5B04E300AF4DDB /* InteractionMasteryRepository.swift in Sources */,
@@ -804,6 +818,7 @@
 				030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */,
 				03D42BD92A4D5D4D00ACB90E /* PortalEventManager.swift in Sources */,
 				039037CD2A17AB3E0014A571 /* Coordinate.swift in Sources */,
+				037783002A623F9500E3D724 /* ChunkIsGeneratedDataSource.swift in Sources */,
 				0347BA742A46E68500E31FA1 /* Address.swift in Sources */,
 				03F7A2662A39EBCC0061E030 /* WorldDirectoryUtility.swift in Sources */,
 				0304D76F2A57FF1D0068DE99 /* SceneLogic.swift in Sources */,
@@ -860,6 +875,7 @@
 				031D57562A076DC8007EF383 /* CharacterData.swift in Sources */,
 				03FEA1BF2A5B066D00AF4DDB /* CraftMasteryRepository.swift in Sources */,
 				033D68F02A3EE5DD005D3CB0 /* ChunkService.swift in Sources */,
+				037783062A625FD100E3D724 /* GameObjectService.swift in Sources */,
 				03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */,
 				03796C0C2A501C6100462804 /* InventoryTapLogic.swift in Sources */,
 				03FEA1A72A5AC99700AF4DDB /* CraftMasteryDataSource.swift in Sources */,

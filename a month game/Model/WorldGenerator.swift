@@ -10,15 +10,10 @@ import Foundation
 final class WorldGenerator {
 
     static func generate(worldName: String) {
-        FileUtility.default.createCharacterDirIfNotExist()
+        let worldGenerator = WorldGenerator()
 
-        if (!FileUtility.default.isWorldDirExist(worldName: worldName)) {
-            Services.set(worldName: worldName)
-
-            let worldGenerator = WorldGenerator()
-            worldGenerator.generateWorldData(worldName: worldName)
-            worldGenerator.generateGOMOs()
-        }
+        worldGenerator.generateWorldData(worldName: worldName)
+//        worldGenerator.generateGOMOs()
     }
 
     private func generateWorldData(worldName: String) {
@@ -71,14 +66,8 @@ final class WorldGenerator {
     }
 
     private func new(type goType: GameObjectType, x: Int, y: Int) {
-        let id = Services.default.idGeneratorServ.generate()
-        let goMO = Services.default.goRepo.new(id: id,
-                                                       type: goType,
-                                                       variant: 0,
-                                                       quality: 0.0,
-                                                       state: [])
         let chunkCoord = ChunkCoordinate(x, y)
-        goMO.update(to: chunkCoord)
+        _ = Services.default.goServ.newMO(type: goType, coord: chunkCoord)
     }
 
 }

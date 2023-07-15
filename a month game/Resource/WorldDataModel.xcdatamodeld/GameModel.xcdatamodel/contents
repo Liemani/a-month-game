@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="ChunkCoordinateMO" representedClassName="ChunkCoordinateMO" syncable="YES" codeGenerationType="class">
-        <attribute name="location" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="address" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="x" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="y" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="gameObjectMO" maxCount="1" deletionRule="Nullify" destinationEntity="GameObjectMO" inverseName="chunkCoord" inverseEntity="GameObjectMO"/>
+    </entity>
+    <entity name="ChunkIsGeneratedMO" representedClassName="ChunkIsGeneratedMO" syncable="YES" codeGenerationType="class">
+        <attribute name="address" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="x" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="y" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="CraftMasteryMO" representedClassName="CraftMasteryMO" syncable="YES" codeGenerationType="class">
         <attribute name="dstTypeID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -44,5 +49,6 @@
         <memberEntity name="ChunkCoordinateMO"/>
         <memberEntity name="GameObjectMO"/>
         <memberEntity name="InventoryCoordinateMO"/>
+        <memberEntity name="ChunkIsGeneratedMO"/>
     </configuration>
 </model>

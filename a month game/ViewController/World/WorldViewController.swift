@@ -28,10 +28,20 @@ class WorldViewController: UIViewController {
         skView.showsFPS = true
         skView.showsNodeCount = true
 #endif
-        
-        WorldGenerator.generate(worldName: Constant.Name.defaultWorld)
 
-        Services.set(worldName: Constant.Name.defaultWorld)
+        let worldName = Constant.Name.defaultWorld
+
+        FileUtility.default.setUpEnvironment(worldName: worldName)
+        
+        if !FileUtility.default.isWorldDirExist(worldName: worldName) {
+            Services.set(worldName: worldName)
+            WorldGenerator.generate(worldName: Constant.Name.defaultWorld)
+        } else {
+            Services.set(worldName: worldName)
+        }
+
+        MapGenerator.set()
+
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
 
@@ -65,12 +75,14 @@ class WorldViewController: UIViewController {
 
     deinit {
         Services.free()
+        MapGenerator.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
 
         Logics.free()
 
         Particle.free()
+
     }
 
     // MARK: - transition

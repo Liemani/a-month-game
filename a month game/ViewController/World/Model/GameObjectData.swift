@@ -101,7 +101,7 @@ class GameObjectData {
         self._invCoord = nil
 
         if let chunkCoordMO = goMO.chunkCoord {
-            let chunkAddress = UInt16(truncatingIfNeeded: UInt32(bitPattern: chunkCoordMO.location))
+            let chunkAddress = UInt16(truncatingIfNeeded: UInt32(bitPattern: chunkCoordMO.address))
             self._chunkCoord = ChunkCoordinate(x: chunkCoordMO.x,
                                                y: chunkCoordMO.y,
                                                chunkAddress: chunkAddress)

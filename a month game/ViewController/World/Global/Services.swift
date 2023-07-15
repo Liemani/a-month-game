@@ -29,6 +29,7 @@ final class Services {
     let idGeneratorServ: IDGeneratorService
     let chunkServ: ChunkService
     let invServ: InventoryService
+    let goServ: GameObjectService
 
     let interactionMasteryRepo: InteractionMasteryRepository
     let goInteractionMasteryRepo: GOInteractionMasteryRepository
@@ -37,6 +38,7 @@ final class Services {
     let goRepo: GameObjectRepository
     let chunkRepo: ChunkRepository
     let invRepo: InventoryRepository
+    let chunkIsGeneratedRepo: ChunkIsGeneratedRepository
 
     let interactionMasteryDS: InteractionMasteryDataSource
     let goInteractionMasteryDS: GOInteractionMasteryDataSource
@@ -45,6 +47,7 @@ final class Services {
     let goDS: GameObjectDataSource
     let chunkCoordDS: ChunkCoordinateDataSource
     let invCoordDS: InventoryCoordinateDataSource
+    let chunkIsGeneratedDS: ChunkIsGeneratedDataSource
 
     let persistentContainer: LMIPersistentContainer
     let moContext: NSManagedObjectContext
@@ -82,6 +85,9 @@ final class Services {
         let invCoordDS = InventoryCoordinateDataSource(moContext)
         self.invCoordDS = invCoordDS
 
+        let chunkIsGeneratedDS = ChunkIsGeneratedDataSource(moContext)
+        self.chunkIsGeneratedDS = chunkIsGeneratedDS
+
         // MARK: repository
         let interactionMasteryRepo = InteractionMasteryRepository(interactionMasteryDS: interactionMasteryDS)
         self.interactionMasteryRepo = interactionMasteryRepo
@@ -111,6 +117,10 @@ final class Services {
             invCoordDS: invCoordDS)
         self.invRepo = invRepo
 
+        let chunkIsGeneratedRepo = ChunkIsGeneratedRepository(
+            chunkIsGeneratedDS: chunkIsGeneratedDS)
+        self.chunkIsGeneratedRepo = chunkIsGeneratedRepo
+
         // MARK: service
         let interactionMasteryServ = InteractionMasteryService(dataSource: interactionMasteryDS)
         self.interactionMasteryServ = interactionMasteryServ
@@ -129,6 +139,9 @@ final class Services {
 
         let invServ = InventoryService(inventoryRepo: invRepo)
         self.invServ = invServ
+
+        let goServ = GameObjectService()
+        self.goServ = goServ
 
 #if DEBUG
         print(worldDirURL)

@@ -39,17 +39,17 @@ class Chunk: SKNode {
         self.removeAllChildren()
         self.data.removeAll()
 
-        DispatchQueue.global(qos: .userInteractive).async {
+//        DispatchQueue.global(qos: .userInteractive).async {
             let goDatas = Services.default.chunkServ.load(at: chunkCoord)
             
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 for goData in goDatas {
                     let go = GameObject(from: goData)
 
                     self.add(go)
                 }
-            }
-        }
+//            }
+//        }
     }
 
 }

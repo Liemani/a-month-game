@@ -24,14 +24,29 @@ class FileUtility {
     }
 
     var characterDirURL: URL {
-        let characterDirURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: "character")
+        let characterDirURL = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask).first!.appending(path: "character")
         return characterDirURL
+    }
+
+    var worldDirURL: URL {
+        let worldDirURL = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask).first!.appending(path: "world")
+        return worldDirURL
     }
 
     func worldDirURL(of name: String) -> URL {
         let worldDirURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appending(path: "world")
         let currentWorldDirURL = worldDirURL.appending(path: name)
         return currentWorldDirURL
+    }
+
+    func setUpEnvironment(worldName: String) {
+        self.createCharacterDirIfNotExist()
+        self.createWorldDirIfNotExist()
+        self.createCurrentWorldDirIfNotExist(worldName: worldName)
     }
 
     func isWorldDirExist(worldName: String) -> Bool {
@@ -51,11 +66,26 @@ class FileUtility {
                                               withIntermediateDirectories: false)
     }
 
-    func createWorldDir(worldName: String) {
-        let worldDirURL = self.worldDirURL(of: worldName)
+    func createWorldDirIfNotExist() {
+        let worldDirURL = self.worldDirURL
+
+        guard !self.fileManager.fileExists(atPath: worldDirURL.path) else {
+            return
+        }
 
         try! self.fileManager.createDirectory(at: worldDirURL,
-                                              withIntermediateDirectories: true)
+                                              withIntermediateDirectories: false)
+    }
+
+    func createCurrentWorldDirIfNotExist(worldName: String) {
+        let currentWorldDirURL = self.worldDirURL(of: worldName)
+
+        guard !self.fileManager.fileExists(atPath: currentWorldDirURL.path) else {
+            return
+        }
+
+        try! self.fileManager.createDirectory(at: currentWorldDirURL,
+                                              withIntermediateDirectories: false)
     }
 
     func remove(worldName: String) {

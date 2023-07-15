@@ -57,14 +57,18 @@ class ChunkContainer: SKNode {
     }
 
     private func setUpChunks(direction: Direction9) {
-        let chunkOffset = direction.coordOfAChunk
-        let tartgetChunkCoord = self.character.chunkChunkCoord + chunkOffset
+        var tartgetChunkCoord = self.character.chunkChunkCoord
+        tartgetChunkCoord.address.tile.rawCoord = Coordinate(0, 0)
+        tartgetChunkCoord += direction.coordOfAChunk
+
         self.chunks[direction].setUp(chunkCoord: tartgetChunkCoord)
     }
 
     private func loadChunk(direction: Direction9) {
-        let chunkOffset = direction.coordOfAChunk
-        let tartgetChunkCoord = self.character.chunkChunkCoord + chunkOffset
+        var tartgetChunkCoord = self.character.chunkChunkCoord
+        tartgetChunkCoord.address.tile.rawCoord = Coordinate(0, 0)
+        tartgetChunkCoord += direction.coordOfAChunk
+
         self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
 
