@@ -468,6 +468,8 @@ what is the profit of the quality?
     strength
     task time
 
+add discord server button
+
 move action when craft
 
 underground
@@ -481,6 +483,8 @@ shallow water
 
 container
     another image for empty, normal, full
+
+limit end of world
 
 add oak tree sapling
 implement underground
