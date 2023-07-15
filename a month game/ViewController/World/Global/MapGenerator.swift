@@ -29,7 +29,7 @@ class MapGenerator {
             if chunkChunkCoord.x != self.regionChunkCoord.x
                 || chunkChunkCoord.y != regionChunkCoord.y {
                 var regionChunkCoord = chunkChunkCoord
-                regionChunkCoord.address.chunk.rawCoord = Coordinate(0, 0)
+                regionChunkCoord.address.chunk.setZero()
 
                 self.regionChunkCoord = regionChunkCoord
                 self.regionNoiseMap = self.generateRegionNoiseMap(
@@ -37,7 +37,7 @@ class MapGenerator {
             }
         } else {
             var regionChunkCoord = chunkChunkCoord
-            regionChunkCoord.address.chunk.rawCoord = Coordinate(0, 0)
+            regionChunkCoord.address.chunk.setZero()
 
             self.regionChunkCoord = regionChunkCoord
             self.regionNoiseMap = self.generateRegionNoiseMap(
@@ -128,25 +128,27 @@ class MapGenerator {
         return 1.0 - landAltitude / seaIncline
     }
 
-    func generateChunkNoiseMap(chunkCoord: ChunkCoordinate) -> GKNoiseMap {
-        let tileCountOfChunkSide = Constant.tileCountOfChunkSide
+//    func generateChunkNoiseMap(chunkCoord: ChunkCoordinate) -> GKNoiseMap {
+//        let tileCountOfChunkSide = Constant.tileCountOfChunkSide
+//
+//        let sampleCount = vector2(Int32(tileCountOfChunkSide),
+//                                  Int32(tileCountOfChunkSide))
+//
+//        let worldSeed: Int32 = 0
+//        let regionSeed = Int32(chunkCoord.x << 16 + chunkCoord.y + worldSeed)
+//
+//        return self.generateNoiseMap(sampleCount: sampleCount,
+//                                     seed: regionSeed)
+//    }
 
-        let sampleCount = vector2(Int32(tileCountOfChunkSide),
-                                  Int32(tileCountOfChunkSide))
-
-        let worldSeed: Int32 = 0
-        let regionSeed = Int32(chunkCoord.x << 16 + chunkCoord.y + worldSeed)
-
-        return self.generateNoiseMap(sampleCount: sampleCount,
-                                     seed: regionSeed)
-    }
-
+    /// 'seed + (0x1 << 16) * N' output same pelin noise map lol
     /// - Parameters:
     ///         - chunkCoord: the chunk coord of region
+    ///
     func generateRegionNoiseMap(chunkCoord: ChunkCoordinate) -> GKNoiseMap {
         let worldSeed = 0
         let regionSeed = Int32(truncatingIfNeeded:
-                                Int(chunkCoord.x) << 16
+                                Int(chunkCoord.x) << 8
                                + Int(chunkCoord.y)
                                + worldSeed)
 

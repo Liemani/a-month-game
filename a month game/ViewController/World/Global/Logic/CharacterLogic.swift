@@ -34,4 +34,10 @@ class CharacterLogic {
         self.character.velocityVector = vector
     }
 
+    func jumpChunk(direction: Direction4) {
+        let offset = direction.coord.cgPoint * Constant.chunkWidth
+
+        self.character.position += offset
+    }
+
 }

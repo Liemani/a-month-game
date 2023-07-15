@@ -447,10 +447,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-all region has same noise
+same y region has same noise
 something crash when move another chunk
-something case pinch not working
-field tap but end with outside the world? crash?
 
 move global/model -> world/service
 
@@ -467,6 +465,8 @@ what is the profit of the quality?
     durability
     strength
     task time
+
+road has more moving speed
 
 add discord server button
 
@@ -733,6 +733,8 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+something case pinch not working
+field tap but end with outside the world? crash?
 draw
     log, leaves
 create tree

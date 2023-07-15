@@ -48,7 +48,7 @@ class Character: SKShapeNode {
     override init() {
         self.data = CharacterData()
         self.chunkChunkCoord = self.data.chunkCoord
-        self.chunkChunkCoord.address.tile.rawCoord = Coordinate()
+        self.chunkChunkCoord.address.tile.setZero()
         self.velocityVector = CGVector()
         self.speedModifier = 1.0
 

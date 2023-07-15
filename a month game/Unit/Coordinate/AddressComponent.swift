@@ -41,6 +41,11 @@ struct AddressComponent: Equatable {
         self.rawCoord = Coordinate<UInt8>(address >> 4, address & 0xf)
     }
 
+    mutating func setZero() {
+        self.rawCoord.x = 0
+        self.rawCoord.y = 0
+    }
+
 }
 
 extension AddressComponent: CustomDebugStringConvertible {
