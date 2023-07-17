@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: SKSpriteNode {
+class GameObject: SKSpriteNode, HasIDProtocol {
 
     var data: GameObjectData
 
@@ -22,6 +22,8 @@ class GameObject: SKSpriteNode {
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
+
+    var dateLastChanged: Date { self.data.dateLastChanged }
 
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
@@ -166,7 +168,7 @@ class GameObject: SKSpriteNode {
 
     // MARK: -
     func set(type goType: GameObjectType) {
-        self.data.set(type: goType)
+        self.data.type = goType
 
         self.texture = goType.textures[0]
 
@@ -190,7 +192,7 @@ class GameObject: SKSpriteNode {
     }
 
     func set(variant: Int) {
-        self.data.set(variant: variant)
+        self.data.variant = variant
     }
 
     func set(quality: Double) {
@@ -238,7 +240,7 @@ extension GameObject: TouchResponder {
 extension GameObject {
 
     override var debugDescription: String {
-        var description = "(id: \(self.id), typeID: \(self.type), variation: \(self.variant), quality: \(self.quality), state: \(self.data.state)"
+        var description = "(id: \(self.id), typeID: \(self.type), variation: \(self.variant), quality: \(self.quality), state: \(self.data.state), dateLastChanged: \(self.dateLastChanged)"
 
         if let chunkCoord = self.chunkCoord {
             description += ", coord: \(chunkCoord))"

@@ -38,36 +38,11 @@ class ChunkContainer: SKNode {
 
             self.addChild(chunk)
             self.chunks.append(chunk)
-
-            self.setUpChunks(direction: direction)
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - chunk
-    func update(direction: Direction4) {
-        self.shift(direction: direction.opposite)
-
-        for direction in direction.direction9 {
-            self.loadChunk(direction: direction)
-        }
-    }
-
-    private func setUpChunks(direction: Direction9) {
-        var tartgetChunkCoord = self.character.chunkChunkCoord
-        tartgetChunkCoord += direction.coordOfAChunk
-
-        self.chunks[direction].setUp(chunkCoord: tartgetChunkCoord)
-    }
-
-    private func loadChunk(direction: Direction9) {
-        var tartgetChunkCoord = self.character.chunkChunkCoord
-        tartgetChunkCoord += direction.coordOfAChunk
-
-        self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
 
     // MARK: -
@@ -76,7 +51,7 @@ class ChunkContainer: SKNode {
     }
 
     // MARK: - private
-    private func shift(direction: Direction4) {
+    func shift(direction: Direction4) {
         switch direction {
         case .east:
             let temp1 = self.chunks[2]
@@ -240,7 +215,7 @@ extension ChunkContainer: InventoryProtocol {
 
     func add(_ item: GameObject) {
         let direction = self.chunkDirection(to: item.chunkCoord!)!
-        self.chunks[direction].add(item)
+        self.chunks[direction].add(go: item)
     }
 
     func remove(_ item: GameObject) {
@@ -248,7 +223,7 @@ extension ChunkContainer: InventoryProtocol {
             return
         }
 
-        self.chunks[direction].remove(item)
+        self.chunks[direction].remove(go: item)
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {

@@ -16,6 +16,7 @@ class WorldScene: SKScene {
 
     // MARK: model
     var accessibleGOTracker: AccessibleGOTracker!
+    var leftGOTracker: LeftGOTracker!
 
     // MARK: view
     var invContainer: InventoryContainer!
@@ -66,6 +67,9 @@ class WorldScene: SKScene {
 
         self.accessibleGOTracker = AccessibleGOTracker(character: character)
         FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
+
+        self.leftGOTracker = LeftGOTracker()
+        FrameCycleUpdateManager.default.update(with: .leftGOTracker)
 
         let invContainer = InventoryContainer()
         self.invContainer = invContainer
@@ -119,6 +123,7 @@ class WorldScene: SKScene {
 
     override func sceneDidLoad() {
         self.cTime = CACurrentMediaTime()
+        self.minuteTime = CACurrentMediaTime() + 60
     }
 
     // MARK: - edit model
@@ -146,11 +151,13 @@ class WorldScene: SKScene {
 
         self.handleEvent(currentTime)
 
+        self.minuteSimulate(currentTime)
+
         // MARK: set new character position
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
 
         // MARK: apply new character position
-        self.updateModel()
+        self.updateModel(currentTime)
 
         // MARK: save changed data
         self.updateData()
@@ -164,8 +171,25 @@ class WorldScene: SKScene {
         }
     }
 
-    func updateModel() {
+    var minuteTime: Double!
+
+    func minuteSimulate(_ currentTime: TimeInterval) {
+        guard currentTime >= self.minuteTime else {
+            return
+        }
+
+        Logics.default.leftGOTracker.update()
+
+        self.minuteTime += 60
+    }
+
+    func updateModel(_ currentTime: TimeInterval) {
         if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
+            self.accessibleGOTracker.update(chunkContainer: self.chunkContainer)
+        }
+
+        if FrameCycleUpdateManager.default.contains(.leftGOTracker) {
+            Logics.default.leftGOTracker.update()
             self.accessibleGOTracker.update(chunkContainer: self.chunkContainer)
         }
 

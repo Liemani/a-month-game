@@ -99,7 +99,7 @@ class GameObjectLogic {
 
     func removeFromParent(_ go: GameObject) {
         if let chunk = go.parent as? Chunk {
-            chunk.remove(go)
+            chunk.remove(go: go)
             Logics.default.accessibleGOTracker.remove(go)
         } else if let inventory = go.parent?.parent as? Inventory {
             inventory.remove(go)

@@ -23,35 +23,6 @@ class Chunk: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setUp(chunkCoord: ChunkCoordinate) {
-        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
-
-        for goData in goDatas {
-            let go = GameObject(from: goData)
-
-            self.add(go)
-        }
-    }
-
-    // MARK: - edit
-    // MARK: chunk
-    func update(chunkCoord: ChunkCoordinate) {
-        self.removeAllChildren()
-        self.data.removeAll()
-
-//        DispatchQueue.global(qos: .userInteractive).async {
-            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
-            
-//            DispatchQueue.main.async {
-                for goData in goDatas {
-                    let go = GameObject(from: goData)
-
-                    self.add(go)
-                }
-//            }
-//        }
-    }
-
 }
 
 extension Chunk: InventoryProtocol {
@@ -126,6 +97,53 @@ extension Chunk: InventoryProtocol {
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return (self.children as! [GameObject]).makeIterator()
+    }
+
+}
+
+// MARK: - logic
+extension Chunk {
+
+    func setUp(chunkCoord: ChunkCoordinate) {
+        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+
+            self.add(go: go)
+        }
+    }
+
+    func update(chunkCoord: ChunkCoordinate) {
+        self.removeAllChildren()
+        self.data.removeAll()
+
+        // NOTE: This code generated reference freed memory address or double free
+//        DispatchQueue.global(qos: .userInteractive).async {
+//            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+//
+//            DispatchQueue.main.async {
+//                for goData in goDatas {
+//                    let go = GameObject(from: goData)
+//
+//                    chunk.add(go)
+//                }
+//            }
+//        }
+
+        self.setUp(chunkCoord: chunkCoord)
+    }
+
+    func add(go: GameObject) {
+        self.add(go)
+
+        Logics.default.leftGOTracker.addIfDisappearable(go)
+    }
+
+    func remove(go: GameObject) {
+        self.remove(go)
+
+        Logics.default.leftGOTracker.remove(go)
     }
 
 }

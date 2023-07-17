@@ -22,7 +22,8 @@ class Logics {
                     character: Character,
                     chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
-                    accessibleGOTracker: AccessibleGOTracker) {
+                    accessibleGOTracker: AccessibleGOTracker,
+                    leftGOTracker: LeftGOTracker) {
         self._default = Logics(scene: scene,
                                ui: ui,
                                invInv: invInv,
@@ -32,7 +33,8 @@ class Logics {
                                character: character,
                                chunkContainer: chunkContainer,
                                invContainer: invContainer,
-                               accessibleGOTracker: accessibleGOTracker)
+                               accessibleGOTracker: accessibleGOTracker,
+                               leftGOTracker: leftGOTracker)
     }
 
     static func free() {
@@ -53,7 +55,9 @@ class Logics {
 
     let invContainer: InventoryContainerLogic
     let chunkContainer: ChunkContainerLogic
+
     let accessibleGOTracker: AccessibleGOTrackerLogic
+    let leftGOTracker: LeftGOTrackerLogic
 
     let go: GameObjectLogic
     let goData: GameObjectDataLogic
@@ -67,7 +71,8 @@ class Logics {
          character: Character,
          chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
-         accessibleGOTracker: AccessibleGOTracker) {
+         accessibleGOTracker: AccessibleGOTracker,
+         leftGOTracker: LeftGOTracker) {
         self.touch = TouchLogics()
         self.scene = SceneLogic(scene: scene)
 
@@ -82,7 +87,9 @@ class Logics {
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
         self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
+
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
+        self.leftGOTracker = LeftGOTrackerLogic(tracker: leftGOTracker)
 
         self.go = GameObjectLogic()
         self.goData = GameObjectDataLogic()

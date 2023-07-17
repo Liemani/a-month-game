@@ -447,20 +447,16 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+엄밀하게는, 이것들이 청크가 업데이트 될 때 하는 것이 아니라, 청크에 GO 가 add 될 때 해야 한다
+move container to container qualiti order
 상수는 프로퍼티 리스트로 불러오면 좋겠다
 월드 여러개는?
 포탈 메뉴
 청크 컨테이너 업데이트 시 중앙 청크부터
 이전 버전은 어떤지 비교
 태그 달기
-제어센터 충돌 실험
 알림 센터 충돌 실험
 
-밀도를 낮춘다
-나무는 위로
-각 층마다 잔디 패딩
-펠린 히든 메커니즘 주석
-돌 줄이기
 배
 다리
 물 테라포밍
@@ -469,6 +465,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 아이템 사라짐
 잔디는 인벤 노 바닥 떨굼
 리스폰 버튼
+
+rotate used item only texture without quality box
 
 something crash when move another chunk
 
@@ -755,6 +753,11 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+돌 줄이기
+밀도를 낮춘다
+나무는 위로
+각 층마다 잔디 패딩
+제어센터 충돌 실험
 same y region has same noise
 something case pinch not working
 field tap but end with outside the world? crash?

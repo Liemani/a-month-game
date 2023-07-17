@@ -16,12 +16,38 @@ class ChunkContainerLogic {
         self.chunkContainer = chunkContainer
     }
 
+    func setUp() {
+        for direction in Direction9.allCases {
+            self.setUpChunk(direction: direction)
+        }
+    }
+
+    private func setUpChunk(direction: Direction9) {
+        let chunk = self.chunkContainer.chunks[direction]
+        let targetChunkCoord = Logics.default.character.chunkChunkCoord
+            + direction.coordOfAChunk
+
+        chunk.setUp(chunkCoord: targetChunkCoord)
+    }
+
+    func update(direction: Direction4) {
+        self.chunkContainer.shift(direction: direction.opposite)
+
+        for direction in direction.direction9 {
+            self.updateChunk(direction: direction)
+        }
+    }
+
+    private func updateChunk(direction: Direction9) {
+        let chunk = self.chunkContainer.chunks[direction]
+        let targetChunkCoord = Logics.default.character.chunkChunkCoord
+            + direction.coordOfAChunk
+
+        chunk.update(chunkCoord: targetChunkCoord)
+    }
+
     func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
         return self.chunkContainer.coordAtLocation(of: touch)
-    }
-    
-    func chunkContainerUpdate(direction: Direction4) {
-        chunkContainer.update(direction: direction)
     }
 
     func item(at chunkCoord: ChunkCoordinate) -> GameObject? {
@@ -41,6 +67,10 @@ class ChunkContainerLogic {
             && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
             Logics.default.accessibleGOTracker.add(go)
         }
+    }
+
+    func forEach(_ body: (ChunkContainer.Element) -> Void) {
+        self.chunkContainer.forEach(body)
     }
 
 }

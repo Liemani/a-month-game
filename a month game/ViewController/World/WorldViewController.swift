@@ -66,8 +66,10 @@ class WorldViewController: UIViewController {
                    character: scene.character,
                    chunkContainer: scene.chunkContainer,
                    invContainer: scene.invContainer,
-                   accessibleGOTracker: scene.accessibleGOTracker)
+                   accessibleGOTracker: scene.accessibleGOTracker,
+                   leftGOTracker: scene.leftGOTracker)
 
+        Logics.default.chunkContainer.setUp()
         Particle.setUp()
 
         skView.presentScene(scene)

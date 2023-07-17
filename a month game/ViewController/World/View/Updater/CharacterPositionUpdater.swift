@@ -159,7 +159,7 @@ class CharacterPositionUpdater {
     }
 
     func saveCharacterPosition() {
-        var chunkChunkCoord = self.character.chunkChunkCoord
+        let chunkChunkCoord = self.character.chunkChunkCoord
 
         // case character.move() changed the chunkChunkCoord and the position
         //  but the position is CGPoint, so it's possible not move proper value

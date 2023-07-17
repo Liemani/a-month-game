@@ -102,8 +102,7 @@ class InteractionLogic {
             return true
         },
         .weed: { handlerManager, go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle) else {
                 return false
             }
 
@@ -116,7 +115,7 @@ class InteractionLogic {
             Logics.default.scene.new(result: result,
                                      type: .weedLeaves,
                                      quality: goEquiping.quality,
-                                     coord: emptyInvCoord)
+                                     coord: go.chunkCoord!)
 
             return true
         },

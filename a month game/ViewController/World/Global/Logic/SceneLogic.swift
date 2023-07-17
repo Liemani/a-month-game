@@ -209,9 +209,9 @@ class SceneLogic {
         }
     }
 
-    // MARK: - chunk
+    // MARK: - chunk container
     func chunkContainerUpdate(direction: Direction4) {
-        Logics.default.chunkContainer.chunkContainerUpdate(direction: direction)
+        Logics.default.chunkContainer.update(direction: direction)
 
         let fieldInv = Logics.default.invContainer.fieldInv
         if fieldInv.parent == nil {

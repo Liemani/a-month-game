@@ -18,7 +18,7 @@ class GameObjectService {
                                              variant: 0,
                                              quality: 0.0,
                                              state: [])
-        mo.update(to: chunkCoord)
+        mo.update(coord: chunkCoord)
 
         return mo
     }

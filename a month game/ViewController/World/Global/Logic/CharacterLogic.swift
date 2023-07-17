@@ -17,6 +17,7 @@ class CharacterLogic {
     }
 
     var chunkCoord: ChunkCoordinate { self.character.chunkCoord }
+    var chunkChunkCoord: ChunkCoordinate { self.character.chunkChunkCoord }
 
     func addParticle(_ particle: SKShapeNode) {
         self.character.addChild(particle)

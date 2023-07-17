@@ -103,6 +103,8 @@
 		03EA27B22A43E523007BAF4F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EA27B12A43E523007BAF4F /* Queue.swift */; };
 		03EA27B42A43F9AA007BAF4F /* Character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EA27B32A43F9AA007BAF4F /* Character.swift */; };
 		03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */; };
+		03F0B7932A64CFF40048A50D /* LeftGOTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0B7922A64CFF40048A50D /* LeftGOTracker.swift */; };
+		03F0B7952A64D74C0048A50D /* LeftGOTrackerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F0B7942A64D74C0048A50D /* LeftGOTrackerLogic.swift */; };
 		03F6CD2A2A553DF300403EAF /* InteractionLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CD292A553DF300403EAF /* InteractionLogic.swift */; };
 		03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */; };
 		03F6CD2F2A57A72500403EAF /* Logics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F6CD2E2A57A72500403EAF /* Logics.swift */; };
@@ -245,6 +247,8 @@
 		03EA27B12A43E523007BAF4F /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		03EA27B32A43F9AA007BAF4F /* Character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Character.swift; sourceTree = "<group>"; };
 		03EA27BD2A442D1F007BAF4F /* TouchResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchResponder.swift; sourceTree = "<group>"; };
+		03F0B7922A64CFF40048A50D /* LeftGOTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGOTracker.swift; sourceTree = "<group>"; };
+		03F0B7942A64D74C0048A50D /* LeftGOTrackerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftGOTrackerLogic.swift; sourceTree = "<group>"; };
 		03F6CD292A553DF300403EAF /* InteractionLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InteractionLogic.swift; sourceTree = "<group>"; };
 		03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectInventory.swift; sourceTree = "<group>"; };
 		03F6CD2E2A57A72500403EAF /* Logics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logics.swift; sourceTree = "<group>"; };
@@ -346,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				034637812A238D3600370C71 /* AccessibleGOTracker.swift */,
+				03F0B7922A64CFF40048A50D /* LeftGOTracker.swift */,
 				031D57552A076DC8007EF383 /* CharacterData.swift */,
 				03FEA1B22A5AE1B000AF4DDB /* Masteries.swift */,
 				0347BA7D2A49BB8F00E31FA1 /* ChunkData.swift */,
@@ -636,6 +641,7 @@
 			isa = PBXGroup;
 			children = (
 				03F6CD2E2A57A72500403EAF /* Logics.swift */,
+				03F0B7942A64D74C0048A50D /* LeftGOTrackerLogic.swift */,
 				03FEA1C22A5BC9D300AF4DDB /* MasteryLogic.swift */,
 				037782FB2A5FE00400E3D724 /* CraftLogic.swift */,
 				0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */,
@@ -803,6 +809,7 @@
 				037782F82A5FD70700E3D724 /* MasteryTableCell.swift in Sources */,
 				03F6CD2D2A56955400403EAF /* GameObjectInventory.swift in Sources */,
 				03FEA1BB2A5B04E300AF4DDB /* InteractionMasteryRepository.swift in Sources */,
+				03F0B7932A64CFF40048A50D /* LeftGOTracker.swift in Sources */,
 				030261242A3C56E40050E697 /* MovingLayer.swift in Sources */,
 				03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */,
 				03C65E202A45631C0042BF22 /* CharacterMovedEventHandler.swift in Sources */,
@@ -844,6 +851,7 @@
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
+				03F0B7952A64D74C0048A50D /* LeftGOTrackerLogic.swift in Sources */,
 				0304D7732A583BE20068DE99 /* AccessibleGOTrackerLogic.swift in Sources */,
 				0347BA7E2A49BB8F00E31FA1 /* ChunkData.swift in Sources */,
 				03FEA1EC2A5C2E3D00AF4DDB /* InfoWindow.swift in Sources */,

@@ -171,7 +171,8 @@ struct Constant {
     // MARK: - recipe
     static let recipes: [GameObjectType: [GameObjectType: Int]] = [
         // MARK: tile
-        .woodWall: [.woodStick: 4],
+        .woodFloorTile: [.woodBoard: 2],
+        .woodWall: [.woodBoard: 2],
 
         // MARK: tool
         .axe: [.stone: 1, .woodStick: 1],
@@ -217,5 +218,6 @@ struct Constant {
     static let characterInventoryID = 0
 
     static let longTouchThreshold = 0.5
-
+    
+    static let timeTookTooRemove = 100.0
 }
