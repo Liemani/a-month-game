@@ -67,7 +67,7 @@ class GameObjectTapLogic: TouchLogic {
 
         // no activatedGO
         if go.isOnField
-            && !go.type.isPickable {
+            && !go.type.isMovable {
             go.deactivate()
             Logics.default.go.interact(go)
 
