@@ -79,30 +79,33 @@ class MapGenerator {
     }
 
     func goType(by altitude: Float) -> GameObjectType {
-        let seaLevel: Float = 0.0
-        let sandLevel: Float = 0.1
-        let cobbleStoneLevel: Float = 0.2
-        let grassLevel: Float = 0.6
-        let weedLevel: Float = 0.7
-        let vineLevel: Float = 0.8
-        let oakTreeLevel: Float = 0.9
+        let seaLevel = ClosedRange<Float>(uncheckedBounds: (-1.0, 0.0))
+        let sandLevel = Range<Float>(uncheckedBounds: (0.0, 0.15))
+        let cobbleStoneLevel = Range<Float>(uncheckedBounds: (0.15, 0.20))
+        let weedLevel = Range<Float>(uncheckedBounds: (0.6, 0.8))
+        let vineLevel = Range<Float>(uncheckedBounds: (0.8, 0.9))
+        let oakTreeLevel = Range<Float>(uncheckedBounds: (0.9, 1.0))
 
         var goType: GameObjectType = .none
 
-        if altitude < seaLevel {
+        if seaLevel ~= altitude {
             goType = .waterTile
-        } else if altitude <= sandLevel {
+        } else if sandLevel ~= altitude {
             goType = .sandTile
-        } else if altitude <= cobbleStoneLevel {
+        } else if cobbleStoneLevel ~= altitude {
             goType = .cobblestoneTile
-        } else if altitude <= grassLevel {
-
-        } else if altitude <= weedLevel {
-            goType = .weed
-        } else if altitude <= vineLevel {
-            goType = .vine
-        } else if altitude <= oakTreeLevel {
-            goType = .treeOak
+        } else if weedLevel ~= altitude {
+            if (arc4random() & 0x3) == 0 {
+                goType = .weed
+            }
+        } else if vineLevel ~= altitude {
+            if (arc4random() & 0x7) == 0 {
+                goType = .vine
+            }
+        } else if oakTreeLevel ~= altitude {
+            if (arc4random() & 0x3) == 0 {
+                goType = .treeOak
+            }
         }
 
         return goType
