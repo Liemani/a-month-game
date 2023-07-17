@@ -122,26 +122,24 @@ extension InventoryContainer: InventoryProtocol {
         return self.isValid(invCoord)
     }
 
-    func items(at coord: InventoryCoordinate) -> [GameObject]? {
+    func items(at coord: InventoryCoordinate) -> [GameObject] {
         for inv in self.invs {
-            if !inv.isHidden,
-               let gos = inv.items(at: coord.index) {
-                return gos
+            if !inv.isHidden {
+                return inv.items(at: coord.index)
             }
         }
 
-        return nil
+        return []
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         for inv in self.invs {
-            if !inv.isHidden,
-               let gos = inv.itemsAtLocation(of: touch) {
-                return gos
+            if !inv.isHidden {
+                return inv.itemsAtLocation(of: touch)
             }
         }
 
-        return nil
+        return []
     }
 
     func coordAtLocation(of touch: UITouch) -> InventoryCoordinate? {

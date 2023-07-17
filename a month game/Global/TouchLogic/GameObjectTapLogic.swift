@@ -47,7 +47,7 @@ class GameObjectTapLogic: TouchLogic {
         var go = go
 
         if go.type.isTile {
-            go = Logics.default.chunkContainer.items(at: go.chunkCoord!)!.last!
+            go = Logics.default.chunkContainer.items(at: go.chunkCoord!).last!
         }
 
         if let activatedGO = TouchLogics.default.activatedGO {
@@ -55,9 +55,9 @@ class GameObjectTapLogic: TouchLogic {
             go.deactivate()
 
             if activatedGO == go {
-                Logics.default.go.interact(go)
+                go.interact()
             } else {
-                Logics.default.go.interactToGO(activatedGO, to: go)
+                activatedGO.interact(to: go)
             }
 
             TouchLogics.default.activatedGO = nil
@@ -69,7 +69,7 @@ class GameObjectTapLogic: TouchLogic {
         if go.isOnField
             && !go.type.isMovable {
             go.deactivate()
-            Logics.default.go.interact(go)
+            go.interact()
 
             return
         }

@@ -447,7 +447,6 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-엄밀하게는, 이것들이 청크가 업데이트 될 때 하는 것이 아니라, 청크에 GO 가 add 될 때 해야 한다
 move container to container qualiti order
 상수는 프로퍼티 리스트로 불러오면 좋겠다
 월드 여러개는?
@@ -456,6 +455,20 @@ move container to container qualiti order
 이전 버전은 어떤지 비교
 태그 달기
 알림 센터 충돌 실험
+shovel -> weed: get weed to inventory
+
+굳이 모든 오브젝트를 1 타일로 만들 필요는 없다
+
+시간으로 정렬해두면 매번 모든 오브젝트를 돌 필요가 없다
+
+action 으로 생성한 go 가 같은 chunk 에 만들어지는 오류
+    만약 다른 청크 위치를 갖는다면 다른 청크에 만들어져야 한다
+    그리고 시뮬레이션은 한 프레임에 다 완료됐으면 좋겠다
+    즉, 시뮬레이션 할 것이 없을 때까지 반복하기
+
+move frame cycle update to hasChanged for each class
+
+when delete go, if it is activatedGO, disconnect
 
 배
 다리
@@ -753,6 +766,7 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+엄밀하게는, 이것들이 청크가 업데이트 될 때 하는 것이 아니라, 청크에 GO 가 add 될 때 해야 한다
 돌 줄이기
 밀도를 낮춘다
 나무는 위로

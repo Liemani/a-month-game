@@ -23,7 +23,15 @@ class GameObject: SKSpriteNode, HasIDProtocol {
     var invCoord: InventoryCoordinate? { self.data.invCoord }
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
 
-    var dateLastChanged: Date { self.data.dateLastChanged }
+    var dateLastChanged: Date {
+        get { self.data.dateLastChanged }
+        set {
+            self.data.dateLastChanged = newValue
+            let chunk = self.parent as! Chunk
+            chunk.hasChanges = true
+        }
+    }
+    var scheduledDate: Date { self.data.scheduledDate }
 
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
@@ -100,11 +108,13 @@ class GameObject: SKSpriteNode, HasIDProtocol {
                      variant: Int,
                      quality: Double,
                      state: GameObjectState,
-                     coord chunkCoord: ChunkCoordinate) {
+                     coord chunkCoord: ChunkCoordinate,
+                     date: Date) {
         let goData = GameObjectData(goType: goType,
                                     variant: variant,
                                     quality: quality,
-                                    state: state)
+                                    state: state,
+                                    date: date)
         goData.set(coord: chunkCoord)
 
         self.init(from: goData)
@@ -114,11 +124,13 @@ class GameObject: SKSpriteNode, HasIDProtocol {
                      variant: Int,
                      quality: Double,
                      state: GameObjectState,
-                     coord invCoord: InventoryCoordinate) {
+                     coord invCoord: InventoryCoordinate,
+                     date: Date) {
         let goData = GameObjectData(goType: goType,
                                     variant: variant,
                                     quality: quality,
-                                    state: state)
+                                    state: state,
+                                    date: date)
         goData.set(coord: invCoord)
 
         self.init(from: goData)
@@ -215,10 +227,6 @@ class GameObject: SKSpriteNode, HasIDProtocol {
         return character.accessibleFrame.contains(self.positionInWorld)
     }
 
-    func delete() {
-        self.data.delete()
-    }
-
 }
 
 extension GameObject: TouchResponder {
@@ -251,6 +259,136 @@ extension GameObject {
         }
 
         return description
+    }
+
+}
+
+// MARK: - Logic
+extension GameObject {
+
+    static func new(type goType: GameObjectType,
+                    variant: Int = 0,
+                    quality: Double = 0.0,
+                    state: GameObjectState = [],
+                    coord chunkCoord: ChunkCoordinate,
+                    date: Date = Date()) {
+        let go = GameObject(type: goType,
+                            variant: variant,
+                            quality: quality,
+                            state: state,
+                            coord: chunkCoord,
+                            date: date)
+        Logics.default.chunkContainer.add(go)
+    }
+
+    static func new(type goType: GameObjectType,
+                    variant: Int = 0,
+                    quality: Double = 0.0,
+                    state: GameObjectState = [],
+                    coord invCoord: InventoryCoordinate,
+                    date: Date = Date()) {
+        let go = GameObject(type: goType,
+                            variant: variant,
+                            quality: quality,
+                            state: state,
+                            coord: invCoord,
+                            date: date)
+        Logics.default.invContainer.add(go)
+
+        FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    func removeFromParentWithSideEffect() {
+        if let chunk = self.parent as? Chunk {
+            chunk.remove(go: self)
+            Logics.default.accessibleGOTracker.remove(self)
+        } else if let inventory = self.parent?.parent as? Inventory {
+            inventory.remove(self)
+
+            FrameCycleUpdateManager.default.update(with: .craftWindow)
+        }
+    }
+
+    func move(to invCoord: InventoryCoordinate) {
+        if !self.type.isContainer {
+            self.removeFromParentWithSideEffect()
+            self.set(coord: invCoord)
+            Logics.default.invContainer.add(self)
+
+            return
+        }
+
+        guard invCoord.id == Constant.characterInventoryID
+                || Services.default.invServ.isEmpty(id: self.id) else {
+            return
+        }
+
+        self.addQualityBox()
+
+        self.removeFromParentWithSideEffect()
+        self.set(coord: invCoord)
+        Logics.default.invContainer.add(self)
+
+        Logics.default.invContainer.closeAnyInv(of: self.id)
+    }
+
+    func move(to chunkCoord: ChunkCoordinate) {
+        self.removeQualityBox()
+
+        self.removeFromParentWithSideEffect()
+        self.set(coord: chunkCoord)
+        Logics.default.chunkContainer.add(self)
+
+        if self.type.isContainer {
+            Logics.default.invContainer.closeAnyInv(of: self.id)
+        }
+    }
+
+    func delete() {
+        self.removeFromParentWithSideEffect()
+
+        if self.type.isContainer {
+            Logics.default.invContainer.closeAnyInv(of: self.id)
+        }
+
+        self.data.delete()
+    }
+
+    func interact() {
+        if let handler = Logics.default.interaction.go[self.type] {
+            if handler(self) {
+                return
+            }
+        }
+
+        if self.type.isContainer {
+            Logics.default.scene.containerInteract(self)
+        }
+    }
+
+    func interact(to go: GameObject) {
+        if let handler = Logics.default.interaction.goToGO[go.type] {
+            if handler(self, go) {
+                return
+            }
+        }
+
+        if go.type.isContainer {
+            if self.type.isContainer {
+                Logics.default.scene.containerTransfer(self, to: go)
+            } else {
+                Logics.default.scene.gameObjectInteractContainer(self, to: go)
+            }
+
+            return
+        }
+
+        if go.type.isTile,
+           let goCoord = go.chunkCoord {
+            self.move(to: goCoord)
+
+            return
+        }
     }
 
 }

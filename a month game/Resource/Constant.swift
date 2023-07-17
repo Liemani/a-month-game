@@ -218,6 +218,14 @@ struct Constant {
     static let characterInventoryID = 0
 
     static let longTouchThreshold = 0.5
-    
+
     static let timeTookTooRemove = 100.0
+    static let weedSpreadTime = 1 * 60.0
+
+    static let aSecond = 1.0
+    static let aMinute = 60.0
+    static let anHour = aMinute * 60.0
+    static let aDay = anHour * 24.0
+    static let aWeek = aDay * 7.0
+
 }

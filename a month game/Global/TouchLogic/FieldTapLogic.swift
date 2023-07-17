@@ -33,24 +33,23 @@ class FieldTapLogic: TouchLogic {
         if let activatedGO = TouchLogics.default.activatedGO {
             if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
                 TouchLogics.default.freeActivatedGO()
-                Logics.default.go.interactToGO(activatedGO, to: go)
+                activatedGO.interact(to: go)
             } else {
                 TouchLogics.default.freeActivatedGO()
-                Logics.default.scene.move(activatedGO, to: chunkCoord)
+                activatedGO.move(to: chunkCoord)
             }
 
             return
         }
 
         if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
-            Logics.default.go.interact(go)
+            go.interact()
 
             return
         }
 
         if Logics.default.invContainer.is(equiping: .shovel) {
-            Logics.default.go.new(type: .dirtTile,
-                                          coord: chunkCoord)
+            GameObject.new(type: .dirtTile, coord: chunkCoord)
 
             return
         }

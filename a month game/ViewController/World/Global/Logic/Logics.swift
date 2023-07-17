@@ -59,8 +59,10 @@ class Logics {
     let accessibleGOTracker: AccessibleGOTrackerLogic
     let leftGOTracker: LeftGOTrackerLogic
 
-    let go: GameObjectLogic
     let goData: GameObjectDataLogic
+
+    let interaction: InteractionLogic
+    let simulator: SimulatorLogic
 
     init(scene: WorldScene,
          ui: SKNode,
@@ -91,8 +93,10 @@ class Logics {
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
         self.leftGOTracker = LeftGOTrackerLogic(tracker: leftGOTracker)
 
-        self.go = GameObjectLogic()
         self.goData = GameObjectDataLogic()
+
+        self.interaction = InteractionLogic()
+        self.simulator = SimulatorLogic()
     }
 
 }

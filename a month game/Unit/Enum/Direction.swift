@@ -105,6 +105,12 @@ enum Direction8: Int, CaseIterable {
         Direction8.coordTable[self.rawValue]
     }
 
+    static var random: Direction8 {
+        let rawValue = arc4random_uniform(UInt32(Direction8.allCases.count))
+
+        return Direction8(rawValue: Int(rawValue))!
+    }
+
     static let rawValueTable = [
         6, 7, 0,
         5, 8, 1,

@@ -31,7 +31,7 @@ class LeftGOTrackerLogic {
         for go in self.tracker {
             if go.dateLastChanged <= removeDate {
                 self.tracker.remove(go)
-                Logics.default.go.delete(go)
+                go.delete()
             }
         }
     }

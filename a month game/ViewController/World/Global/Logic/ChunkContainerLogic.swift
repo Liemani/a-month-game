@@ -10,7 +10,7 @@ import SpriteKit
 
 class ChunkContainerLogic {
 
-    private let chunkContainer: ChunkContainer
+    let chunkContainer: ChunkContainer
 
     init(chunkContainer: ChunkContainer) {
         self.chunkContainer = chunkContainer
@@ -20,6 +20,14 @@ class ChunkContainerLogic {
         for direction in Direction9.allCases {
             self.setUpChunk(direction: direction)
         }
+    }
+
+    func isValid(_ chunkCoord: ChunkCoordinate) -> Bool {
+        return self.chunkContainer.isValid(chunkCoord)
+    }
+
+    func contains(_ point: CGPoint) -> Bool {
+        return self.chunkContainer.contains(point)
     }
 
     private func setUpChunk(direction: Direction9) {
@@ -51,10 +59,10 @@ class ChunkContainerLogic {
     }
 
     func item(at chunkCoord: ChunkCoordinate) -> GameObject? {
-        return self.chunkContainer.items(at: chunkCoord)?.first
+        return self.chunkContainer.items(at: chunkCoord).first
     }
 
-    func items(at chunkCoord: ChunkCoordinate) -> [GameObject]? {
+    func items(at chunkCoord: ChunkCoordinate) -> [GameObject] {
         self.chunkContainer.items(at: chunkCoord)
     }
 
@@ -71,6 +79,16 @@ class ChunkContainerLogic {
 
     func forEach(_ body: (ChunkContainer.Element) -> Void) {
         self.chunkContainer.forEach(body)
+    }
+
+    var gos: some Sequence<GameObject> { self.chunkContainer }
+
+    func updateIfHasChanged() {
+        for chunk in self.chunkContainer.chunks {
+            if chunk.hasChanges {
+                chunk.update()
+            }
+        }
     }
 
 }

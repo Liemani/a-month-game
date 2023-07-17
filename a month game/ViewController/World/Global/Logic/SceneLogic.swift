@@ -29,11 +29,11 @@ class SceneLogic {
 
         let quality = max(quality + result.qualityDiff, 0)
 
-        Logics.default.go.new(type: goType,
-                              variant: variant,
-                              quality: quality,
-                              state: state,
-                              coord: invCoord)
+        GameObject.new(type: goType,
+                       variant: variant,
+                       quality: quality,
+                       state: state,
+                       coord: invCoord)
     }
 
     func new(result: TaskResultType,
@@ -46,11 +46,11 @@ class SceneLogic {
 
         let quality = max(quality + result.qualityDiff, 0)
 
-        Logics.default.go.new(type: goType,
-                              variant: variant,
-                              quality: quality,
-                              state: state,
-                              coord: chunkCoord)
+        GameObject.new(type: goType,
+                       variant: variant,
+                       quality: quality,
+                       state: state,
+                       coord: chunkCoord)
     }
 
     func new(result: TaskResultType,
@@ -92,39 +92,6 @@ class SceneLogic {
         guard result != .fail else { return }
 
         go.set(quality: quality)
-    }
-
-    func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
-        if !go.type.isContainer {
-            Logics.default.go.move(go, to: invCoord)
-
-            return
-        }
-
-        guard invCoord.id == Constant.characterInventoryID
-                || Services.default.invServ.isEmpty(id: go.id) else {
-            return
-        }
-
-        Logics.default.go.move(go, to: invCoord)
-
-        Logics.default.invContainer.closeAnyInv(of: go.id)
-    }
-
-    func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        Logics.default.go.move(go, to: chunkCoord)
-
-        if go.type.isContainer {
-            Logics.default.invContainer.closeAnyInv(of: go.id)
-        }
-    }
-
-    func delete(_ go: GameObject) {
-        if go.type.isContainer {
-            Logics.default.invContainer.closeAnyInv(of: go.id)
-        }
-
-        Logics.default.go.delete(go)
     }
 
     // MARK: - inventory
@@ -174,7 +141,7 @@ class SceneLogic {
         }
 
         let invCoord = InventoryCoordinate(container.id, index)
-        Logics.default.scene.move(go, to: invCoord)
+        go.move(to: invCoord)
     }
 
     func containerTransfer(_ source: GameObject, to dest: GameObject) {

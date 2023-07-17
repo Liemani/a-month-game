@@ -26,7 +26,8 @@ class GameObjectRepository {
              type: GameObjectType,
              variant: Int,
              quality: Double,
-             state: GameObjectState) -> GameObjectMO {
+             state: GameObjectState,
+             date: Date) -> GameObjectMO {
         let goMO = self.goDS.new()
 
         goMO.id = Int32(id)
@@ -38,7 +39,7 @@ class GameObjectRepository {
         goMO.chunkCoord = nil
         goMO.invCoord = nil
 
-        goMO.dateLastChanged = Date()
+        goMO.dateLastChanged = date
 
         return goMO
     }
@@ -96,8 +97,8 @@ extension GameObjectMO {
         }
     }
 
-    func updateDateLastChanged() {
-        self.dateLastChanged = Date.now
+    func update(dateLastChanged: Date) {
+        self.dateLastChanged = dateLastChanged
     }
 
     func delete() {
