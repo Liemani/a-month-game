@@ -22,7 +22,9 @@ class FieldTapLogic: TouchLogic {
     }
 
     override func ended() {
-        let chunkCoord = Logics.default.chunkContainer.coordAtLocation(of: self.touch)!
+        guard let chunkCoord = Logics.default.chunkContainer.coordAtLocation(of: self.touch) else {
+            return
+        }
 
         guard chunkCoord == self.bChunkCoord else {
             return

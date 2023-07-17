@@ -141,13 +141,18 @@ class WorldScene: SKScene {
         self.pTime = self.cTime
         self.cTime = currentTime
 
+        // MARK: process touch
         TouchManager.default.updateTimeoutRecognizer()
 
         self.handleEvent(currentTime)
 
-        self.updateModel()
+        // MARK: set new character position
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
 
+        // MARK: apply new character position
+        self.updateModel()
+
+        // MARK: save changed data
         self.updateData()
     }
 
@@ -166,10 +171,6 @@ class WorldScene: SKScene {
 
         if FrameCycleUpdateManager.default.contains(.craftWindow) {
             self.craftWindow.update(gos: self.invContainer)
-        }
-
-        if FrameCycleUpdateManager.default.contains(.timer) {
-            // TODO: implement long touch timer
         }
 
         FrameCycleUpdateManager.default.clear()
@@ -217,7 +218,8 @@ extension WorldScene: TouchResponder {
     func isRespondable(with type: TouchRecognizer.Type) -> Bool {
         switch type {
         case is TapRecognizer.Type,
-            is PanRecognizer.Type:
+            is PanRecognizer.Type,
+            is PinchRecognizer.Type:
             return true
         default:
             return false

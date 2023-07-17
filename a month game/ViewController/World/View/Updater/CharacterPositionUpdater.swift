@@ -58,15 +58,15 @@ class CharacterPositionUpdater {
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)
                 Logics.default.scene.chunkContainerUpdate(direction: direction)
+                print(self.character.chunkChunkCoord)
             }
         }
 
         self.movingLayer.position = -self.character.position
         self.character.lastPosition = self.character.position
 
-        self.saveCharacterPosition()
-
         if hasMovedToAnotherTile {
+            self.saveCharacterPosition()
             self.updateSpeedModifier()
         }
     }
@@ -79,10 +79,14 @@ class CharacterPositionUpdater {
     // TODO: update wrong formula
     private func updateCharacterVelocity(_ timeInterval: TimeInterval) {
         let velocity = self.character.velocityVector.magnitude
+
+        let newVelocity = self.character.velocityVector
+            * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
+
         self.character.velocityVector =
-        velocity > Constant.velocityDamping
-        ? self.character.velocityVector * pow(Constant.velocityFrictionRatioPerSec, timeInterval)
-        : CGVector()
+            velocity > Constant.velocityDamping
+            ? newVelocity
+            : CGVector()
     }
 
     private func resolveCharacterCollision() {
@@ -156,8 +160,9 @@ class CharacterPositionUpdater {
 
     func saveCharacterPosition() {
         var chunkChunkCoord = self.character.chunkChunkCoord
-        chunkChunkCoord.address.tile = AddressComponent()
 
+        // case character.move() changed the chunkChunkCoord and the position
+        //  but the position is CGPoint, so it's possible not move proper value
         let tileCoord = FieldCoordinate(from: self.character.position).coord
         let chunkCoord = chunkChunkCoord + tileCoord
         self.character.data.chunkCoord = chunkCoord
