@@ -9,34 +9,110 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: SKSpriteNode, HasIDProtocol {
+class GameObject: SKSpriteNode {
 
     var data: GameObjectData
 
     var id: Int { self.data.id }
-    var type: GameObjectType { self.data.type }
-    var variant: Int { self.data.variant }
 
-    var quality: Double { self.data.quality }
+    var type: GameObjectType {
+        get { self.data.type }
+        set {
+            self.data.type = newValue
+            self.setTexture(type: newValue)
+
+            self._updateDateLastChanged()
+        }
+    }
+
+    var variant: Int {
+        get { self.data.variant }
+        set {
+            self.data.variant = newValue
+
+            self._updateDateLastChanged()
+        }
+    }
+
+    var quality: Double {
+        get { self.data.quality }
+        set {
+            self.data.quality = newValue
+
+            self._updateDateLastChanged()
+        }
+    }
 
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
+    func set(coord chunkCoord: ChunkCoordinate) {
+        self.data.set(coord: chunkCoord)
+
+        self._updateDateLastChanged()
+    }
+
     var invCoord: InventoryCoordinate? { self.data.invCoord }
+    func set(coord invCoord: InventoryCoordinate) {
+        self.data.set(coord: invCoord)
+
+        self._updateDateLastChanged()
+    }
+
     var tileCoord: Coordinate<Int>? { self.chunkCoord?.address.tile.coord }
+
+    private func _updateDateLastChanged() {
+        self.data.dateLastChanged = Date()
+
+        if let chunk = self.chunk {
+            chunk.scheduler.hasChanges = true
+        }
+    }
 
     var dateLastChanged: Date {
         get { self.data.dateLastChanged }
-        set {
-            self.data.dateLastChanged = newValue
-            let chunk = self.parent as! Chunk
-            chunk.hasChanges = true
-        }
+        set { self.data.dateLastChanged = newValue }
     }
-    var scheduledDate: Date { self.data.scheduledDate }
+
+    var timeEventDate: Date? { self.data.timeEventDate }
 
     var isOnField: Bool { self.chunkCoord != nil }
     var isInInv: Bool { self.invCoord != nil }
 
     var positionInWorld: CGPoint { self.position + self.parent!.position }
+
+    func setTexture(type goType: GameObjectType) {
+        self.texture = goType.textures[0]
+
+        if goType.layerCount == 2 {
+            if self.children.count == 1 {
+                let cover = self.children[0] as! SKSpriteNode
+                cover.texture = goType.textures[1]
+            } else {
+                let cover = SKSpriteNode(texture: goType.textures[1])
+                cover.size = Constant.coverSize
+                cover.zPosition = Constant.ZPosition.gameObjectCover
+                self.addChild(cover)
+            }
+        } else {
+            self.removeAllChildren()
+        }
+
+        self.size = goType.isTile || !goType.isWalkable
+            ? Constant.defaultNodeSize
+            : Constant.gameObjectSize
+    }
+
+    func isAccessible(by character: Character) -> Bool {
+        if self.invCoord != nil {
+            return true
+        }
+
+        return character.accessibleFrame.contains(self.positionInWorld)
+    }
+
+    var chunk: Chunk? { self.parent as? Chunk }
+    var inventory: Inventory? { self.parent?.parent as? Inventory }
+
+    var isDeleted: Bool { self.parent == nil }
 
     // MARK: - init
     init(from goData: GameObjectData) {
@@ -64,8 +140,8 @@ class GameObject: SKSpriteNode, HasIDProtocol {
         }
 
         self.zPosition = !self.type.isTile
-            ? Constant.ZPosition.gameObject
-            : Constant.ZPosition.tile
+                            ? Constant.ZPosition.gameObject
+                            : Constant.ZPosition.tile
     }
 
     func addQualityBox() {
@@ -178,57 +254,13 @@ class GameObject: SKSpriteNode, HasIDProtocol {
         self.run(action)
     }
 
-    // MARK: -
-    func set(type goType: GameObjectType) {
-        self.data.type = goType
-
-        self.texture = goType.textures[0]
-
-        if goType.layerCount == 2 {
-            if self.children.count == 1 {
-                let cover = self.children[0] as! SKSpriteNode
-                cover.texture = goType.textures[1]
-            } else {
-                let cover = SKSpriteNode(texture: goType.textures[1])
-                cover.size = Constant.coverSize
-                cover.zPosition = Constant.ZPosition.gameObjectCover
-                self.addChild(cover)
-            }
-        } else {
-            self.removeAllChildren()
-        }
-
-        self.size = goType.isTile || !goType.isWalkable
-            ? Constant.defaultNodeSize
-            : Constant.gameObjectSize
-    }
-
-    func set(variant: Int) {
-        self.data.variant = variant
-    }
-
-    func set(quality: Double) {
-        self.data.quality = quality
-    }
-
-    func set(coord chunkCoord: ChunkCoordinate) {
-        self.data.set(coord: chunkCoord)
-    }
-
-    func set(coord invCoord: InventoryCoordinate) {
-        self.data.set(coord: invCoord)
-    }
-
-    func isAccessible(by character: Character) -> Bool {
-        if self.invCoord != nil {
-            return true
-        }
-
-        return character.accessibleFrame.contains(self.positionInWorld)
+    private func _delete() {
+        self.data.delete()
     }
 
 }
 
+// MARK: - touch responder
 extension GameObject: TouchResponder {
 
     func isRespondable(with type: TouchRecognizer.Type) -> Bool {
@@ -245,10 +277,15 @@ extension GameObject: TouchResponder {
 
 }
 
+// MARK: - debug description
 extension GameObject {
 
     override var debugDescription: String {
-        var description = "(id: \(self.id), typeID: \(self.type), variation: \(self.variant), quality: \(self.quality), state: \(self.data.state), dateLastChanged: \(self.dateLastChanged)"
+        var description = "(id: \(self.id), type: \(self.type), variation: \(self.variant), quality: \(self.quality), dateLastChanged: \(self.dateLastChanged)"
+
+        if let timeEventDate = self.timeEventDate {
+            description += ", timeEventDate: \(timeEventDate)"
+        }
 
         if let chunkCoord = self.chunkCoord {
             description += ", coord: \(chunkCoord))"
@@ -299,13 +336,16 @@ extension GameObject {
     }
 
     func removeFromParentWithSideEffect() {
-        if let chunk = self.parent as? Chunk {
-            chunk.remove(go: self)
+        if let chunk = self.chunk {
+            chunk.remove(self)
             Logics.default.accessibleGOTracker.remove(self)
-        } else if let inventory = self.parent?.parent as? Inventory {
-            inventory.remove(self)
+            return
+        }
 
+        if let inventory = self.inventory {
+            inventory.remove(self)
             FrameCycleUpdateManager.default.update(with: .craftWindow)
+            return
         }
     }
 
@@ -351,11 +391,11 @@ extension GameObject {
             Logics.default.invContainer.closeAnyInv(of: self.id)
         }
 
-        self.data.delete()
+        self._delete()
     }
 
     func interact() {
-        if let handler = Logics.default.interaction.go[self.type] {
+        if let handler = Logics.default.action.interact[self.type] {
             if handler(self) {
                 return
             }
@@ -367,7 +407,7 @@ extension GameObject {
     }
 
     func interact(to go: GameObject) {
-        if let handler = Logics.default.interaction.goToGO[go.type] {
+        if let handler = Logics.default.action.interactToGO[go.type] {
             if handler(self, go) {
                 return
             }

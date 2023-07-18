@@ -75,7 +75,7 @@ class SceneLogic {
              type goType: GameObjectType) {
         guard result != .fail else { return }
 
-        go.set(type: goType)
+        go.type = goType
     }
 
     func set(result: TaskResultType,
@@ -83,7 +83,7 @@ class SceneLogic {
              variant: Int) {
         guard result != .fail else { return }
 
-        go.set(variant: variant)
+        go.variant = variant
     }
 
     func set(result: TaskResultType,
@@ -91,7 +91,7 @@ class SceneLogic {
              quality: Double) {
         guard result != .fail else { return }
 
-        go.set(quality: quality)
+        go.quality = quality
     }
 
     // MARK: - inventory

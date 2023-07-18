@@ -45,6 +45,12 @@ class ChunkContainer: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func update() {
+        for chunk in chunks {
+            chunk.update()
+        }
+    }
+
     // MARK: -
     func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
         return self.character.chunkChunkCoord.chunkDirection(to: chunkCoord)
@@ -215,7 +221,7 @@ extension ChunkContainer: InventoryProtocol {
 
     func add(_ item: GameObject) {
         let direction = self.chunkDirection(to: item.chunkCoord!)!
-        self.chunks[direction].add(go: item)
+        self.chunks[direction].add(item)
     }
 
     func remove(_ item: GameObject) {
@@ -223,7 +229,7 @@ extension ChunkContainer: InventoryProtocol {
             return
         }
 
-        self.chunks[direction].remove(go: item)
+        self.chunks[direction].remove(item)
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {

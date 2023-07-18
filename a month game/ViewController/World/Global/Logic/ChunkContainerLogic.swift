@@ -83,12 +83,4 @@ class ChunkContainerLogic {
 
     var gos: some Sequence<GameObject> { self.chunkContainer }
 
-    func updateIfHasChanged() {
-        for chunk in self.chunkContainer.chunks {
-            if chunk.hasChanges {
-                chunk.update()
-            }
-        }
-    }
-
 }

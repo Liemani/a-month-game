@@ -447,6 +447,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+remove GameObjectDataLogic
+
 move container to container qualiti order
 상수는 프로퍼티 리스트로 불러오면 좋겠다
 월드 여러개는?
@@ -459,7 +461,7 @@ shovel -> weed: get weed to inventory
 
 굳이 모든 오브젝트를 1 타일로 만들 필요는 없다
 
-시간으로 정렬해두면 매번 모든 오브젝트를 돌 필요가 없다
+ChunkOrderedSet -> ChunkGOOrderedSet
 
 action 으로 생성한 go 가 같은 chunk 에 만들어지는 오류
     만약 다른 청크 위치를 갖는다면 다른 청크에 만들어져야 한다
@@ -766,6 +768,58 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+event - action
+weed: expand terratory
+tree: respawn branch
+item: disappear
+    pickable but not container
+what i want
+living in simulation world
+but bunch of simulation is not good
+what about limit it?
+how limit
+- simulationCountLimit
+the place visited long time must fill with weed, but not all
+    limited simulation
+density?
+//  - densityLimit
+- conditionLimit
+- simulationTimeLimit
+but limiting make player stress
+    they have to trigger frequently if want
+- simulate only the chunk player exist
+    this will left another chunk totally un-simulated state
+make simulation action is not important
+- count limit + character chunk
+What do when offline?
+    don't simulate
+    moving character position for prevent simulate is stress
+represent living world, time event have to occured even app is off
+limit the count of recursive event action
+새로운 시도를 하는 것은 좋다
+    하지만 너무 무리할 필요는 없다
+    하지만 중요하다면 도전해야 한다
+시뮬레이션은 적당히 구현할 것
+    나는 어느정도를 원하는가?
+플레이어가 납득할 수 있는 시스템
+- 맵 활성화 시 한 번만 발동시키기
+역시 내가 없는 곳은 시간이 흐르지 않도록 해야 하는가?
+    로딩되지 않은 지역
+    접속하지 않은 기간
+서버가 있으면 모르겠는데 아닌 경우에는 결국 자원이 시간적으로 제한된다(플레이 시간)
+오랫동안 방문하지 않은 장소에 오랜만에 방문하여 렉을 맞는 것은 구리다
+별 액션을 하지도 않는데 대량의 시뮬레이션으로 인해 렉걸리는 문제
+로딩되지 않은 청크는 시뮬레이션 없이 근처의 오브젝트의 dateLastChanged 가 update 되는 문제
+dateLastchanged 는 메뉴얼하게 설정할 것
+    각 setter 에서 설정하니 임의로 dateLastchanged 의 변경 없이 값 설정이 안된다
+    그럼 내부에서는 setter 를 사용하는 것이 아니라 실제 데이터의 값을 바꾼다면?
+go에서 청크의 hasChanges 를 바꾸면 core data 랑 다르게 동적으로 sort 를 호출해서 안맞는거 같다
+if i set dateLastChanged -> have to sort chunk go scheduler
+remove previous GameObject setter
+go.data.getset -> go.getset
+action 이 아무것도 바꾸지 않았음에도 dateLastChanged 를 update 해야 하는가?
+    해야지
+시간으로 정렬해두면 매번 모든 오브젝트를 돌 필요가 없다
 엄밀하게는, 이것들이 청크가 업데이트 될 때 하는 것이 아니라, 청크에 GO 가 add 될 때 해야 한다
 돌 줄이기
 밀도를 낮춘다

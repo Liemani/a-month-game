@@ -7,26 +7,33 @@
 
 import Foundation
 
-class ChunkScheduler {
+class ChunkGOScheduler {
     
     var orderedSet: NSMutableOrderedSet
+    var hasChanges: Bool
 
     init() {
         self.orderedSet = NSMutableOrderedSet()
+        self.hasChanges = false
     }
 
     func add(_ go: GameObject) {
-        let count = self.orderedSet.count
-
-        if count == 0 {
-            self.orderedSet[0] = go
+        guard go.timeEventDate != nil else {
             return
         }
 
-        for index in 0 ..< count {
-            let setGO = self.orderedSet[index] as! GameObject
+        self._add(go)
 
-            if go.scheduledDate <= setGO.data.scheduledDate {
+        self.hasChanges = true
+    }
+
+    private func _add(_ go: GameObject) {
+        let count = self.orderedSet.count
+
+        for index in 0 ..< count {
+            let orderedGO = self.orderedSet[index] as! GameObject
+
+            if go.timeEventDate! <= orderedGO.timeEventDate! {
                 self.orderedSet.insert(go, at: index)
                 return
             }
@@ -41,6 +48,8 @@ class ChunkScheduler {
 
     func remove(_ go: GameObject) {
         self.orderedSet.remove(go)
+
+        self.hasChanges = true
     }
 
     func removeAll() {
@@ -48,15 +57,16 @@ class ChunkScheduler {
     }
 
     func sort() {
-        orderedSet.sort {
+        self.orderedSet.sort {
             let lhs = $0 as! GameObject
             let rhs = $1 as! GameObject
 
-            return lhs.scheduledDate <= rhs.scheduledDate
-                ? .orderedAscending
-                : .orderedDescending
+            return (lhs.timeEventDate! <= rhs.timeEventDate!)
+                        ? .orderedAscending
+                        : .orderedDescending
         }
 
+        self.hasChanges = false
     }
     
 }

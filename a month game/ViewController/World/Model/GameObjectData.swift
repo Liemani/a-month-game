@@ -27,7 +27,6 @@ class GameObjectData {
             self._type = newValue
 
             self.mo.update(type: newValue)
-            self.dateLastChanged = Date()
         }
     }
 
@@ -38,7 +37,6 @@ class GameObjectData {
             self._variant = newValue
 
             self.mo.update(variant: newValue)
-            self.dateLastChanged = Date()
         }
     }
 
@@ -46,7 +44,6 @@ class GameObjectData {
         get { self.mo.quality }
         set {
             self.mo.update(quality: newValue)
-            self.dateLastChanged = Date()
         }
     }
 
@@ -56,13 +53,11 @@ class GameObjectData {
         self._state.insert(state)
 
         self.mo.update(state: state)
-        self.dateLastChanged = Date()
     }
     func remove(state: GameObjectState) {
         self._state.remove(state)
 
         self.mo.update(state: state)
-        self.dateLastChanged = Date()
     }
 
     private var _chunkCoord: ChunkCoordinate?
@@ -72,7 +67,6 @@ class GameObjectData {
         self._chunkCoord = chunkCoord
 
         self.mo.update(coord: chunkCoord)
-        self.dateLastChanged = Date()
     }
 
     private var _invCoord: InventoryCoordinate?
@@ -82,21 +76,25 @@ class GameObjectData {
         self._invCoord = invCoord
 
         self.mo.update(coord: invCoord)
-        self.dateLastChanged = Date()
     }
 
     var dateLastChanged: Date {
-        get {self.mo.dateLastChanged! }
+        get { self.mo.dateLastChanged! }
         set {
-            self.scheduledDate = newValue + self.type.actionTimeout
-
             self.mo.update(dateLastChanged: newValue)
+
+            self._setTimeEventDateByDateLastChanged()
         }
     }
 
-    var scheduledDate: Date!
-    func setScheduledDateByDateLastChanged() {
-        self.scheduledDate = self.dateLastChanged + self.type.actionTimeout
+    var timeEventDate: Date?
+
+    private func _setTimeEventDateByDateLastChanged() {
+        let actionTimeout = self.type.actionTimeout
+
+        self.timeEventDate = (actionTimeout != Double.infinity)
+                                ? self.dateLastChanged + actionTimeout
+                                : nil
     }
 
     // MARK: - init
@@ -121,7 +119,7 @@ class GameObjectData {
         self._chunkCoord = nil
         self._invCoord = nil
 
-        self.setScheduledDateByDateLastChanged()
+        self._setTimeEventDateByDateLastChanged()
     }
 
     init?(from goMO: GameObjectMO) {
@@ -155,7 +153,7 @@ class GameObjectData {
             return nil
         }
 
-        self.setScheduledDateByDateLastChanged()
+        self._setTimeEventDateByDateLastChanged()
     }
 
     func delete() {

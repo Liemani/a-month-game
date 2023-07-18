@@ -16,7 +16,6 @@ class WorldScene: SKScene {
 
     // MARK: model
     var accessibleGOTracker: AccessibleGOTracker!
-    var leftGOTracker: LeftGOTracker!
 
     // MARK: view
     var invContainer: InventoryContainer!
@@ -67,8 +66,6 @@ class WorldScene: SKScene {
 
         self.accessibleGOTracker = AccessibleGOTracker(character: character)
         FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
-
-        self.leftGOTracker = LeftGOTracker()
 
         let invContainer = InventoryContainer()
         self.invContainer = invContainer
@@ -122,7 +119,6 @@ class WorldScene: SKScene {
 
     override func sceneDidLoad() {
         self.cTime = CACurrentMediaTime()
-        self.secondTimer = CACurrentMediaTime() + Constant.aSecond
     }
 
     // MARK: - edit model
@@ -148,9 +144,7 @@ class WorldScene: SKScene {
         // MARK: process touch
         TouchManager.default.updateTimeoutRecognizer()
 
-        self.handleEvent(currentTime)
-
-        self.simulate(currentTime)
+        self.handleEvent()
 
         // MARK: set new character position
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
@@ -162,7 +156,12 @@ class WorldScene: SKScene {
         self.updateData()
     }
 
-    func handleEvent(_ currentTime: TimeInterval) {
+    func handleEvent() {
+        self.processGeneralEvent()
+        self.processTimeEvent()
+    }
+
+    func processGeneralEvent() {
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
             // TODO: remove argument self
@@ -170,17 +169,8 @@ class WorldScene: SKScene {
         }
     }
 
-    var secondTimer: Double!
-
-    func simulate(_ currentTime: TimeInterval) {
-        guard currentTime >= self.secondTimer else {
-            return
-        }
-
-        Logics.default.leftGOTracker.update()
-        Logics.default.simulator.update()
-
-        self.secondTimer += Constant.aSecond
+    func processTimeEvent() {
+        Logics.default.action.update()
     }
 
     func updateModel(_ currentTime: TimeInterval) {
@@ -196,7 +186,7 @@ class WorldScene: SKScene {
     }
 
     func updateData() {
-        Logics.default.chunkContainer.updateIfHasChanged()
+        self.chunkContainer.update()
 
         let moContext = Services.default.moContext
         if moContext.hasChanges {

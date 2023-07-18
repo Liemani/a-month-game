@@ -11,16 +11,12 @@ import SpriteKit
 class Chunk: SKNode {
 
     var data: ChunkData
-    var scheduler: ChunkScheduler
-
-    var hasChanges: Bool
+    var scheduler: ChunkGOScheduler
 
     // MARK: - init
     override init() {
         self.data = ChunkData()
-        self.scheduler = ChunkScheduler()
-
-        self.hasChanges = false
+        self.scheduler = ChunkGOScheduler()
 
         super.init()
     }
@@ -36,9 +32,9 @@ class Chunk: SKNode {
     }
 
     func update() {
-        self.scheduler.sort()
-
-        self.hasChanges = false
+        if self.scheduler.hasChanges {
+            self.scheduler.sort()
+        }
     }
 
 }
@@ -140,12 +136,16 @@ extension Chunk {
 
             self.addChild(go)
 
-            sortedGOs.append(go)
+            if go.timeEventDate != nil {
+                sortedGOs.append(go)
+            }
         }
 
-        sortedGOs.sort { $0.scheduledDate <= $1.scheduledDate }
+        sortedGOs.sort { $0.timeEventDate! <= $1.timeEventDate! }
 
         self.scheduler.add(sortedGOs)
+
+        Logics.default.action.update()
     }
 
     func update(chunkCoord: ChunkCoordinate) {
@@ -165,18 +165,6 @@ extension Chunk {
 //        }
 
         self.setUp(chunkCoord: chunkCoord)
-    }
-
-    func add(go: GameObject) {
-        self.add(go)
-
-        Logics.default.leftGOTracker.addIfDisappearable(go)
-    }
-
-    func remove(go: GameObject) {
-        self.remove(go)
-
-        Logics.default.leftGOTracker.remove(go)
     }
 
 }

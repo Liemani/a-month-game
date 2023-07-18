@@ -228,4 +228,6 @@ struct Constant {
     static let aDay = anHour * 24.0
     static let aWeek = aDay * 7.0
 
+    static let timeEventLimit = 5
+
 }

@@ -34,8 +34,10 @@ class GameObjectTapLogic: TouchLogic {
     }
 
     override func ended() {
-        guard self.go.isBeing(touched: self.touch) else {
-            self.go.deactivate()
+        var go = self.go
+
+        guard go.isBeing(touched: self.touch) else {
+            go.deactivate()
 
             return
         }
@@ -43,8 +45,6 @@ class GameObjectTapLogic: TouchLogic {
 #if DEBUG
         print(go.debugDescription)
 #endif
-
-        var go = go
 
         if go.type.isTile {
             go = Logics.default.chunkContainer.items(at: go.chunkCoord!).last!
