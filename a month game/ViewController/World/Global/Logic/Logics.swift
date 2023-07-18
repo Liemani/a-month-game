@@ -53,10 +53,12 @@ class Logics {
 
     let invContainer: InventoryContainerLogic
     let chunkContainer: ChunkContainerLogic
+
     let accessibleGOTracker: AccessibleGOTrackerLogic
 
-    let go: GameObjectLogic
     let goData: GameObjectDataLogic
+
+    let action: ActionLogic
 
     init(scene: WorldScene,
          ui: SKNode,
@@ -82,10 +84,12 @@ class Logics {
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
         self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
+
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
-        self.go = GameObjectLogic()
         self.goData = GameObjectDataLogic()
+
+        self.action = ActionLogic()
     }
 
 }

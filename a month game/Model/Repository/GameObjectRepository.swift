@@ -26,7 +26,8 @@ class GameObjectRepository {
              type: GameObjectType,
              variant: Int,
              quality: Double,
-             state: GameObjectState) -> GameObjectMO {
+             state: GameObjectState,
+             date: Date) -> GameObjectMO {
         let goMO = self.goDS.new()
 
         goMO.id = Int32(id)
@@ -38,6 +39,8 @@ class GameObjectRepository {
         goMO.chunkCoord = nil
         goMO.invCoord = nil
 
+        goMO.dateLastChanged = date
+
         return goMO
     }
 
@@ -48,19 +51,23 @@ extension GameObjectMO {
     var type: Int { Int(self.typeID & 0xffff) }
     var variant: Int { Int(UInt32(self.typeID) >> 16) }
 
-    func update(to goType: GameObjectType) {
+    func update(type goType: GameObjectType) {
         self.typeID = Int32(goType.rawValue)
     }
 
-    func update(to variant: Int) {
+    func update(variant: Int) {
         self.typeID = Int32(truncatingIfNeeded: variant << 16) | self.typeID
     }
 
-    func update(to state: GameObjectState) {
+    func update(quality: Double) {
+        self.quality = quality
+    }
+
+    func update(state: GameObjectState) {
         self.state = state.rawValue
     }
 
-    func update(to chunkCoord: ChunkCoordinate) {
+    func update(coord chunkCoord: ChunkCoordinate) {
         if let chunkCoordMO = self.chunkCoord {
             chunkCoordMO.update(chunkCoord)
         } else {
@@ -75,7 +82,7 @@ extension GameObjectMO {
         }
     }
 
-    func update(to invCoord: InventoryCoordinate) {
+    func update(coord invCoord: InventoryCoordinate) {
         if let invCoordMO = self.invCoord {
             invCoordMO.update(invCoord)
         } else {
@@ -88,6 +95,10 @@ extension GameObjectMO {
                 chunkCoordMO.delete()
             }
         }
+    }
+
+    func update(dateLastChanged: Date) {
+        self.dateLastChanged = dateLastChanged
     }
 
     func delete() {

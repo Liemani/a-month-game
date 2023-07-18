@@ -12,7 +12,8 @@ struct UpdateOptionSet: OptionSet {
     let rawValue: Int
 
     static let accessibleGOTracker = UpdateOptionSet(rawValue: 0x1 << 0)
-    static let craftWindow = UpdateOptionSet(rawValue: 0x1 << 1)
+    static let craftWindow = UpdateOptionSet(rawValue: 0x1 << 2)
+    static let sortSchedule = UpdateOptionSet(rawValue: 0x1 << 3)
 
 }
 

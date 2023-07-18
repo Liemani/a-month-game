@@ -43,10 +43,12 @@ class InventoryTapLogic: TouchLogic {
         if let activatedGO = TouchLogics.default.activatedGO {
             if self.cell.isEmpty {
                 TouchLogics.default.freeActivatedGO()
-                Logics.default.scene.move(activatedGO, to: self.cell.invCoord)
+                if activatedGO.type.isPickable {
+                    activatedGO.move(to: self.cell.invCoord)
+                }
             } else {
                 TouchLogics.default.freeActivatedGO()
-                Logics.default.go.interactToGO(activatedGO, to: cell.go!)
+                activatedGO.interact(to: cell.go!)
             }
         }
     }

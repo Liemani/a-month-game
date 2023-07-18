@@ -8,10 +8,70 @@
 import Foundation
 import SpriteKit
 
-class InteractionLogic {
+class ActionLogic {
 
-    let go: [GameObjectType: (InteractionLogic, GameObject) -> Bool] = [
-        .dirtTile: { handlerManager, go in
+    func update() {
+        for chunk in Logics.default.chunkContainer.chunkContainer.chunks {
+            let scheduler = chunk.scheduler
+
+            let cDate = Date()
+            var timeEventCount = 0
+
+            while timeEventCount < Constant.timeEventLimit {
+                guard let go = scheduler.orderedSet.firstObject as! GameObject? else {
+                    break
+                }
+
+                guard go.timeEventDate! <= cDate else {
+                    break
+                }
+
+                var index = 0
+
+                while index < scheduler.orderedSet.count {
+                    let go = scheduler.orderedSet[index] as! GameObject
+                    if go.timeEventDate! <= cDate {
+                        self.runTimeEventAction(go)
+
+                        if !go.isDeleted {
+                            index += 1
+                        }
+                    } else {
+                        break
+                    }
+                }
+
+                scheduler.sort()
+
+                timeEventCount += 1
+            }
+
+            for go in scheduler.orderedSet {
+                let go = go as! GameObject
+
+                if go.timeEventDate! <= cDate {
+                    go.dateLastChanged = cDate
+                } else {
+                    break
+                }
+            }
+
+            scheduler.sort()
+        }
+    }
+
+    func runTimeEventAction(_ go: GameObject) {
+        if let action = Logics.default.action.time[go.type] {
+            _ = action(go)
+        } else {
+            go.delete()
+        }
+
+        go.dateLastChanged = go.timeEventDate!
+    }
+
+    let interact: [GameObjectType: (GameObject) -> Bool] = [
+        .dirtTile: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -22,7 +82,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.set(type: .clayTile)
+            go.type = .clayTile
             Logics.default.scene.new(result: result,
                                      type: .dirt,
                                      quality: goEquiping.quality,
@@ -30,7 +90,7 @@ class InteractionLogic {
 
             return true
         },
-        .clayTile: { handlerManager, go in
+        .clayTile: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -41,7 +101,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.set(type: .caveCeilTile)
+            go.type = .caveCeilTile
             Logics.default.scene.new(result: result,
                                      type: .clay,
                                      quality: goEquiping.quality,
@@ -49,7 +109,7 @@ class InteractionLogic {
 
             return true
         },
-        .caveCeilTile: { handlerManager, go in
+        .caveCeilTile: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .pickaxe),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -60,7 +120,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.set(type: .caveHoleTile)
+            go.type = .caveHoleTile
             Logics.default.scene.new(result: result,
                                      type: .stone,
                                      quality: goEquiping.quality,
@@ -68,21 +128,21 @@ class InteractionLogic {
 
             return true
         },
-        .cobblestoneTile: { handleManager, go in
+        .cobblestoneTile: { go in
             guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
 
             let result = Logics.default.mastery.interact(go.type)
 
-            go.set(type: .sandTile)
+            go.type = .sandTile
             Logics.default.scene.new(result: result,
                                      type: .stone,
                                      coord: emptyInvCoord)
 
             return true
         },
-        .sandTile: { handlerManager, go in
+        .sandTile: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -93,7 +153,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.set(type: .clayTile)
+            go.type = .clayTile
             Logics.default.scene.new(result: result,
                                      type: .sand,
                                      quality: goEquiping.quality,
@@ -101,9 +161,8 @@ class InteractionLogic {
 
             return true
         },
-        .weed: { handlerManager, go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+        .weed: { go in
+            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle) else {
                 return false
             }
 
@@ -112,15 +171,15 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
             Logics.default.scene.new(result: result,
                                      type: .weedLeaves,
                                      quality: goEquiping.quality,
-                                     coord: emptyInvCoord)
+                                     coord: go.chunkCoord!)
 
             return true
         },
-        .vine: { handlerManager, go in
+        .vine: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -131,7 +190,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
             Logics.default.scene.new(result: result,
                                      type: .vineStem,
                                      quality: goEquiping.quality,
@@ -139,7 +198,7 @@ class InteractionLogic {
 
             return true
         },
-        .treeOak: { handlerManager, go in
+        .treeOak: { go in
             if let goEquiping = Logics.default.invContainer.go(equiping: .axe) {
 
                 goEquiping.emphasizeUsing()
@@ -150,7 +209,7 @@ class InteractionLogic {
                 let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                              to: go.type)
 
-                Logics.default.go.delete(go)
+                go.delete()
 
                 Logics.default.scene.new(result: result,
                                          type: .woodLog,
@@ -181,7 +240,7 @@ class InteractionLogic {
 
             let result = Logics.default.mastery.interact(go.type)
 
-            go.set(variant: 1)
+            go.variant = 1
 
             for _ in 0 ..< 2 {
                 let emptyInvCoord = Logics.default.invContainer.emptyCoord!
@@ -194,7 +253,7 @@ class InteractionLogic {
 
             return true
         },
-        .woodLog: { handlerManager, go in
+        .woodLog: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .saw),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -205,7 +264,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
 
             let newGOQuality = (go.quality + goEquiping.quality) / 2.0
 
@@ -219,8 +278,8 @@ class InteractionLogic {
         },
     ]
 
-    let goToGO: [GameObjectType: (InteractionLogic, GameObject, GameObject) -> Bool] = [
-        .waterTile: { handlerManager, go, target in
+    let interactToGO: [GameObjectType: (GameObject, GameObject) -> Bool] = [
+        .waterTile: { go, target in
             if go.type.isContainer {
                 if !Logics.default.invContainer.isEmpty(go.id) {
                     Logics.default.invContainer.deleteAll(go.id)
@@ -229,16 +288,16 @@ class InteractionLogic {
                 }
             }
 
-            Logics.default.scene.delete(go)
+            go.delete()
 
             return true
         },
-        .clayTile: { handlerManager, go, target in
+        .clayTile: { go, target in
             if go.type == .sand {
                 let result = Logics.default.mastery.interact(with: target.type,
                                                              to: go.type)
 
-                Logics.default.go.delete(go)
+                go.delete()
                 Logics.default.scene.set(result: result, go: target, type: .sandTile)
 
                 return true
@@ -248,7 +307,7 @@ class InteractionLogic {
                 let result = Logics.default.mastery.interact(with: target.type,
                                                              to: go.type)
 
-                Logics.default.go.delete(go)
+                go.delete()
                 Logics.default.scene.set(result: result, go: target, type: .dirtTile)
 
                 return true
@@ -256,39 +315,39 @@ class InteractionLogic {
 
             return false
         },
-        .caveCeilTile: { handlerManager, go, target in
+        .caveCeilTile: { go, target in
             guard go.type == .clay else { return false }
 
             let result = Logics.default.mastery.interact(with: target.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
             Logics.default.scene.set(result: result, go: target, type: .clayTile)
 
             return true
         },
-        .caveHoleTile: { handlerManager, go, target in
+        .caveHoleTile: { go, target in
             guard go.type == .stone else { return false }
 
             let result = Logics.default.mastery.interact(with: .stone, to: .caveHoleTile)
 
-            Logics.default.go.delete(go)
+            go.delete()
             Logics.default.scene.set(result: result, go: target, type: .caveCeilTile)
 
             return true
         },
-        .sandTile: { handlerManager, go, target in
+        .sandTile: { go, target in
             guard go.type == .stone else { return false }
 
             let result = Logics.default.mastery.interact(with: target.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
             Logics.default.scene.set(result: result, go: target, type: .cobblestoneTile)
 
             return true
         },
-        .treeOakSeed: { handlerManager, go, target in
+        .treeOakSeed: { go, target in
             let oakSeed = target
 
             guard go.type == .dirt,
@@ -296,7 +355,7 @@ class InteractionLogic {
                 return false
             }
 
-            let gosInTile = Logics.default.chunkContainer.items(at: seedChunkCoord)!
+            let gosInTile = Logics.default.chunkContainer.items(at: seedChunkCoord)
 
             guard let clayTile = gosInTile.first(where: { $0.type == .clayTile }) else {
                 return false
@@ -305,7 +364,7 @@ class InteractionLogic {
             let result = Logics.default.mastery.interact(with: target.type,
                                                          to: go.type)
 
-            Logics.default.go.delete(go)
+            go.delete()
 
             Logics.default.scene.set(result: result, go: clayTile, type: .dirtTile)
             Logics.default.scene.set(result: result, go: oakSeed, type: .treeOak)
@@ -315,4 +374,51 @@ class InteractionLogic {
             return true
         },
     ]
+
+    let time: [GameObjectType: (GameObject) -> Bool] = [
+        .weed: { go in
+            let weedChunkCoord = go.chunkCoord!
+            let randomDirection = Direction8.random.coord
+            let randomTileChunkCoord = weedChunkCoord + randomDirection
+
+            guard Logics.default.chunkContainer.isValid(randomTileChunkCoord) else {
+                return true
+            }
+
+            let gosOnTile = Logics.default.chunkContainer.items(at: randomTileChunkCoord)
+
+            var tile: GameObject? = nil
+
+            for go in gosOnTile {
+                if go.type.isTile {
+                    tile = go
+                    break
+                }
+            }
+
+            if let tile = tile {
+                switch tile.type {
+                case .dirtTile:
+                    tile.delete()
+                case .clayTile:
+                    tile.type = .dirtTile
+                case .caveCeilTile:
+                    tile.type = .clayTile
+                case .caveHoleTile:
+                    tile.type = .caveCeilTile
+                default:
+                    break
+                }
+            } else {
+                if gosOnTile.isEmpty {
+                    GameObject.new(type: .weed,
+                                   coord: randomTileChunkCoord,
+                                   date: go.timeEventDate!)
+                }
+            }
+
+            return true
+        },
+    ]
+
 }

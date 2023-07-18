@@ -144,7 +144,6 @@ class MapGenerator {
 //                                     seed: regionSeed)
 //    }
 
-    /// 'seed + (0x1 << 16) * N' output same pelin noise map lol
     /// - Parameters:
     ///         - chunkCoord: the chunk coord of region
     ///
@@ -166,6 +165,7 @@ class MapGenerator {
 
     func generateNoiseMap(sampleCount: vector_int2,
                           seed: Int32) -> GKNoiseMap {
+        // hidden mechanism: 'seed + (0x1 << 16) * N' output same pelin noise source lol
         let source = GKPerlinNoiseSource(frequency: 2.0,
                                          octaveCount: 6,
                                          persistence: 0.5,

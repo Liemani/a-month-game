@@ -29,11 +29,11 @@ class SceneLogic {
 
         let quality = max(quality + result.qualityDiff, 0)
 
-        Logics.default.go.new(type: goType,
-                              variant: variant,
-                              quality: quality,
-                              state: state,
-                              coord: invCoord)
+        GameObject.new(type: goType,
+                       variant: variant,
+                       quality: quality,
+                       state: state,
+                       coord: invCoord)
     }
 
     func new(result: TaskResultType,
@@ -46,11 +46,11 @@ class SceneLogic {
 
         let quality = max(quality + result.qualityDiff, 0)
 
-        Logics.default.go.new(type: goType,
-                              variant: variant,
-                              quality: quality,
-                              state: state,
-                              coord: chunkCoord)
+        GameObject.new(type: goType,
+                       variant: variant,
+                       quality: quality,
+                       state: state,
+                       coord: chunkCoord)
     }
 
     func new(result: TaskResultType,
@@ -75,7 +75,7 @@ class SceneLogic {
              type goType: GameObjectType) {
         guard result != .fail else { return }
 
-        go.set(type: goType)
+        go.type = goType
     }
 
     func set(result: TaskResultType,
@@ -83,7 +83,7 @@ class SceneLogic {
              variant: Int) {
         guard result != .fail else { return }
 
-        go.set(variant: variant)
+        go.variant = variant
     }
 
     func set(result: TaskResultType,
@@ -91,40 +91,7 @@ class SceneLogic {
              quality: Double) {
         guard result != .fail else { return }
 
-        go.set(quality: quality)
-    }
-
-    func move(_ go: GameObject, to invCoord: InventoryCoordinate) {
-        if !go.type.isContainer {
-            Logics.default.go.move(go, to: invCoord)
-
-            return
-        }
-
-        guard invCoord.id == Constant.characterInventoryID
-                || Services.default.invServ.isEmpty(id: go.id) else {
-            return
-        }
-
-        Logics.default.go.move(go, to: invCoord)
-
-        Logics.default.invContainer.closeAnyInv(of: go.id)
-    }
-
-    func move(_ go: GameObject, to chunkCoord: ChunkCoordinate) {
-        Logics.default.go.move(go, to: chunkCoord)
-
-        if go.type.isContainer {
-            Logics.default.invContainer.closeAnyInv(of: go.id)
-        }
-    }
-
-    func delete(_ go: GameObject) {
-        if go.type.isContainer {
-            Logics.default.invContainer.closeAnyInv(of: go.id)
-        }
-
-        Logics.default.go.delete(go)
+        go.quality = quality
     }
 
     // MARK: - inventory
@@ -174,7 +141,7 @@ class SceneLogic {
         }
 
         let invCoord = InventoryCoordinate(container.id, index)
-        Logics.default.scene.move(go, to: invCoord)
+        go.move(to: invCoord)
     }
 
     func containerTransfer(_ source: GameObject, to dest: GameObject) {
@@ -209,9 +176,9 @@ class SceneLogic {
         }
     }
 
-    // MARK: - chunk
+    // MARK: - chunk container
     func chunkContainerUpdate(direction: Direction4) {
-        Logics.default.chunkContainer.chunkContainerUpdate(direction: direction)
+        Logics.default.chunkContainer.update(direction: direction)
 
         let fieldInv = Logics.default.invContainer.fieldInv
         if fieldInv.parent == nil {

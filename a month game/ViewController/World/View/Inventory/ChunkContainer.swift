@@ -38,8 +38,6 @@ class ChunkContainer: SKNode {
 
             self.addChild(chunk)
             self.chunks.append(chunk)
-
-            self.setUpChunks(direction: direction)
         }
     }
 
@@ -47,27 +45,10 @@ class ChunkContainer: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - chunk
-    func update(direction: Direction4) {
-        self.shift(direction: direction.opposite)
-
-        for direction in direction.direction9 {
-            self.loadChunk(direction: direction)
+    func update() {
+        for chunk in chunks {
+            chunk.update()
         }
-    }
-
-    private func setUpChunks(direction: Direction9) {
-        var tartgetChunkCoord = self.character.chunkChunkCoord
-        tartgetChunkCoord += direction.coordOfAChunk
-
-        self.chunks[direction].setUp(chunkCoord: tartgetChunkCoord)
-    }
-
-    private func loadChunk(direction: Direction9) {
-        var tartgetChunkCoord = self.character.chunkChunkCoord
-        tartgetChunkCoord += direction.coordOfAChunk
-
-        self.chunks[direction].update(chunkCoord: tartgetChunkCoord)
     }
 
     // MARK: -
@@ -76,7 +57,7 @@ class ChunkContainer: SKNode {
     }
 
     // MARK: - private
-    private func shift(direction: Direction4) {
+    func shift(direction: Direction4) {
         switch direction {
         case .east:
             let temp1 = self.chunks[2]
@@ -204,15 +185,15 @@ extension ChunkContainer: InventoryProtocol {
         return self.isValid(goChunkCoord)
     }
 
-    func items(at coord: ChunkCoordinate) -> [GameObject]? {
+    func items(at coord: ChunkCoordinate) -> [GameObject] {
         guard let direction = self.chunkDirection(to: coord) else {
-            return nil
+            return []
         }
 
         return self.chunks[direction].items(at: coord.address.tile.coord)
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         let touchPoint = touch.location(in: self)
         let fieldCoord = FieldCoordinate(from: touchPoint)
         let directionCoord = fieldCoord.coord

@@ -20,40 +20,53 @@ class GameObjectData {
 
     var id: Int { Int(self.mo.id) }
 
-    var type: GameObjectType
-    func set(type goType: GameObjectType) {
-        self.mo.update(to: goType)
-        self.type = goType
+    private var _type: GameObjectType
+    var type: GameObjectType {
+        get { self._type }
+        set {
+            self._type = newValue
+
+            self.mo.update(type: newValue)
+        }
     }
 
-    var variant: Int
-    func set(variant: Int) {
-        self.mo.update(to: variant)
-        self.variant = variant
+    private var _variant: Int
+    var variant: Int {
+        get { self._variant }
+        set {
+            self._variant = newValue
+
+            self.mo.update(variant: newValue)
+        }
     }
 
     var quality: Double {
         get { self.mo.quality }
-        set { self.mo.quality = newValue }
+        set {
+            self.mo.update(quality: newValue)
+        }
     }
 
-    var state: GameObjectState
+    private var _state: GameObjectState
+    var state: GameObjectState { return self._state }
     func insert(state: GameObjectState) {
-        self.state.insert(state)
-        self.mo.update(to: state)
+        self._state.insert(state)
+
+        self.mo.update(state: state)
     }
     func remove(state: GameObjectState) {
-        self.state.remove(state)
-        self.mo.update(to: state)
+        self._state.remove(state)
+
+        self.mo.update(state: state)
     }
 
     private var _chunkCoord: ChunkCoordinate?
     var chunkCoord: ChunkCoordinate? { self._chunkCoord }
     func set(coord chunkCoord: ChunkCoordinate) {
-        self._chunkCoord = chunkCoord
         self._invCoord = nil
+        self._chunkCoord = chunkCoord
 
-        self.mo.update(to: chunkCoord)
+        self.mo.update(coord: chunkCoord)
     }
 
     private var _invCoord: InventoryCoordinate?
@@ -62,28 +75,51 @@ class GameObjectData {
         self._chunkCoord = nil
         self._invCoord = invCoord
 
-        self.mo.update(to: invCoord)
+        self.mo.update(coord: invCoord)
+    }
+
+    var dateLastChanged: Date {
+        get { self.mo.dateLastChanged! }
+        set {
+            self.mo.update(dateLastChanged: newValue)
+
+            self._setTimeEventDateByDateLastChanged()
+        }
+    }
+
+    var timeEventDate: Date?
+
+    private func _setTimeEventDateByDateLastChanged() {
+        let actionTimeout = self.type.actionTimeout
+
+        self.timeEventDate = (actionTimeout != Double.infinity)
+                                ? self.dateLastChanged + actionTimeout
+                                : nil
     }
 
     // MARK: - init
     init(goType: GameObjectType,
          variant: Int,
          quality: Double,
-         state: GameObjectState) {
+         state: GameObjectState,
+         date: Date) {
         let id = Services.default.idGeneratorServ.generate()
         self.mo = Services.default.goRepo.new(id: id,
                                               type: goType,
                                               variant: variant,
                                               quality: quality,
-                                              state: state)
+                                              state: state,
+                                              date: date)
 
-        self.type = goType
-        self.variant = variant
+        self._type = goType
+        self._variant = variant
 
-        self.state = state
+        self._state = state
 
         self._chunkCoord = nil
         self._invCoord = nil
+
+        self._setTimeEventDateByDateLastChanged()
     }
 
     init?(from goMO: GameObjectMO) {
@@ -92,10 +128,10 @@ class GameObjectData {
         }
 
         self.mo = goMO
-        self.type = goType
-        self.variant = goMO.variant
+        self._type = goType
+        self._variant = goMO.variant
 
-        self.state = GameObjectState(rawValue: goMO.state)
+        self._state = GameObjectState(rawValue: goMO.state)
 
         self._chunkCoord = nil
         self._invCoord = nil
@@ -116,6 +152,8 @@ class GameObjectData {
         if (self._chunkCoord == nil) == (self._invCoord == nil) {
             return nil
         }
+
+        self._setTimeEventDateByDateLastChanged()
     }
 
     func delete() {

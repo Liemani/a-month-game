@@ -144,19 +144,24 @@ class WorldScene: SKScene {
         // MARK: process touch
         TouchManager.default.updateTimeoutRecognizer()
 
-        self.handleEvent(currentTime)
+        self.handleEvent()
 
         // MARK: set new character position
         self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
 
         // MARK: apply new character position
-        self.updateModel()
+        self.updateModel(currentTime)
 
         // MARK: save changed data
         self.updateData()
     }
 
-    func handleEvent(_ currentTime: TimeInterval) {
+    func handleEvent() {
+        self.processGeneralEvent()
+        self.processTimeEvent()
+    }
+
+    func processGeneralEvent() {
         while let event = WorldEventManager.default.dequeue() {
             let eventType = event.type as! WorldEventType
             // TODO: remove argument self
@@ -164,7 +169,11 @@ class WorldScene: SKScene {
         }
     }
 
-    func updateModel() {
+    func processTimeEvent() {
+        Logics.default.action.update()
+    }
+
+    func updateModel(_ currentTime: TimeInterval) {
         if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
             self.accessibleGOTracker.update(chunkContainer: self.chunkContainer)
         }
@@ -177,6 +186,8 @@ class WorldScene: SKScene {
     }
 
     func updateData() {
+        self.chunkContainer.update()
+
         let moContext = Services.default.moContext
         if moContext.hasChanges {
             try! moContext.save()

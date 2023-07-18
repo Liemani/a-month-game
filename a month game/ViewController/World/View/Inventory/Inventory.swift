@@ -34,14 +34,14 @@ protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Item
     associatedtype Coord
-    associatedtype Items
+    associatedtype Items: Sequence<Item>
 
     func isValid(_ coord: Coord) -> Bool
     func contains(_ item: Item) -> Bool
 
-    func items(at coord: Coord) -> Items?
+    func items(at coord: Coord) -> Items
 
-    func itemsAtLocation(of touch: UITouch) -> Items?
+    func itemsAtLocation(of touch: UITouch) -> Items
     func coordAtLocation(of touch: UITouch) -> Coord?
 
     func add(_ item: Item)
@@ -203,32 +203,32 @@ extension Inventory: InventoryProtocol {
         return item.invCoord!.id == self.id
     }
 
-    func items(at coord: Int) -> [GameObject]? {
+    func items(at coord: Int) -> [GameObject] {
         guard !self.isValid(coord) else {
-            return nil
+            return []
         }
 
         let cell = self.children[coord]
 
         if cell.children.count != 0 {
-            return cell.children as! [GameObject]?
+            return cell.children as! [GameObject]
         } else {
-            return nil
+            return []
         }
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         for cell in self.children {
             if cell.isBeing(touched: touch) {
                 if cell.children.count != 0 {
-                    return cell.children as! [GameObject]?
+                    return cell.children as! [GameObject]
                 } else {
-                    return nil
+                    return []
                 }
             }
         }
 
-        return nil
+        return []
     }
 
     func coordAtLocation(of touch: UITouch) -> Int? {

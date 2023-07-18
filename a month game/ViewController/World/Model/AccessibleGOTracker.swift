@@ -12,16 +12,16 @@ class AccessibleGOTracker {
 
     var character: Character
 
-    private var dict: [Int: GameObject]
-    var gos: some Sequence<GameObject> { self.dict.values }
+    private var _gos: [Int: GameObject]
+    var gos: some Sequence<GameObject> { self._gos.values }
 
     init(character: Character) {
         self.character = character
-        self.dict = [:]
+        self._gos = [:]
     }
 
     func contains(_ go: GameObject) -> Bool {
-        return self.dict[go.id] != nil
+        return self._gos[go.id] != nil
     }
 
 //    func gameObjectAtLocation(of touch: UITouch) -> GameObject? {
@@ -36,21 +36,21 @@ class AccessibleGOTracker {
     // MARK: - edit
     func add(_ gos: [GameObject]) {
         for go in gos {
-            self.dict[go.id] = go
+            self._gos[go.id] = go
         }
     }
 
     func add(_ go: GameObject) {
-        self.dict[go.id] = go
+        self._gos[go.id] = go
     }
 
     func remove(_ go: GameObject) {
-        self.dict[go.id] = nil
+        self._gos[go.id] = nil
     }
 
     // MARK: - update
     func update(chunkContainer: ChunkContainer) {
-        self.dict.removeAll()
+        self._gos.removeAll()
 
         for direction in Direction9.allCases {
             let tileChunkCoord = self.character.chunkCoord + direction.coord

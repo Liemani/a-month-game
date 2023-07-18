@@ -11,10 +11,12 @@ import SpriteKit
 class Chunk: SKNode {
 
     var data: ChunkData
+    var scheduler: ChunkGOScheduler
 
     // MARK: - init
     override init() {
         self.data = ChunkData()
+        self.scheduler = ChunkGOScheduler()
 
         super.init()
     }
@@ -23,37 +25,21 @@ class Chunk: SKNode {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setUp(chunkCoord: ChunkCoordinate) {
-        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
-
-        for goData in goDatas {
-            let go = GameObject(from: goData)
-
-            self.add(go)
-        }
-    }
-
-    // MARK: - edit
-    // MARK: chunk
-    func update(chunkCoord: ChunkCoordinate) {
+    func removeAll() {
         self.removeAllChildren()
         self.data.removeAll()
+        self.scheduler.removeAll()
+    }
 
-//        DispatchQueue.global(qos: .userInteractive).async {
-            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
-            
-//            DispatchQueue.main.async {
-                for goData in goDatas {
-                    let go = GameObject(from: goData)
-
-                    self.add(go)
-                }
-//            }
-//        }
+    func update() {
+        if self.scheduler.hasChanges {
+            self.scheduler.sort()
+        }
     }
 
 }
 
+// MARK: - inventory protocol
 extension Chunk: InventoryProtocol {
 
     func isValid(_ coord: Coordinate<Int>) -> Bool {
@@ -76,16 +62,16 @@ extension Chunk: InventoryProtocol {
         return false
     }
 
-    func items(at coord: Coordinate<Int>) -> [GameObject]? {
+    func items(at coord: Coordinate<Int>) -> [GameObject] {
         let addr = Address(coord.x, coord.y).tile.value
         if let tileGOs = self.data.tileGOs(tileAddr: addr) {
             return tileGOs
         }
 
-        return nil
+        return []
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         let touchedLocation = touch.location(in: self)
         let touchedFieldCoord = FieldCoordinate(from: touchedLocation)
         let touchedChunkCoord = ChunkCoordinate(touchedFieldCoord.coord.x, touchedFieldCoord.coord.y)
@@ -95,7 +81,7 @@ extension Chunk: InventoryProtocol {
             return tileGOs
         }
 
-        return nil
+        return []
     }
 
     func coordAtLocation(of touch: UITouch) -> Coordinate<Int>? {
@@ -111,6 +97,7 @@ extension Chunk: InventoryProtocol {
 
     func add(_ item: GameObject) {
         self.data.add(item)
+        self.scheduler.add(item)
 
         let tileCoord = item.chunkCoord!.address.tile.coord
         item.position = FieldCoordinate(tileCoord).fieldPoint
@@ -120,12 +107,64 @@ extension Chunk: InventoryProtocol {
 
     func remove(_ item: GameObject) {
         self.data.remove(item)
+        self.scheduler.remove(item)
 
         item.removeFromParent()
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
         return (self.children as! [GameObject]).makeIterator()
+    }
+
+}
+
+// MARK: - logic
+extension Chunk {
+
+    func setUp(chunkCoord: ChunkCoordinate) {
+        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+
+        var sortedGOs: [GameObject] = []
+
+        for goData in goDatas {
+            let go = GameObject(from: goData)
+
+            self.data.add(go)
+
+            let tileCoord = go.chunkCoord!.address.tile.coord
+            go.position = FieldCoordinate(tileCoord).fieldPoint
+
+            self.addChild(go)
+
+            if go.timeEventDate != nil {
+                sortedGOs.append(go)
+            }
+        }
+
+        sortedGOs.sort { $0.timeEventDate! <= $1.timeEventDate! }
+
+        self.scheduler.add(sortedGOs)
+
+        Logics.default.action.update()
+    }
+
+    func update(chunkCoord: ChunkCoordinate) {
+        self.removeAll()
+
+        // NOTE: This code generated reference freed memory address or double free
+//        DispatchQueue.global(qos: .userInteractive).async {
+//            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+//
+//            DispatchQueue.main.async {
+//                for goData in goDatas {
+//                    let go = GameObject(from: goData)
+//
+//                    chunk.add(go)
+//                }
+//            }
+//        }
+
+        self.setUp(chunkCoord: chunkCoord)
     }
 
 }

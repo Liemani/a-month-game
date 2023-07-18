@@ -72,17 +72,28 @@ class InventoryContainerLogic {
     }
 
     func openFieldInv(of go: GameObject) {
-        let chunk = go.parent as! Chunk
+        let chunkContainer = go.parent!.parent as! ChunkContainer
         let fieldInv = self.invContainer.fieldInv
 
         fieldInv.reveal(with: go)
-        fieldInv.position = go.position
+        fieldInv.position = go.positionInWorld
             + CGPoint(x: 0, y: Constant.defaultWidth + Constant.defaultPadding)
 
         fieldInv.removeFromParent()
-        chunk.addChild(fieldInv)
+        chunkContainer.addChild(fieldInv)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+    }
+
+    func moveFieldInv(direction: Direction4) {
+        self.fieldInv.position += direction.coord.cgPoint * Constant.tileWidth
+
+        let tilePosition = self.fieldInv.position
+            - CGPoint(x: 0, y: Constant.defaultWidth + Constant.defaultPadding)
+
+        if Logics.default.chunkContainer.contains(tilePosition) {
+            self.fieldInv.hide()
+        }
     }
 
     func closeInvInv() {

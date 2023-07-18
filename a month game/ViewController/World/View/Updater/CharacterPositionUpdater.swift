@@ -32,7 +32,9 @@ class CharacterPositionUpdater {
     func updateSpeedModifier() {
         self.character.speedModifier = 1.0
 
-        guard let gos = self.chunkContainer.items(at: self.character.chunkCoord) else {
+        let gos = self.chunkContainer.items(at: self.character.chunkCoord)
+
+        guard !gos.isEmpty else {
             return
         }
 
@@ -58,7 +60,7 @@ class CharacterPositionUpdater {
             if let direction = self.currChunkDirection {
                 self.character.moveChunk(direction: direction)
                 Logics.default.scene.chunkContainerUpdate(direction: direction)
-                print(self.character.chunkChunkCoord)
+                Logics.default.invContainer.moveFieldInv(direction: direction)
             }
         }
 
@@ -146,6 +148,7 @@ class CharacterPositionUpdater {
 
     var currChunkDirection: Direction4? {
         let halfChunkwidth = Constant.chunkWidth / 2.0
+
         if self.character.position.x > halfChunkwidth {
             return .east
         } else if self.character.position.y < -halfChunkwidth {
@@ -155,11 +158,12 @@ class CharacterPositionUpdater {
         } else if self.character.position.y > halfChunkwidth {
             return .north
         }
+
         return nil
     }
 
     func saveCharacterPosition() {
-        var chunkChunkCoord = self.character.chunkChunkCoord
+        let chunkChunkCoord = self.character.chunkChunkCoord
 
         // case character.move() changed the chunkChunkCoord and the position
         //  but the position is CGPoint, so it's possible not move proper value
