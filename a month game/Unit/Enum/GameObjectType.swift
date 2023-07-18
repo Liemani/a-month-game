@@ -69,7 +69,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_cobblestone_tile", 0.75, 0, 1, true, false, false, Double.infinity),
         ("game_object_dirt_tile", 1.0, 0, 1, true, false, false, Double.infinity),
         ("game_object_wood_floor_tile", 1.0, 0, 1, true, false, false, Double.infinity),
-        ("game_object_weed", 0.75, 0, 2, false, false, false, 60.0),
+        ("game_object_weed", 0.75, 0, 2, false, false, false, Constant.aWeek),
         ("game_object_vine", 0.50, 0, 1, false, false, false, Double.infinity),
         ("game_object_tree_oak", -1.0, 0, 1, false, false, false, Double.infinity),
         ("game_object_pine_tree", -1.0, 0, 1, false, false, false, Double.infinity),

@@ -50,7 +50,7 @@ class PortalScene: SKScene {
     }
 
     func addButton(to parent: SKNode) {
-        let texture = SKTexture(imageNamed: Constant.ResourceName.button)
+        var texture = SKTexture(imageNamed: Constant.ResourceName.button)
 
         let enterButton = Button(texture: texture,
                                  frame: Constant.Frame.enterButton,
@@ -63,6 +63,13 @@ class PortalScene: SKScene {
                                  text: "Reset",
                                  eventType: PortalEventType.resetButton)
         parent.addChild(resetButton)
+
+        texture = SKTexture(imageNamed: Constant.ResourceName.discordButton)
+
+        let discordButton = Button(texture: texture,
+                                   frame: Constant.Frame.discordButton,
+                                   eventType: PortalEventType.discordButton)
+        parent.addChild(discordButton)
     }
 
     func addResetWindow(_ parent: SKNode) {

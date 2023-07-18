@@ -13,7 +13,10 @@ class Button: SKSpriteNode {
     let eventType: EventType
     var shouldActivated: Bool
 
-    init(texture: SKTexture?, frame: CGRect, text: String?, eventType: EventType) {
+    init(texture: SKTexture?,
+         frame: CGRect,
+         text: String? = nil,
+         eventType: EventType) {
         self.eventType = eventType
         self.shouldActivated = true
 

@@ -17,6 +17,7 @@ enum PortalEventType: Int, CaseIterable, EventType {
     case resetButton
     case resetYesButton
     case resetNoButton
+    case discordButton
 
     static let eventHandlers: [(PortalScene, Event) -> Void] = [
         { scene, event in // enterButton
@@ -34,6 +35,10 @@ enum PortalEventType: Int, CaseIterable, EventType {
 
         { scene, event in // resetNoButton
             scene.resetWindow.hide()
+        },
+
+        { scene, event in // discordButton
+            UIApplication.shared.open(URL(string: "https://discord.gg/YUbZkcfGcA")!)
         },
     ]
 

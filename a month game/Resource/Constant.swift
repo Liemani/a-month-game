@@ -108,31 +108,36 @@ struct Constant {
 
     // MARK: - frame
     struct Frame {
+        static let enterButton = CGRect(
+            origin: enterButtonNodePosition,
+            size: enterButtonNodeSize)
+        static let resetButton = CGRect(
+            origin: resetButtonNodePosition,
+            size: resetButtonNodeSize)
+        static let discordButton = CGRect(
+            origin: menuPosition,
+            size: defaultNodeSize)
+        static let yesButton = CGRect(
+            origin: enterButton.origin,
+            size: resetButton.size)
+        static let noButton = CGRect(
+            origin: resetButtonNodePosition,
+            size: resetButtonNodeSize)
         static let character = CGRect(
-            origin: Constant.sceneCenter,
-            size: Constant.defaultNodeSize)
+            origin: sceneCenter,
+            size: defaultNodeSize)
         static let menuButton = CGRect(
-            origin: Constant.menuPosition,
-            size: CGSize(width: Constant.defaultWidth, height: Constant.defaultWidth))
+            origin: menuPosition,
+            size: defaultNodeSize)
         static let infoWindowCloseButton = CGRect(
             origin: Size.infoWindow.cgPoint / 2.0 - defaultPadding,
             size: CGSize(width: defaultPadding, height: defaultPadding))
-        static let enterButton = CGRect(
-            origin: Constant.enterButtonNodePosition,
-            size: Constant.enterButtonNodeSize)
-        static let resetButton = CGRect(
-            origin: Constant.resetButtonNodePosition,
-            size: Constant.resetButtonNodeSize)
         static let worldMenuBackgroundButton = CGRect(
             origin: sceneCenter,
             size: sceneSize)
         static let exitWorldButton = CGRect(
-            origin: Constant.sceneCenter,
-            size: Constant.exitWorldButtonNodeSize)
-        static let yesButton = CGRect(
-            origin: Constant.Frame.enterButton.origin,
-            size: Constant.Frame.resetButton.size)
-        static let noButton = Constant.Frame.resetButton
+            origin: sceneCenter,
+            size: exitWorldButtonNodeSize)
     }
 
     // MARK: - name
@@ -165,6 +170,7 @@ struct Constant {
         static let craftCell = "craft_cell"
         static let bgPortal = "bg_portal"
         static let button = "button"
+        static let discordButton = "discord_icon"
         static let grassTile = "grass_tile"
     }
 
@@ -223,7 +229,7 @@ struct Constant {
     static let weedSpreadTime = 1 * 60.0
 
     static let aSecond = 1.0
-    static let aMinute = 60.0
+    static let aMinute = aSecond * 60.0
     static let anHour = aMinute * 60.0
     static let aDay = anHour * 24.0
     static let aWeek = aDay * 7.0

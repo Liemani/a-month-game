@@ -463,11 +463,6 @@ shovel -> weed: get weed to inventory
 
 ChunkOrderedSet -> ChunkGOOrderedSet
 
-action 으로 생성한 go 가 같은 chunk 에 만들어지는 오류
-    만약 다른 청크 위치를 갖는다면 다른 청크에 만들어져야 한다
-    그리고 시뮬레이션은 한 프레임에 다 완료됐으면 좋겠다
-    즉, 시뮬레이션 할 것이 없을 때까지 반복하기
-
 move frame cycle update to hasChanged for each class
 
 when delete go, if it is activatedGO, disconnect
@@ -768,6 +763,10 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+action 으로 생성한 go 가 같은 chunk 에 만들어지는 오류
+    만약 다른 청크 위치를 갖는다면 다른 청크에 만들어져야 한다
+    그리고 시뮬레이션은 한 프레임에 다 완료됐으면 좋겠다
+    즉, 시뮬레이션 할 것이 없을 때까지 반복하기
 event - action
 weed: expand terratory
 tree: respawn branch
