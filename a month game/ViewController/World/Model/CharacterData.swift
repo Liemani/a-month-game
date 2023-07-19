@@ -20,7 +20,7 @@ class CharacterData {
 
     // MARK: - init
     init() {
-        let worldDataRep = Services.default.worldDataRepo
+        let worldDataRep = Repositories.default.worldDataRepo
 
         let x = worldDataRep.load(at: .characterLocationChunkX)
         let y = worldDataRep.load(at: .characterLocationChunkY)
@@ -32,7 +32,7 @@ class CharacterData {
     }
 
     private func update(chunkCoord: ChunkCoordinate) {
-        let worldDataRep = Services.default.worldDataRepo
+        let worldDataRep = Repositories.default.worldDataRepo
 
         worldDataRep.update(value: Int(chunkCoord.x), to: .characterLocationChunkX)
         worldDataRep.update(value: Int(chunkCoord.y), to: .characterLocationChunkY)

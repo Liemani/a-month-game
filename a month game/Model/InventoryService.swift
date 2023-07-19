@@ -9,14 +9,8 @@ import Foundation
 
 class InventoryService {
 
-    private var inventoryRepo: InventoryRepository!
-
-    init(inventoryRepo: InventoryRepository) {
-        self.inventoryRepo = inventoryRepo
-    }
-
     func load(id: Int) -> [GameObjectData] {
-        let goMOs = self.inventoryRepo.load(id: id)
+        let goMOs = Repositories.default.invRepo.load(id: id)
         let goDatas = goMOs.compactMap {
             GameObjectData(from: $0)
         }
@@ -25,7 +19,7 @@ class InventoryService {
     }
 
     func emptyIndex(id: Int) -> Int {
-        var invCoordinateMOs = Services.default.invCoordDS.load(id: id)
+        var invCoordinateMOs = Repositories.default.invCoordDS.load(id: id)
         invCoordinateMOs.sort { $0.index < $1.index }
         var index = 0
 
@@ -41,7 +35,7 @@ class InventoryService {
     }
 
     func isEmpty(id: Int) -> Bool {
-        let goMOs = self.inventoryRepo.load(id: id)
+        let goMOs = Repositories.default.invRepo.load(id: id)
         return goMOs.count == 0
     }
 

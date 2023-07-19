@@ -10,16 +10,20 @@ import SpriteKit
 
 class ChunkContainer: SKNode {
 
-    private let character: Character
     var chunks: [Chunk]
 
     // MARK: computed property
-    var lowerBound: Coordinate<Int> { self.character.chunkChunkCoord.coord + Direction9.southWest.coordOfAChunk }
-    var upperBound: Coordinate<Int> { self.character.chunkChunkCoord.coord + Direction9.northEast.coordOfAChunk * 2 }
+    var lowerBound: Coordinate<Int> {
+        let middleChunkChunkCoord = Services.default.character.chunkCoord.chunk.coord
+        return middleChunkChunkCoord + Direction9.southWest.coordOfAChunk
+    }
+    var upperBound: Coordinate<Int> {
+        let middleChunkChunkCoord = Services.default.character.chunkCoord.chunk.coord
+        return middleChunkChunkCoord + Direction9.northEast.coordOfAChunk * 2
+    }
 
     // MARK: - init
-    init(character: Character) {
-        self.character = character
+    override init() {
         self.chunks = []
 
         super.init()
@@ -52,8 +56,9 @@ class ChunkContainer: SKNode {
     }
 
     // MARK: -
-    func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        return self.character.chunkChunkCoord.chunkDirection(to: chunkCoord)
+    func chunkDirection9(to targetChunkCoord: ChunkCoordinate) -> Direction9? {
+        let middleChunkCoord = Services.default.character.chunkCoord
+        return middleChunkCoord.chunkDirection9(to: targetChunkCoord)
     }
 
     // MARK: - private
@@ -186,7 +191,7 @@ extension ChunkContainer: InventoryProtocol {
     }
 
     func items(at coord: ChunkCoordinate) -> [GameObject] {
-        guard let direction = self.chunkDirection(to: coord) else {
+        guard let direction = self.chunkDirection9(to: coord) else {
             return []
         }
 
@@ -195,7 +200,7 @@ extension ChunkContainer: InventoryProtocol {
 
     func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         let touchPoint = touch.location(in: self)
-        let fieldCoord = FieldCoordinate(from: touchPoint)
+        let fieldCoord = CoordinateConverter(touchPoint)
         let directionCoord = fieldCoord.coord
         let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
         let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
@@ -214,18 +219,19 @@ extension ChunkContainer: InventoryProtocol {
             return nil
         }
 
-        let fieldCoord = FieldCoordinate(from: touchPoint)
+        let fieldCoord = CoordinateConverter(touchPoint)
 
-        return self.character.chunkChunkCoord + fieldCoord.coord
+        let middleChunkCoord = Services.default.character.chunkCoord.chunk
+        return middleChunkCoord + fieldCoord.coord
     }
 
     func add(_ item: GameObject) {
-        let direction = self.chunkDirection(to: item.chunkCoord!)!
+        let direction = self.chunkDirection9(to: item.chunkCoord!)!
         self.chunks[direction].add(item)
     }
 
     func remove(_ item: GameObject) {
-        guard let direction = self.chunkDirection(to: item.chunkCoord!) else {
+        guard let direction = self.chunkDirection9(to: item.chunkCoord!) else {
             return
         }
 

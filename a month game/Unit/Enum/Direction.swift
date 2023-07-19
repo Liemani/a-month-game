@@ -14,18 +14,6 @@ enum Direction4: Int, CaseIterable {
     case west
     case north
 
-    init?(from coord: Coordinate<Int>) {
-        var rawValue = 0
-        switch (coord.x, coord.y) {
-        case (1, 0): rawValue = 0
-        case (0, -1): rawValue = 1
-        case (-1, 0): rawValue = 2
-        case (0, 1): rawValue = 3
-        default: return nil
-        }
-        self.init(rawValue: rawValue)
-    }
-
     var coord: Coordinate<Int> { Direction4.coordTable[self] }
     var coordOfAChunk: Coordinate<Int> { Direction4.coordOfAChunkTable[self] }
     var opposite: Direction4 { Direction4.oppositeTable[self] }
@@ -59,6 +47,42 @@ enum Direction4: Int, CaseIterable {
         [.southWest, .west, .northWest],
         [.northWest, .north, .northEast],
     ]
+
+    static func table(_ coord: Coordinate<Int>) -> Direction4? {
+        var direction: Direction4
+
+        switch (coord.x, coord.y) {
+        case (1, 0):
+            direction = .east
+        case (0, -1):
+            direction = .south
+        case (-1, 0):
+            direction = .west
+        case (0, 1):
+            direction = .north
+        default: return nil
+        }
+
+        return direction
+    }
+
+    static func table(_ direction9: Direction9) -> Direction4? {
+        var direction: Direction4
+
+        switch direction9 {
+        case .east:
+            direction = .east
+        case .south:
+            direction = .south
+        case .west:
+            direction = .west
+        case .north:
+            direction = .north
+        default: return nil
+        }
+
+        return direction
+    }
 
 }
 

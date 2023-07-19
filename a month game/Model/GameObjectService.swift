@@ -11,9 +11,9 @@ class GameObjectService {
 
     func newMO(type goType: GameObjectType,
                coord chunkCoord: ChunkCoordinate) -> GameObjectMO {
-        let id = Services.default.idGeneratorServ.generate()
+        let id = Services.default.idGenerator.generate()
 
-        let mo = Services.default.goRepo.new(id: id,
+        let mo = Repositories.default.goRepo.new(id: id,
                                              type: goType,
                                              variant: 0,
                                              quality: 0.0,

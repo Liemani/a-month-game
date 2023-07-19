@@ -22,6 +22,23 @@ struct ChunkCoordinate {
         }
     }
 
+    var chunk: ChunkCoordinate {
+        var chunkChunkCoord = self
+        chunkChunkCoord.address.tile.setZero()
+        return chunkChunkCoord
+    }
+
+    func direction(_ direction: Direction9) -> ChunkCoordinate {
+        var x = Int(self.x) << 4 | self.address.chunk.coordX
+        var y = Int(self.y) << 4 | self.address.chunk.coordY
+
+        let directionCoord = direction.coord
+        x += directionCoord.x
+        y += directionCoord.y
+
+        return ChunkCoordinate(x, y)
+    }
+
     // MARK: - init
     init() {
         self.x = 0
@@ -52,8 +69,9 @@ struct ChunkCoordinate {
 //        return direction
 //    }
 
-    func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        let deltaCoord = chunkCoord.coord - self.coord
+    /// Suppose self. and chunkCoord is chunk chunk coordinate
+    func chunkDirection9(to chunkCoord: ChunkCoordinate) -> Direction9? {
+        let deltaCoord = chunkCoord.chunk.coord - self.chunk.coord
         let chunkDirection = Direction9(from: deltaCoord >> 4)
         return chunkDirection
     }

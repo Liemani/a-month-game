@@ -78,7 +78,7 @@ class GameObject: SKSpriteNode {
     var isInInv: Bool { self.invCoord != nil }
 
     var positionInWorld: CGPoint { self.position + self.parent!.position }
-
+    var frameInWorld: CGRect { self.frame + self.parent!.position }
     func setTexture(type goType: GameObjectType) {
         self.texture = goType.textures[0]
 
@@ -99,14 +99,6 @@ class GameObject: SKSpriteNode {
         self.size = goType.isTile || !goType.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize
-    }
-
-    func isAccessible(by character: Character) -> Bool {
-        if self.invCoord != nil {
-            return true
-        }
-
-        return character.accessibleFrame.contains(self.positionInWorld)
     }
 
     var chunk: Chunk? { self.parent as? Chunk }
@@ -359,7 +351,7 @@ extension GameObject {
         }
 
         guard invCoord.id == Constant.characterInventoryID
-                || Services.default.invServ.isEmpty(id: self.id) else {
+                || Services.default.inv.isEmpty(id: self.id) else {
             return
         }
 

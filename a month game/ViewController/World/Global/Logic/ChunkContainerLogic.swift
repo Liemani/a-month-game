@@ -32,13 +32,62 @@ class ChunkContainerLogic {
 
     private func setUpChunk(direction: Direction9) {
         let chunk = self.chunkContainer.chunks[direction]
-        let targetChunkCoord = Logics.default.character.chunkChunkCoord
-            + direction.coordOfAChunk
+        let targetCoord = Services.default.character.chunkCoord.direction(direction)
 
-        chunk.setUp(chunkCoord: targetChunkCoord)
+        chunk.setUp(chunkCoord: targetCoord)
     }
 
-    func update(direction: Direction4) {
+    func update(direction: Direction9) {
+        if direction == .northEast || direction == .southEast {
+            self.chunkContainer.shift(direction: Direction4.east.opposite)
+
+            for direction in Direction4.east.direction9 {
+                self.updateChunk(direction: direction)
+            }
+
+            if direction == .northEast {
+                self.chunkContainer.shift(direction: Direction4.north.opposite)
+
+                for direction in Direction4.north.direction9 {
+                    self.updateChunk(direction: direction)
+                }
+            } else {
+                self.chunkContainer.shift(direction: Direction4.south.opposite)
+
+                for direction in Direction4.south.direction9 {
+                    self.updateChunk(direction: direction)
+                }
+            }
+
+            return
+        }
+
+        if direction == .northWest || direction == .southWest {
+            self.chunkContainer.shift(direction: Direction4.west.opposite)
+
+            for direction in Direction4.west.direction9 {
+                self.updateChunk(direction: direction)
+            }
+
+            if direction == .northWest {
+                self.chunkContainer.shift(direction: Direction4.north.opposite)
+
+                for direction in Direction4.north.direction9 {
+                    self.updateChunk(direction: direction)
+                }
+            } else {
+                self.chunkContainer.shift(direction: Direction4.south.opposite)
+
+                for direction in Direction4.south.direction9 {
+                    self.updateChunk(direction: direction)
+                }
+            }
+
+            return
+        }
+
+        let direction = Direction4.table(direction)!
+
         self.chunkContainer.shift(direction: direction.opposite)
 
         for direction in direction.direction9 {
@@ -48,10 +97,9 @@ class ChunkContainerLogic {
 
     private func updateChunk(direction: Direction9) {
         let chunk = self.chunkContainer.chunks[direction]
-        let targetChunkCoord = Logics.default.character.chunkChunkCoord
-            + direction.coordOfAChunk
+        let targetCoord = Services.default.character.chunkCoord.direction(direction)
 
-        chunk.update(chunkCoord: targetChunkCoord)
+        chunk.update(chunkCoord: targetCoord)
     }
 
     func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
@@ -67,7 +115,7 @@ class ChunkContainerLogic {
     }
 
     func add(_ go: GameObject) {
-        let characterCoord = Logics.default.character.chunkCoord.coord
+        let characterCoord = Services.default.character.chunkCoord.coord
 
         self.chunkContainer.add(go)
 

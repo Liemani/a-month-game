@@ -13,13 +13,13 @@ class MovingLayer: SKNode {
     var chunkContainer: ChunkContainer!
 
     // MARK: - init
-    init(character: Character) {
+    override init() {
         super.init()
 
         self.zPosition = Constant.ZPosition.movingLayer
 
         // MARK: chunkContainer
-        let chunkContainer = ChunkContainer(character: character)
+        let chunkContainer = ChunkContainer()
         self.addChild(chunkContainer)
         self.chunkContainer = chunkContainer
 

@@ -136,7 +136,10 @@ struct Constant {
             origin: sceneCenter,
             size: sceneSize)
         static let exitWorldButton = CGRect(
-            origin: sceneCenter,
+            origin: enterButton.origin,
+            size: exitWorldButtonNodeSize)
+        static let escapeButton = CGRect(
+            origin: resetButtonNodePosition,
             size: exitWorldButtonNodeSize)
     }
 

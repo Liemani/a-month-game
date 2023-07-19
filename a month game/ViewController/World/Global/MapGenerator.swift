@@ -48,7 +48,7 @@ class MapGenerator {
 
         var mos: [GameObjectMO] = []
 
-        Services.default.chunkIsGeneratedRepo.new(chunkCoord: chunkChunkCoord)
+        Repositories.default.chunkIsGeneratedRepo.new(chunkCoord: chunkChunkCoord)
 
         for y in 0 ..< chunkSide {
             tileChunkCoord.address.tile.rawCoord.y = UInt8(y)
@@ -67,7 +67,7 @@ class MapGenerator {
                 let goType = self.goType(by: altitude)
 
                 if goType != .none {
-                    let mo = Services.default.goServ.newMO(type: goType,
+                    let mo = Services.default.go.newMO(type: goType,
                                                            coord: tileChunkCoord)
 
                     mos.append(mo)

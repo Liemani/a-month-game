@@ -26,7 +26,7 @@ class WorldPanLogic: TouchLogic {
     }
 
     override func began() {
-        Logics.default.character.resetVelocity()
+        Services.default.character.velocityVector = CGVector.zero
         self.cPoint = self.touch.location(in: self.scene)
     }
 
@@ -37,7 +37,7 @@ class WorldPanLogic: TouchLogic {
         let pointDelta = self.cPoint - self.pPoint
         let characterPositionDelta = -pointDelta
 
-        Logics.default.character.applyPositionDelta(characterPositionDelta)
+        Services.default.character.nPosition += characterPositionDelta
     }
 
     override func ended() {
@@ -51,7 +51,7 @@ class WorldPanLogic: TouchLogic {
 
         let velocityVector = (-(self.cPoint - self.pPoint) / timeInterval).vector
 
-        Logics.default.character.setVelocity(velocityVector)
+        Services.default.character.velocityVector = velocityVector
     }
 
 }

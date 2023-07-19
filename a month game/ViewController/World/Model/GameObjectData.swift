@@ -103,8 +103,8 @@ class GameObjectData {
          quality: Double,
          state: GameObjectState,
          date: Date) {
-        let id = Services.default.idGeneratorServ.generate()
-        self.mo = Services.default.goRepo.new(id: id,
+        let id = Services.default.idGenerator.generate()
+        self.mo = Repositories.default.goRepo.new(id: id,
                                               type: goType,
                                               variant: variant,
                                               quality: quality,

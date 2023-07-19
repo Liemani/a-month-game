@@ -10,13 +10,10 @@ import SpriteKit
 
 class AccessibleGOTracker {
 
-    var character: Character
-
     private var _gos: [Int: GameObject]
     var gos: some Sequence<GameObject> { self._gos.values }
 
-    init(character: Character) {
-        self.character = character
+    init() {
         self._gos = [:]
     }
 
@@ -53,8 +50,9 @@ class AccessibleGOTracker {
         self._gos.removeAll()
 
         for direction in Direction9.allCases {
-            let tileChunkCoord = self.character.chunkCoord + direction.coord
-            let chunkDirection = chunkContainer.chunkDirection(to: tileChunkCoord)!
+            let characterChunkCoord = Services.default.character.chunkCoord
+            let tileChunkCoord = characterChunkCoord + direction.coord
+            let chunkDirection = chunkContainer.chunkDirection9(to: tileChunkCoord)!
             let tileAddr = tileChunkCoord.address.tile.value
             let chunk = chunkContainer.chunks[chunkDirection]
 

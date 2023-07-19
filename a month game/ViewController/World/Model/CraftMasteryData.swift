@@ -27,7 +27,7 @@ class CraftMasteryData {
     }
 
     init(type goType: GameObjectType) {
-        self.mo = Services.default.craftMasteryRepo.new(type: goType)
+        self.mo = Repositories.default.craftMasteryRepo.new(type: goType)
 
         self.dstType = goType
     }

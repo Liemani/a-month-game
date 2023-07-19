@@ -47,7 +47,7 @@ extension ChunkCoordinateMO {
     }
 
     func delete() {
-        Services.default.moContext.delete(self)
+        Repositories.default.moContext.delete(self)
     }
 
 }

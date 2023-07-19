@@ -73,7 +73,7 @@ extension Chunk: InventoryProtocol {
 
     func itemsAtLocation(of touch: UITouch) -> [GameObject] {
         let touchedLocation = touch.location(in: self)
-        let touchedFieldCoord = FieldCoordinate(from: touchedLocation)
+        let touchedFieldCoord = CoordinateConverter(touchedLocation)
         let touchedChunkCoord = ChunkCoordinate(touchedFieldCoord.coord.x, touchedFieldCoord.coord.y)
 
         let tileAddr = touchedChunkCoord.address.tile.value
@@ -92,7 +92,7 @@ extension Chunk: InventoryProtocol {
             return nil
         }
 
-        return FieldCoordinate(from: touchPoint).coord
+        return CoordinateConverter(touchPoint).coord
     }
 
     func add(_ item: GameObject) {
@@ -100,7 +100,7 @@ extension Chunk: InventoryProtocol {
         self.scheduler.add(item)
 
         let tileCoord = item.chunkCoord!.address.tile.coord
-        item.position = FieldCoordinate(tileCoord).fieldPoint
+        item.position = CoordinateConverter(tileCoord).fieldPoint
 
         self.addChild(item)
     }
@@ -122,7 +122,7 @@ extension Chunk: InventoryProtocol {
 extension Chunk {
 
     func setUp(chunkCoord: ChunkCoordinate) {
-        let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+        let goDatas = Services.default.chunk.load(at: chunkCoord)
 
         var sortedGOs: [GameObject] = []
 
@@ -132,7 +132,7 @@ extension Chunk {
             self.data.add(go)
 
             let tileCoord = go.chunkCoord!.address.tile.coord
-            go.position = FieldCoordinate(tileCoord).fieldPoint
+            go.position = CoordinateConverter(tileCoord).fieldPoint
 
             self.addChild(go)
 
@@ -153,7 +153,7 @@ extension Chunk {
 
         // NOTE: This code generated reference freed memory address or double free
 //        DispatchQueue.global(qos: .userInteractive).async {
-//            let goDatas = Services.default.chunkServ.load(at: chunkCoord)
+//            let goDatas = Services.default.chunk.load(at: chunkCoord)
 //
 //            DispatchQueue.main.async {
 //                for goData in goDatas {

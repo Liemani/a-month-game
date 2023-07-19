@@ -9,21 +9,17 @@ import Foundation
 
 class ChunkService {
 
-    private let chunkRepo: ChunkRepository
-
-    init(chunkRepo: ChunkRepository) {
-        self.chunkRepo = chunkRepo
-    }
-
     /// - Parameters:
     ///         - chunkCoord: ChunkCoordinate of chunk
     func load(at chunkCoord: ChunkCoordinate) -> [GameObjectData] {
+        let chunkChunkCoord = chunkCoord.chunk
+
         var goMOs: [GameObjectMO]
 
-        if Services.default.chunkIsGeneratedDS.load(at: chunkCoord).isEmpty {
-            goMOs = MapGenerator.default.generateChunk(chunkCoord)
+        if Repositories.default.chunkIsGeneratedDS.load(at: chunkChunkCoord).isEmpty {
+            goMOs = MapGenerator.default.generateChunk(chunkChunkCoord)
         } else {
-            goMOs = self.chunkRepo.load(at: chunkCoord)
+            goMOs = Repositories.default.chunkRepo.load(at: chunkChunkCoord)
         }
 
         let goDatas = goMOs.compactMap { GameObjectData(from: $0) }

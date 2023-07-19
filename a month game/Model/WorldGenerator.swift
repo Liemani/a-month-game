@@ -17,7 +17,7 @@ final class WorldGenerator {
     }
 
     private func generateWorldData(worldName: String) {
-        let worldDataRepo = Services.default.worldDataRepo
+        let worldDataRepo = Repositories.default.worldDataRepo
 
         worldDataRepo.update(value: Constant.initialNextID, to: .nextID)
         worldDataRepo.update(value: 0, to: .characterLocationChunkX)
@@ -44,7 +44,7 @@ final class WorldGenerator {
         self.newSquare(goType: .weed, x: 5, y: 5, width: 5, height: 5)
         self.newSquare(goType: .vine, x: 0, y: 10, width: 5, height: 5)
 
-        try! Services.default.moContext.save()
+        try! Repositories.default.moContext.save()
     }
 
     func newSquare(goType: GameObjectType, x: Int, y: Int, width: Int, height: Int) {
@@ -67,7 +67,7 @@ final class WorldGenerator {
 
     private func new(type goType: GameObjectType, x: Int, y: Int) {
         let chunkCoord = ChunkCoordinate(x, y)
-        _ = Services.default.goServ.newMO(type: goType, coord: chunkCoord)
+        _ = Services.default.go.newMO(type: goType, coord: chunkCoord)
     }
 
 }

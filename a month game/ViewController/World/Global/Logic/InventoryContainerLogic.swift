@@ -85,14 +85,15 @@ class InventoryContainerLogic {
         FrameCycleUpdateManager.default.update(with: .craftWindow)
     }
 
-    func moveFieldInv(direction: Direction4) {
+    func moveFieldInv(direction: Direction9) {
         self.fieldInv.position += direction.coord.cgPoint * Constant.tileWidth
 
-        let tilePosition = self.fieldInv.position
-            - CGPoint(x: 0, y: Constant.defaultWidth + Constant.defaultPadding)
-
-        if Logics.default.chunkContainer.contains(tilePosition) {
-            self.fieldInv.hide()
+//        let tilePosition = self.fieldInv.position
+//            - CGPoint(x: 0, y: Constant.defaultWidth + Constant.defaultPadding)
+//
+//        if Logics.default.chunkContainer.contains(tilePosition) {
+        if self.fieldInv.parent != nil {
+            Logics.default.invContainer.closeFieldInv()
         }
     }
 
@@ -112,7 +113,7 @@ class InventoryContainerLogic {
         if let sourceInvData = Logics.default.invContainer.inv(id: id)?.data {
             return sourceInvData.isEmpty
         } else {
-            let goDatas = Services.default.invServ.load(id: id)
+            let goDatas = Services.default.inv.load(id: id)
             return goDatas.isEmpty
         }
     }
@@ -126,7 +127,7 @@ class InventoryContainerLogic {
 
             sourceInvData.inv!.synchronizeData()
         } else {
-            let goDatas = Services.default.invServ.load(id: id)
+            let goDatas = Services.default.inv.load(id: id)
             for goData in goDatas {
                 goData.delete()
             }

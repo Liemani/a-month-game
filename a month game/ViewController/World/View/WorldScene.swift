@@ -23,10 +23,8 @@ class WorldScene: SKScene {
 
     // MARK: layer
     var worldLayer: SKNode!
-    var movingLayer: MovingLayer!
     var chunkContainer: ChunkContainer!
 
-    var character: Character!
     var ui: SKNode!
     var craftWindow: CraftWindow!
 
@@ -45,12 +43,6 @@ class WorldScene: SKScene {
 
         self.initModel()
         self.initSceneLayer()
-
-        self.characterPositionUpdateHandler = CharacterPositionUpdater(
-            character: self.character,
-            movingLayer: self.movingLayer,
-            chunkContainer: self.chunkContainer,
-            accessibleGOTracker: self.accessibleGOTracker)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,13 +50,10 @@ class WorldScene: SKScene {
     }
 
     func initModel() {
-        self.character = Character()
-
-        let movingLayer = MovingLayer(character: character)
-        self.movingLayer = movingLayer
+        let movingLayer = Services.default.movingLayer.movingLayer
         self.chunkContainer = movingLayer.chunkContainer
 
-        self.accessibleGOTracker = AccessibleGOTracker(character: character)
+        self.accessibleGOTracker = AccessibleGOTracker()
         FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
 
         let invContainer = InventoryContainer()
@@ -93,8 +82,8 @@ class WorldScene: SKScene {
         self.worldLayer = worldLayer
 
         // MARK: moving layer
-        worldLayer.addChild(self.character)
-        worldLayer.addChild(movingLayer)
+        worldLayer.addChild(Services.default.character.character)
+        worldLayer.addChild(Services.default.movingLayer.movingLayer)
         self.invContainer.fieldInv.zPosition = Constant.ZPosition.fieldInv
 
         // MARK: ui
@@ -135,7 +124,6 @@ class WorldScene: SKScene {
     var pTime: TimeInterval!
     var cTime: TimeInterval!
     var timeInterval: TimeInterval { self.cTime - self.pTime }
-    var characterPositionUpdateHandler: CharacterPositionUpdater!
 
     override func update(_ currentTime: TimeInterval) {
         self.pTime = self.cTime
@@ -147,7 +135,7 @@ class WorldScene: SKScene {
         self.handleEvent()
 
         // MARK: set new character position
-        self.characterPositionUpdateHandler.update(timeInterval: self.timeInterval)
+        Services.default.character.update(timeInterval: self.timeInterval)
 
         // MARK: apply new character position
         self.updateModel(currentTime)
@@ -188,7 +176,7 @@ class WorldScene: SKScene {
     func updateData() {
         self.chunkContainer.update()
 
-        let moContext = Services.default.moContext
+        let moContext = Repositories.default.moContext
         if moContext.hasChanges {
             try! moContext.save()
         }

@@ -446,6 +446,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+-
 
 ## mandatory
 the button that reset the character position(escape) at menu
@@ -482,6 +483,9 @@ fix friction
 refactor constants to load from property list
 compose table node for button list(has isScrollable property)
 remove goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
+AccessibleGOTracker -> NonWalkableGOTracker
+remove guard !go.type.isWalkable else { continue }
+    from CharacterService.resolveCollisionOfNonWalkable()
 
 ## should i did?
 after activate pinch, after touch up one touch, pinch works

@@ -9,14 +9,8 @@ import Foundation
 
 class InteractionMasteryService {
 
-    private let dataSource: InteractionMasteryDataSource
-
-    init(dataSource: InteractionMasteryDataSource) {
-        self.dataSource = dataSource
-    }
-
     func load() -> [InteractionMasteryData] {
-        let mos = self.dataSource.load()
+        let mos = Repositories.default.interactionMasteryDS.load()
 
         let datas = mos.compactMap { InteractionMasteryData(from: $0) }
         return datas
