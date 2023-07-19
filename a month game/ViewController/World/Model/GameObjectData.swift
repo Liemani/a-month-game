@@ -92,7 +92,7 @@ class GameObjectData {
     private func _setTimeEventDateByDateLastChanged() {
         let actionTimeout = self.type.actionTimeout
 
-        self.timeEventDate = (actionTimeout != Double.infinity)
+        self.timeEventDate = (actionTimeout != -1)
                                 ? self.dateLastChanged + actionTimeout
                                 : nil
     }

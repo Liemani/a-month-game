@@ -387,6 +387,10 @@ extension GameObject {
     func delete() {
         self.removeFromParentWithSideEffect()
 
+        if self === Logics.default.touch.activatedGO {
+            Logics.default.touch.freeActivatedGO()
+        }
+
         if self.type.isContainer {
             Logics.default.invContainer.closeAnyInv(of: self.id)
         }

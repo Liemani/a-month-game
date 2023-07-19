@@ -446,172 +446,77 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
--
-remove GameObjectDataLogic
 
-move container to container qualiti order
-상수는 프로퍼티 리스트로 불러오면 좋겠다
-월드 여러개는?
-포탈 메뉴
-청크 컨테이너 업데이트 시 중앙 청크부터
-이전 버전은 어떤지 비교
-태그 달기
-알림 센터 충돌 실험
+## mandatory
+the button that reset the character position(escape) at menu
+add sapling
 shovel -> weed: get weed to inventory
 
-굳이 모든 오브젝트를 1 타일로 만들 필요는 없다
+## 2nd priority
+character inventory and invInv have to belong to character
+upgradable plant
+create
+    boat
+    bridge
+    water terraforming
+    road
+    barley
+set world seed
 
-ChunkOrderedSet -> ChunkGOOrderedSet
+## 3rd priority
+move container to container qualiti order
 
+## debt
+refactor game object texture mechanism
+remove GameObjectDataLogic
 move frame cycle update to hasChanged for each class
-
-when delete go, if it is activatedGO, disconnect
-
-배
-다리
-물 테라포밍
-도로
-잔디 전파
-아이템 사라짐
-잔디는 인벤 노 바닥 떨굼
-리스폰 버튼
-
 rotate used item only texture without quality box
+remember open character inventory container and open when enter world
+display expected quality to craft object
+limit end of world
+container another image for empty, normal, full
+make the time event timeout -1 if don't want rather than Double.infinity
+add tag imposed commit
+conflict test with notification center drag
+fix friction
+refactor constants to load from property list
+compose table node for button list(has isScrollable property)
+remove goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
 
-something crash when move another chunk
+## should i did?
+after activate pinch, after touch up one touch, pinch works
+support multiple world
+when update all chunk, update center first
 
+## scribble
 move global/model -> world/service
-
-what about removing goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
-
-barley
-
-remove specific time last game object
-
-what about
-    remember open character inventory container and open when enter world
 
 what is the profit of the quality?
     durability
     strength
     task time
 
-road has more moving speed
-
-add discord server button
-
 move action when craft
-
-underground
-
-display expected quality to craft object
 
 fire
 potery
-
+brick
 shallow water
+underground
 
-container
-    another image for empty, normal, full
-
-limit end of world
-
-add oak tree sapling
-implement underground
-remove GO when put to water
 지상 및 지하를 미리 로딩해둔다
 타일간 상호작용 구현
 menu button -> cancel all gesture
 캐릭터 이미지 추가하기
     옆에서 보는 이미지가 좋겠다
 
-world generator
-    generate in chunk unit dynamically
-    sea
-
-func base(chunkCoord: ChunkCoordinate) -> Double {
-    let absY = abs(chunkCoord.y)
-
-    if absY < (Int.max >> 1) {
-        return -1.0
-    }
-
-    return (Double(absY - (Int.max >> 1)) / Double(Int.max >> 2)) - 1.0
-}
-
-add haptic
-
-한 쪽이 + 면 다른 쪽은 - 인 것은 재미 없다
-밀도가 다르다
-나는 어느 정도의 밀도를 원하는가?
-월드 끝에서 끝까지 몇 번이나 반복되면 좋겠는가?
-즉, 세세한 것은 랜덤이지만 큰 틀에서는 조절되야 한다
-
-random generator
-
-mastery
-brick
-fire
-info
+add haptic when open info window
 
 optimize accessibleGOTracker::update()
-
-example code
-func isDeepWater(seed: Int, chunkCoord: ChunkCoordinate) -> Bool {
-    return true
-    return chunkCoord.chunk.address % 2
-}
-
-월드의 좌우, 위아래가 각각 연결되어 있다
-그럼 이걸 구형이라고 한다면
-위도 0은 어디이며 위도 90은 어디일까?
-적도는 어디이며 극은 어디일까?
-가운데를 적도라고 하자,
-그럼 극은 2 곳이어야 하므로 1/4 과 3/4 이 극이어야 한다
-그럼 위와 아래는 또 다른 적도가 되어야 한다
-그런데 문제는, 적도를 돌아서 다른 적도와 만날 수 없다는 것이다
-그럼 결국 적도는 하나만 배치해야 한다
-그럼 구형 월드가 아니라 원통형 월드라면 어떨까?
-좌우는 연결되되, 상하는 끊어져 있다
-그래서 중심에 1 개의 적도와 상하에 2개의 극을 가질 수 있다
-그럼 적도는 0 이고, 멀어질수록 높이가 1 청크당 1 씩 높아진다고 하자
-그럼 적도에 물이 모이고 양 극은 대륙이 될 것이다
-하지만 물은 땅과 같은 면적이라고 한다면 평균 높이를 해수면으로 잡으면 안된다
-물은 삼각뿔 형태에 모이기 때문에 땅의 평균 높이보다 더 높아야 물의 양과 땅의 양이 같게 된다
-하지만 그렇게되면 땅이 다 사라진다
-즉, 물과 땅의 비율에서, 물이 더 적어야 한다
-물의 양을 적절하 조절하자
-지구와 같게 하는게 좋겠다
-표면의 물 비율은 70 퍼센트로 한다
-그럼 전체 높이는 청크의 "y 좌표" + "chunk.coord.y" 이니 이 값의 70% 를 해수면으로 한다
-여기에 변주를 줘야 한다
-강은 당연히 있어야 하는 것이고
-    화산 폭발
-    대륙 이동
-    혜성 충돌
-한 청크를 시뮬레이션하기 위해서는 최소 그 주변 청크까지 시뮬레이션 해야 하지 않을까?
-해안선을 랜덤하게 절반씩 결정하는게 좋다
-[] 한 128개의 높이를 설정해야 한다고 하면
-0번 높이는 0이라 하고
-64번 높이는 n의 랜덤성을 주고
-32번 높이에 평균에 n /2 의 랜덤성을 주고
-반복, 너무 단조롭지 않을까?
-괜찮을 것 같긴 하다
-하지만 이 알고리즘은 특정 지점을 알기 위해 다른 지점의 계산을 요구한다
-반대로 작은 랜덤성으로 큰 랜덤성을 유추해나가는 방식이 있으면 좋겠다
-
-region 마다 방향을 하나씩 가지게 한다
-    region 은 큰 영향을 미친다
-chunk 마다 방향을 하나씩 갖는다
-    chunk 는 작은 영향을 미친다
-고정된 multiplier 와 increment 를 준비한다
-seed 에 따라 chunk 를 계산하여 그린다
 
 game object must have it's size not default node size
     terrain -> default node size
     else -> middle size
-캐릭터는 월드에 귀속된다
-add mastery system
 
 interact 구현
     씨앗 -> 나무
@@ -620,14 +525,11 @@ sound 구현 및 추가
     background
     interact
     button touch
-fix friction
 touch pine cone make pine tree
 Add interaction
     wood wall with axe
     pine cone
     pine tree with axe
-add tools
-add quality
 hide reset button to menu window
 이력서 정리해서 보내드리기
 
@@ -636,8 +538,6 @@ sand color is to yellow
 dirt has wrong outline
 add fade effect
 add sound
-long info touch
-    add timer
 address -> addr
 벽 뚫는거 막는게 좋다
 add small none texture
@@ -763,6 +663,91 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+잔디는 인벤 노 바닥 떨굼
+when delete go, if it is activatedGO, disconnect
+long info touch
+    add timer
+add tools
+add quality
+add mastery system
+example code
+func isDeepWater(seed: Int, chunkCoord: ChunkCoordinate) -> Bool {
+    return true
+    return chunkCoord.chunk.address % 2
+}
+
+월드의 좌우, 위아래가 각각 연결되어 있다
+그럼 이걸 구형이라고 한다면
+위도 0은 어디이며 위도 90은 어디일까?
+적도는 어디이며 극은 어디일까?
+가운데를 적도라고 하자,
+그럼 극은 2 곳이어야 하므로 1/4 과 3/4 이 극이어야 한다
+그럼 위와 아래는 또 다른 적도가 되어야 한다
+그런데 문제는, 적도를 돌아서 다른 적도와 만날 수 없다는 것이다
+그럼 결국 적도는 하나만 배치해야 한다
+그럼 구형 월드가 아니라 원통형 월드라면 어떨까?
+좌우는 연결되되, 상하는 끊어져 있다
+그래서 중심에 1 개의 적도와 상하에 2개의 극을 가질 수 있다
+그럼 적도는 0 이고, 멀어질수록 높이가 1 청크당 1 씩 높아진다고 하자
+그럼 적도에 물이 모이고 양 극은 대륙이 될 것이다
+하지만 물은 땅과 같은 면적이라고 한다면 평균 높이를 해수면으로 잡으면 안된다
+물은 삼각뿔 형태에 모이기 때문에 땅의 평균 높이보다 더 높아야 물의 양과 땅의 양이 같게 된다
+하지만 그렇게되면 땅이 다 사라진다
+즉, 물과 땅의 비율에서, 물이 더 적어야 한다
+물의 양을 적절하 조절하자
+지구와 같게 하는게 좋겠다
+표면의 물 비율은 70 퍼센트로 한다
+그럼 전체 높이는 청크의 "y 좌표" + "chunk.coord.y" 이니 이 값의 70% 를 해수면으로 한다
+여기에 변주를 줘야 한다
+강은 당연히 있어야 하는 것이고
+    화산 폭발
+    대륙 이동
+    혜성 충돌
+한 청크를 시뮬레이션하기 위해서는 최소 그 주변 청크까지 시뮬레이션 해야 하지 않을까?
+해안선을 랜덤하게 절반씩 결정하는게 좋다
+[] 한 128개의 높이를 설정해야 한다고 하면
+0번 높이는 0이라 하고
+64번 높이는 n의 랜덤성을 주고
+32번 높이에 평균에 n /2 의 랜덤성을 주고
+반복, 너무 단조롭지 않을까?
+괜찮을 것 같긴 하다
+하지만 이 알고리즘은 특정 지점을 알기 위해 다른 지점의 계산을 요구한다
+반대로 작은 랜덤성으로 큰 랜덤성을 유추해나가는 방식이 있으면 좋겠다
+
+region 마다 방향을 하나씩 가지게 한다
+    region 은 큰 영향을 미친다
+chunk 마다 방향을 하나씩 갖는다
+    chunk 는 작은 영향을 미친다
+고정된 multiplier 와 increment 를 준비한다
+seed 에 따라 chunk 를 계산하여 그린다
+한 쪽이 + 면 다른 쪽은 - 인 것은 재미 없다
+밀도가 다르다
+나는 어느 정도의 밀도를 원하는가?
+월드 끝에서 끝까지 몇 번이나 반복되면 좋겠는가?
+즉, 세세한 것은 랜덤이지만 큰 틀에서는 조절되야 한다
+
+random generator
+mastery
+world generator
+    generate in chunk unit dynamically
+    sea
+
+func base(chunkCoord: ChunkCoordinate) -> Double {
+    let absY = abs(chunkCoord.y)
+
+    if absY < (Int.max >> 1) {
+        return -1.0
+    }
+
+    return (Double(absY - (Int.max >> 1)) / Double(Int.max >> 2)) - 1.0
+}
+remove GO when put to water
+remove specific time last game object
+something crash when move another chunk
+아이템 사라짐
+잔디 전파
+ChunkOrderedSet -> ChunkGOOrderedSet
+add discord server button
 action 으로 생성한 go 가 같은 chunk 에 만들어지는 오류
     만약 다른 청크 위치를 갖는다면 다른 청크에 만들어져야 한다
     그리고 시뮬레이션은 한 프레임에 다 완료됐으면 좋겠다
