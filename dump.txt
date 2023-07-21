@@ -446,6 +446,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
         firing
 
 # issue
+-
+track chunk.updateSchedule
 
 ## mandatory
 the button that reset the character position(escape) at menu
@@ -465,6 +467,7 @@ set world seed
 
 ## 3rd priority
 move container to container qualiti order
+add scheduler to inventory
 
 ## debt
 refactor game object texture mechanism
@@ -482,6 +485,9 @@ fix friction
 refactor constants to load from property list
 compose table node for button list(has isScrollable property)
 remove goRepo init(goDS:, chunkCoordDS: , invCoordDS: )
+AccessibleGOTracker -> NonWalkableGOTracker
+remove guard !go.type.isWalkable else { continue }
+    from CharacterService.resolveCollisionOfNonWalkable()
 
 ## should i did?
 after activate pinch, after touch up one touch, pinch works

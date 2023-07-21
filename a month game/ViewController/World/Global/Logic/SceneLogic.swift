@@ -133,7 +133,7 @@ class SceneLogic {
                 return
             }
         } else {
-            index = Services.default.invServ.emptyIndex(id: container.id)
+            index = Services.default.inv.emptyIndex(id: container.id)
 
             guard index < container.type.invCapacity else {
                 return
@@ -176,19 +176,14 @@ class SceneLogic {
         }
     }
 
-    // MARK: - chunk container
-    func chunkContainerUpdate(direction: Direction4) {
-        Logics.default.chunkContainer.update(direction: direction)
-
-        let fieldInv = Logics.default.invContainer.fieldInv
-        if fieldInv.parent == nil {
-            Logics.default.invContainer.closeFieldInv()
-        }
-    }
-
     // MARK: - etc
     func isDescendantOfUILayer(_ node: SKNode) -> Bool {
         return node.isDescendant(self.scene.ui)
+    }
+
+    func escape() {
+        Services.default.character.reset()
+        Services.default.chunkContainer.reset()
     }
 
 }

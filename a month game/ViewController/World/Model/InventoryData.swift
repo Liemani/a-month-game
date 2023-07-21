@@ -54,7 +54,7 @@ class InventoryData {
         
         self.id = id
 
-        let goDatas = Services.default.invServ.load(id: id)
+        let goDatas = Services.default.inv.load(id: id)
 
         for goData in goDatas {
             self.goDatas[goData.invCoord!.index] = goData

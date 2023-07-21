@@ -71,7 +71,7 @@ extension GameObjectMO {
         if let chunkCoordMO = self.chunkCoord {
             chunkCoordMO.update(chunkCoord)
         } else {
-            let chunkCoordMO = Services.default.chunkCoordDS.new()
+            let chunkCoordMO = Repositories.default.chunkCoordDS.new()
             chunkCoordMO.update(chunkCoord)
             chunkCoordMO.gameObjectMO = self
             self.chunkCoord = chunkCoordMO
@@ -86,7 +86,7 @@ extension GameObjectMO {
         if let invCoordMO = self.invCoord {
             invCoordMO.update(invCoord)
         } else {
-            let invCoordMO = Services.default.invCoordDS.new()
+            let invCoordMO = Repositories.default.invCoordDS.new()
             invCoordMO.update(invCoord)
             invCoordMO.gameObjectMO = self
             self.invCoord = invCoordMO
@@ -102,7 +102,7 @@ extension GameObjectMO {
     }
 
     func delete() {
-        Services.default.persistentContainer.viewContext.delete(self)
+        Repositories.default.persistentContainer.viewContext.delete(self)
     }
 
 }

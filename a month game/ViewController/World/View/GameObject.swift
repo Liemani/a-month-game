@@ -78,7 +78,7 @@ class GameObject: SKSpriteNode {
     var isInInv: Bool { self.invCoord != nil }
 
     var positionInWorld: CGPoint { self.position + self.parent!.position }
-
+    var frameInWorld: CGRect { self.frame + self.parent!.position }
     func setTexture(type goType: GameObjectType) {
         self.texture = goType.textures[0]
 
@@ -96,17 +96,9 @@ class GameObject: SKSpriteNode {
             self.removeAllChildren()
         }
 
-        self.size = goType.isTile || !goType.isWalkable
+        self.size = goType.isFloor || !goType.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize
-    }
-
-    func isAccessible(by character: Character) -> Bool {
-        if self.invCoord != nil {
-            return true
-        }
-
-        return character.accessibleFrame.contains(self.positionInWorld)
     }
 
     var chunk: Chunk? { self.parent as? Chunk }
@@ -120,7 +112,7 @@ class GameObject: SKSpriteNode {
 
         let texture = goData.type.textures[0]
 
-        let size = goData.type.isTile || !goData.type.isWalkable
+        let size = goData.type.isFloor || !goData.type.isWalkable
             ? Constant.defaultNodeSize
             : Constant.gameObjectSize
 
@@ -139,7 +131,7 @@ class GameObject: SKSpriteNode {
             self.addChild(cover)
         }
 
-        self.zPosition = !self.type.isTile
+        self.zPosition = !self.type.isFloor
                             ? Constant.ZPosition.gameObject
                             : Constant.ZPosition.tile
     }
@@ -315,7 +307,7 @@ extension GameObject {
                             state: state,
                             coord: chunkCoord,
                             date: date)
-        Logics.default.chunkContainer.add(go)
+        Services.default.chunkContainer.add(go)
     }
 
     static func new(type goType: GameObjectType,
@@ -337,13 +329,13 @@ extension GameObject {
 
     func removeFromParentWithSideEffect() {
         if let chunk = self.chunk {
-            chunk.remove(self)
+            chunk.remove(self, from: self.chunkCoord!.address.tile.rawCoord)
             Logics.default.accessibleGOTracker.remove(self)
             return
         }
 
         if let inventory = self.inventory {
-            inventory.remove(self)
+            inventory.remove(self, from: self.invCoord!.index)
             FrameCycleUpdateManager.default.update(with: .craftWindow)
             return
         }
@@ -359,7 +351,7 @@ extension GameObject {
         }
 
         guard invCoord.id == Constant.characterInventoryID
-                || Services.default.invServ.isEmpty(id: self.id) else {
+                || Services.default.inv.isEmpty(id: self.id) else {
             return
         }
 
@@ -377,7 +369,7 @@ extension GameObject {
 
         self.removeFromParentWithSideEffect()
         self.set(coord: chunkCoord)
-        Logics.default.chunkContainer.add(self)
+        Services.default.chunkContainer.add(self)
 
         if self.type.isContainer {
             Logics.default.invContainer.closeAnyInv(of: self.id)
@@ -399,7 +391,7 @@ extension GameObject {
     }
 
     func interact() {
-        if let handler = Logics.default.action.interact[self.type] {
+        if let handler = Services.default.action.interact[self.type] {
             if handler(self) {
                 return
             }
@@ -411,7 +403,7 @@ extension GameObject {
     }
 
     func interact(to go: GameObject) {
-        if let handler = Logics.default.action.interactToGO[go.type] {
+        if let handler = Services.default.action.interactToGO[go.type] {
             if handler(self, go) {
                 return
             }
@@ -427,7 +419,7 @@ extension GameObject {
             return
         }
 
-        if go.type.isTile,
+        if go.type.isFloor,
            let goCoord = go.chunkCoord {
             self.move(to: goCoord)
 

@@ -19,8 +19,6 @@ class Logics {
                     fieldInv: GameObjectInventory,
                     infoWindow: InfoWindow,
                     world: SKNode,
-                    character: Character,
-                    chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
         self._default = Logics(scene: scene,
@@ -29,8 +27,6 @@ class Logics {
                                fieldInv: fieldInv,
                                infoWindow: infoWindow,
                                world: world,
-                               character: character,
-                               chunkContainer: chunkContainer,
                                invContainer: invContainer,
                                accessibleGOTracker: accessibleGOTracker)
     }
@@ -49,16 +45,12 @@ class Logics {
     let infoWindow: InfoWindowLogic
 
     let world: WorldLogic
-    let character: CharacterLogic
 
     let invContainer: InventoryContainerLogic
-    let chunkContainer: ChunkContainerLogic
 
     let accessibleGOTracker: AccessibleGOTrackerLogic
 
     let goData: GameObjectDataLogic
-
-    let action: ActionLogic
 
     init(scene: WorldScene,
          ui: SKNode,
@@ -66,8 +58,6 @@ class Logics {
          fieldInv: GameObjectInventory,
          infoWindow: InfoWindow,
          world: SKNode,
-         character: Character,
-         chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
         self.touch = TouchLogics()
@@ -80,16 +70,12 @@ class Logics {
         self.infoWindow = InfoWindowLogic(infoWindow: infoWindow)
 
         self.world = WorldLogic(world: world)
-        self.character = CharacterLogic(character: character)
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
-        self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
 
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
         self.goData = GameObjectDataLogic()
-
-        self.action = ActionLogic()
     }
 
 }

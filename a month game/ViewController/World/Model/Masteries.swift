@@ -30,13 +30,13 @@ class Masteries {
         self.goInteractionMasteryDatas = [:]
         self.craftMasteryDatas = [:]
 
-        let interactionMasteryDatas = Services.default.interactionMasteryServ.load()
+        let interactionMasteryDatas = Services.default.interactionMastery.load()
 
         for interactionMasteryData in interactionMasteryDatas {
             self.interactionMasteryDatas[interactionMasteryData.dstType] = interactionMasteryData
         }
 
-        let goInteractionMasteryDatas = Services.default.goInteractionMasteryServ.load()
+        let goInteractionMasteryDatas = Services.default.goInteractionMastery.load()
 
         for goInteractionMasteryData in goInteractionMasteryDatas {
             let key = GOInteractionMasteryDatasKey(
@@ -45,7 +45,7 @@ class Masteries {
             self.goInteractionMasteryDatas[key] = goInteractionMasteryData
         }
 
-        let craftMasteryDatas = Services.default.craftMasteryServ.load()
+        let craftMasteryDatas = Services.default.craftMastery.load()
 
         for craftMasteryData in craftMasteryDatas {
             self.craftMasteryDatas[craftMasteryData.dstType] = craftMasteryData

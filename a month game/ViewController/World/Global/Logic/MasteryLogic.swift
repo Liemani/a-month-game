@@ -55,19 +55,19 @@ class MasteryLogic {
     var description: String {
         var description = ""
 
-        description.append("interaction:\n")
+        description.append("Interaction lv:\n")
 
         for masteryData in self.masteries.interactionMasteryDatas.values {
             description.append("\(masteryData.dstType): \(masteryData.lv)\n")
         }
 
-        description.append("\ngame object interaction:\n")
+        description.append("\nGame object interaction lv:\n")
 
         for masteryData in self.masteries.goInteractionMasteryDatas.values {
             description.append("\(masteryData.srcType) -> \(masteryData.dstType): \(masteryData.lv)\n")
         }
 
-        description.append("\ncraft:\n")
+        description.append("\nCraft lv:\n")
 
         for masteryData in self.masteries.craftMasteryDatas.values {
             description.append("\(masteryData.dstType): \(masteryData.lv)\n")

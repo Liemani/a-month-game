@@ -9,14 +9,8 @@ import Foundation
 
 class GOInteractionMasteryService {
     
-    private let dataSource: GOInteractionMasteryDataSource
-
-    init(dataSource: GOInteractionMasteryDataSource) {
-        self.dataSource = dataSource
-    }
-
     func load() -> [GOInteractionMasteryData] {
-        let mos = self.dataSource.load()
+        let mos = Repositories.default.goInteractionMasteryDS.load()
 
         let datas = mos.compactMap { GOInteractionMasteryData(from: $0) }
         return datas

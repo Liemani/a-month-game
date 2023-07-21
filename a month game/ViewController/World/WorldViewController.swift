@@ -32,15 +32,16 @@ class WorldViewController: UIViewController {
         let worldName = Constant.Name.defaultWorld
 
         FileUtility.default.setUpEnvironment(worldName: worldName)
-        
+        MapGenerator.set()
+
         if !FileUtility.default.isWorldDirExist(worldName: worldName) {
-            Services.set(worldName: worldName)
+            Repositories.set(worldName: worldName)
+            Services.set()
             WorldGenerator.generate(worldName: Constant.Name.defaultWorld)
         } else {
-            Services.set(worldName: worldName)
+            Repositories.set(worldName: worldName)
+            Services.set()
         }
-
-        MapGenerator.set()
 
         WorldEventManager.set()
         FrameCycleUpdateManager.set()
@@ -63,12 +64,9 @@ class WorldViewController: UIViewController {
                    fieldInv: scene.invContainer.fieldInv,
                    infoWindow: scene.infoWindow,
                    world: scene.worldLayer,
-                   character: scene.character,
-                   chunkContainer: scene.chunkContainer,
                    invContainer: scene.invContainer,
                    accessibleGOTracker: scene.accessibleGOTracker)
 
-        Logics.default.chunkContainer.setUp()
         Particle.setUp()
 
         skView.presentScene(scene)
@@ -129,7 +127,7 @@ class WorldViewController: UIViewController {
             return
         }
 
-        Logics.default.character.jumpChunk(direction: direction)
+        Services.default.character.jumpChunk(direction: direction)
     }
 
 }

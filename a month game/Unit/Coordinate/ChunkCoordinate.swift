@@ -9,6 +9,8 @@ import Foundation
 
 struct ChunkCoordinate {
 
+    static let zero = ChunkCoordinate()
+
     var x: Int32
     var y: Int32
     var address: Address
@@ -20,6 +22,29 @@ struct ChunkCoordinate {
             self.y = Int32(truncatingIfNeeded: y >> 8)
             self.address = Address(Int(x), Int(y))
         }
+    }
+
+    var chunk: ChunkCoordinate {
+        var chunkChunkCoord = self
+        chunkChunkCoord.address.tile.setZero()
+        return chunkChunkCoord
+    }
+
+    func to(_ direction: Direction9) -> ChunkCoordinate {
+        var x = Int(self.x) << 4 | self.address.chunk.coordX
+        var y = Int(self.y) << 4 | self.address.chunk.coordY
+
+        let directionCoord = direction.coord
+        x += directionCoord.x
+        y += directionCoord.y
+
+        x <<= 4
+        y <<= 4
+
+        x += self.address.tile.coordX
+        y += self.address.tile.coordY
+
+        return ChunkCoordinate(x, y)
     }
 
     // MARK: - init
@@ -41,6 +66,10 @@ struct ChunkCoordinate {
         self.address = Address(x, y)
     }
 
+    init(_ coord: Coordinate<Int>) {
+        self.init(coord.x, coord.y)
+    }
+
     // MARK: -
 //    static func buildingDirection(from origin: Coordinate<Int>, to destination: Coordinate<Int>) -> Direction9? {
 //        let originBuildingCoord = origin >> 4
@@ -52,10 +81,9 @@ struct ChunkCoordinate {
 //        return direction
 //    }
 
-    func chunkDirection(to chunkCoord: ChunkCoordinate) -> Direction9? {
-        let deltaCoord = chunkCoord.coord - self.coord
-        let chunkDirection = Direction9(from: deltaCoord >> 4)
-        return chunkDirection
+    func chunkDirection4(to chunkCoord: ChunkCoordinate) -> Direction4? {
+        let chunkDeltaCoord = chunkCoord.chunk.coord - self.chunk.coord
+        return Direction4(chunkDeltaCoord >> 4)
     }
 
     // MARK: ChunkCoordinate

@@ -136,7 +136,10 @@ struct Constant {
             origin: sceneCenter,
             size: sceneSize)
         static let exitWorldButton = CGRect(
-            origin: sceneCenter,
+            origin: enterButton.origin,
+            size: exitWorldButtonNodeSize)
+        static let escapeButton = CGRect(
+            origin: resetButtonNodePosition,
             size: exitWorldButtonNodeSize)
     }
 
@@ -171,13 +174,12 @@ struct Constant {
         static let bgPortal = "bg_portal"
         static let button = "button"
         static let discordButton = "discord_icon"
-        static let grassTile = "grass_tile"
     }
 
     // MARK: - recipe
     static let recipes: [GameObjectType: [GameObjectType: Int]] = [
         // MARK: tile
-        .woodFloorTile: [.woodBoard: 2],
+        .woodFloorFloor: [.woodBoard: 2],
         .woodWall: [.woodBoard: 2],
 
         // MARK: tool

@@ -15,21 +15,22 @@ enum GameObjectType: Int, CaseIterable {
         walkSpeed: Double,
         invCapacity: Int,
         layerCount: Int,
-        isTile: Bool,
+        isFloor: Bool,
         isMovable: Bool,
         isPickable: Bool,
         actionTimeout: Double
     )
 
     case none
-    case caveHoleTile
-    case waterTile
-    case caveCeilTile
-    case sandTile
-    case clayTile
-    case cobblestoneTile
-    case dirtTile
-    case woodFloorTile
+    case grassFloor
+    case dirtFloor
+    case clayFloor
+    case caveCeilFloor
+    case caveHoleFloor
+    case waterFloor
+    case cobblestoneFloor
+    case sandFloor
+    case woodFloorFloor
     case weed
     case vine
     case treeOak
@@ -61,35 +62,36 @@ enum GameObjectType: Int, CaseIterable {
 
     private static let resources: [ResourceType] = [
         ("game_object_none", -1.0, 0, 1, false, false, false, -1.0),
-        ("game_object_cave_hole_tile", -1.0, 0, 1, true, false, false, -1.0),
-        ("game_object_water_tile", 0.25, 0, 1, true, false, false, -1.0),
-        ("game_object_cave_ceil_tile", 0.25, 0, 1, true, false, false, -1.0),
-        ("game_object_sand_tile", 0.5, 0, 1, true, false, false, -1.0),
-        ("game_object_clay_tile", 0.5, 0, 1, true, false, false, -1.0),
-        ("game_object_cobblestone_tile", 0.75, 0, 1, true, false, false, -1.0),
-        ("game_object_dirt_tile", 1.0, 0, 1, true, false, false, -1.0),
-        ("game_object_wood_floor_tile", 1.0, 0, 1, true, false, false, -1.0),
-        ("game_object_weed", 0.75, 0, 2, false, false, false, Constant.aWeek),
+        ("game_object_grass_floor", 1.0, 0, 1, true, false, false, -1.0),
+        ("game_object_dirt_floor", 1.0, 0, 1, true, false, false, -1.0),
+        ("game_object_clay_floor", 0.5, 0, 1, true, false, false, -1.0),
+        ("game_object_cave_ceil_floor", 0.25, 0, 1, true, false, false, -1.0),
+        ("game_object_cave_hole_floor", -1.0, 0, 1, true, false, false, -1.0),
+        ("game_object_water_floor", 0.25, 0, 1, true, false, false, -1.0),
+        ("game_object_cobblestone_floor", 0.75, 0, 1, true, false, false, -1.0),
+        ("game_object_sand_floor", 0.5, 0, 1, true, false, false, -1.0),
+        ("game_object_wood_floor_floor", 1.0, 0, 1, true, false, false, -1.0),
+        ("game_object_weed", 0.75, 0, 2, false, false, false, 604800.0),
         ("game_object_vine", 0.50, 0, 1, false, false, false, -1.0),
         ("game_object_tree_oak", -1.0, 0, 1, false, false, false, -1.0),
         ("game_object_pine_tree", -1.0, 0, 1, false, false, false, -1.0),
         ("game_object_wood_wall", -1.0, 0, 1, false, false, false, -1.0),
         ("game_object_wood_log", 1.0, 0, 1, false, true, false, -1.0),
-        ("game_object_stone", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_dirt", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_sand", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_clay", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_weed_leaves", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_vine_stem", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_wood_stick", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_wood_board", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_tree_oak_seed", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_pine_cone", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_axe", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_shovel", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_pickaxe", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_sickle", 1.0, 0, 1, false, true, true, 60.0),
-        ("game_object_saw", 1.0, 0, 1, false, true, true, 60.0),
+        ("game_object_stone", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_dirt", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_sand", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_clay", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_weed_leaves", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_vine_stem", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_wood_stick", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_wood_board", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_tree_oak_seed", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_pine_cone", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_axe", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_shovel", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_pickaxe", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_sickle", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_saw", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_leaf_bag", 1.0, 2, 1, false, true, true, -1.0),
         ("game_object_vine_basket", 1.0, 3, 1, false, true, true, -1.0),
         ("game_object_wooden_box", 1.0, 4, 1, false, true, true, -1.0),
@@ -129,8 +131,7 @@ enum GameObjectType: Int, CaseIterable {
 
     var typeID: Int32 { Int32(self.rawValue) }
 
-    var resources: [ResourceType] { GameObjectType.resources }
-    var resource: ResourceType { self.resources[self] }
+    var resource: ResourceType { GameObjectType.resources[self] }
 
     var textures: [SKTexture] { GameObjectType.textures[self] }
 
@@ -142,7 +143,7 @@ enum GameObjectType: Int, CaseIterable {
     var walkSpeed: Double { self.resource.walkSpeed }
     var isWalkable: Bool { self.walkSpeed != -1.0 }
 
-    var isTile: Bool { self.resource.isTile }
+    var isFloor: Bool { self.resource.isFloor }
     var isMovable: Bool { self.resource.isMovable }
     var isPickable: Bool { self.resource.isPickable }
 

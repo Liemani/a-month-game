@@ -23,4 +23,8 @@ class AccessibleGOTrackerLogic {
         self.tracker.remove(go)
     }
 
+    var gos: some Sequence<GameObject> {
+        return tracker.gos
+    }
+
 }

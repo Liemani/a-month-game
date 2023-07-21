@@ -27,7 +27,7 @@ class InteractionMasteryData {
     }
 
     init(type goType: GameObjectType) {
-        self.mo = Services.default.interactionMasteryRepo.new(type: goType)
+        self.mo = Repositories.default.interactionMasteryRepo.new(type: goType)
 
         self.dstType = goType
     }

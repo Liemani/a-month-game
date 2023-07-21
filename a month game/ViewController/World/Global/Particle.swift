@@ -35,7 +35,7 @@ class Particle {
 
         newParticle.fillColor = result.color
 
-        Logics.default.character.addParticle(newParticle)
+        Services.default.character.addParticle(newParticle)
     }
 
 }

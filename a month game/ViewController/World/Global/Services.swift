@@ -6,16 +6,16 @@
 //
 
 import Foundation
-import CoreData
 
 final class Services {
 
     private static var _default: Services?
     static var `default`: Services { self._default! }
 
-    static func set(worldName: String) {
+    static func set() {
         if self._default == nil {
-            self._default = Services(worldName: worldName)
+            self._default = Services()
+            Services.default.setUp()
         }
     }
 
@@ -23,129 +23,41 @@ final class Services {
         self._default = nil
     }
 
-    let interactionMasteryServ: InteractionMasteryService
-    let goInteractionMasteryServ: GOInteractionMasteryService
-    let craftMasteryServ: CraftMasteryService
-    let idGeneratorServ: IDGeneratorService
-    let chunkServ: ChunkService
-    let invServ: InventoryService
-    let goServ: GameObjectService
+    let action: ActionService
+    let movingLayer: MovingLayerService
+    let character: CharacterService
+    let interactionMastery: InteractionMasteryService
+    let goInteractionMastery: GOInteractionMasteryService
+    let craftMastery: CraftMasteryService
+    let idGenerator: IDGeneratorService
+    let chunkContainer: ChunkContainerService
+    let chunk: ChunkService
+    let inv: InventoryService
+    let go: GameObjectService
 
-    let interactionMasteryRepo: InteractionMasteryRepository
-    let goInteractionMasteryRepo: GOInteractionMasteryRepository
-    let craftMasteryRepo: CraftMasteryRepository
-    let worldDataRepo: WorldDataRepository
-    let goRepo: GameObjectRepository
-    let chunkRepo: ChunkRepository
-    let invRepo: InventoryRepository
-    let chunkIsGeneratedRepo: ChunkIsGeneratedRepository
+    init() {
+        self.action = ActionService()
 
-    let interactionMasteryDS: InteractionMasteryDataSource
-    let goInteractionMasteryDS: GOInteractionMasteryDataSource
-    let craftMasteryDS: CraftMasteryDataSource
-    let worldDataDS: WorldDataDataSource
-    let goDS: GameObjectDataSource
-    let chunkCoordDS: ChunkCoordinateDataSource
-    let invCoordDS: InventoryCoordinateDataSource
-    let chunkIsGeneratedDS: ChunkIsGeneratedDataSource
+        self.character = CharacterService()
+        self.movingLayer = MovingLayerService()
 
-    let persistentContainer: LMIPersistentContainer
-    let moContext: NSManagedObjectContext
+        self.interactionMastery = InteractionMasteryService()
+        self.goInteractionMastery = GOInteractionMasteryService()
+        self.craftMastery = CraftMasteryService()
 
-    init(worldName: String) {
-        let worldDirURL = FileUtility.default.worldDirURL(of: worldName)
+        self.idGenerator = IDGeneratorService()
 
-        let worldDataModelName = Constant.Name.worldDataModel
-        let persistentContainer = LMIPersistentContainer(name: worldDataModelName)
-        persistentContainer.setUp(to: worldName)
-        self.persistentContainer = persistentContainer
+        self.chunkContainer = ChunkContainerService()
+        self.chunk = ChunkService()
 
-        let moContext = persistentContainer.viewContext
-        self.moContext = moContext
+        self.inv = InventoryService()
 
-        // MARK: data source
-        let interactionMasteryDS = InteractionMasteryDataSource(moContext)
-        self.interactionMasteryDS = interactionMasteryDS
+        self.go = GameObjectService()
+    }
 
-        let goInteractionMasteryDS = GOInteractionMasteryDataSource(moContext)
-        self.goInteractionMasteryDS = goInteractionMasteryDS
-
-        let craftMasteryDS = CraftMasteryDataSource(moContext)
-        self.craftMasteryDS = craftMasteryDS
-
-        let worldDataDS = WorldDataDataSource(worldDirURL: worldDirURL)
-        self.worldDataDS = worldDataDS
-
-        let goDS = GameObjectDataSource(moContext)
-        self.goDS = goDS
-
-        let chunkCoordDS = ChunkCoordinateDataSource(moContext)
-        self.chunkCoordDS = chunkCoordDS
-
-        let invCoordDS = InventoryCoordinateDataSource(moContext)
-        self.invCoordDS = invCoordDS
-
-        let chunkIsGeneratedDS = ChunkIsGeneratedDataSource(moContext)
-        self.chunkIsGeneratedDS = chunkIsGeneratedDS
-
-        // MARK: repository
-        let interactionMasteryRepo = InteractionMasteryRepository(interactionMasteryDS: interactionMasteryDS)
-        self.interactionMasteryRepo = interactionMasteryRepo
-
-        let goInteractionMasteryRepo = GOInteractionMasteryRepository(goInteractionMasteryDS: goInteractionMasteryDS)
-        self.goInteractionMasteryRepo = goInteractionMasteryRepo
-
-        let craftMasteryRepo = CraftMasteryRepository(craftMasteryDS: craftMasteryDS)
-        self.craftMasteryRepo = craftMasteryRepo
-
-        let worldDataRepo = WorldDataRepository(worldDataDataSource: worldDataDS)
-        self.worldDataRepo = worldDataRepo
-
-        let goRepo = GameObjectRepository(
-            goDS: goDS,
-            chunkCoordDS: chunkCoordDS,
-            invCoordDS: invCoordDS)
-        self.goRepo = goRepo
-
-        let chunkRepo = ChunkRepository(
-            goDS: goDS,
-            chunkCoordDS: chunkCoordDS)
-        self.chunkRepo = chunkRepo
-
-        let invRepo = InventoryRepository(
-            goDS: goDS,
-            invCoordDS: invCoordDS)
-        self.invRepo = invRepo
-
-        let chunkIsGeneratedRepo = ChunkIsGeneratedRepository(
-            chunkIsGeneratedDS: chunkIsGeneratedDS)
-        self.chunkIsGeneratedRepo = chunkIsGeneratedRepo
-
-        // MARK: service
-        let interactionMasteryServ = InteractionMasteryService(dataSource: interactionMasteryDS)
-        self.interactionMasteryServ = interactionMasteryServ
-
-        let goInteractionMasteryServ = GOInteractionMasteryService(dataSource: goInteractionMasteryDS)
-        self.goInteractionMasteryServ = goInteractionMasteryServ
-
-        let craftMasteryServ = CraftMasteryService(dataSource: craftMasteryDS)
-        self.craftMasteryServ = craftMasteryServ
-
-        let idGeneratorServ = IDGeneratorService(worldDataRepository: worldDataRepo)
-        self.idGeneratorServ = idGeneratorServ
-
-        let chunkServ = ChunkService(chunkRepo: chunkRepo)
-        self.chunkServ = chunkServ
-
-        let invServ = InventoryService(inventoryRepo: invRepo)
-        self.invServ = invServ
-
-        let goServ = GameObjectService()
-        self.goServ = goServ
-
-#if DEBUG
-        print(worldDirURL)
-#endif
+    func setUp() {
+        self.character.setUp()
+        self.chunkContainer.setUp()
     }
 
 }

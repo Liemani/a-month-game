@@ -9,17 +9,16 @@ import Foundation
 
 final class IDGeneratorService {
 
-    private var worldDataRepository: WorldDataRepository
-    lazy var nextID: Int = self.worldDataRepository.load(at: .nextID)
+    var nextID: Int
 
-    init(worldDataRepository: WorldDataRepository) {
-        self.worldDataRepository = worldDataRepository
+    init() {
+        self.nextID = Repositories.default.worldDataRepo.load(at: .nextID)
     }
 
     func generate() -> Int {
         let id = self.nextID
         self.nextID += 1
-        self.worldDataRepository.update(value: nextID, to: .nextID)
+        Repositories.default.worldDataRepo.update(value: nextID, to: .nextID)
 
         return id
     }

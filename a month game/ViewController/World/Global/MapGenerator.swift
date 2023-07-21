@@ -48,7 +48,7 @@ class MapGenerator {
 
         var mos: [GameObjectMO] = []
 
-        Services.default.chunkIsGeneratedRepo.new(chunkCoord: chunkChunkCoord)
+        Repositories.default.chunkIsGeneratedRepo.new(chunkCoord: chunkChunkCoord)
 
         for y in 0 ..< chunkSide {
             tileChunkCoord.address.tile.rawCoord.y = UInt8(y)
@@ -67,7 +67,7 @@ class MapGenerator {
                 let goType = self.goType(by: altitude)
 
                 if goType != .none {
-                    let mo = Services.default.goServ.newMO(type: goType,
+                    let mo = Services.default.go.newMO(type: goType,
                                                            coord: tileChunkCoord)
 
                     mos.append(mo)
@@ -89,11 +89,11 @@ class MapGenerator {
         var goType: GameObjectType = .none
 
         if seaLevel ~= altitude {
-            goType = .waterTile
+            goType = .waterFloor
         } else if sandLevel ~= altitude {
-            goType = .sandTile
+            goType = .sandFloor
         } else if cobbleStoneLevel ~= altitude {
-            goType = .cobblestoneTile
+            goType = .cobblestoneFloor
         } else if weedLevel ~= altitude {
             if (arc4random() & 0x3) == 0 {
                 goType = .weed

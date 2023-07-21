@@ -25,6 +25,12 @@ class MenuWindow: SKNode {
         backgroundButton.shouldActivated = false
         self.addChild(backgroundButton)
 
+        self.addButton()
+
+        self.hide()
+    }
+
+    func addButton() {
         let texture = SKTexture(imageNamed: Constant.ResourceName.button)
         let exitButton = Button(texture: texture,
                                 frame: Constant.Frame.exitWorldButton,
@@ -32,7 +38,11 @@ class MenuWindow: SKNode {
                                 eventType: WorldEventType.menuExitButton)
         self.addChild(exitButton)
 
-        self.hide()
+        let escapeButton = Button(texture: texture,
+                                  frame: Constant.Frame.escapeButton,
+                                  text: "Escape",
+                                  eventType: WorldEventType.menuEscapeButton)
+        self.addChild(escapeButton)
     }
 
     required init?(coder aDecoder: NSCoder) {
