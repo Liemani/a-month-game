@@ -31,7 +31,7 @@ class Chunk: SKNode {
         self.scheduler.removeAll()
     }
 
-    func update() {
+    func updateSchedule() {
         if self.scheduler.hasChanges {
             self.scheduler.sort()
         }
@@ -42,49 +42,30 @@ class Chunk: SKNode {
 // MARK: - inventory protocol
 extension Chunk: InventoryProtocol {
 
-    func isValid(_ coord: Coordinate<Int>) -> Bool {
+    typealias Item = GameObject
+    typealias Items = [GameObject]
+    typealias Coord = Coordinate<UInt8>
+
+    func isValid(_ coord: Coord) -> Bool {
         return 0 <= coord.x && coord.x < Constant.tileCountOfChunkSide
             && 0 <= coord.y && coord.y < Constant.tileCountOfChunkSide
     }
 
-    func contains(_ item: GameObject) -> Bool {
-        let tileAddr = item.chunkCoord!.address.tile.value
-
-        guard let gos = self.data.tileGOs(tileAddr: tileAddr) else {
-            return false
-        }
-
-        for go in gos {
-            if go.id == item.id {
-                return true
-            }
-        }
-        return false
+    func items(at coord: Coord) -> [GameObject]? {
+        return self.data.gos(at: coord)
     }
 
-    func items(at coord: Coordinate<Int>) -> [GameObject] {
-        let addr = Address(coord.x, coord.y).tile.value
-        if let tileGOs = self.data.tileGOs(tileAddr: addr) {
-            return tileGOs
-        }
-
-        return []
-    }
-
-    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
+    /// - Parameters:
+    ///     - touch: suppose touch is on self
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         let touchedLocation = touch.location(in: self)
-        let touchedFieldCoord = CoordinateConverter(touchedLocation)
-        let touchedChunkCoord = ChunkCoordinate(touchedFieldCoord.coord.x, touchedFieldCoord.coord.y)
-
-        let tileAddr = touchedChunkCoord.address.tile.value
-        if let tileGOs = self.data.tileGOs(tileAddr: tileAddr) {
-            return tileGOs
-        }
-
-        return []
+        let touchedCoord = CoordinateConverter(touchedLocation).coord.coordUInt8
+        return self.data.gos(at: touchedCoord)
     }
 
-    func coordAtLocation(of touch: UITouch) -> Coordinate<Int>? {
+    /// - Parameters:
+    ///     - touch: suppose touch is on self
+    func coordAtLocation(of touch: UITouch) -> Coord? {
         let touchPoint = touch.location(in: self)
         let chunkWidthHalf = Constant.chunkWidth
 
@@ -92,11 +73,11 @@ extension Chunk: InventoryProtocol {
             return nil
         }
 
-        return CoordinateConverter(touchPoint).coord
+        return CoordinateConverter(touchPoint).coord.coordUInt8
     }
 
-    func add(_ item: GameObject) {
-        self.data.add(item)
+    func add(_ item: GameObject, to coord: Coord) {
+        self.data.add(item, to: coord)
         self.scheduler.add(item)
 
         let tileCoord = item.chunkCoord!.address.tile.coord
@@ -105,8 +86,8 @@ extension Chunk: InventoryProtocol {
         self.addChild(item)
     }
 
-    func remove(_ item: GameObject) {
-        self.data.remove(item)
+    func remove(_ item: GameObject, from coord: Coord) {
+        self.data.remove(item, from: coord)
         self.scheduler.remove(item)
 
         item.removeFromParent()
@@ -128,11 +109,11 @@ extension Chunk {
 
         for goData in goDatas {
             let go = GameObject(from: goData)
+            let tileAddress = go.chunkCoord!.address.tile
 
-            self.data.add(go)
+            self.data.add(go, to: tileAddress.rawCoord)
 
-            let tileCoord = go.chunkCoord!.address.tile.coord
-            go.position = CoordinateConverter(tileCoord).fieldPoint
+            go.position = CoordinateConverter(tileAddress.coord).fieldPoint
 
             self.addChild(go)
 
@@ -145,7 +126,7 @@ extension Chunk {
 
         self.scheduler.add(sortedGOs)
 
-        Logics.default.action.update()
+        Services.default.action.update()
     }
 
     func update(chunkCoord: ChunkCoordinate) {

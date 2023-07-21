@@ -46,8 +46,8 @@ class GameObjectTapLogic: TouchLogic {
         print(go.debugDescription)
 #endif
 
-        if go.type.isTile {
-            go = Logics.default.chunkContainer.items(at: go.chunkCoord!).last!
+        if go.type.isFloor {
+            go = Services.default.chunkContainer.items(at: go.chunkCoord!)!.last!
         }
 
         if let activatedGO = TouchLogics.default.activatedGO {

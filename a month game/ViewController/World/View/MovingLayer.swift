@@ -10,21 +10,15 @@ import SpriteKit
 
 class MovingLayer: SKNode {
 
-    var chunkContainer: ChunkContainer!
-
     // MARK: - init
     override init() {
         super.init()
 
         self.zPosition = Constant.ZPosition.movingLayer
 
-        // MARK: chunkContainer
-        let chunkContainer = ChunkContainer()
-        self.addChild(chunkContainer)
-        self.chunkContainer = chunkContainer
-
         // MARK: tile
-        let tileTexture = SKTexture(imageNamed: Constant.ResourceName.grassTile)
+        let grassFloorResourceName = GameObjectType.grassFloor.resource.resourceName
+        let tileTexture = SKTexture(imageNamed: grassFloorResourceName)
         let tileDefinition = SKTileDefinition(texture: tileTexture)
         let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
         let tileSet = SKTileSet(tileGroups: [tileGroup])

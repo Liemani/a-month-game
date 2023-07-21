@@ -104,6 +104,10 @@ class InventoryContainer {
 
 extension InventoryContainer: InventoryProtocol {
 
+    typealias Coord = InventoryCoordinate
+    typealias Item = GameObject
+    typealias Items = [Item]
+
     func isValid(_ coord: InventoryCoordinate) -> Bool {
         for inv in self.invs {
             if !inv.isHidden && inv.isValid(coord.index){
@@ -114,32 +118,24 @@ extension InventoryContainer: InventoryProtocol {
         return false
     }
 
-    func contains(_ item: GameObject) -> Bool {
-        guard let invCoord = item.invCoord else {
-            return false
-        }
-
-        return self.isValid(invCoord)
-    }
-
-    func items(at coord: InventoryCoordinate) -> [GameObject] {
+    func items(at coord: InventoryCoordinate) -> [GameObject]? {
         for inv in self.invs {
             if !inv.isHidden {
                 return inv.items(at: coord.index)
             }
         }
 
-        return []
+        return nil
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         for inv in self.invs {
             if !inv.isHidden {
                 return inv.itemsAtLocation(of: touch)
             }
         }
 
-        return []
+        return nil
     }
 
     func coordAtLocation(of touch: UITouch) -> InventoryCoordinate? {
@@ -153,23 +149,20 @@ extension InventoryContainer: InventoryProtocol {
         return nil
     }
 
-    func add(_ item: GameObject) {
-        let invCoord = item.invCoord!
-
+    func add(_ item: GameObject, to coord: Coord) {
         for inv in self.invs {
-            if !inv.isHidden && inv.id == invCoord.id {
-                inv.add(item)
+            if !inv.isHidden && inv.id == coord.id {
+                inv.add(item, to: coord.index)
 
                 return
             }
         }
     }
 
-    func remove(_ item: GameObject) {
-        let invID = item.invCoord!.id
+    func remove(_ item: GameObject, from coord: Coord) {
         for inv in self.invs {
-            if !inv.isHidden && invID == inv.id {
-                inv.remove(item)
+            if !inv.isHidden && inv.id == coord.id {
+                inv.remove(item, from: coord.index)
 
                 return
             }

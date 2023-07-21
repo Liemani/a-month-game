@@ -9,10 +9,10 @@ import Foundation
 
 class MovingLayerService {
 
-    let movingLayer: MovingLayer
+    let target: MovingLayer
 
     init() {
-        self.movingLayer = MovingLayer()
+        self.target = MovingLayer()
     }
 
 }

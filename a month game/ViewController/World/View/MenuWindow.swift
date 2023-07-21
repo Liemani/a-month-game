@@ -40,7 +40,7 @@ class MenuWindow: SKNode {
 
         let escapeButton = Button(texture: texture,
                                   frame: Constant.Frame.escapeButton,
-                                  text: "escape",
+                                  text: "Escape",
                                   eventType: WorldEventType.menuEscapeButton)
         self.addChild(escapeButton)
     }

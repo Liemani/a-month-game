@@ -23,7 +23,6 @@ class WorldScene: SKScene {
 
     // MARK: layer
     var worldLayer: SKNode!
-    var chunkContainer: ChunkContainer!
 
     var ui: SKNode!
     var craftWindow: CraftWindow!
@@ -50,9 +49,6 @@ class WorldScene: SKScene {
     }
 
     func initModel() {
-        let movingLayer = Services.default.movingLayer.movingLayer
-        self.chunkContainer = movingLayer.chunkContainer
-
         self.accessibleGOTracker = AccessibleGOTracker()
         FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
 
@@ -82,8 +78,15 @@ class WorldScene: SKScene {
         self.worldLayer = worldLayer
 
         // MARK: moving layer
-        worldLayer.addChild(Services.default.character.character)
-        worldLayer.addChild(Services.default.movingLayer.movingLayer)
+        let character = Services.default.character.target
+        let movingLayer = Services.default.movingLayer.target
+        let chunkContainer = Services.default.chunkContainer.target
+
+        movingLayer.addChild(chunkContainer)
+
+        worldLayer.addChild(movingLayer)
+        worldLayer.addChild(character)
+
         self.invContainer.fieldInv.zPosition = Constant.ZPosition.fieldInv
 
         // MARK: ui
@@ -158,12 +161,13 @@ class WorldScene: SKScene {
     }
 
     func processTimeEvent() {
-        Logics.default.action.update()
+        Services.default.action.update()
     }
 
     func updateModel(_ currentTime: TimeInterval) {
         if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
-            self.accessibleGOTracker.update(chunkContainer: self.chunkContainer)
+            let chunkContainer = Services.default.chunkContainer.target
+            self.accessibleGOTracker.update(chunkContainer: chunkContainer)
         }
 
         if FrameCycleUpdateManager.default.contains(.craftWindow) {
@@ -174,7 +178,7 @@ class WorldScene: SKScene {
     }
 
     func updateData() {
-        self.chunkContainer.update()
+        Services.default.chunkContainer.target.updateSchedule()
 
         let moContext = Repositories.default.moContext
         if moContext.hasChanges {

@@ -10,14 +10,14 @@ import SpriteKit
 
 class CharacterService {
 
-    let character: Character
+    let target: Character
 
     var pChunkCoord: ChunkCoordinate
     var chunkCoord: ChunkCoordinate {
-        get { self.character.data.chunkCoord }
+        get { self.target.data.chunkCoord }
         set {
             self.pChunkCoord = self.chunkCoord
-            self.character.data.chunkCoord = newValue
+            self.target.data.chunkCoord = newValue
         }
     }
 
@@ -27,11 +27,12 @@ class CharacterService {
         set {
             self._position.x = self.constrainedNumberToMiddleChunk(newValue.x)
             self._position.y = self.constrainedNumberToMiddleChunk(newValue.y)
+            self.nPosition = self.position
 
             let newTileCoord = CoordinateConverter(newValue).coord
             self.chunkCoord = self.chunkCoord.chunk + newTileCoord
 
-            Services.default.movingLayer.movingLayer.position = -self._position
+            Services.default.movingLayer.target.position = -self._position
         }
     }
     var nPosition: CGPoint
@@ -49,6 +50,14 @@ class CharacterService {
     var hasMovedToAnotherTile: Bool { self.chunkCoord != self.pChunkCoord }
     var hasMovedToAnotherChunk: Bool { self.chunkCoord.chunk != self.pChunkCoord.chunk }
 
+    var movedChunkDirection: Direction4? {
+        self.pChunkCoord.chunkDirection4(to: self.chunkCoord)
+    }
+
+    var movedChunkChunkCoord: Coordinate<Int> {
+        self.chunkCoord.chunk.coord - self.pChunkCoord.chunk.coord
+    }
+
     // MARK: - init
     init() {
         self.pChunkCoord = ChunkCoordinate()
@@ -59,7 +68,8 @@ class CharacterService {
         self.velocityVector = CGVector()
         self.velocityModifier = 1.0
 
-        self.character = Character()
+        self.target = Character()
+        // MARK: all stored properties are initilized
 
         self.pChunkCoord = self.chunkCoord
     }
@@ -70,8 +80,13 @@ class CharacterService {
         self.nPosition = self.position
     }
 
+    func reset() {
+        self.chunkCoord = ChunkCoordinate.zero
+        self.setUp()
+    }
+
     func addParticle(_ particle: SKShapeNode) {
-        self.character.addChild(particle)
+        self.target.addChild(particle)
     }
 
     func jumpChunk(direction: Direction4) {
@@ -93,11 +108,8 @@ class CharacterService {
             self.updateSpeedModifier()
 
             if self.hasMovedToAnotherChunk {
-                print("pChunkCoord: \(self.pChunkCoord)")
-                print("chunkCoord: \(self.chunkCoord)")
-                let direction = self.pChunkCoord.chunkDirection9(to: self.chunkCoord)!
-                Logics.default.scene.chunkContainerUpdate(direction: direction)
-                Logics.default.invContainer.moveFieldInv(direction: direction)
+                Services.default.chunkContainer.update()
+                Logics.default.invContainer.moveFieldInvToGO()
             }
         }
     }
@@ -105,7 +117,9 @@ class CharacterService {
     func updateSpeedModifier() {
         self.velocityModifier = 1.0
 
-        let gos = Logics.default.chunkContainer.items(at: self.chunkCoord)
+        guard let gos = Services.default.chunkContainer.items(at: self.chunkCoord) else {
+            return
+        }
 
         guard !gos.isEmpty else {
             return
@@ -146,7 +160,7 @@ class CharacterService {
         for go in Logics.default.accessibleGOTracker.gos {
             guard !go.type.isWalkable else { continue }
 
-            let characterRadius = self.character.path!.boundingBox.width / 2.0
+            let characterRadius = self.target.path!.boundingBox.width / 2.0
 
             let goFrameInWorld = go.frameInWorld
 
@@ -186,13 +200,13 @@ class CharacterService {
 //    var currChunkDirection: Direction4? {
 //        let halfChunkwidth = Constant.chunkWidth / 2.0
 //
-//        if self.character.position.x > halfChunkwidth {
+//        if self.target.position.x > halfChunkwidth {
 //            return .east
-//        } else if self.character.position.y < -halfChunkwidth {
+//        } else if self.target.position.y < -halfChunkwidth {
 //            return .south
-//        } else if self.character.position.x < -halfChunkwidth {
+//        } else if self.target.position.x < -halfChunkwidth {
 //            return .west
-//        } else if self.character.position.y > halfChunkwidth {
+//        } else if self.target.position.y > halfChunkwidth {
 //            return .north
 //        }
 //
@@ -201,7 +215,7 @@ class CharacterService {
 
     /// - Returns: true if collision resolved else false
     func resolveTileSideCollision(tileFrame: CGRect) {
-        let characterRadius = self.character.path!.boundingBox.width / 2.0
+        let characterRadius = self.target.path!.boundingBox.width / 2.0
 
         let deltaX = self.nPosition.x - tileFrame.midX
         let deltaY = self.nPosition.y - tileFrame.midY
@@ -222,7 +236,7 @@ class CharacterService {
 
     // NOTE: optimization possible
     func resolveTilePointCollision(tileFrame: CGRect) {
-        let characterRadius = self.character.path!.boundingBox.width / 2.0
+        let characterRadius = self.target.path!.boundingBox.width / 2.0
 
         if CGVector(dx: self.nPosition.x - tileFrame.minX, dy: self.nPosition.y - tileFrame.minY).magnitude < characterRadius {
             let deltaX = tileFrame.midX - self.nPosition.x

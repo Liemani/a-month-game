@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Coordinate<T> where T: Numeric {
+struct Coordinate<T: Numeric> where T: Hashable {
 
     var x: T
     var y: T
@@ -32,6 +32,15 @@ struct Coordinate<T> where T: Numeric {
 
 }
 
+extension Coordinate: Hashable {
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(x)
+        hasher.combine(y)
+    }
+
+}
+
 extension Coordinate: Equatable {
 
     static func == (lhs: Coordinate<T>, rhs: Coordinate<T>) -> Bool {
@@ -51,6 +60,10 @@ extension Coordinate<Int> {
     }
 
     var cgPoint: CGPoint { CGPoint(x: self.x, y: self.y) }
+    var coordUInt8: Coordinate<UInt8> {
+        return Coordinate<UInt8>(UInt8(truncatingIfNeeded: self.x),
+                                 UInt8(truncatingIfNeeded: self.y))
+    }
 
     func isAdjacent(to coordinate: Coordinate<Int>) -> Bool {
         let deltaX = self.x - coordinate.x
@@ -60,6 +73,7 @@ extension Coordinate<Int> {
         && (-1 <= deltaY && deltaY <= 1)
     }
 
+    // MARK: - Coordinate, Int
     static func + (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
         return Coordinate<Int>(lhs.x + rhs, lhs.y + rhs)
     }
@@ -74,6 +88,10 @@ extension Coordinate<Int> {
 
     static func / (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
         return Coordinate<Int>(lhs.x / rhs, lhs.y / rhs)
+    }
+
+    static func % (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {
+        return Coordinate<Int>(lhs.x % rhs, lhs.y % rhs)
     }
 
     static func << (lhs: Coordinate<Int>, rhs: Int) -> Coordinate<Int> {

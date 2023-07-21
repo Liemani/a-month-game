@@ -447,6 +447,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
+track chunk.updateSchedule
 
 ## mandatory
 the button that reset the character position(escape) at menu
@@ -466,6 +467,7 @@ set world seed
 
 ## 3rd priority
 move container to container qualiti order
+add scheduler to inventory
 
 ## debt
 refactor game object texture mechanism

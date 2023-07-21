@@ -14,7 +14,10 @@ class FieldTapLogic: TouchLogic {
     private let bChunkCoord: ChunkCoordinate
 
     init(touch: UITouch) {
-        self.bChunkCoord = Logics.default.chunkContainer.coordAtLocation(of: touch)!
+        let coord = Services.default.chunkContainer.target.coordAtLocation(of: touch)!
+        let chunkCoord = Services.default.chunkContainer.chunkCoord(coord)
+
+        self.bChunkCoord = chunkCoord
 
         super.init()
 
@@ -22,16 +25,18 @@ class FieldTapLogic: TouchLogic {
     }
 
     override func ended() {
-        guard let chunkCoord = Logics.default.chunkContainer.coordAtLocation(of: self.touch) else {
+        guard let coord = Services.default.chunkContainer.target.coordAtLocation(of: self.touch) else {
             return
         }
+
+        let chunkCoord = Services.default.chunkContainer.chunkCoord(coord)
 
         guard chunkCoord == self.bChunkCoord else {
             return
         }
 
         if let activatedGO = TouchLogics.default.activatedGO {
-            if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
+            if let go = Services.default.chunkContainer.item(at: chunkCoord) {
                 TouchLogics.default.freeActivatedGO()
                 activatedGO.interact(to: go)
             } else {
@@ -42,14 +47,14 @@ class FieldTapLogic: TouchLogic {
             return
         }
 
-        if let go = Logics.default.chunkContainer.item(at: chunkCoord) {
+        if let go = Services.default.chunkContainer.item(at: chunkCoord) {
             go.interact()
 
             return
         }
 
         if Logics.default.invContainer.is(equiping: .shovel) {
-            GameObject.new(type: .dirtTile, coord: chunkCoord)
+            GameObject.new(type: .dirtFloor, coord: chunkCoord)
 
             return
         }

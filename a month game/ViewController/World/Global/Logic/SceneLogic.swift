@@ -176,18 +176,14 @@ class SceneLogic {
         }
     }
 
-    // MARK: - chunk container
-    func chunkContainerUpdate(direction: Direction9) {
-        Logics.default.chunkContainer.update(direction: direction)
-    }
-
     // MARK: - etc
     func isDescendantOfUILayer(_ node: SKNode) -> Bool {
         return node.isDescendant(self.scene.ui)
     }
 
     func escape() {
-        #warning("implement")
+        Services.default.character.reset()
+        Services.default.chunkContainer.reset()
     }
 
 }

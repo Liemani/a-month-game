@@ -49,19 +49,20 @@ class AccessibleGOTracker {
     func update(chunkContainer: ChunkContainer) {
         self._gos.removeAll()
 
-        for direction in Direction9.allCases {
-            let characterChunkCoord = Services.default.character.chunkCoord
-            let tileChunkCoord = characterChunkCoord + direction.coord
-            let chunkDirection = chunkContainer.chunkDirection9(to: tileChunkCoord)!
-            let tileAddr = tileChunkCoord.address.tile.value
-            let chunk = chunkContainer.chunks[chunkDirection]
+        let characterChunkCoord = Services.default.character.chunkCoord
 
-            guard let tileGOs = chunk.data.tileGOs(tileAddr: tileAddr) else {
+        for direction in Direction9.allCases {
+            let adjacentTileChunkCoord = characterChunkCoord + direction.coord
+
+            guard let gos = Services.default.chunkContainer.items(
+                at: adjacentTileChunkCoord) else {
                 continue
             }
 
-            for go in tileGOs {
-                self.add(go)
+            for go in gos {
+                if !go.type.isWalkable {
+                    self.add(go)
+                }
             }
         }
     }

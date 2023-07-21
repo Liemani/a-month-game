@@ -10,160 +10,42 @@ import SpriteKit
 
 class ChunkContainer: SKNode {
 
-    var chunks: [Chunk]
-
-    // MARK: computed property
-    var lowerBound: Coordinate<Int> {
-        let middleChunkChunkCoord = Services.default.character.chunkCoord.chunk.coord
-        return middleChunkChunkCoord + Direction9.southWest.coordOfAChunk
-    }
-    var upperBound: Coordinate<Int> {
-        let middleChunkChunkCoord = Services.default.character.chunkCoord.chunk.coord
-        return middleChunkChunkCoord + Direction9.northEast.coordOfAChunk * 2
-    }
+    var chunks: SKNodeMatrix33<Chunk>
 
     // MARK: - init
     override init() {
-        self.chunks = []
+        self.chunks = SKNodeMatrix33()
 
         super.init()
 
-        self.chunks.reserveCapacity(9)
-        self.initChunks()
-
         self.zPosition = Constant.ZPosition.chunkContainer
-    }
 
-    func initChunks() {
-        for direction in Direction9.allCases {
-            let chunk = Chunk()
-
-            chunk.position = direction.coordOfAChunk.cgPoint * Constant.tileWidth
-
-            self.addChild(chunk)
-            self.chunks.append(chunk)
-        }
+        self.initChunks()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func update() {
-        for chunk in chunks {
-            chunk.update()
+    func initChunks() {
+        for (index, chunk) in self.chunks.enumerated() {
+            let coordOfAChunk = Direction9(rawValue: index)!.coordOfAChunk
+
+            chunk.position = coordOfAChunk.cgPoint * Constant.tileWidth
+
+            self.addChild(chunk)
         }
     }
 
-    // MARK: -
-    func chunkDirection9(to targetChunkCoord: ChunkCoordinate) -> Direction9? {
-        let middleChunkCoord = Services.default.character.chunkCoord
-        return middleChunkCoord.chunkDirection9(to: targetChunkCoord)
+    func updateSchedule() {
+        for chunk in self.chunks {
+            chunk.updateSchedule()
+        }
     }
 
-    // MARK: - private
-    func shift(direction: Direction4) {
-        switch direction {
-        case .east:
-            let temp1 = self.chunks[2]
-            let temp2 = self.chunks[5]
-            let temp3 = self.chunks[8]
-            self.chunks[2] = self.chunks[1]
-            self.chunks[5] = self.chunks[4]
-            self.chunks[8] = self.chunks[7]
-            self.chunks[1] = self.chunks[0]
-            self.chunks[4] = self.chunks[3]
-            self.chunks[7] = self.chunks[6]
-            self.chunks[0] = temp1
-            self.chunks[3] = temp2
-            self.chunks[6] = temp3
-            let temp4 = self.chunks[0].position
-            let temp5 = self.chunks[3].position
-            let temp6 = self.chunks[6].position
-            self.chunks[0].position = self.chunks[1].position
-            self.chunks[3].position = self.chunks[4].position
-            self.chunks[6].position = self.chunks[7].position
-            self.chunks[1].position = self.chunks[2].position
-            self.chunks[4].position = self.chunks[5].position
-            self.chunks[7].position = self.chunks[8].position
-            self.chunks[2].position = temp4
-            self.chunks[5].position = temp5
-            self.chunks[8].position = temp6
-        case .south:
-            let temp1 = self.chunks[0]
-            let temp2 = self.chunks[1]
-            let temp3 = self.chunks[2]
-            self.chunks[0] = self.chunks[3]
-            self.chunks[1] = self.chunks[4]
-            self.chunks[2] = self.chunks[5]
-            self.chunks[3] = self.chunks[6]
-            self.chunks[4] = self.chunks[7]
-            self.chunks[5] = self.chunks[8]
-            self.chunks[6] = temp1
-            self.chunks[7] = temp2
-            self.chunks[8] = temp3
-            let temp4 = self.chunks[6].position
-            let temp5 = self.chunks[7].position
-            let temp6 = self.chunks[8].position
-            self.chunks[6].position = self.chunks[3].position
-            self.chunks[7].position = self.chunks[4].position
-            self.chunks[8].position = self.chunks[5].position
-            self.chunks[3].position = self.chunks[0].position
-            self.chunks[4].position = self.chunks[1].position
-            self.chunks[5].position = self.chunks[2].position
-            self.chunks[0].position = temp4
-            self.chunks[1].position = temp5
-            self.chunks[2].position = temp6
-        case .west:
-            let temp1 = self.chunks[0]
-            let temp2 = self.chunks[3]
-            let temp3 = self.chunks[6]
-            self.chunks[0] = self.chunks[1]
-            self.chunks[3] = self.chunks[4]
-            self.chunks[6] = self.chunks[7]
-            self.chunks[1] = self.chunks[2]
-            self.chunks[4] = self.chunks[5]
-            self.chunks[7] = self.chunks[8]
-            self.chunks[2] = temp1
-            self.chunks[5] = temp2
-            self.chunks[8] = temp3
-            let temp4 = self.chunks[2].position
-            let temp5 = self.chunks[5].position
-            let temp6 = self.chunks[8].position
-            self.chunks[2].position = self.chunks[1].position
-            self.chunks[5].position = self.chunks[4].position
-            self.chunks[8].position = self.chunks[7].position
-            self.chunks[1].position = self.chunks[0].position
-            self.chunks[4].position = self.chunks[3].position
-            self.chunks[7].position = self.chunks[6].position
-            self.chunks[0].position = temp4
-            self.chunks[3].position = temp5
-            self.chunks[6].position = temp6
-        case .north:
-            let temp1 = self.chunks[6]
-            let temp2 = self.chunks[7]
-            let temp3 = self.chunks[8]
-            self.chunks[6] = self.chunks[3]
-            self.chunks[7] = self.chunks[4]
-            self.chunks[8] = self.chunks[5]
-            self.chunks[3] = self.chunks[0]
-            self.chunks[4] = self.chunks[1]
-            self.chunks[5] = self.chunks[2]
-            self.chunks[0] = temp1
-            self.chunks[1] = temp2
-            self.chunks[2] = temp3
-            let temp4 = self.chunks[0].position
-            let temp5 = self.chunks[1].position
-            let temp6 = self.chunks[2].position
-            self.chunks[0].position = self.chunks[3].position
-            self.chunks[1].position = self.chunks[4].position
-            self.chunks[2].position = self.chunks[5].position
-            self.chunks[3].position = self.chunks[6].position
-            self.chunks[4].position = self.chunks[7].position
-            self.chunks[5].position = self.chunks[8].position
-            self.chunks[6].position = temp4
-            self.chunks[7].position = temp5
-            self.chunks[8].position = temp6
+    func removeAll() {
+        for chunk in self.chunks {
+            chunk.removeAll()
         }
     }
 
@@ -172,44 +54,45 @@ class ChunkContainer: SKNode {
 // MARK: - inventory protocol
 extension ChunkContainer: InventoryProtocol {
 
-    func isValid(_ coord: ChunkCoordinate) -> Bool {
-        let coord = coord.coord
-        let lowerBound = self.lowerBound
-        let upperBound = self.upperBound
+    typealias Coord = Coordinate<Int>
+    typealias Item = GameObject
+    typealias Items = [Item]
 
-        return lowerBound.x <= coord.x && coord.x < upperBound.x
-            && lowerBound.y <= coord.y && coord.y < upperBound.y
+    /// - Parameters:
+    ///     - coord: must valid coordinate
+    func chunk(containing coord: Coord) -> Chunk {
+        return self.chunks.element(coord >> 4)
     }
 
-    /// - Suppose: item is alwasy has chunk coordinate
-    func contains(_ item: GameObject) -> Bool {
-        guard let goChunkCoord = item.chunkCoord else {
-            return false
-        }
+    func isValid(_ coord: Coord) -> Bool {
+        let range = 0 ..< Constant.tileCountOfChunkSide * 3
 
-        return self.isValid(goChunkCoord)
+        return range.contains(coord.x) && range.contains(coord.y)
     }
 
-    func items(at coord: ChunkCoordinate) -> [GameObject] {
-        guard let direction = self.chunkDirection9(to: coord) else {
+    func items(at coord: Coord) -> Items? {
+        guard self.isValid(coord) else {
             return []
         }
 
-        return self.chunks[direction].items(at: coord.address.tile.coord)
+        let coordOfChunk = coord >> 4
+        let chunk = self.chunks.element(coordOfChunk)
+        let tileCoord = coord % Constant.tileCountOfChunkSide
+
+        return chunk.items(at: tileCoord.coordUInt8)
     }
 
-    func itemsAtLocation(of touch: UITouch) -> [GameObject] {
+    func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
         let touchPoint = touch.location(in: self)
-        let fieldCoord = CoordinateConverter(touchPoint)
-        let directionCoord = fieldCoord.coord
-        let chunkDirectionCoord = directionCoord / Constant.tileCountOfChunkSide
-        let chunk = self.chunks[chunkDirectionCoord.y * 3 + chunkDirectionCoord.x]
-        let gos = chunk.itemsAtLocation(of: touch)
+        let touchedCoord = CoordinateConverter(touchPoint).coord + Constant.tileCountOfChunkSide
+        let chunk = self.chunk(containing: touchedCoord)
 
-        return gos
+        let touchedChunkCoord = touchedCoord % Constant.tileCountOfChunkSide
+
+        return chunk.items(at: touchedChunkCoord.coordUInt8)
     }
 
-    func coordAtLocation(of touch: UITouch) -> ChunkCoordinate? {
+    func coordAtLocation(of touch: UITouch) -> Coord? {
         let touchPoint = touch.location(in: self)
 
         let chunkcontainerWidthHalf = Constant.chunkWidth * 3.0 / 2.0
@@ -219,27 +102,29 @@ extension ChunkContainer: InventoryProtocol {
             return nil
         }
 
-        let fieldCoord = CoordinateConverter(touchPoint)
-
-        let middleChunkCoord = Services.default.character.chunkCoord.chunk
-        return middleChunkCoord + fieldCoord.coord
+        return CoordinateConverter(touchPoint).coord + Constant.tileCountOfChunkSide
     }
 
-    func add(_ item: GameObject) {
-        let direction = self.chunkDirection9(to: item.chunkCoord!)!
-        self.chunks[direction].add(item)
+    /// - Parameters:
+    ///     - coord: suppose is valid
+    func add(_ item: GameObject, to coord: Coord) {
+        let chunk = self.chunk(containing: coord)
+        let coord = item.chunkCoord!.address.tile.rawCoord
+
+        chunk.add(item, to: coord)
     }
 
-    func remove(_ item: GameObject) {
-        guard let direction = self.chunkDirection9(to: item.chunkCoord!) else {
-            return
-        }
+    /// - Parameters:
+    ///     - coord: suppose is valid
+    func remove(_ item: GameObject, from coord: Coord) {
+        let chunk = self.chunk(containing: coord)
+        let coord = item.chunkCoord!.address.tile.rawCoord
 
-        self.chunks[direction].remove(item)
+        chunk.remove(item, from: coord)
     }
 
     func makeIterator() -> some IteratorProtocol<GameObject> {
-        return CombineSequences(sequences: self.chunks)
+        return CombineSequences(sequences: self.chunks.content)
     }
 
 }

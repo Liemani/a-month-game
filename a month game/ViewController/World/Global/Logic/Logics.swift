@@ -19,7 +19,6 @@ class Logics {
                     fieldInv: GameObjectInventory,
                     infoWindow: InfoWindow,
                     world: SKNode,
-                    chunkContainer: ChunkContainer,
                     invContainer: InventoryContainer,
                     accessibleGOTracker: AccessibleGOTracker) {
         self._default = Logics(scene: scene,
@@ -28,7 +27,6 @@ class Logics {
                                fieldInv: fieldInv,
                                infoWindow: infoWindow,
                                world: world,
-                               chunkContainer: chunkContainer,
                                invContainer: invContainer,
                                accessibleGOTracker: accessibleGOTracker)
     }
@@ -49,13 +47,10 @@ class Logics {
     let world: WorldLogic
 
     let invContainer: InventoryContainerLogic
-    let chunkContainer: ChunkContainerLogic
 
     let accessibleGOTracker: AccessibleGOTrackerLogic
 
     let goData: GameObjectDataLogic
-
-    let action: ActionLogic
 
     init(scene: WorldScene,
          ui: SKNode,
@@ -63,7 +58,6 @@ class Logics {
          fieldInv: GameObjectInventory,
          infoWindow: InfoWindow,
          world: SKNode,
-         chunkContainer: ChunkContainer,
          invContainer: InventoryContainer,
          accessibleGOTracker: AccessibleGOTracker) {
         self.touch = TouchLogics()
@@ -78,13 +72,10 @@ class Logics {
         self.world = WorldLogic(world: world)
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
-        self.chunkContainer = ChunkContainerLogic(chunkContainer: chunkContainer)
 
         self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
         self.goData = GameObjectDataLogic()
-
-        self.action = ActionLogic()
     }
 
 }

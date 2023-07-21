@@ -8,10 +8,10 @@
 import Foundation
 import SpriteKit
 
-class ActionLogic {
+class ActionService {
 
     func update() {
-        for chunk in Logics.default.chunkContainer.chunkContainer.chunks {
+        for chunk in Services.default.chunkContainer.target.chunks {
             let scheduler = chunk.scheduler
 
             let cDate = Date()
@@ -61,7 +61,7 @@ class ActionLogic {
     }
 
     func runTimeEventAction(_ go: GameObject) {
-        if let action = Logics.default.action.time[go.type] {
+        if let action = Services.default.action.time[go.type] {
             _ = action(go)
         } else {
             go.delete()
@@ -71,7 +71,7 @@ class ActionLogic {
     }
 
     let interact: [GameObjectType: (GameObject) -> Bool] = [
-        .dirtTile: { go in
+        .dirtFloor: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -82,7 +82,7 @@ class ActionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.type = .clayTile
+            go.type = .clayFloor
             Logics.default.scene.new(result: result,
                                      type: .dirt,
                                      quality: goEquiping.quality,
@@ -90,7 +90,7 @@ class ActionLogic {
 
             return true
         },
-        .clayTile: { go in
+        .clayFloor: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -101,7 +101,7 @@ class ActionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.type = .caveCeilTile
+            go.type = .caveCeilFloor
             Logics.default.scene.new(result: result,
                                      type: .clay,
                                      quality: goEquiping.quality,
@@ -109,7 +109,7 @@ class ActionLogic {
 
             return true
         },
-        .caveCeilTile: { go in
+        .caveCeilFloor: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .pickaxe),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -120,7 +120,7 @@ class ActionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.type = .caveHoleTile
+            go.type = .caveHoleFloor
             Logics.default.scene.new(result: result,
                                      type: .stone,
                                      quality: goEquiping.quality,
@@ -128,21 +128,21 @@ class ActionLogic {
 
             return true
         },
-        .cobblestoneTile: { go in
+        .cobblestoneFloor: { go in
             guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
 
             let result = Logics.default.mastery.interact(go.type)
 
-            go.type = .sandTile
+            go.type = .sandFloor
             Logics.default.scene.new(result: result,
                                      type: .stone,
                                      coord: emptyInvCoord)
 
             return true
         },
-        .sandTile: { go in
+        .sandFloor: { go in
             guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
@@ -153,7 +153,7 @@ class ActionLogic {
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
 
-            go.type = .clayTile
+            go.type = .clayFloor
             Logics.default.scene.new(result: result,
                                      type: .sand,
                                      quality: goEquiping.quality,
@@ -279,7 +279,7 @@ class ActionLogic {
     ]
 
     let interactToGO: [GameObjectType: (GameObject, GameObject) -> Bool] = [
-        .waterTile: { go, target in
+        .waterFloor: { go, target in
             if go.type.isContainer {
                 if !Logics.default.invContainer.isEmpty(go.id) {
                     Logics.default.invContainer.deleteAll(go.id)
@@ -292,13 +292,13 @@ class ActionLogic {
 
             return true
         },
-        .clayTile: { go, target in
+        .clayFloor: { go, target in
             if go.type == .sand {
                 let result = Logics.default.mastery.interact(with: target.type,
                                                              to: go.type)
 
                 go.delete()
-                Logics.default.scene.set(result: result, go: target, type: .sandTile)
+                Logics.default.scene.set(result: result, go: target, type: .sandFloor)
 
                 return true
             }
@@ -308,42 +308,42 @@ class ActionLogic {
                                                              to: go.type)
 
                 go.delete()
-                Logics.default.scene.set(result: result, go: target, type: .dirtTile)
+                Logics.default.scene.set(result: result, go: target, type: .dirtFloor)
 
                 return true
             }
 
             return false
         },
-        .caveCeilTile: { go, target in
+        .caveCeilFloor: { go, target in
             guard go.type == .clay else { return false }
 
             let result = Logics.default.mastery.interact(with: target.type,
                                                          to: go.type)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .clayTile)
+            Logics.default.scene.set(result: result, go: target, type: .clayFloor)
 
             return true
         },
-        .caveHoleTile: { go, target in
+        .caveHoleFloor: { go, target in
             guard go.type == .stone else { return false }
 
-            let result = Logics.default.mastery.interact(with: .stone, to: .caveHoleTile)
+            let result = Logics.default.mastery.interact(with: .stone, to: .caveHoleFloor)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .caveCeilTile)
+            Logics.default.scene.set(result: result, go: target, type: .caveCeilFloor)
 
             return true
         },
-        .sandTile: { go, target in
+        .sandFloor: { go, target in
             guard go.type == .stone else { return false }
 
             let result = Logics.default.mastery.interact(with: target.type,
                                                          to: go.type)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .cobblestoneTile)
+            Logics.default.scene.set(result: result, go: target, type: .cobblestoneFloor)
 
             return true
         },
@@ -355,9 +355,9 @@ class ActionLogic {
                 return false
             }
 
-            let gosInTile = Logics.default.chunkContainer.items(at: seedChunkCoord)
+            let gosInFloor = Services.default.chunkContainer.items(at: seedChunkCoord)!
 
-            guard let clayTile = gosInTile.first(where: { $0.type == .clayTile }) else {
+            guard let clayFloor = gosInFloor.first(where: { $0.type == .clayFloor }) else {
                 return false
             }
 
@@ -366,7 +366,7 @@ class ActionLogic {
 
             go.delete()
 
-            Logics.default.scene.set(result: result, go: clayTile, type: .dirtTile)
+            Logics.default.scene.set(result: result, go: clayFloor, type: .dirtFloor)
             Logics.default.scene.set(result: result, go: oakSeed, type: .treeOak)
             let newQuality = (oakSeed.quality + go.quality) / 2.0
             Logics.default.scene.set(result: result, go: oakSeed, quality: newQuality)
@@ -377,42 +377,47 @@ class ActionLogic {
 
     let time: [GameObjectType: (GameObject) -> Bool] = [
         .weed: { go in
-            let weedChunkCoord = go.chunkCoord!
-            let randomDirection = Direction8.random.coord
-            let randomTileChunkCoord = weedChunkCoord + randomDirection
+            let weedCoordInWorld = go.chunkCoord!.coord
+            let adjacentDirection = Direction8.random.coord
+            let adjacentFloorCoordInWorld = weedCoordInWorld + adjacentDirection
 
-            guard Logics.default.chunkContainer.isValid(randomTileChunkCoord) else {
+            let adjacentFloorCoord = Services.default.chunkContainer.coord(adjacentFloorCoordInWorld)
+            let adjacentFloorChunkCoord = ChunkCoordinate(adjacentFloorCoordInWorld)
+
+            guard Services.default.chunkContainer.target.isValid(adjacentFloorCoord) else {
                 return true
             }
 
-            let gosOnTile = Logics.default.chunkContainer.items(at: randomTileChunkCoord)
+            var floor: GameObject? = nil
 
-            var tile: GameObject? = nil
+            let gosOnTile = Services.default.chunkContainer.target.items(at: adjacentFloorCoord)
 
-            for go in gosOnTile {
-                if go.type.isTile {
-                    tile = go
-                    break
+            if let gosOnTile = gosOnTile {
+                for go in gosOnTile {
+                    if go.type.isFloor {
+                        floor = go
+                        break
+                    }
                 }
             }
 
-            if let tile = tile {
-                switch tile.type {
-                case .dirtTile:
-                    tile.delete()
-                case .clayTile:
-                    tile.type = .dirtTile
-                case .caveCeilTile:
-                    tile.type = .clayTile
-                case .caveHoleTile:
-                    tile.type = .caveCeilTile
+            if let floor = floor {
+                switch floor.type {
+                case .dirtFloor:
+                    floor.delete()
+                case .clayFloor:
+                    floor.type = .dirtFloor
+                case .caveCeilFloor:
+                    floor.type = .clayFloor
+                case .caveHoleFloor:
+                    floor.type = .caveCeilFloor
                 default:
                     break
                 }
             } else {
-                if gosOnTile.isEmpty {
+                if gosOnTile == nil {
                     GameObject.new(type: .weed,
-                                   coord: randomTileChunkCoord,
+                                   coord: adjacentFloorChunkCoord,
                                    date: go.timeEventDate!)
                 }
             }
