@@ -50,4 +50,12 @@ class InfoWindowLogic {
         self.infoWindow.removeAllActions()
     }
 
+    func hideContent() {
+        self.infoWindow.hideContent()
+    }
+
+    func unhideContent() {
+        self.infoWindow.unhideContent()
+    }
+
 }

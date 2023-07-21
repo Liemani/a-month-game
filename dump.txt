@@ -447,7 +447,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-fix a bug that tile can be activated when a go is on the tile
+a bug that tile can be activated when a go is on the tile
+a bug that can scrol outside the info window
 
 ## mandatory
 add sapling

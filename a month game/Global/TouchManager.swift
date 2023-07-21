@@ -37,6 +37,7 @@ class RecognizerTouch {
         self.bTime = touch.timestamp
         self.pTime = touch.timestamp
         self.possible = touchRecognizers
+
         self.setTouchResponder(scene: scene)
     }
 
@@ -193,6 +194,9 @@ class TouchManager {
     private var recognizers: [TouchRecognizer]
     private var timeoutRecognizers: [TouchRecognizer]
 
+    var willSearch: (() -> Void)?
+    var didSearch: (() -> Void)?
+
     init() {
         self.recognizerTouches = RecognizerTouchContainer()
         self.recognizers = []
@@ -321,7 +325,16 @@ class TouchManager {
             return
         }
 
+        if let willSearch = self.willSearch {
+            willSearch()
+        }
+
         let recognizerTouch = RecognizerTouch(touch, scene: self.scene, touchRecognizers: self.recognizers)
+
+        if let didSearch = self.didSearch {
+            didSearch()
+        }
+
         self.recognizerTouches.add(recognizerTouch: recognizerTouch)
 
         self.recognize(recognizerTouch: recognizerTouch)

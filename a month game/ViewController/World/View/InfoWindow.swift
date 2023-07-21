@@ -114,6 +114,14 @@ class InfoWindow: SKShapeNode {
         self.label.text = nil
     }
 
+    func hideContent() {
+        self.content.isHidden = true
+    }
+
+    func unhideContent() {
+        self.content.isHidden = false
+    }
+
     func scrolled(_ diff: Double) {
         let positionY = self.content.position.y
 

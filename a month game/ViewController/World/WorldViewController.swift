@@ -48,15 +48,7 @@ class WorldViewController: UIViewController {
 
         let scene = WorldScene(size: Constant.sceneSize)
 
-        let recognizers: [TouchRecognizer] = [
-            TapRecognizer(),
-            TapRecognizer(),
-            PanRecognizer(scene: scene),
-            PinchRecognizer(scene: scene,
-                            ui: scene.ui),
-            LongTouchRecognizer(),
-        ]
-        TouchManager.default.set(scene: scene, recognizers: recognizers)
+        self.configureTouchManager(scene: scene)
 
         Logics.set(scene: scene,
                    ui: scene.ui,
@@ -70,6 +62,27 @@ class WorldViewController: UIViewController {
         Particle.setUp()
 
         skView.presentScene(scene)
+    }
+
+    func configureTouchManager(scene: WorldScene) {
+        let recognizers: [TouchRecognizer] = [
+            TapRecognizer(),
+            TapRecognizer(),
+            PanRecognizer(scene: scene),
+            PinchRecognizer(scene: scene,
+                            ui: scene.ui),
+            LongTouchRecognizer(),
+        ]
+
+        TouchManager.default.set(scene: scene, recognizers: recognizers)
+
+        TouchManager.default.willSearch = {
+            Logics.default.infoWindow.hideContent()
+        }
+
+        TouchManager.default.didSearch = {
+            Logics.default.infoWindow.unhideContent()
+        }
     }
 
     deinit {

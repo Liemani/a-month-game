@@ -21,7 +21,7 @@ class PortalViewController: UIViewController {
         let scene = PortalScene()
         self.skView.presentScene(scene)
 
-        self.setTouchRecognizer(scene: scene)
+        self.configureTouchManager(scene: scene)
 
         NotificationCenter.default.addObserver(self, selector: #selector(requestPresentWorldSceneViewController), name: .requestPresentWorldSceneViewController, object: nil)
 
@@ -36,11 +36,15 @@ class PortalViewController: UIViewController {
 #endif
     }
 
-    func setTouchRecognizer(scene: SKScene) {
+    func configureTouchManager(scene: SKScene) {
         let recognizers = [
             TapRecognizer(),
         ]
+
         TouchManager.default.set(scene: scene, recognizers: recognizers)
+
+        TouchManager.default.willSearch = nil
+        TouchManager.default.didSearch = nil
     }
 
     deinit {
