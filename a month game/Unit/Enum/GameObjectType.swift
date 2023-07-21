@@ -112,11 +112,11 @@ enum GameObjectType: Int, CaseIterable {
                 texture.filteringMode = .nearest
                 texturesForResource.append(texture)
             case 2:
-                var resourceName = resource.resourceName.appending("_bottom")
+                var resourceName = resource.resourceName
                 var texture = SKTexture(imageNamed: resourceName)
                 texture.filteringMode = .nearest
                 texturesForResource.append(texture)
-                resourceName = resource.resourceName.appending("_top")
+                resourceName = resourceName.appending("_cover")
                 texture = SKTexture(imageNamed: resourceName)
                 texture.filteringMode = .nearest
                 texturesForResource.append(texture)
@@ -140,7 +140,7 @@ enum GameObjectType: Int, CaseIterable {
     var invCapacity: Int { self.resource.invCapacity }
     var isContainer: Bool { self.invCapacity != 0 }
 
-    var layerCount: Int { self.resource.layerCount }
+    var hasCover: Bool { self.resource.layerCount == 2 }
     
     var walkSpeed: Double { self.resource.walkSpeed }
     var isWalkable: Bool { self.walkSpeed != -1.0 }

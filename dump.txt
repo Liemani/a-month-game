@@ -447,11 +447,9 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-a bug that tile can be activated when a go is on the tile
-a bug that can scrol outside the info window
+bug not show quality box from field
 
 ## mandatory
-add sapling
 shovel -> weed: get weed to inventory
 
 ## 2nd priority
@@ -669,6 +667,9 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+add sapling
+a bug that tile can be activated when a go is on the tile
+a bug that can scrol outside the info window
 the button that reset the character position(escape) at menu
 잔디는 인벤 노 바닥 떨굼
 when delete go, if it is activatedGO, disconnect

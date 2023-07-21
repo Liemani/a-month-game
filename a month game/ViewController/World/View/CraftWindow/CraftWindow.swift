@@ -50,7 +50,7 @@ class CraftObject: SKSpriteNode {
         self.texture = goType.textures[0]
         self.size = Constant.gameObjectSize
 
-        if goType.layerCount == 2 {
+        if goType.hasCover {
             if self.children.count == 1 {
                 let cover = self.children[0] as! SKSpriteNode
                 cover.texture = goType.textures[1]

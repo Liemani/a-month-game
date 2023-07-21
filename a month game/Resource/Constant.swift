@@ -162,6 +162,10 @@ struct Constant {
         static let interactionMasteryEntity = "InteractionMasteryMO"
         static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
         static let craftMasteryEntity = "CraftMasteryMO"
+
+        // MARK: node name
+        static let goCover = "goC"
+        static let goQualityBox = "goQB"
     }
 
     // MARK: - resource name

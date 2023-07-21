@@ -82,18 +82,14 @@ class GameObject: SKSpriteNode {
     func setTexture(type goType: GameObjectType) {
         self.texture = goType.textures[0]
 
-        if goType.layerCount == 2 {
-            if self.children.count == 1 {
-                let cover = self.children[0] as! SKSpriteNode
+        if goType.hasCover {
+            if let cover = self.childNode(withName: Constant.Name.goCover) as! SKSpriteNode? {
                 cover.texture = goType.textures[1]
             } else {
-                let cover = SKSpriteNode(texture: goType.textures[1])
-                cover.size = Constant.coverSize
-                cover.zPosition = Constant.ZPosition.gameObjectCover
-                self.addChild(cover)
+                self.addCover(goType)
             }
         } else {
-            self.removeAllChildren()
+            self.childNode(withName: Constant.Name.goCover)?.removeFromParent()
         }
 
         self.size = goType.isFloor || !goType.isWalkable
@@ -124,16 +120,21 @@ class GameObject: SKSpriteNode {
             self.addQualityBox()
         }
 
-        if goData.type.layerCount == 2 {
-            let cover = SKSpriteNode(texture: goData.type.textures[1])
-            cover.size = Constant.coverSize
-            cover.zPosition = Constant.ZPosition.gameObjectCover
-            self.addChild(cover)
+        if goData.type.hasCover {
+            self.addCover(goData.type)
         }
 
         self.zPosition = !self.type.isFloor
                             ? Constant.ZPosition.gameObject
                             : Constant.ZPosition.tile
+    }
+
+    func addCover(_ goType: GameObjectType) {
+        let cover = SKSpriteNode(texture: type.textures[1])
+        cover.name = Constant.Name.goCover
+        cover.size = Constant.coverSize
+        cover.zPosition = Constant.ZPosition.gameObjectCover
+        self.addChild(cover)
     }
 
     func addQualityBox() {
@@ -144,6 +145,7 @@ class GameObject: SKSpriteNode {
         let boxSize = Constant.Size.qualityBox
 
         let qualityBox = SKShapeNode(rectOf: boxSize)
+        qualityBox.name = Constant.Name.goQualityBox
         qualityBox.position = Constant.Position.qualityBox
         qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
         qualityBox.fillColor = .black
@@ -167,9 +169,7 @@ class GameObject: SKSpriteNode {
     }
 
     func removeQualityBox() {
-        if !self.children.isEmpty {
-            self.children[0].removeFromParent()
-        }
+        self.childNode(withName: Constant.Name.goQualityBox)?.removeFromParent()
     }
 
     convenience init(type goType: GameObjectType,
@@ -343,6 +343,8 @@ extension GameObject {
 
     func move(to invCoord: InventoryCoordinate) {
         if !self.type.isContainer {
+            self.addQualityBox()
+
             self.removeFromParentWithSideEffect()
             self.set(coord: invCoord)
             Logics.default.invContainer.add(self)
