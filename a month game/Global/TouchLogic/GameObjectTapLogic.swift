@@ -47,7 +47,9 @@ class GameObjectTapLogic: TouchLogic {
 #endif
 
         if go.type.isFloor {
+            go.deactivate()
             go = Services.default.chunkContainer.items(at: go.chunkCoord!)!.last!
+            go.activate()
         }
 
         if let activatedGO = TouchLogics.default.activatedGO {
@@ -68,13 +70,13 @@ class GameObjectTapLogic: TouchLogic {
         // no activatedGO
         if go.isOnField
             && !go.type.isMovable {
-            go.deactivate()
             go.interact()
+            go.deactivate()
 
             return
         }
 
-        TouchLogics.default.activatedGO = self.go
+        TouchLogics.default.activatedGO = go
 
         return
     }
