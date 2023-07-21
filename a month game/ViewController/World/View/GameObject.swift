@@ -292,7 +292,7 @@ extension GameObject {
 
 }
 
-// MARK: - Logic
+// MARK: - logic
 extension GameObject {
 
     static func new(type goType: GameObjectType,
@@ -390,6 +390,12 @@ extension GameObject {
         self._delete()
     }
 
+    func delete(result: TaskResultType) {
+        guard result != .fail else { return }
+
+        self.delete()
+    }
+
     func interact() {
         if let handler = Services.default.action.interact[self.type] {
             if handler(self) {
@@ -403,7 +409,7 @@ extension GameObject {
     }
 
     func interact(to go: GameObject) {
-        if let handler = Services.default.action.interactToGO[go.type] {
+        if let handler = Services.default.action.interactGOToGO[go.type] {
             if handler(self, go) {
                 return
             }

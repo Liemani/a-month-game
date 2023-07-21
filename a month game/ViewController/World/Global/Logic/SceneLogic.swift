@@ -70,30 +70,6 @@ class SceneLogic {
         }
     }
 
-    func set(result: TaskResultType,
-             go: GameObject,
-             type goType: GameObjectType) {
-        guard result != .fail else { return }
-
-        go.type = goType
-    }
-
-    func set(result: TaskResultType,
-             go: GameObject,
-             variant: Int) {
-        guard result != .fail else { return }
-
-        go.variant = variant
-    }
-
-    func set(result: TaskResultType,
-             go: GameObject,
-             quality: Double) {
-        guard result != .fail else { return }
-
-        go.quality = quality
-    }
-
     // MARK: - inventory
     func containerInteract(_ container: GameObject) {
         let invInv = Logics.default.invContainer.invInv

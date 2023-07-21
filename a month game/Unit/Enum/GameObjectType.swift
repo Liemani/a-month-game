@@ -33,6 +33,8 @@ enum GameObjectType: Int, CaseIterable {
     case woodFloorFloor
     case weed
     case vine
+    case treeOakSeed
+    case treeOakSapling
     case treeOak
     case pineTree
     case woodWall
@@ -45,7 +47,6 @@ enum GameObjectType: Int, CaseIterable {
     case vineStem
     case woodStick
     case woodBoard
-    case treeOakSeed
     case pineCone
     case axe
     case shovel
@@ -73,6 +74,8 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_wood_floor_floor", 1.0, 0, 1, true, false, false, -1.0),
         ("game_object_weed", 0.75, 0, 2, false, false, false, 604800.0),
         ("game_object_vine", 0.50, 0, 1, false, false, false, -1.0),
+        ("game_object_tree_oak_seed", 1.0, 0, 1, false, true, true, 300.0),
+        ("game_object_tree_oak_sapling", 1.0, 0, 1, false, false, false, 604800.0),
         ("game_object_tree_oak", -1.0, 0, 1, false, false, false, -1.0),
         ("game_object_pine_tree", -1.0, 0, 1, false, false, false, -1.0),
         ("game_object_wood_wall", -1.0, 0, 1, false, false, false, -1.0),
@@ -85,7 +88,6 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_vine_stem", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_wood_stick", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_wood_board", 1.0, 0, 1, false, true, true, 300.0),
-        ("game_object_tree_oak_seed", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_pine_cone", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_axe", 1.0, 0, 1, false, true, true, 300.0),
         ("game_object_shovel", 1.0, 0, 1, false, true, true, 300.0),

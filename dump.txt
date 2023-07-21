@@ -447,10 +447,9 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-track chunk.updateSchedule
+fix a bug that tile can be activated when a go is on the tile
 
 ## mandatory
-the button that reset the character position(escape) at menu
 add sapling
 shovel -> weed: get weed to inventory
 
@@ -669,6 +668,7 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+the button that reset the character position(escape) at menu
 잔디는 인벤 노 바닥 떨굼
 when delete go, if it is activatedGO, disconnect
 long info touch

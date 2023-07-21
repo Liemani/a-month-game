@@ -198,6 +198,20 @@ class ActionService {
 
             return true
         },
+        .treeOakSapling: { go in
+            guard let goEquiping = Logics.default.invContainer.go(equiping: .axe) else {
+                return false
+            }
+
+            goEquiping.emphasizeUsing()
+
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
+
+            go.delete(result: result)
+
+            return true
+        },
         .treeOak: { go in
             if let goEquiping = Logics.default.invContainer.go(equiping: .axe) {
 
@@ -276,9 +290,23 @@ class ActionService {
 
             return true
         },
+        .woodWall: { go in
+            guard let goEquiping = Logics.default.invContainer.go(equiping: .axe) else {
+                return false
+            }
+
+            goEquiping.emphasizeUsing()
+
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
+
+            go.delete(result: result)
+
+            return true
+        }
     ]
 
-    let interactToGO: [GameObjectType: (GameObject, GameObject) -> Bool] = [
+    let interactGOToGO: [GameObjectType: (GameObject, GameObject) -> Bool] = [
         .waterFloor: { go, target in
             if go.type.isContainer {
                 if !Logics.default.invContainer.isEmpty(go.id) {
@@ -298,7 +326,12 @@ class ActionService {
                                                              to: go.type)
 
                 go.delete()
-                Logics.default.scene.set(result: result, go: target, type: .sandFloor)
+
+                if result == .fail {
+                    return true
+                }
+
+                target.type = .sandFloor
 
                 return true
             }
@@ -308,7 +341,12 @@ class ActionService {
                                                              to: go.type)
 
                 go.delete()
-                Logics.default.scene.set(result: result, go: target, type: .dirtFloor)
+
+                if result == .fail {
+                    return true
+                }
+
+                target.type = .dirtFloor
 
                 return true
             }
@@ -322,7 +360,12 @@ class ActionService {
                                                          to: go.type)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .clayFloor)
+
+            if result == .fail {
+                return true
+            }
+
+            target.type = .clayFloor
 
             return true
         },
@@ -332,7 +375,12 @@ class ActionService {
             let result = Logics.default.mastery.interact(with: .stone, to: .caveHoleFloor)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .caveCeilFloor)
+
+            if result == .fail {
+                return true
+            }
+
+            target.type = .caveCeilFloor
 
             return true
         },
@@ -343,7 +391,12 @@ class ActionService {
                                                          to: go.type)
 
             go.delete()
-            Logics.default.scene.set(result: result, go: target, type: .cobblestoneFloor)
+
+            if result == .fail {
+                return true
+            }
+
+            target.type = .cobblestoneFloor
 
             return true
         },
@@ -366,10 +419,15 @@ class ActionService {
 
             go.delete()
 
-            Logics.default.scene.set(result: result, go: clayFloor, type: .dirtFloor)
-            Logics.default.scene.set(result: result, go: oakSeed, type: .treeOak)
-            let newQuality = (oakSeed.quality + go.quality) / 2.0
-            Logics.default.scene.set(result: result, go: oakSeed, quality: newQuality)
+            if result == .fail {
+                oakSeed.delete()
+
+                return true
+            }
+
+            clayFloor.type = .dirtFloor
+            oakSeed.type = .treeOakSapling
+            oakSeed.quality = (oakSeed.quality + go.quality) / 2.0
 
             return true
         },
@@ -422,6 +480,10 @@ class ActionService {
                 }
             }
 
+            return true
+        },
+        .treeOakSapling: { go in
+            go.type = .treeOak
             return true
         },
     ]
