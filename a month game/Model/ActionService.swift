@@ -404,8 +404,8 @@ class ActionService {
         },
         .clayFloor: { go, target in
             if go.type == .sand {
-                let result = Logics.default.mastery.interact(with: target.type,
-                                                             to: go.type)
+                let result = Logics.default.mastery.interact(with: go.type,
+                                                             to: target.type)
 
                 go.delete()
 
@@ -419,8 +419,8 @@ class ActionService {
             }
 
             if go.type == .dirt {
-                let result = Logics.default.mastery.interact(with: target.type,
-                                                             to: go.type)
+                let result = Logics.default.mastery.interact(with: go.type,
+                                                             to: target.type)
 
                 go.delete()
 
@@ -438,8 +438,8 @@ class ActionService {
         .caveCeilFloor: { go, target in
             guard go.type == .clay else { return false }
 
-            let result = Logics.default.mastery.interact(with: target.type,
-                                                         to: go.type)
+            let result = Logics.default.mastery.interact(with: go.type,
+                                                         to: target.type)
 
             go.delete()
 
@@ -454,7 +454,8 @@ class ActionService {
         .caveHoleFloor: { go, target in
             guard go.type == .stone else { return false }
 
-            let result = Logics.default.mastery.interact(with: .stone, to: .caveHoleFloor)
+            let result = Logics.default.mastery.interact(with: go.type,
+                                                         to: target.type)
 
             go.delete()
 
@@ -469,8 +470,8 @@ class ActionService {
         .sandFloor: { go, target in
             guard go.type == .stone else { return false }
 
-            let result = Logics.default.mastery.interact(with: target.type,
-                                                         to: go.type)
+            let result = Logics.default.mastery.interact(with: go.type,
+                                                         to: target.type)
 
             go.delete()
 
@@ -494,8 +495,8 @@ class ActionService {
                 return false
             }
 
-            let result = Logics.default.mastery.interact(with: target.type,
-                                                         to: go.type)
+            let result = Logics.default.mastery.interact(with: go.type,
+                                                         to: target.type)
 
             go.delete()
 
@@ -523,8 +524,8 @@ class ActionService {
                 return false
             }
 
-            let result = Logics.default.mastery.interact(with: target.type,
-                                                         to: go.type)
+            let result = Logics.default.mastery.interact(with: go.type,
+                                                         to: target.type)
 
             go.delete()
 
