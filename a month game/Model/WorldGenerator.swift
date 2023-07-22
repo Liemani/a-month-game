@@ -26,7 +26,7 @@ final class WorldGenerator {
     }
 
     private func generateGOMOs() {
-        self.new(type: .woodFloorFloor, x: 0, y: 0)
+        self.new(type: .woodTileFloor, x: 0, y: 0)
 
         self.new(type: .woodWall, x: -1, y: -1)
         self.new(type: .woodWall, x: -1, y: 0)

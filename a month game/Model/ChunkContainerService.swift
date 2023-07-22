@@ -98,7 +98,7 @@ class ChunkContainerService {
 
         if !go.type.isWalkable
             && go.chunkCoord!.coord.isAdjacent(to: characterCoord) {
-            Logics.default.accessibleGOTracker.add(go)
+            Services.default.accessibleGOTracker.tracker.add(go)
         }
     }
 

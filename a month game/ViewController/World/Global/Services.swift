@@ -24,14 +24,20 @@ final class Services {
     }
 
     let action: ActionService
+
     let movingLayer: MovingLayerService
     let character: CharacterService
+
     let interactionMastery: InteractionMasteryService
     let goInteractionMastery: GOInteractionMasteryService
     let craftMastery: CraftMasteryService
+
     let idGenerator: IDGeneratorService
+
     let chunkContainer: ChunkContainerService
     let chunk: ChunkService
+    let accessibleGOTracker: AccessibleGOTrackerService
+
     let inv: InventoryService
     let go: GameObjectService
 
@@ -49,6 +55,7 @@ final class Services {
 
         self.chunkContainer = ChunkContainerService()
         self.chunk = ChunkService()
+        self.accessibleGOTracker = AccessibleGOTrackerService()
 
         self.inv = InventoryService()
 
@@ -57,7 +64,6 @@ final class Services {
 
     func setUp() {
         self.character.setUp()
-        self.chunkContainer.setUp()
     }
 
 }

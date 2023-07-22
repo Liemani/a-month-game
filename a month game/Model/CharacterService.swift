@@ -82,6 +82,11 @@ class CharacterService {
         let tileCoord = self._chunkCoord.address.tile.coord
         self._position = CoordinateConverter(tileCoord).fieldPoint
         self._nPosition = self._position
+
+        Services.default.chunkContainer.setUp()
+
+        FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
+        self.updateSpeedModifier()
     }
 
     func reset() {
@@ -162,7 +167,7 @@ class CharacterService {
     }
 
     private func resolveCollisionOfNonWalkable() {
-        for go in Logics.default.accessibleGOTracker.gos {
+        for go in Services.default.accessibleGOTracker.tracker.gos {
             guard !go.type.isWalkable else { continue }
 
             let characterRadius = self.target.path!.boundingBox.width / 2.0

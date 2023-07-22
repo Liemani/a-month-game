@@ -18,11 +18,11 @@ class CraftLogic {
             sum += go.quality
         }
 
-        let result = Logics.default.mastery.craft(craftObject.goType)
+        let result = Logics.default.mastery.craft(craftObject.type)
 
         let emptyCoord = Logics.default.invContainer.emptyCoord!
         Logics.default.scene.new(result: result,
-                                 type: craftObject.goType,
+                                 type: craftObject.type,
                                  quality: sum / Double(consumeTargets.count),
                                  coord: emptyCoord)
     }

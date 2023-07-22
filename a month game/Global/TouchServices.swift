@@ -30,9 +30,9 @@ class TouchLogic {
 
 }
 
-class TouchLogics {
+class TouchServices {
 
-    static var `default` = TouchLogics()
+    static var `default` = TouchServices()
 
     private var logics: [UITouch: TouchLogic]
     var activatedGO: GameObject?

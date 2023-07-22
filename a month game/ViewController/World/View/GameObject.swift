@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 // MARK: - class GameObjectNode
-class GameObject: SKSpriteNode {
+class GameObject: SKNode {
 
     var data: GameObjectData
 
@@ -19,10 +19,54 @@ class GameObject: SKSpriteNode {
         get { self.data.type }
         set {
             self.data.type = newValue
-            self.setTexture(type: newValue)
+            self._setTexture()
 
             self._updateDateLastChanged()
         }
+    }
+
+    private var _textureNode: SKSpriteNode { self.children[0] as! SKSpriteNode }
+    private var _cover: SKSpriteNode? {
+        return (self.children.count == 2)
+            ? self._textureNode.children[1] as! SKSpriteNode?
+            : nil
+    }
+
+    private func _setTexture() {
+        let type = self.type
+        let texture = type.texture
+
+        self._textureNode.texture = texture
+        self._textureNode.size = Constant.defaultNodeSize * type.sizeScale
+
+        guard type.hasCover else {
+            self._textureNode.position = CGPoint.zero
+            self._cover?.removeFromParent()
+            return
+        }
+
+        self.setCover()
+    }
+
+    func setCover() {
+        if let cover = self._cover {
+            cover.texture = self.type.texture
+        } else {
+            self._textureNode.position = Constant.Position.gameObjectCoveredBase
+            self._addCover()
+        }
+    }
+
+    func removeCover() {
+        self._cover?.removeFromParent()
+    }
+
+    private func _addCover() {
+        let cover = SKSpriteNode(texture: self.type.texture)
+        cover.size = Constant.coverSize
+        cover.zPosition = Constant.ZPosition.gameObjectCover
+        cover.xScale = -1.0
+        self.addChild(cover)
     }
 
     var variant: Int {
@@ -81,26 +125,9 @@ class GameObject: SKSpriteNode {
     var isInInv: Bool { self.invCoord != nil }
 
     var positionInWorld: CGPoint { self.position + self.parent!.position }
-    var frameInWorld: CGRect { self.frame + self.parent!.position }
-
-    var cover: SKSpriteNode? { self.childNode(withName: Constant.Name.goCover) as! SKSpriteNode? }
-
-    func setTexture(type goType: GameObjectType) {
-        self.texture = goType.textures[0]
-
-        if goType.hasCover {
-            if let cover = self.childNode(withName: Constant.Name.goCover) as! SKSpriteNode? {
-                cover.texture = goType.textures[1]
-            } else {
-                self.addCover(goType)
-            }
-        } else {
-            self.childNode(withName: Constant.Name.goCover)?.removeFromParent()
-        }
-
-        self.size = goType.isFloor || !goType.isWalkable
-            ? Constant.defaultNodeSize
-            : Constant.gameObjectSize
+    var frameInWorld: CGRect {
+        let accumulatedFrame = self.calculateAccumulatedFrame()
+        return accumulatedFrame + self.parent!.position
     }
 
     var chunk: Chunk? { self.parent as? Chunk }
@@ -112,19 +139,13 @@ class GameObject: SKSpriteNode {
     init(from goData: GameObjectData) {
         self.data = goData
 
-        let texture = goData.type.textures[0]
-
-        let size = goData.type.isFloor || !goData.type.isWalkable
-            ? Constant.defaultNodeSize
-            : Constant.gameObjectSize
-
-        super.init(texture: texture, color: .white, size: size)
+        super.init()
 
         self.data.go = self
 
-        if goData.type.hasCover {
-            self.addCover(goData.type)
-        }
+        self.addChild(SKSpriteNode())
+
+        self._setTexture()
 
         self.zPosition = !self.type.isFloor
                             ? Constant.ZPosition.gameObject
@@ -133,14 +154,6 @@ class GameObject: SKSpriteNode {
         if self.isOnField {
             self.setRandomFlip()
         }
-    }
-
-    func addCover(_ goType: GameObjectType) {
-        let cover = SKSpriteNode(texture: type.textures[1])
-        cover.name = Constant.Name.goCover
-        cover.size = Constant.coverSize
-        cover.zPosition = Constant.ZPosition.gameObjectCover
-        self.addChild(cover)
     }
 
     convenience init(type goType: GameObjectType,
@@ -197,12 +210,12 @@ class GameObject: SKSpriteNode {
     }
 
     func highlight() {
-        self.color = .green.withAlphaComponent(0.9)
-        self.colorBlendFactor = Constant.accessibleGOColorBlendFactor
+        self._textureNode.color = .green.withAlphaComponent(0.9)
+        self._textureNode.colorBlendFactor = Constant.accessibleGOColorBlendFactor
     }
 
     func removeHighlight() {
-        self.colorBlendFactor = 0.0
+        self._textureNode.colorBlendFactor = 0.0
     }
 
     func emphasizeUsing() {
@@ -313,7 +326,7 @@ extension GameObject {
     func removeFromParentWithSideEffect() {
         if let chunk = self.chunk {
             chunk.remove(self, from: self.chunkCoord!.address.tile.rawCoord)
-            Logics.default.accessibleGOTracker.remove(self)
+            Services.default.accessibleGOTracker.tracker.remove(self)
             return
         }
 
@@ -361,8 +374,8 @@ extension GameObject {
     func delete() {
         self.removeFromParentWithSideEffect()
 
-        if self === Logics.default.touch.activatedGO {
-            Logics.default.touch.freeActivatedGO()
+        if self === TouchServices.default.activatedGO {
+            TouchServices.default.freeActivatedGO()
         }
 
         if self.type.isContainer {

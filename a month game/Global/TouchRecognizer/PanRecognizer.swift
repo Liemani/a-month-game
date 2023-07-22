@@ -80,7 +80,7 @@ class PanRecognizer: TouchRecognizer {
                                      scene: self.scene)
         }
 
-        TouchLogics.default.add(panLogic)
+        TouchServices.default.add(panLogic)
         panLogic.began()
     }
 

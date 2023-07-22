@@ -8,19 +8,21 @@
 import Foundation
 import SpriteKit
 
-class CraftObject: SKSpriteNode {
+class CraftObject: SKNode {
 
-    var goType: GameObjectType
+    var type: GameObjectType
 
     var consumeTargets: [GameObject]
 
-    init() {
-        self.goType = .none
+    override init() {
+        self.type = .none
         self.consumeTargets = []
 
-        super.init(texture: GameObjectType.none.textures[0],
-                   color: .white,
-                   size: CGSize())
+        super.init()
+
+        self.addChild(SKSpriteNode())
+        self._setTexture()
+
         self.zPosition = Constant.ZPosition.gameObject
     }
 
@@ -45,33 +47,59 @@ class CraftObject: SKSpriteNode {
     }
 
     func update(type goType: GameObjectType, consumeTargets: [GameObject]) {
-        self.goType = goType
-
-        self.texture = goType.textures[0]
-        self.size = Constant.gameObjectSize
-
-        if goType.hasCover {
-            if self.children.count == 1 {
-                let cover = self.children[0] as! SKSpriteNode
-                cover.texture = goType.textures[1]
-            } else {
-                let cover = SKSpriteNode(texture: goType.textures[1])
-                cover.size = Constant.coverSize
-                cover.zPosition = Constant.ZPosition.gameObjectCover
-                self.addChild(cover)
-            }
-        } else {
-            self.removeAllChildren()
-        }
+        self.type = goType
+        self._setTexture()
 
         self.consumeTargets = consumeTargets
     }
 
+    private var _textureNode: SKSpriteNode { self.children[0] as! SKSpriteNode }
+    private var _cover: SKSpriteNode? {
+        return (self.children.count == 2)
+            ? self._textureNode.children[1] as! SKSpriteNode?
+            : nil
+    }
+
+    private func _setTexture() {
+        let type = self.type
+        let texture = type.texture
+
+        self._textureNode.texture = texture
+        self._textureNode.size = Constant.defaultNodeSize * type.sizeScale
+
+        guard type.hasCover else {
+            self._textureNode.position = CGPoint.zero
+            self._cover?.removeFromParent()
+            return
+        }
+
+        self.setCover()
+    }
+
+    func setCover() {
+        if let cover = self._cover {
+            cover.texture = self.type.texture
+        } else {
+            self._textureNode.position = Constant.Position.gameObjectCoveredBase
+            self._addCover()
+        }
+    }
+
+    func removeCover() {
+        self._cover?.removeFromParent()
+    }
+
+    private func _addCover() {
+        let cover = SKSpriteNode(texture: self.type.texture)
+        cover.size = Constant.coverSize
+        cover.zPosition = Constant.ZPosition.gameObjectCover
+        cover.xScale = -1.0
+        self.addChild(cover)
+    }
+
     func clear() {
-        self.goType = .none
-        self.removeAllChildren()
-        self.texture = self.goType.textures[0]
-        self.size = CGSize()
+        self.type = .none
+        self._setTexture()
         self.consumeTargets.removeAll()
     }
 
@@ -223,7 +251,7 @@ class CraftWindow: SKNode {
     }
 
     func isCellActivated(_ cell: CraftCell) -> Bool {
-        return cell.craftObject.goType != .none
+        return cell.craftObject.type != .none
     }
 
 }
