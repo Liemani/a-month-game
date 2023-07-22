@@ -88,6 +88,30 @@ class InventoryContainer {
         return nil
     }
 
+    func go(equiping goTypes: [GameObjectType]) -> GameObject? {
+        if let rightGO = self.rightGO {
+            let rightGOType = rightGO.type
+
+            for goType in goTypes {
+                if goType == rightGOType {
+                    return rightGO
+                }
+            }
+        }
+
+        if let leftGO = self.leftGO {
+            let leftGOType = leftGO.type
+
+            for goType in goTypes {
+                if goType == leftGOType {
+                    return leftGO
+                }
+            }
+        }
+
+        return nil
+    }
+
     var space: Int {
         var space = 0
 

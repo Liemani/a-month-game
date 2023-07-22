@@ -56,17 +56,13 @@ class RecognizerTouch {
         self.touch.location(in: node)
     }
 
-    func previousLocation(in node: SKNode) -> CGPoint {
-        return self.touch.previousLocation(in: node)
-    }
-
     func update() {
         self.pTime = self.touch.timestamp
     }
 
     func velocity(in node: SKNode) -> CGFloat {
-        let cPoint = touch.previousLocation(in: node)
-        let pPoint = touch.location(in: node)
+        let cPoint = self.touch.previousLocation(in: node)
+        let pPoint = self.touch.location(in: node)
         let deltaPoint = cPoint - pPoint
 
         let cTime = self.touch.timestamp

@@ -79,6 +79,10 @@ class GameObject: SKSpriteNode {
 
     var positionInWorld: CGPoint { self.position + self.parent!.position }
     var frameInWorld: CGRect { self.frame + self.parent!.position }
+
+    var cover: SKSpriteNode? { self.childNode(withName: Constant.Name.goCover) as! SKSpriteNode? }
+    var qualityBox: SKShapeNode? { self.childNode(withName: Constant.Name.goQualityBox) as! SKShapeNode? }
+
     func setTexture(type goType: GameObjectType) {
         self.texture = goType.textures[0]
 
@@ -117,7 +121,7 @@ class GameObject: SKSpriteNode {
         self.data.go = self
 
         if self.isInInv {
-            self.addQualityBox()
+            self.addQualityBoxIfNeed()
         }
 
         if goData.type.hasCover {
@@ -138,8 +142,8 @@ class GameObject: SKSpriteNode {
         self.addChild(cover)
     }
 
-    func addQualityBox() {
-        guard self.children.first == nil else {
+    func addQualityBoxIfNeed() {
+        guard self.qualityBox == nil else {
             return
         }
 
@@ -344,7 +348,7 @@ extension GameObject {
 
     func move(to invCoord: InventoryCoordinate) {
         if !self.type.isContainer {
-            self.addQualityBox()
+            self.addQualityBoxIfNeed()
 
             self.removeFromParentWithSideEffect()
             self.set(coord: invCoord)
@@ -358,7 +362,7 @@ extension GameObject {
             return
         }
 
-        self.addQualityBox()
+        self.addQualityBoxIfNeed()
 
         self.removeFromParentWithSideEffect()
         self.set(coord: invCoord)

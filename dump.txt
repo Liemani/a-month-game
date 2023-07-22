@@ -449,9 +449,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 
 ## mandatory
-shovel -> weed: get weed to inventory
-game object must have there own scaled size
 barley
+game object in inventory must not flip it's display
 
 ## 2nd priority
 character inventory and invInv have to belong to character
@@ -462,6 +461,7 @@ create
     water terraforming
     road
 set world seed
+game object must have there own scaled size
 
 ## 3rd priority
 move container to container qualiti order
@@ -667,6 +667,7 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+shovel -> weed: get weed to inventory
 bug searching go before chunks update when has moved to another chunk
 bug velocity modifier would not be applied
 bug not show quality box from field

@@ -81,7 +81,7 @@ class PinchRecognizer: TouchRecognizer {
             pTouch = self.trackingRecognizerTouches[0]
             cTouch = self.trackingRecognizerTouches[1]
 
-            pTouchPLocation = pTouch.previousLocation(in: self.scene)
+            pTouchPLocation = pTouch.touch.previousLocation(in: self.scene)
         } else {
             if self.trackingRecognizerTouches[0].touch.timestamp < self.trackingRecognizerTouches[1].touch.timestamp {
                 pTouch = self.trackingRecognizerTouches[0]
@@ -94,7 +94,7 @@ class PinchRecognizer: TouchRecognizer {
             pTouchPLocation = pTouch.location(in: self.scene)
         }
 
-        let pDifference = cTouch.previousLocation(in: self.scene) - pTouchPLocation
+        let pDifference = cTouch.touch.previousLocation(in: self.scene) - pTouchPLocation
         let cDifference = cTouch.location(in: self.scene)
             - pTouch.location(in: self.scene)
 

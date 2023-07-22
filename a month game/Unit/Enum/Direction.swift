@@ -232,6 +232,12 @@ enum Direction9: Int, CaseIterable {
         return (coord.y + 1) * 3 + (coord.x + 1)
     }
 
+    static var random: Direction9 {
+        let rawValue = arc4random_uniform(UInt32(Direction9.allCases.count))
+
+        return Direction9(rawValue: Int(rawValue))!
+    }
+
     static let coordTable = [
         Coordinate(-1, -1),
         Coordinate(0, -1),

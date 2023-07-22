@@ -72,12 +72,15 @@ class ActionService {
 
     let interact: [GameObjectType: (GameObject) -> Bool] = [
         .dirtFloor: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .shovel) else {
                 return false
             }
 
             goEquiping.emphasizeUsing()
+
+            guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                return true
+            }
 
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
@@ -91,12 +94,15 @@ class ActionService {
             return true
         },
         .clayFloor: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .shovel) else {
                 return false
             }
 
             goEquiping.emphasizeUsing()
+
+            guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                return true
+            }
 
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
@@ -110,12 +116,15 @@ class ActionService {
             return true
         },
         .caveCeilFloor: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .pickaxe),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .pickaxe) else {
                 return false
             }
 
             goEquiping.emphasizeUsing()
+
+            guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                return true
+            }
 
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
@@ -143,12 +152,15 @@ class ActionService {
             return true
         },
         .sandFloor: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .shovel),
-                  let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .shovel) else {
                 return false
             }
 
             goEquiping.emphasizeUsing()
+
+            guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                return true
+            }
 
             let result = Logics.default.mastery.interact(with: goEquiping.type,
                                                          to: go.type)
@@ -162,25 +174,44 @@ class ActionService {
             return true
         },
         .weed: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle) else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: [.sickle, .shovel]) else {
                 return false
             }
 
             goEquiping.emphasizeUsing()
 
-            let result = Logics.default.mastery.interact(with: goEquiping.type,
-                                                         to: go.type)
+            switch goEquiping.type {
+            case .sickle:
+                let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                             to: go.type)
 
-            go.delete()
-            Logics.default.scene.new(result: result,
-                                     type: .weedLeaves,
-                                     quality: goEquiping.quality,
-                                     coord: go.chunkCoord!)
+                go.delete()
+                Logics.default.scene.new(result: result,
+                                         type: .weedLeaves,
+                                         quality: goEquiping.quality,
+                                         coord: go.chunkCoord!)
+            case .shovel:
+                guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
+                    return true
+                }
+
+                let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                             to: go.type)
+
+                if result == .fail {
+                    go.delete()
+                    return true
+                }
+
+                go.move(to: emptyInvCoord)
+            default:
+                fatalError("It's impossible")
+            }
 
             return true
         },
         .vine: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .sickle),
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .sickle),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
@@ -199,7 +230,7 @@ class ActionService {
             return true
         },
         .treeOakSapling: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .axe) else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .axe) else {
                 return false
             }
 
@@ -213,7 +244,7 @@ class ActionService {
             return true
         },
         .treeOak: { go in
-            if let goEquiping = Logics.default.invContainer.go(equiping: .axe) {
+            if let goEquiping = Logics.default.invContainer.target.go(equiping: .axe) {
 
                 goEquiping.emphasizeUsing()
 
@@ -268,7 +299,7 @@ class ActionService {
             return true
         },
         .woodLog: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .saw),
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .saw),
                   let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                 return false
             }
@@ -291,7 +322,7 @@ class ActionService {
             return true
         },
         .woodWall: { go in
-            guard let goEquiping = Logics.default.invContainer.go(equiping: .axe) else {
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .axe) else {
                 return false
             }
 
@@ -436,7 +467,7 @@ class ActionService {
     let time: [GameObjectType: (GameObject) -> Bool] = [
         .weed: { go in
             let weedCoordInWorld = go.chunkCoord!.coord
-            let adjacentDirection = Direction8.random.coord
+            let adjacentDirection = Direction9.random.coord
             let adjacentFloorCoordInWorld = weedCoordInWorld + adjacentDirection
 
             let adjacentFloorCoord = Services.default.chunkContainer.coord(adjacentFloorCoordInWorld)
