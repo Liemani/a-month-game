@@ -42,10 +42,6 @@ class GameObjectTapLogic: TouchLogic {
             return
         }
 
-#if DEBUG
-        print(go.debugDescription)
-#endif
-
         if go.type.isFloor {
             go.deactivate()
             go = Services.default.chunkContainer.items(at: go.chunkCoord!)!.last!
@@ -77,8 +73,6 @@ class GameObjectTapLogic: TouchLogic {
         }
 
         TouchServices.default.activatedGO = go
-
-        return
     }
 
     override func cancelled() {

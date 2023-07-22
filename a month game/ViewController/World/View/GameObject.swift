@@ -135,6 +135,22 @@ class GameObject: SKNode {
 
     var isDeleted: Bool { self.parent == nil }
 
+    var goOnFloor: GameObject? {
+        guard let chunk = self.chunk else {
+            return nil
+        }
+
+        let gos = chunk.items(at: self.chunkCoord!.address.tile.rawCoord)!
+
+        for go in gos {
+            if !go.type.isFloor {
+                return go
+            }
+        }
+
+        return nil
+    }
+
     // MARK: - init
     init(from goData: GameObjectData) {
         self.data = goData
@@ -202,11 +218,21 @@ class GameObject: SKNode {
     }
 
     func activate() {
-        self.alpha = 0.5
+        if self.type.isFloor,
+           let goOnFloor = self.goOnFloor {
+            goOnFloor.activate()
+        } else {
+            self.alpha = 0.5
+        }
     }
 
     func deactivate() {
         self.alpha = 1.0
+
+        if self.type.isFloor,
+           let goOnFloor = self.goOnFloor {
+            goOnFloor.activate()
+        }
     }
 
     func highlight() {
