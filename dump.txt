@@ -447,10 +447,11 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 
 # issue
 -
-bug not show quality box from field
 
 ## mandatory
 shovel -> weed: get weed to inventory
+game object must have there own scaled size
+barley
 
 ## 2nd priority
 character inventory and invInv have to belong to character
@@ -460,7 +461,6 @@ create
     bridge
     water terraforming
     road
-    barley
 set world seed
 
 ## 3rd priority
@@ -667,6 +667,9 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+bug searching go before chunks update when has moved to another chunk
+bug velocity modifier would not be applied
+bug not show quality box from field
 add sapling
 a bug that tile can be activated when a go is on the tile
 a bug that can scrol outside the info window

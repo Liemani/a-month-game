@@ -37,7 +37,7 @@ class WorldPanLogic: TouchLogic {
         let pointDelta = self.cPoint - self.pPoint
         let characterPositionDelta = -pointDelta
 
-        Services.default.character.nPosition += characterPositionDelta
+        Services.default.character.addNPosition(characterPositionDelta)
     }
 
     override func ended() {

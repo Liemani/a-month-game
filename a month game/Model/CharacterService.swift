@@ -12,30 +12,34 @@ class CharacterService {
 
     let target: Character
 
-    var pChunkCoord: ChunkCoordinate
-    var chunkCoord: ChunkCoordinate {
+    private var _pChunkCoord: ChunkCoordinate
+    private var _chunkCoord: ChunkCoordinate {
         get { self.target.data.chunkCoord }
         set {
-            self.pChunkCoord = self.chunkCoord
+            self._pChunkCoord = self._chunkCoord
             self.target.data.chunkCoord = newValue
         }
     }
+    var chunkCoord: ChunkCoordinate { self._chunkCoord }
 
-    private var _position: CGPoint
-    var position: CGPoint {
-        get { self._position }
+    private var __position: CGPoint
+    private var _position: CGPoint {
+        get { self.__position }
         set {
-            self._position.x = self.constrainedNumberToMiddleChunk(newValue.x)
-            self._position.y = self.constrainedNumberToMiddleChunk(newValue.y)
-            self.nPosition = self.position
+            self.__position.x = self.constrainedNumberToMiddleChunk(newValue.x)
+            self.__position.y = self.constrainedNumberToMiddleChunk(newValue.y)
+            self._nPosition = self._position
 
             let newTileCoord = CoordinateConverter(newValue).coord
-            self.chunkCoord = self.chunkCoord.chunk + newTileCoord
+            self._chunkCoord = self._chunkCoord.chunk + newTileCoord
 
-            Services.default.movingLayer.target.position = -self._position
+            Services.default.movingLayer.target.position = -self.__position
         }
     }
-    var nPosition: CGPoint
+    private var _nPosition: CGPoint
+    func addNPosition(_ delta: CGPoint) {
+        _nPosition += delta * self._velocityModifier
+    }
 
     private func constrainedNumberToMiddleChunk(_ number: Double) -> Double {
         let chunkWidth = Constant.chunkWidth
@@ -45,43 +49,43 @@ class CharacterService {
     }
 
     var velocityVector: CGVector
-    var velocityModifier: Double
+    private var _velocityModifier: Double
 
-    var hasMovedToAnotherTile: Bool { self.chunkCoord != self.pChunkCoord }
-    var hasMovedToAnotherChunk: Bool { self.chunkCoord.chunk != self.pChunkCoord.chunk }
+    var hasMovedToAnotherTile: Bool { self._chunkCoord != self._pChunkCoord }
+    var hasMovedToAnotherChunk: Bool { self._chunkCoord.chunk != self._pChunkCoord.chunk }
 
     var movedChunkDirection: Direction4? {
-        self.pChunkCoord.chunkDirection4(to: self.chunkCoord)
+        self._pChunkCoord.chunkDirection4(to: self._chunkCoord)
     }
 
     var movedChunkChunkCoord: Coordinate<Int> {
-        self.chunkCoord.chunk.coord - self.pChunkCoord.chunk.coord
+        self._chunkCoord.chunk.coord - self._pChunkCoord.chunk.coord
     }
 
     // MARK: - init
     init() {
-        self.pChunkCoord = ChunkCoordinate()
+        self._pChunkCoord = ChunkCoordinate()
 
-        self._position = CGPoint()
-        self.nPosition = CGPoint()
+        self.__position = CGPoint()
+        self._nPosition = CGPoint()
 
         self.velocityVector = CGVector()
-        self.velocityModifier = 1.0
+        self._velocityModifier = 1.0
 
         self.target = Character()
         // MARK: all stored properties are initilized
 
-        self.pChunkCoord = self.chunkCoord
+        self._pChunkCoord = self._chunkCoord
     }
 
     func setUp() {
-        let tileCoord = self.chunkCoord.address.tile.coord
-        self.position = CoordinateConverter(tileCoord).fieldPoint
-        self.nPosition = self.position
+        let tileCoord = self._chunkCoord.address.tile.coord
+        self._position = CoordinateConverter(tileCoord).fieldPoint
+        self._nPosition = self._position
     }
 
     func reset() {
-        self.chunkCoord = ChunkCoordinate.zero
+        self._chunkCoord = ChunkCoordinate.zero
         self.setUp()
     }
 
@@ -92,7 +96,7 @@ class CharacterService {
     func jumpChunk(direction: Direction4) {
         let offset = direction.coord.cgPoint * Constant.chunkWidth
 
-        self.nPosition += offset
+        self._nPosition += offset
     }
 
     func update(timeInterval: TimeInterval) {
@@ -101,23 +105,23 @@ class CharacterService {
 
         self.updateCharacterVelocity(timeInterval)
 
-        self.position = self.nPosition
+        self._position = self._nPosition
 
         if self.hasMovedToAnotherTile {
-            FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
-            self.updateSpeedModifier()
-
             if self.hasMovedToAnotherChunk {
                 Services.default.chunkContainer.update()
                 Logics.default.invContainer.moveFieldInvToGO()
             }
+
+            FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
+            self.updateSpeedModifier()
         }
     }
 
     func updateSpeedModifier() {
-        self.velocityModifier = 1.0
+        self._velocityModifier = 1.0
 
-        guard let gos = Services.default.chunkContainer.items(at: self.chunkCoord) else {
+        guard let gos = Services.default.chunkContainer.items(at: self._chunkCoord) else {
             return
         }
 
@@ -128,14 +132,15 @@ class CharacterService {
         for go in gos {
             let goWalkSpeed = go.type.walkSpeed
 
-            if goWalkSpeed < self.velocityModifier { self.velocityModifier = go.type.walkSpeed
+            if goWalkSpeed < self._velocityModifier {
+                self._velocityModifier = go.type.walkSpeed
             }
         }
     }
 
     private func applyCharacterVelocity(_ timeInterval: TimeInterval) {
         let deltaVector = self.velocityVector * timeInterval
-        self.nPosition += deltaVector * self.velocityModifier
+        self._nPosition += deltaVector * self._velocityModifier
     }
 
     // TODO: update wrong formula
@@ -173,8 +178,8 @@ class CharacterService {
                                     width: goFrameInWorld.width,
                                     height: goFrameInWorld.height + characterRadius * 2.0)
 
-            if widthRect.contains(self.nPosition)
-                || heightRect.contains(self.nPosition) {
+            if widthRect.contains(self._nPosition)
+                || heightRect.contains(self._nPosition) {
                 self.resolveTileSideCollision(tileFrame: goFrameInWorld)
             } else {
                 self.resolveTilePointCollision(tileFrame: goFrameInWorld)
@@ -183,18 +188,18 @@ class CharacterService {
     }
 
     //    private func resolveWorldBorderCollision() {
-    //        self.nPosition.x = self.nPosition.x < Constant.moveableArea.minX
+    //        self._nPosition.x = self._nPosition.x < Constant.moveableArea.minX
     //        ? Constant.moveableArea.minX
-    //        : self.nPosition.x
-    //        self.nPosition.x = self.nPosition.x > Constant.moveableArea.maxX
+    //        : self._nPosition.x
+    //        self._nPosition.x = self._nPosition.x > Constant.moveableArea.maxX
     //        ? Constant.moveableArea.maxX
-    //        : self.nPosition.x
-    //        self.nPosition.y = self.nPosition.y < Constant.moveableArea.minY
+    //        : self._nPosition.x
+    //        self._nPosition.y = self._nPosition.y < Constant.moveableArea.minY
     //        ? Constant.moveableArea.minY
-    //        : self.nPosition.y
-    //        self.nPosition.y = self.nPosition.y > Constant.moveableArea.maxY
+    //        : self._nPosition.y
+    //        self._nPosition.y = self._nPosition.y > Constant.moveableArea.maxY
     //        ? Constant.moveableArea.maxY
-    //        : self.nPosition.y
+    //        : self._nPosition.y
     //    }
 
 //    var currChunkDirection: Direction4? {
@@ -217,20 +222,20 @@ class CharacterService {
     func resolveTileSideCollision(tileFrame: CGRect) {
         let characterRadius = self.target.path!.boundingBox.width / 2.0
 
-        let deltaX = self.nPosition.x - tileFrame.midX
-        let deltaY = self.nPosition.y - tileFrame.midY
+        let deltaX = self._nPosition.x - tileFrame.midX
+        let deltaY = self._nPosition.y - tileFrame.midY
 
         let sum = deltaY + deltaX
         let sub = deltaY - deltaX
 
         if sub < 0 && sum >= 0 {
-            self.nPosition.x = tileFrame.maxX + characterRadius
+            self._nPosition.x = tileFrame.maxX + characterRadius
         } else if sub <= 0 && sum < 0 {
-            self.nPosition.y = tileFrame.minY - characterRadius
+            self._nPosition.y = tileFrame.minY - characterRadius
         } else if sub > 0 && sum <= 0 {
-            self.nPosition.x = tileFrame.minX - characterRadius
+            self._nPosition.x = tileFrame.minX - characterRadius
         }else if sub >= 0 && sum > 0 {
-            self.nPosition.y = tileFrame.maxY + characterRadius
+            self._nPosition.y = tileFrame.maxY + characterRadius
         }
     }
 
@@ -238,50 +243,50 @@ class CharacterService {
     func resolveTilePointCollision(tileFrame: CGRect) {
         let characterRadius = self.target.path!.boundingBox.width / 2.0
 
-        if CGVector(dx: self.nPosition.x - tileFrame.minX, dy: self.nPosition.y - tileFrame.minY).magnitude < characterRadius {
-            let deltaX = tileFrame.midX - self.nPosition.x
-            let deltaY = tileFrame.midY - self.nPosition.y
+        if CGVector(dx: self._nPosition.x - tileFrame.minX, dy: self._nPosition.y - tileFrame.minY).magnitude < characterRadius {
+            let deltaX = tileFrame.midX - self._nPosition.x
+            let deltaY = tileFrame.midY - self._nPosition.y
             let inclination = deltaY / deltaX
-            let yIntercept = (tileFrame.midX * self.nPosition.y - self.nPosition.x * tileFrame.midY) / deltaX
+            let yIntercept = (tileFrame.midX * self._nPosition.y - self._nPosition.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.minY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.minX
             let c = tileFrame.minX * tileFrame.minX + temp * temp - characterRadius * characterRadius
-            self.nPosition.x = (-b - (b * b - a * c).squareRoot()) / a
-            self.nPosition.y = inclination * self.nPosition.x + yIntercept
-        } else if CGVector(dx: self.nPosition.x - tileFrame.maxX, dy: self.nPosition.y - tileFrame.minY).magnitude < characterRadius {
-            let deltaX = tileFrame.midX - self.nPosition.x
-            let deltaY = tileFrame.midY - self.nPosition.y
+            self._nPosition.x = (-b - (b * b - a * c).squareRoot()) / a
+            self._nPosition.y = inclination * self._nPosition.x + yIntercept
+        } else if CGVector(dx: self._nPosition.x - tileFrame.maxX, dy: self._nPosition.y - tileFrame.minY).magnitude < characterRadius {
+            let deltaX = tileFrame.midX - self._nPosition.x
+            let deltaY = tileFrame.midY - self._nPosition.y
             let inclination = deltaY / deltaX
-            let yIntercept = (tileFrame.midX * self.nPosition.y - self.nPosition.x * tileFrame.midY) / deltaX
+            let yIntercept = (tileFrame.midX * self._nPosition.y - self._nPosition.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.minY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.maxX
             let c = tileFrame.maxX * tileFrame.maxX + temp * temp - characterRadius * characterRadius
-            self.nPosition.x = (-b + (b * b - a * c).squareRoot()) / a
-            self.nPosition.y = inclination * self.nPosition.x + yIntercept
-        } else if CGVector(dx: self.nPosition.x - tileFrame.minX, dy: self.nPosition.y - tileFrame.maxY).magnitude < characterRadius {
-            let deltaX = tileFrame.midX - self.nPosition.x
-            let deltaY = tileFrame.midY - self.nPosition.y
+            self._nPosition.x = (-b + (b * b - a * c).squareRoot()) / a
+            self._nPosition.y = inclination * self._nPosition.x + yIntercept
+        } else if CGVector(dx: self._nPosition.x - tileFrame.minX, dy: self._nPosition.y - tileFrame.maxY).magnitude < characterRadius {
+            let deltaX = tileFrame.midX - self._nPosition.x
+            let deltaY = tileFrame.midY - self._nPosition.y
             let inclination = deltaY / deltaX
-            let yIntercept = (tileFrame.midX * self.nPosition.y - self.nPosition.x * tileFrame.midY) / deltaX
+            let yIntercept = (tileFrame.midX * self._nPosition.y - self._nPosition.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.maxY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.minX
             let c = tileFrame.minX * tileFrame.minX + temp * temp - characterRadius * characterRadius
-            self.nPosition.x = (-b - (b * b - a * c).squareRoot()) / a
-            self.nPosition.y = inclination * self.nPosition.x + yIntercept
-        } else if CGVector(dx: self.nPosition.x - tileFrame.maxX, dy: self.nPosition.y - tileFrame.maxY).magnitude < characterRadius {
-            let deltaX = tileFrame.midX - self.nPosition.x
-            let deltaY = tileFrame.midY - self.nPosition.y
+            self._nPosition.x = (-b - (b * b - a * c).squareRoot()) / a
+            self._nPosition.y = inclination * self._nPosition.x + yIntercept
+        } else if CGVector(dx: self._nPosition.x - tileFrame.maxX, dy: self._nPosition.y - tileFrame.maxY).magnitude < characterRadius {
+            let deltaX = tileFrame.midX - self._nPosition.x
+            let deltaY = tileFrame.midY - self._nPosition.y
             let inclination = deltaY / deltaX
-            let yIntercept = (tileFrame.midX * self.nPosition.y - self.nPosition.x * tileFrame.midY) / deltaX
+            let yIntercept = (tileFrame.midX * self._nPosition.y - self._nPosition.x * tileFrame.midY) / deltaX
             let temp = yIntercept - tileFrame.maxY
             let a = inclination * inclination + 1.0
             let b = inclination * temp - tileFrame.maxX
             let c = tileFrame.maxX * tileFrame.maxX + temp * temp - characterRadius * characterRadius
-            self.nPosition.x = (-b + (b * b - a * c).squareRoot()) / a
-            self.nPosition.y = inclination * self.nPosition.x + yIntercept
+            self._nPosition.x = (-b + (b * b - a * c).squareRoot()) / a
+            self._nPosition.y = inclination * self._nPosition.x + yIntercept
         }
     }
 

@@ -127,6 +127,7 @@ class GameObject: SKSpriteNode {
         self.zPosition = !self.type.isFloor
                             ? Constant.ZPosition.gameObject
                             : Constant.ZPosition.tile
+        self.xScale = self.type.isFloor || Bool.random() ? 1 : -1
     }
 
     func addCover(_ goType: GameObjectType) {

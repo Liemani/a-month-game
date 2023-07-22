@@ -72,7 +72,7 @@ extension ChunkContainer: InventoryProtocol {
 
     func items(at coord: Coord) -> Items? {
         guard self.isValid(coord) else {
-            return []
+            return nil
         }
 
         let coordOfChunk = coord >> 4
