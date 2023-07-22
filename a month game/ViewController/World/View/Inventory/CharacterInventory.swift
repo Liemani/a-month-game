@@ -10,8 +10,11 @@ import SpriteKit
 
 class CharacterInventory: Inventory {
 
-    var leftGO: GameObject? { self.children.first!.children.first as! GameObject? }
-    var rightGO: GameObject? { self.children.last!.children.first as! GameObject? }
+    private var _leftCell: InventoryCell { self.children.first as! InventoryCell }
+    private var _rightCell: InventoryCell { self.children.last as! InventoryCell }
+
+    var leftGO: GameObject? { self._leftCell.go }
+    var rightGO: GameObject? { self._rightCell.go }
 
     init(id: Int) {
         var cells: [InventoryCell] = []
@@ -25,7 +28,7 @@ class CharacterInventory: Inventory {
         leftCell.size = Constant.defaultNodeSize
         cells.append(leftCell)
 
-        for _ in 1..<4 {
+        for _ in 1 ..< 4 {
             let cell = InventoryCell(texture: cellTexture)
             cell.size = Constant.defaultNodeSize
             cells.append(cell)
@@ -41,7 +44,6 @@ class CharacterInventory: Inventory {
                    cellSpacing: Constant.defaultPadding)
 
         self.position = Constant.invWindowPosition
-        self.zPosition = Constant.ZPosition.characterInv
     }
 
     required init?(coder aDecoder: NSCoder) {

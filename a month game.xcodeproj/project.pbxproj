@@ -94,6 +94,7 @@
 		03D42BDB2A4D697C00ACB90E /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D42BDA2A4D697C00ACB90E /* Event.swift */; };
 		03D7B0B72A68D12300A1208E /* ChunkContainerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D7B0B62A68D12300A1208E /* ChunkContainerService.swift */; };
 		03D7B0B92A6A206400A1208E /* SKNodeMatrix33.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D7B0B82A6A206400A1208E /* SKNodeMatrix33.swift */; };
+		03D7B0BB2A6BA7DA00A1208E /* InventoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D7B0BA2A6BA7DA00A1208E /* InventoryCell.swift */; };
 		03DBB1222A3611EF00DA4E73 /* WorldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */; };
 		03E755882A1D255400BF5C0F /* GameObjectType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E755872A1D255400BF5C0F /* GameObjectType.swift */; };
 		03E7558C2A1E0C5E00BF5C0F /* CoordinateConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E7558B2A1E0C5E00BF5C0F /* CoordinateConverter.swift */; };
@@ -240,6 +241,7 @@
 		03D42BDA2A4D697C00ACB90E /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		03D7B0B62A68D12300A1208E /* ChunkContainerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChunkContainerService.swift; sourceTree = "<group>"; };
 		03D7B0B82A6A206400A1208E /* SKNodeMatrix33.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKNodeMatrix33.swift; sourceTree = "<group>"; };
+		03D7B0BA2A6BA7DA00A1208E /* InventoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryCell.swift; sourceTree = "<group>"; };
 		03DBB1212A3611EF00DA4E73 /* WorldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorldViewController.swift; sourceTree = "<group>"; };
 		03E755872A1D255400BF5C0F /* GameObjectType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectType.swift; sourceTree = "<group>"; };
 		03E7558B2A1E0C5E00BF5C0F /* CoordinateConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateConverter.swift; sourceTree = "<group>"; };
@@ -522,6 +524,7 @@
 				03311DD12A1A3E3F0020ADB5 /* CharacterInventory.swift */,
 				03F6CD2C2A56955400403EAF /* GameObjectInventory.swift */,
 				033C9E602A1C2D83000E1D50 /* Inventory.swift */,
+				03D7B0BA2A6BA7DA00A1208E /* InventoryCell.swift */,
 			);
 			path = Inventory;
 			sourceTree = "<group>";
@@ -836,6 +839,7 @@
 				03FEA1A92A5AC9AD00AF4DDB /* GOInteractionMasteryDataSource.swift in Sources */,
 				033D68F62A4001DF005D3CB0 /* CharacterMovedToAnotherChunkEventHandler.swift in Sources */,
 				038330AA2A02850A008DEA10 /* PortalViewController.swift in Sources */,
+				03D7B0BB2A6BA7DA00A1208E /* InventoryCell.swift in Sources */,
 				031AA8042A24A5D20017EFCD /* CombineSequences.swift in Sources */,
 				03C65E2B2A46B04E0042BF22 /* FrameCycleUpdateManager.swift in Sources */,
 				03FEA1F42A5D3B7A00AF4DDB /* WorldPanLogic.swift in Sources */,

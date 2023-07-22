@@ -8,28 +8,6 @@
 import Foundation
 import SpriteKit
 
-class InventoryCell: SKSpriteNode {
-
-    var go: GameObject? { self.children.first as! GameObject? }
-
-    func activate() {
-        self.alpha = 0.5
-    }
-
-    func deactivate() {
-        self.alpha = 1.0
-    }
-
-    var invCoord: InventoryCoordinate {
-        let inventory = self.parent as! Inventory
-        let index = inventory.coordAtLocation(of: self)!
-        return InventoryCoordinate(inventory.id!, index)
-    }
-
-    var isEmpty: Bool { self.children.isEmpty }
-
-}
-
 protocol InventoryProtocol<Item>: Sequence {
 
     associatedtype Coord
@@ -73,6 +51,8 @@ class Inventory: SKSpriteNode {
         self.cellSpacing = cellSpacing
 
         super.init(texture: nil, color: .white, size: CGSize())
+
+        self.zPosition = Constant.ZPosition.inv
 
         self.data.inv = self
 
@@ -146,7 +126,7 @@ class Inventory: SKSpriteNode {
 
     private func clear() {
         for cell in self.cells {
-            if let go = cell.children.first {
+            if let go = cell.go {
                 go.removeFromParent()
             }
         }
@@ -178,6 +158,7 @@ class Inventory: SKSpriteNode {
                 return index
             }
         }
+
         return nil
     }
 
@@ -187,6 +168,7 @@ class Inventory: SKSpriteNode {
                 return index
             }
         }
+
         return nil
     }
 
@@ -205,23 +187,14 @@ extension Inventory: InventoryProtocol {
     /// - Parameters:
     ///     - coord: suppose is valid
     func items(at coord: Int) -> [GameObject]? {
-        let cell = self.children[coord]
-
-        if !cell.children.isEmpty {
-            return cell.children as! [GameObject]?
-        } else {
-            return nil
-        }
+        let cell = self.cells[coord]
+        return cell.items(at: 0)
     }
 
     func itemsAtLocation(of touch: UITouch) -> [GameObject]? {
-        for cell in self.children {
+        for cell in self.cells {
             if cell.isBeing(touched: touch) {
-                if !cell.children.isEmpty {
-                    return cell.children as! [GameObject]?
-                } else {
-                    return nil
-                }
+                return cell.items(at: 0)
             }
         }
 
@@ -229,23 +202,24 @@ extension Inventory: InventoryProtocol {
     }
 
     func coordAtLocation(of touch: UITouch) -> Int? {
-        for (index, cell) in self.children.enumerated() {
+        for (index, cell) in self.cells.enumerated() {
             if cell.isBeing(touched: touch) {
                 return index
             }
         }
+
         return nil
     }
 
     func add(_ item: GameObject, to index: Int) {
         item.position = CGPoint()
-        self.children[index].addChild(item)
+        self.cells[index].add(item, to: 0)
 
         self.data.add(item.data)
     }
 
     func remove(_ item: GameObject, from index: Int) {
-        item.removeFromParent()
+        self.cells[index].remove(item, from: 0)
 
         self.data.remove(item.data)
     }

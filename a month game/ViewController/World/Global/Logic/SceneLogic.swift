@@ -27,13 +27,11 @@ class SceneLogic {
              coord invCoord: InventoryCoordinate) {
         guard result != .fail else { return }
 
-        let quality = max(quality + result.qualityDiff, 0)
-
-        GameObject.new(type: goType,
-                       variant: variant,
-                       quality: quality,
-                       state: state,
-                       coord: invCoord)
+        let go = GameObject.new(type: goType,
+                                variant: variant,
+                                state: state,
+                                coord: invCoord)
+        go.setQuality(quality, by: result)
     }
 
     func new(result: TaskResultType,
@@ -44,13 +42,11 @@ class SceneLogic {
              coord chunkCoord: ChunkCoordinate) {
         guard result != .fail else { return }
 
-        let quality = max(quality + result.qualityDiff, 0)
-
-        GameObject.new(type: goType,
-                       variant: variant,
-                       quality: quality,
-                       state: state,
-                       coord: chunkCoord)
+        let go = GameObject.new(type: goType,
+                                variant: variant,
+                                state: state,
+                                coord: chunkCoord)
+        go.setQuality(quality, by: result)
     }
 
     func new(result: TaskResultType,

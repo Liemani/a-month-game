@@ -449,8 +449,8 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 
 ## mandatory
-barley
 game object in inventory must not flip it's display
+barley
 
 ## 2nd priority
 character inventory and invInv have to belong to character

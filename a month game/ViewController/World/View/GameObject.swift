@@ -42,6 +42,9 @@ class GameObject: SKSpriteNode {
             self._updateDateLastChanged()
         }
     }
+    func setQuality(_ quality: Double, by result: TaskResultType) {
+        self.quality = max(quality + result.qualityDiff, 0)
+    }
 
     var chunkCoord: ChunkCoordinate? { self.data.chunkCoord }
     func set(coord chunkCoord: ChunkCoordinate) {
@@ -81,7 +84,6 @@ class GameObject: SKSpriteNode {
     var frameInWorld: CGRect { self.frame + self.parent!.position }
 
     var cover: SKSpriteNode? { self.childNode(withName: Constant.Name.goCover) as! SKSpriteNode? }
-    var qualityBox: SKShapeNode? { self.childNode(withName: Constant.Name.goQualityBox) as! SKShapeNode? }
 
     func setTexture(type goType: GameObjectType) {
         self.texture = goType.textures[0]
@@ -120,10 +122,6 @@ class GameObject: SKSpriteNode {
 
         self.data.go = self
 
-        if self.isInInv {
-            self.addQualityBoxIfNeed()
-        }
-
         if goData.type.hasCover {
             self.addCover(goData.type)
         }
@@ -131,7 +129,10 @@ class GameObject: SKSpriteNode {
         self.zPosition = !self.type.isFloor
                             ? Constant.ZPosition.gameObject
                             : Constant.ZPosition.tile
-        self.xScale = self.type.isFloor || Bool.random() ? 1 : -1
+
+        if self.isOnField {
+            self.setRandomFlip()
+        }
     }
 
     func addCover(_ goType: GameObjectType) {
@@ -140,41 +141,6 @@ class GameObject: SKSpriteNode {
         cover.size = Constant.coverSize
         cover.zPosition = Constant.ZPosition.gameObjectCover
         self.addChild(cover)
-    }
-
-    func addQualityBoxIfNeed() {
-        guard self.qualityBox == nil else {
-            return
-        }
-
-        let boxSize = Constant.Size.qualityBox
-
-        let qualityBox = SKShapeNode(rectOf: boxSize)
-        qualityBox.name = Constant.Name.goQualityBox
-        qualityBox.position = Constant.Position.qualityBox
-        qualityBox.zPosition = Constant.ZPosition.gameObjectQualityLabel
-        qualityBox.fillColor = .black
-        qualityBox.strokeColor = .black
-        qualityBox.alpha = 0.5
-        self.addChild(qualityBox)
-
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 1
-        formatter.maximumFractionDigits = 1
-        let qualityString = formatter.string(from: self.quality as NSNumber)!
-
-        let qualityLabel = SKLabelNode(text: qualityString)
-        qualityLabel.fontName = "Helvetica-Bold"
-        qualityLabel.fontSize = 12.0
-        qualityLabel.position = Constant.Position.qualityLabel
-        qualityLabel.zPosition = 10.0
-        qualityLabel.horizontalAlignmentMode = .right
-        qualityBox.addChild(qualityLabel)
-    }
-
-    func removeQualityBox() {
-        self.childNode(withName: Constant.Name.goQualityBox)?.removeFromParent()
     }
 
     convenience init(type goType: GameObjectType,
@@ -214,6 +180,14 @@ class GameObject: SKSpriteNode {
     }
 
     // MARK: - activate
+    func removeFlip() {
+        self.xScale = 1.0
+    }
+
+    func setRandomFlip() {
+        self.xScale = self.type.isFloor || Bool.random() ? 1.0 : -1.0
+    }
+
     func activate() {
         self.alpha = 0.5
     }
@@ -305,7 +279,7 @@ extension GameObject {
                     quality: Double = 0.0,
                     state: GameObjectState = [],
                     coord chunkCoord: ChunkCoordinate,
-                    date: Date = Date()) {
+                    date: Date = Date()) -> GameObject {
         let go = GameObject(type: goType,
                             variant: variant,
                             quality: quality,
@@ -313,6 +287,8 @@ extension GameObject {
                             coord: chunkCoord,
                             date: date)
         Services.default.chunkContainer.add(go)
+
+        return go
     }
 
     static func new(type goType: GameObjectType,
@@ -320,7 +296,7 @@ extension GameObject {
                     quality: Double = 0.0,
                     state: GameObjectState = [],
                     coord invCoord: InventoryCoordinate,
-                    date: Date = Date()) {
+                    date: Date = Date()) -> GameObject {
         let go = GameObject(type: goType,
                             variant: variant,
                             quality: quality,
@@ -330,6 +306,8 @@ extension GameObject {
         Logics.default.invContainer.add(go)
 
         FrameCycleUpdateManager.default.update(with: .craftWindow)
+
+        return go
     }
 
     func removeFromParentWithSideEffect() {
@@ -348,8 +326,7 @@ extension GameObject {
 
     func move(to invCoord: InventoryCoordinate) {
         if !self.type.isContainer {
-            self.addQualityBoxIfNeed()
-
+            self.removeFlip()
             self.removeFromParentWithSideEffect()
             self.set(coord: invCoord)
             Logics.default.invContainer.add(self)
@@ -362,8 +339,7 @@ extension GameObject {
             return
         }
 
-        self.addQualityBoxIfNeed()
-
+        self.removeFlip()
         self.removeFromParentWithSideEffect()
         self.set(coord: invCoord)
         Logics.default.invContainer.add(self)
@@ -372,8 +348,7 @@ extension GameObject {
     }
 
     func move(to chunkCoord: ChunkCoordinate) {
-        self.removeQualityBox()
-
+        self.setRandomFlip()
         self.removeFromParentWithSideEffect()
         self.set(coord: chunkCoord)
         Services.default.chunkContainer.add(self)

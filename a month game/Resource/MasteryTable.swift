@@ -18,7 +18,6 @@ enum TaskResultType: Int {
     var exp: Int { self.rawValue }
     var qualityDiff: Double { Double(self.rawValue - 2) }
 
-
     var color: UIColor {
         let alpha = 0.7
         

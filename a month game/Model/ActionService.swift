@@ -203,6 +203,7 @@ class ActionService {
                     return true
                 }
 
+                go.setQuality(goEquiping.quality, by: result)
                 go.move(to: emptyInvCoord)
             default:
                 fatalError("It's impossible")
@@ -505,9 +506,9 @@ class ActionService {
                 }
             } else {
                 if gosOnTile == nil {
-                    GameObject.new(type: .weed,
-                                   coord: adjacentFloorChunkCoord,
-                                   date: go.timeEventDate!)
+                    _ = GameObject.new(type: .weed,
+                                       coord: adjacentFloorChunkCoord,
+                                       date: go.timeEventDate!)
                 }
             }
 

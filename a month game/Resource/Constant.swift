@@ -94,13 +94,14 @@ struct Constant {
                 static let chunkContainer = 0.0
                     static let tile = 10.0
                     static let gameObject = 20.0
-                        static let gameObjectQualityLabel = 30.0
                         static let gameObjectCover = 20.0
                 static let fieldInv = 50.0
             static let character = 30.0
                 static let particle = 20.0
         static let ui = 100.0
-            static let characterInv = 0.0
+            static let inv = 0.0
+                static let invCell = 0.0
+                    static let gameObjectQualityLabel = 50.0
             static let craftCell = 0.0
             static let infoWindow = 50.0
             static let menuWindow = 100.0
