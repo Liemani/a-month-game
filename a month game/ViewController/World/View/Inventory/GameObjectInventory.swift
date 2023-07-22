@@ -18,13 +18,25 @@ class GameObjectInventory: Inventory {
         self.update(id: go.id)
     }
 
-    func hide() {
+    private func clear() {
         self.data.clear()
+
+        for cell in self.cells {
+            cell.hideQualityBox()
+        }
+    }
+
+    func hide() {
+        self.clear()
 
         self.isHidden = true
     }
 
     func reveal(with go: GameObject) {
+        if !self.isHidden {
+            self.clear()
+        }
+
         self.update(with: go)
 
         self.isHidden = false

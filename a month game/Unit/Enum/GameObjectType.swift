@@ -83,7 +83,7 @@ enum GameObjectType: Int, CaseIterable {
         ("game_object_weed_leaves", 0.75, false, 1.0, 0, false, true, true, 300.0),
         ("game_object_vine", 1.0, false, 0.50, 0, false, false, false, -1.0),
         ("game_object_vine_stem", 0.75, false, 1.0, 0, false, true, true, 300.0),
-        ("game_object_plant_barley_seed", 0.5, false, 1.0, 0, false, true, true, 300.0),
+        ("game_object_plant_barley_seed", 0.25, false, 1.0, 0, false, true, true, 300.0),
         ("game_object_plant_barley_sapling", 0.75, true, 1.0, 0, false, false, false, 302400.0),
         ("game_object_plant_barley", 1.0, true, 0.75, 0, false, false, false, -1.0),
         ("game_object_tree_oak_seed", 0.5, false, 1.0, 0, false, true, true, 300.0),

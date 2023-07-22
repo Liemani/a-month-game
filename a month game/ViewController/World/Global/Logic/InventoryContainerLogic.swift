@@ -54,8 +54,8 @@ class InventoryContainerLogic {
     }
 
     func closeAnyInv(of id: Int) {
-        if let inv = self.target.inv(id: id) {
-            inv.isHidden = true
+        if let inv = self.target.inv(id: id) as? GameObjectInventory {
+            inv.hide()
 
             FrameCycleUpdateManager.default.update(with: .craftWindow)
         }

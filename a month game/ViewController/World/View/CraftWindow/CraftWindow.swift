@@ -56,7 +56,7 @@ class CraftObject: SKNode {
     private var _textureNode: SKSpriteNode { self.children[0] as! SKSpriteNode }
     private var _cover: SKSpriteNode? {
         return (self.children.count == 2)
-            ? self._textureNode.children[1] as! SKSpriteNode?
+            ? self.children[1] as! SKSpriteNode?
             : nil
     }
 
