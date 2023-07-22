@@ -115,7 +115,7 @@ class PinchRecognizer: TouchRecognizer {
 
     private func recognized(recognizerTouches: [RecognizerTouch]) {
         for recognizerTouch in recognizerTouches {
-            TouchLogics.default.cancelled(recognizerTouch.touch)
+            TouchServices.default.cancelled(recognizerTouch.touch)
 
             TouchManager.default.removePossible(from: recognizerTouch) { _ in
                 true
@@ -134,7 +134,7 @@ class PinchRecognizer: TouchRecognizer {
 
     override func began() {
         let touchLogic = ScenePinchLogic(touches: self.touches, scene: self.scene)
-        TouchLogics.default.add(touchLogic)
+        TouchServices.default.add(touchLogic)
         touchLogic.began()
     }
 

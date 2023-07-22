@@ -14,9 +14,6 @@ class WorldScene: SKScene {
         return self.view!.next! as! WorldViewController
     }
 
-    // MARK: model
-    var accessibleGOTracker: AccessibleGOTracker!
-
     // MARK: view
     var invContainer: InventoryContainer!
     var characterInv: CharacterInventory!
@@ -49,9 +46,6 @@ class WorldScene: SKScene {
     }
 
     func initModel() {
-        self.accessibleGOTracker = AccessibleGOTracker()
-        FrameCycleUpdateManager.default.update(with: .accessibleGOTracker)
-
         let invContainer = InventoryContainer()
         self.invContainer = invContainer
 
@@ -167,7 +161,7 @@ class WorldScene: SKScene {
     func updateModel(_ currentTime: TimeInterval) {
         if FrameCycleUpdateManager.default.contains(.accessibleGOTracker) {
             let chunkContainer = Services.default.chunkContainer.target
-            self.accessibleGOTracker.update(chunkContainer: chunkContainer)
+            Services.default.accessibleGOTracker.tracker.update(chunkContainer: chunkContainer)
         }
 
         if FrameCycleUpdateManager.default.contains(.craftWindow) {

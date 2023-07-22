@@ -33,6 +33,7 @@ class WorldViewController: UIViewController {
 
         FileUtility.default.setUpEnvironment(worldName: worldName)
         MapGenerator.set()
+        FrameCycleUpdateManager.set()
 
         if !FileUtility.default.isWorldDirExist(worldName: worldName) {
             Repositories.set(worldName: worldName)
@@ -44,7 +45,6 @@ class WorldViewController: UIViewController {
         }
 
         WorldEventManager.set()
-        FrameCycleUpdateManager.set()
 
         let scene = WorldScene(size: Constant.sceneSize)
 
@@ -56,8 +56,7 @@ class WorldViewController: UIViewController {
                    fieldInv: scene.invContainer.fieldInv,
                    infoWindow: scene.infoWindow,
                    world: scene.worldLayer,
-                   invContainer: scene.invContainer,
-                   accessibleGOTracker: scene.accessibleGOTracker)
+                   invContainer: scene.invContainer)
 
         Particle.setUp()
 

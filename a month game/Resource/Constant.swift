@@ -79,6 +79,7 @@ struct Constant {
         static let qualityBox = CGPoint(x: 20.0, y: 30.0)
         static let qualityLabel = CGPoint(x: Size.qualityBox.width / 2.0,
                                           y: -Size.qualityBox.height / 2.0)
+        static let gameObjectCoveredBase = CGPoint(x: 0.0, y: defaultWidth / 3.0)
     }
 
     // MARK: - z position
@@ -92,16 +93,16 @@ struct Constant {
             static let movingLayer = 0.0
                 static let tileMap = -100.0
                 static let chunkContainer = 0.0
-                    static let tile = 10.0
-                    static let gameObject = 20.0
+                    static let tile = 0.0
+                    static let gameObject = 10.0
                         static let gameObjectCover = 20.0
                 static let fieldInv = 50.0
-            static let character = 30.0
+            static let character = 20.0
                 static let particle = 20.0
         static let ui = 100.0
             static let inv = 0.0
                 static let invCell = 0.0
-                    static let gameObjectQualityLabel = 50.0
+                    static let gameObjectQualityLabel = 40.0
             static let craftCell = 0.0
             static let infoWindow = 50.0
             static let menuWindow = 100.0
@@ -163,10 +164,6 @@ struct Constant {
         static let interactionMasteryEntity = "InteractionMasteryMO"
         static let goInteractionMasteryEntity = "GOInteractionMasteryMO"
         static let craftMasteryEntity = "CraftMasteryMO"
-
-        // MARK: node name
-        static let goCover = "goC"
-        static let goQualityBox = "goQB"
     }
 
     // MARK: - resource name
@@ -184,7 +181,7 @@ struct Constant {
     // MARK: - recipe
     static let recipes: [GameObjectType: [GameObjectType: Int]] = [
         // MARK: tile
-        .woodFloorFloor: [.woodBoard: 2],
+        .woodTileFloor: [.woodBoard: 2],
         .woodWall: [.woodBoard: 2],
 
         // MARK: tool

@@ -35,12 +35,12 @@ class FieldTapLogic: TouchLogic {
             return
         }
 
-        if let activatedGO = TouchLogics.default.activatedGO {
+        if let activatedGO = TouchServices.default.activatedGO {
             if let go = Services.default.chunkContainer.item(at: chunkCoord) {
-                TouchLogics.default.freeActivatedGO()
+                TouchServices.default.freeActivatedGO()
                 activatedGO.interact(to: go)
             } else {
-                TouchLogics.default.freeActivatedGO()
+                TouchServices.default.freeActivatedGO()
                 activatedGO.move(to: chunkCoord)
             }
 
@@ -54,7 +54,7 @@ class FieldTapLogic: TouchLogic {
         }
 
         if Logics.default.invContainer.is(equiping: .shovel) {
-            GameObject.new(type: .dirtFloor, coord: chunkCoord)
+            _ = GameObject.new(type: .dirtFloor, coord: chunkCoord)
 
             return
         }

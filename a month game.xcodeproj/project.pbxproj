@@ -15,7 +15,7 @@
 		0304D76D2A57EE870068DE99 /* InventoryContainerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */; };
 		0304D76F2A57FF1D0068DE99 /* SceneLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */; };
 		0304D7712A5839D20068DE99 /* CharacterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7702A5839D20068DE99 /* CharacterService.swift */; };
-		0304D7732A583BE20068DE99 /* AccessibleGOTrackerLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */; };
+		0304D7732A583BE20068DE99 /* AccessibleGOTrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7722A583BE20068DE99 /* AccessibleGOTrackerService.swift */; };
 		0304D7752A5954830068DE99 /* InventoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0304D7742A5954830068DE99 /* InventoryData.swift */; };
 		030ABFB32A0BD0FC00BAB9B8 /* PortalScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */; };
 		030ABFB62A0C93AA00BAB9B8 /* TileDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */; };
@@ -59,7 +59,7 @@
 		03796C012A4E7C1700462804 /* PinchRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C002A4E7C1700462804 /* PinchRecognizer.swift */; };
 		03796C032A4EA92B00462804 /* PanRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C022A4EA92B00462804 /* PanRecognizer.swift */; };
 		03796C062A4FC9EE00462804 /* GameObjectTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */; };
-		03796C082A4FCAD800462804 /* TouchLogics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C072A4FCAD800462804 /* TouchLogics.swift */; };
+		03796C082A4FCAD800462804 /* TouchServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C072A4FCAD800462804 /* TouchServices.swift */; };
 		03796C0A2A50083E00462804 /* FieldTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C092A50083E00462804 /* FieldTapLogic.swift */; };
 		03796C0C2A501C6100462804 /* InventoryTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C0B2A501C6100462804 /* InventoryTapLogic.swift */; };
 		03796C112A513C7D00462804 /* CraftTapLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03796C102A513C7D00462804 /* CraftTapLogic.swift */; };
@@ -160,7 +160,7 @@
 		0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryContainerLogic.swift; sourceTree = "<group>"; };
 		0304D76E2A57FF1D0068DE99 /* SceneLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLogic.swift; sourceTree = "<group>"; };
 		0304D7702A5839D20068DE99 /* CharacterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterService.swift; sourceTree = "<group>"; };
-		0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleGOTrackerLogic.swift; sourceTree = "<group>"; };
+		0304D7722A583BE20068DE99 /* AccessibleGOTrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibleGOTrackerService.swift; sourceTree = "<group>"; };
 		0304D7742A5954830068DE99 /* InventoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryData.swift; sourceTree = "<group>"; };
 		030ABFB22A0BD0FC00BAB9B8 /* PortalScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortalScene.swift; sourceTree = "<group>"; };
 		030ABFB52A0C93AA00BAB9B8 /* TileDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileDataSource.swift; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 		03796C002A4E7C1700462804 /* PinchRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinchRecognizer.swift; sourceTree = "<group>"; };
 		03796C022A4EA92B00462804 /* PanRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanRecognizer.swift; sourceTree = "<group>"; };
 		03796C052A4FC9EE00462804 /* GameObjectTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameObjectTapLogic.swift; sourceTree = "<group>"; };
-		03796C072A4FCAD800462804 /* TouchLogics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchLogics.swift; sourceTree = "<group>"; };
+		03796C072A4FCAD800462804 /* TouchServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchServices.swift; sourceTree = "<group>"; };
 		03796C092A50083E00462804 /* FieldTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FieldTapLogic.swift; sourceTree = "<group>"; };
 		03796C0B2A501C6100462804 /* InventoryTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTapLogic.swift; sourceTree = "<group>"; };
 		03796C102A513C7D00462804 /* CraftTapLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftTapLogic.swift; sourceTree = "<group>"; };
@@ -387,6 +387,7 @@
 			isa = PBXGroup;
 			children = (
 				0392E92F2A3B3E8E001C22C4 /* WorldGenerator.swift */,
+				0304D7722A583BE20068DE99 /* AccessibleGOTrackerService.swift */,
 				03F6CD292A553DF300403EAF /* ActionService.swift */,
 				0304D7702A5839D20068DE99 /* CharacterService.swift */,
 				03D7B0B62A68D12300A1208E /* ChunkContainerService.swift */,
@@ -654,7 +655,6 @@
 				03FEA1ED2A5C364200AF4DDB /* InfoWindownLogic.swift */,
 				0304D76C2A57EE870068DE99 /* InventoryContainerLogic.swift */,
 				034A07342A5ABC2A0034D657 /* GameObjectDataLogic.swift */,
-				0304D7722A583BE20068DE99 /* AccessibleGOTrackerLogic.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -664,7 +664,7 @@
 			children = (
 				03C65E252A4693D70042BF22 /* TouchManager.swift */,
 				03796C042A4FC6A200462804 /* TouchRecognizer */,
-				03796C072A4FCAD800462804 /* TouchLogics.swift */,
+				03796C072A4FCAD800462804 /* TouchServices.swift */,
 				03F6CD2B2A55495A00403EAF /* TouchLogic */,
 			);
 			path = Global;
@@ -856,7 +856,7 @@
 				03EA27BE2A442D1F007BAF4F /* TouchResponder.swift in Sources */,
 				033D68FC2A4050BE005D3CB0 /* ChunkRepository.swift in Sources */,
 				030ABFC02A0E11FB00BAB9B8 /* GameObject.swift in Sources */,
-				0304D7732A583BE20068DE99 /* AccessibleGOTrackerLogic.swift in Sources */,
+				0304D7732A583BE20068DE99 /* AccessibleGOTrackerService.swift in Sources */,
 				0347BA7E2A49BB8F00E31FA1 /* ChunkData.swift in Sources */,
 				03FEA1EC2A5C2E3D00AF4DDB /* InfoWindow.swift in Sources */,
 				039037CB2A15FBCD0014A571 /* Extension.swift in Sources */,
@@ -903,7 +903,7 @@
 				03EA27B22A43E523007BAF4F /* Queue.swift in Sources */,
 				033D68EA2A3EC088005D3CB0 /* Direction.swift in Sources */,
 				03FEA1B12A5ADFFC00AF4DDB /* CraftMasteryData.swift in Sources */,
-				03796C082A4FCAD800462804 /* TouchLogics.swift in Sources */,
+				03796C082A4FCAD800462804 /* TouchServices.swift in Sources */,
 				03C65E172A446D310042BF22 /* CharacterMovedToAnotherTileEventHandler.swift in Sources */,
 				03E755902A1F2E8900BF5C0F /* CraftWindow.swift in Sources */,
 				031AA80E2A25CFB70017EFCD /* Button.swift in Sources */,

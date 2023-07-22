@@ -63,7 +63,7 @@ final class TapRecognizer: TouchRecognizer {
             return
         }
 
-        TouchLogics.default.add(tapLogic)
+        TouchServices.default.add(tapLogic)
         tapLogic.began()
     }
 

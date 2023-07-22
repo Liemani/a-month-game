@@ -294,7 +294,7 @@ class TouchManager {
 
         recognizerTouch.recognizer = nil
 
-        TouchLogics.default.ended(recognizerTouch.touch)
+        TouchServices.default.ended(recognizerTouch.touch)
     }
 
     func recognizerTouchCancelled(recognizerTouch: RecognizerTouch) {
@@ -304,13 +304,13 @@ class TouchManager {
 
         recognizerTouch.recognizer = nil
 
-        TouchLogics.default.cancelled(recognizerTouch.touch)
+        TouchServices.default.cancelled(recognizerTouch.touch)
     }
 
     // MARK: recognizer
     func recognizerCancelled(recognizer: TouchRecognizer,
                              recognizerTouch: RecognizerTouch) {
-        TouchLogics.default.cancelled(recognizerTouch.touch)
+        TouchServices.default.cancelled(recognizerTouch.touch)
         recognizer.free(recognizerTouch: recognizerTouch)
         recognizerTouch.recognizer = nil
     }
@@ -347,7 +347,7 @@ class TouchManager {
 
         recognizerTouch.update()
 
-        TouchLogics.default.moved(recognizerTouch.touch)
+        TouchServices.default.moved(recognizerTouch.touch)
     }
 
     func touchEnded(_ touch: UITouch) {

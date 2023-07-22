@@ -19,23 +19,20 @@ class Logics {
                     fieldInv: GameObjectInventory,
                     infoWindow: InfoWindow,
                     world: SKNode,
-                    invContainer: InventoryContainer,
-                    accessibleGOTracker: AccessibleGOTracker) {
+                    invContainer: InventoryContainer) {
         self._default = Logics(scene: scene,
                                ui: ui,
                                invInv: invInv,
                                fieldInv: fieldInv,
                                infoWindow: infoWindow,
                                world: world,
-                               invContainer: invContainer,
-                               accessibleGOTracker: accessibleGOTracker)
+                               invContainer: invContainer)
     }
 
     static func free() {
         self._default = nil
     }
 
-    let touch: TouchLogics
     let scene: SceneLogic
 
     let mastery: MasteryLogic
@@ -48,8 +45,6 @@ class Logics {
 
     let invContainer: InventoryContainerLogic
 
-    let accessibleGOTracker: AccessibleGOTrackerLogic
-
     let goData: GameObjectDataLogic
 
     init(scene: WorldScene,
@@ -58,9 +53,7 @@ class Logics {
          fieldInv: GameObjectInventory,
          infoWindow: InfoWindow,
          world: SKNode,
-         invContainer: InventoryContainer,
-         accessibleGOTracker: AccessibleGOTracker) {
-        self.touch = TouchLogics()
+         invContainer: InventoryContainer) {
         self.scene = SceneLogic(scene: scene)
 
         self.mastery = MasteryLogic()
@@ -72,8 +65,6 @@ class Logics {
         self.world = WorldLogic(world: world)
 
         self.invContainer = InventoryContainerLogic(invContainer: invContainer)
-
-        self.accessibleGOTracker = AccessibleGOTrackerLogic(tracker: accessibleGOTracker)
 
         self.goData = GameObjectDataLogic()
     }

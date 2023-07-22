@@ -449,8 +449,10 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 
 ## mandatory
-game object in inventory must not flip it's display
 barley
+implement when touch tile or field -> highlight go
+world view controller is not deallocating
+if touch inventory cell -> interact go
 
 ## 2nd priority
 character inventory and invInv have to belong to character
@@ -462,6 +464,7 @@ create
     road
 set world seed
 game object must have there own scaled size
+implement CraftWindow.setUp() rather than update()
 
 ## 3rd priority
 move container to container qualiti order
@@ -667,6 +670,9 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+implement sizeScale
+implement cover
+game object in inventory must not flip it's display
 shovel -> weed: get weed to inventory
 bug searching go before chunks update when has moved to another chunk
 bug velocity modifier would not be applied

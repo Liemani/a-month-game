@@ -52,7 +52,7 @@ class GameObjectTapLogic: TouchLogic {
             go.activate()
         }
 
-        if let activatedGO = TouchLogics.default.activatedGO {
+        if let activatedGO = TouchServices.default.activatedGO {
             activatedGO.deactivate()
             go.deactivate()
 
@@ -62,7 +62,7 @@ class GameObjectTapLogic: TouchLogic {
                 activatedGO.interact(to: go)
             }
 
-            TouchLogics.default.activatedGO = nil
+            TouchServices.default.activatedGO = nil
 
             return
         }
@@ -76,7 +76,7 @@ class GameObjectTapLogic: TouchLogic {
             return
         }
 
-        TouchLogics.default.activatedGO = go
+        TouchServices.default.activatedGO = go
 
         return
     }

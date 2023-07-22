@@ -33,7 +33,8 @@ class ActionService {
                     if go.timeEventDate! <= cDate {
                         self.runTimeEventAction(go)
 
-                        if !go.isDeleted {
+                        if !go.isDeleted
+                            && go.timeEventDate != nil {
                             index += 1
                         }
                     } else {
@@ -61,13 +62,19 @@ class ActionService {
     }
 
     func runTimeEventAction(_ go: GameObject) {
+        let pTimeEventDate = go.timeEventDate!
+
         if let action = Services.default.action.time[go.type] {
             _ = action(go)
+            if go.timeEventDate == nil,
+               let chunk = go.chunk {
+                chunk.scheduler.remove(go)
+            }
         } else {
             go.delete()
         }
 
-        go.dateLastChanged = go.timeEventDate!
+        go.dateLastChanged = pTimeEventDate
     }
 
     let interact: [GameObjectType: (GameObject) -> Bool] = [
@@ -190,6 +197,12 @@ class ActionService {
                                          type: .weedLeaves,
                                          quality: goEquiping.quality,
                                          coord: go.chunkCoord!)
+                if arc4random_uniform(10) == 0 {
+                    Logics.default.scene.new(result: result,
+                                             type: .plantBarleySeed,
+                                             quality: goEquiping.quality,
+                                             coord: go.chunkCoord!)
+                }
             case .shovel:
                 guard let emptyInvCoord = Logics.default.invContainer.emptyCoord else {
                     return true
@@ -227,6 +240,43 @@ class ActionService {
                                      type: .vineStem,
                                      quality: goEquiping.quality,
                                      coord: emptyInvCoord)
+
+            return true
+        },
+        .plantBarleySapling: { go in
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .sickle) else {
+                return false
+            }
+
+            goEquiping.emphasizeUsing()
+
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
+
+            go.delete(result: result)
+
+            return true
+        },
+        .plantBarley: { go in
+            guard let goEquiping = Logics.default.invContainer.target.go(equiping: .sickle) else {
+                return false
+            }
+
+            goEquiping.emphasizeUsing()
+
+            let newQuality = (go.quality + goEquiping.quality) / 2.0
+            let chunkCoord = go.chunkCoord!
+
+            let result = Logics.default.mastery.interact(with: goEquiping.type,
+                                                         to: go.type)
+
+            go.delete()
+
+            Logics.default.scene.new(result: result,
+                                     type: .plantBarleySeed,
+                                     quality: newQuality,
+                                     coord: chunkCoord,
+                                     count: 2)
 
             return true
         },
@@ -432,11 +482,9 @@ class ActionService {
 
             return true
         },
-        .treeOakSeed: { go, target in
-            let oakSeed = target
-
+        .plantBarleySeed: { go, target in
             guard go.type == .dirt,
-                    let seedChunkCoord = oakSeed.chunkCoord else {
+                    let seedChunkCoord = target.chunkCoord else {
                 return false
             }
 
@@ -452,14 +500,43 @@ class ActionService {
             go.delete()
 
             if result == .fail {
-                oakSeed.delete()
+                target.delete()
 
                 return true
             }
 
             clayFloor.type = .dirtFloor
-            oakSeed.type = .treeOakSapling
-            oakSeed.quality = (oakSeed.quality + go.quality) / 2.0
+            target.type = .plantBarleySapling
+            target.quality = (target.quality + go.quality) / 2.0
+
+            return true
+        },
+        .treeOakSeed: { go, target in
+            guard go.type == .dirt,
+                    let seedChunkCoord = target.chunkCoord else {
+                return false
+            }
+
+            let gosInFloor = Services.default.chunkContainer.items(at: seedChunkCoord)!
+
+            guard let clayFloor = gosInFloor.first(where: { $0.type == .clayFloor }) else {
+                return false
+            }
+
+            let result = Logics.default.mastery.interact(with: target.type,
+                                                         to: go.type)
+
+            go.delete()
+
+            if result == .fail {
+                target.delete()
+
+                return true
+            }
+
+            clayFloor.type = .dirtFloor
+            target.type = .treeOakSapling
+            target.quality = (target.quality + go.quality) / 2.0
 
             return true
         },
@@ -512,6 +589,10 @@ class ActionService {
                 }
             }
 
+            return true
+        },
+        .plantBarleySapling: { go in
+            go.type = .plantBarley
             return true
         },
         .treeOakSapling: { go in
