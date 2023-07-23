@@ -231,7 +231,7 @@ class GameObject: SKNode {
 
         if self.type.isFloor,
            let goOnFloor = self.goOnFloor {
-            goOnFloor.activate()
+            goOnFloor.deactivate()
         }
     }
 

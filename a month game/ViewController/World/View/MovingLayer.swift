@@ -17,9 +17,7 @@ class MovingLayer: SKNode {
         self.zPosition = Constant.ZPosition.movingLayer
 
         // MARK: tile
-        let grassFloorResourceName = GameObjectType.grassFloor.resource.resourceName
-        let tileTexture = SKTexture(imageNamed: grassFloorResourceName)
-        let tileDefinition = SKTileDefinition(texture: tileTexture)
+        let tileDefinition = SKTileDefinition(texture: GameObjectType.grassFloor.texture)
         let tileGroup = SKTileGroup(tileDefinition: tileDefinition)
         let tileSet = SKTileSet(tileGroups: [tileGroup])
 

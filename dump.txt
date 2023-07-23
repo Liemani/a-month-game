@@ -449,9 +449,7 @@ view model 은 아하! field view model 이 field 를 가지고 있으면 되겠
 -
 
 ## mandatory
-implement when touch tile or field -> highlight go
-world view controller is not deallocating
-if touch inventory cell -> interact go
+아이콘 바꾸기
 
 ## 2nd priority
 character inventory and invInv have to belong to character
@@ -465,10 +463,15 @@ set world seed
 game object must have there own scaled size
 implement CraftWindow.setUp() rather than update()
 natural GO cover with character
+삽으로 식물을 옮길 수 있어도 좋다
+정보 윈도우 끄기 힘들다
 
 ## 3rd priority
 move container to container qualiti order
 add scheduler to inventory
+왼쪽 조합창 솔직히 거리적거린다
+여기에 스크립트로 자동화 기능을 달면 좋겠다
+열린 상자 옮기면 열린 인벤도 같이 옮기기
 
 ## debt
 refactor game object texture mechanism
@@ -670,6 +673,10 @@ GameObject
     캐릭터가 건설 부지 위를 차지하고 있다면 예정 모습에 붉은 마스크를 해주자
 
 # finish
+바닥 go 를 탭하고 밖으로 나간경우 활성화된 go 가 비활성화되지 않는다
+    무브든지 엔드든지
+if touch inventory cell -> interact go
+implement when touch tile or field -> highlight go
 barley
 implement sizeScale
 implement cover

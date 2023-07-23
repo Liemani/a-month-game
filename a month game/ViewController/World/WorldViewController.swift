@@ -86,6 +86,7 @@ class WorldViewController: UIViewController {
 
     deinit {
         Services.free()
+        Repositories.free()
         MapGenerator.free()
         WorldEventManager.free()
         FrameCycleUpdateManager.free()
@@ -93,7 +94,6 @@ class WorldViewController: UIViewController {
         Logics.free()
 
         Particle.free()
-
     }
 
     // MARK: - transition
