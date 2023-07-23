@@ -32,11 +32,19 @@ class InventoryCell: SKSpriteNode {
     }
 
     func activate() {
-        self.alpha = 0.5
+        if let go = self.go {
+            go.activate()
+        } else {
+            self.alpha = 0.5
+        }
     }
 
     func deactivate() {
         self.alpha = 1.0
+        
+        if let go = self.go {
+            go.deactivate()
+        }
     }
 
     func hideQualityBox() {

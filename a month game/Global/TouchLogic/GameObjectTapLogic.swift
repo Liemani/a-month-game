@@ -77,8 +77,6 @@ class GameObjectTapLogic: TouchLogic {
         }
 
         TouchServices.default.activatedGO = go
-
-        return
     }
 
     override func cancelled() {

@@ -22,12 +22,11 @@ class InventoryTapLogic: TouchLogic {
         self.touches.append(touch)
     }
 
-    // MARK: - logic
-    func logicBegan() {
+    override func began() {
         self.cell.activate()
     }
 
-    func logicMoved() {
+    override func moved() {
         if self.cell.isBeing(touched: self.touch) {
             self.cell.activate()
         } else {
@@ -35,8 +34,9 @@ class InventoryTapLogic: TouchLogic {
         }
     }
 
-    func logicEnded() {
+    override func ended() {
         guard self.cell.isBeing(touched: self.touch) else {
+            self.cell.deactivate()
             return
         }
 
@@ -50,32 +50,21 @@ class InventoryTapLogic: TouchLogic {
                 TouchServices.default.freeActivatedGO()
                 activatedGO.interact(to: cell.go!)
             }
+
+            self.cell.deactivate()
+
+            return
         }
-    }
 
-    func logicCancelled() {
-    }
+        if let go = self.cell.go {
+            TouchServices.default.activatedGO = go
+            return
+        }
 
-    // MARK: - facade
-    override func began() {
-        self.logicBegan()
-    }
-
-    override func moved() {
-        self.logicMoved()
-    }
-
-    override func ended() {
-        self.logicEnded()
-        self.complete()
+        self.cell.deactivate()
     }
 
     override func cancelled() {
-        self.logicCancelled()
-        self.complete()
-    }
-
-    func complete() {
         self.cell.deactivate()
     }
 
